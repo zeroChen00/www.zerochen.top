@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>JavaScript基础</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="JavaScript基础">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://zerochen00.github.io/2021/06/20/JavaScript%E5%9F%BA%E7%A1%80/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-06-20">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-07-04">
+      <meta 
+        property="og:article:author" 
+        content="chen">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="JavaScript">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Blog</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      JavaScript基础
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-06-20T06:22:41.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-06-20</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" 
+          class="post-meta-link">
+          编程基础
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>653 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/JavaScript/" 
+            class="post-meta-link">
+            JavaScript
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="js调用方法（4种）"><a href="#js调用方法（4种）" class="headerlink" title="js调用方法（4种）"></a>js调用方法（4种）</h1><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><script>alert(1)</script></td>
+<td>script标签中执行</td>
+</tr>
+<tr>
+<td><script src="x.js"></script></td>
+<td>调用执行</td>
+</tr>
+<tr>
+<td><a href="javascript:alert(1)"></a></td>
+<td>链接触发</td>
+</tr>
+<tr>
+<td><p onclick="alert(1)"></p></td>
+<td>事件触发</td>
+</tr>
+</tbody></table>
+<h1 id="js事件"><a href="#js事件" class="headerlink" title="js事件"></a>js事件</h1><table>
+<thead>
+<tr>
+<th>事件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows事件</td>
+<td>针对windows对象触发的事件，应用到body标签</td>
+</tr>
+<tr>
+<td>onafterprint</td>
+<td>打印之后触发的事件</td>
+</tr>
+<tr>
+<td>onbeforeprint</td>
+<td>打印之前触发的事件</td>
+</tr>
+<tr>
+<td>onerror</td>
+<td>发生错误（文件加载错误等）时触发的事件，常跟不存在的图片，用来执行js触发xss漏洞</td>
+</tr>
+<tr>
+<td>onload</td>
+<td>页面加载完成后立即发生</td>
+</tr>
+<tr>
+<td>onresize</td>
+<td>窗口大小被改变时触发的事件</td>
+</tr>
+<tr>
+<td>onunload</td>
+<td>页面下载或刷新网页时触发事件</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Form事件</td>
+<td>由HTML表单内的动作触发的事件，应用到几乎所有的HTML元素，最常用在Form元素</td>
+</tr>
+<tr>
+<td>onblur</td>
+<td>当元素失去焦点（鼠标移出等）时触发的事件</td>
+</tr>
+<tr>
+<td>onchange</td>
+<td>输入框的值发生变化或者下拉列表框选项触发的事件</td>
+</tr>
+<tr>
+<td>onfocus</td>
+<td>当元素获得焦点时触发的事件</td>
+</tr>
+<tr>
+<td>onformchange</td>
+<td>当表单被改变时触发的事件</td>
+</tr>
+<tr>
+<td>oninput</td>
+<td>当元素获得用户输入时触发的事件</td>
+</tr>
+<tr>
+<td>onselect</td>
+<td>元素中文本被选中后触发的事件</td>
+</tr>
+<tr>
+<td>onsubmit</td>
+<td>提交表单时触发的事件</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Keyboard事件</td>
+<td></td>
+</tr>
+<tr>
+<td>onkeydown</td>
+<td>用户按下按键时触发的事件</td>
+</tr>
+<tr>
+<td>onkeypress</td>
+<td>用户敲击按钮时触发的事件</td>
+</tr>
+<tr>
+<td>onkeyup</td>
+<td>用户释放按键时触发的事件</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Mouse事件</td>
+<td>由鼠标或类似用户动作触发的事件</td>
+</tr>
+<tr>
+<td>onclick</td>
+<td>元素上发生鼠标点击时触发的事件</td>
+</tr>
+<tr>
+<td>ondblclick</td>
+<td>元素上发生鼠标双击时触发的事件</td>
+</tr>
+<tr>
+<td>onmousedown</td>
+<td>当元素上按下鼠标按钮时触发的事件</td>
+</tr>
+<tr>
+<td>onmousemove</td>
+<td>当鼠标指针移动到元素上时触发的事件</td>
+</tr>
+<tr>
+<td>onmouseover</td>
+<td>当鼠标指针移动到元素上时触发的事件</td>
+</tr>
+<tr>
+<td>onmouseout</td>
+<td>当鼠标指针移出元素时触发的事件</td>
+</tr>
+<tr>
+<td>onmouseup</td>
+<td>当在元素上释放鼠标按钮时触发的事件</td>
+</tr>
+</tbody></table>
+<p>更多事件访问文档：<a target="_blank" rel="noopener" href="https://www.w3school.com.cn/tags/html_ref_eventattributes.asp">https://www.w3school.com.cn/tags/html_ref_eventattributes.asp</a></p>
+<h1 id="DOM操作"><a href="#DOM操作" class="headerlink" title="DOM操作"></a>DOM操作</h1><table>
+<thead>
+<tr>
+<th>使用</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>通过ID获取</td>
+<td>document.getElementById()</td>
+</tr>
+<tr>
+<td>通过标签名称获取（结果有多个，以数组形式存放）</td>
+<td>docunment.getElementsByTagName()</td>
+</tr>
+<tr>
+<td>通过对象名称获取（结果有多个，以数组形式存放）</td>
+<td>documemt.getElementsByClassName()</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>document事件操作</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>动态添加事件</td>
+<td>document.getElementById(“x”).addEventListener(“click”,function(){  })             <br>给img添加点击事件  <br>document.getElementById(“x”).addEventListener(“click”,function(){  alert(“这是图片”)  })</td>
+</tr>
+<tr>
+<td>创建标签</td>
+<td>document.createElement(“img”)                      #创建img标签  <br>创建img标签，并添加属性 <br> img =  document.createElement(“img”)   img.src =  “x.jpg”  img.style.width  = “100px”  …     <br>可以创建script标签实现跨站脚本攻击<br>  <img src="/2021/06/20/JavaScript%E5%9F%BA%E7%A1%80/.%5CJavaScript%E5%9F%BA%E7%A1%80.assets%5C1.png" alt="1" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/06/20/JavaScript%E5%9F%BA%E7%A1%80/.%5CJavaScript%E5%9F%BA%E7%A1%80.assets%5C1.png" class="lozad post-image"></td>
+</tr>
+<tr>
+<td>应用</td>
+<td>document.body.appendChild()  执行添加/创建（否则不显示）</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2021/06/20/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%B9%B6%E6%8F%90%E6%9D%83/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">添加用户并提权 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2021/06/20/Windows%E9%9A%8F%E8%AE%B0/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Windows随记 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="gitalk-container"></div>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+  
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+  
+<script src="/js/lib/md5.min.js"></script>
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: 'e231ce2fa07f8397e8a7',
+      clientSecret: '2fb4635367cf9a78330b811d153435c62a037615',
+      repo: 'zeroChen00.github.io',
+      owner: 'zeroChen00',
+      admin: ["zeroChen00"],
+      id: md5(location.pathname),
+      distractionFreeMode: true,
+      language: '',
+      labels: [],
+      perPage: 10
+    })
+
+    gitalk.render('gitalk-container')
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%884%E7%A7%8D%EF%BC%89"><span class="toc-text">js调用方法（4种）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E4%BA%8B%E4%BB%B6"><span class="toc-text">js事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DOM%E6%93%8D%E4%BD%9C"><span class="toc-text">DOM操作</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">chen</p>
+<p class="author-description">做一个Python脚本小子</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>22</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>26</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%884%E7%A7%8D%EF%BC%89"><span class="toc-text">js调用方法（4种）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E4%BA%8B%E4%BB%B6"><span class="toc-text">js事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DOM%E6%93%8D%E4%BD%9C"><span class="toc-text">DOM操作</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0/">
+        <div class="categories-list-item">
+          附加
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linxu/">
+        <div class="categories-list-item">
+          Linxu
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Token%E7%BB%95%E8%BF%87/" 
+        title="Token绕过">
+        <div class="tags-list-item">Token绕过</div>
+      </a>
+    
+      <a 
+        href="/tags/JavaScript/" 
+        title="JavaScript">
+        <div class="tags-list-item">JavaScript</div>
+      </a>
+    
+      <a 
+        href="/tags/socket%E6%A8%A1%E5%9D%97/" 
+        title="socket模块">
+        <div class="tags-list-item">socket模块</div>
+      </a>
+    
+      <a 
+        href="/tags/threading%E6%A8%A1%E5%9D%97/" 
+        title="threading模块">
+        <div class="tags-list-item">threading模块</div>
+      </a>
+    
+      <a 
+        href="/tags/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" 
+        title="JBoss反序列化">
+        <div class="tags-list-item">JBoss反序列化</div>
+      </a>
+    
+      <a 
+        href="/tags/MS17-010/" 
+        title="MS17-010">
+        <div class="tags-list-item">MS17-010</div>
+      </a>
+    
+      <a 
+        href="/tags/BeautifulSoup%E6%A8%A1%E5%9D%97/" 
+        title="BeautifulSoup模块">
+        <div class="tags-list-item">BeautifulSoup模块</div>
+      </a>
+    
+      <a 
+        href="/tags/requests%E6%A8%A1%E5%9D%97/" 
+        title="requests模块">
+        <div class="tags-list-item">requests模块</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
+        title="Redis未授权访问">
+        <div class="tags-list-item">Redis未授权访问</div>
+      </a>
+    
+      <a 
+        href="/tags/Python%E8%84%9A%E6%9C%AC/" 
+        title="Python脚本">
+        <div class="tags-list-item">Python脚本</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
+        title="Shiro反序列">
+        <div class="tags-list-item">Shiro反序列</div>
+      </a>
+    
+      <a 
+        href="/tags/Typora/" 
+        title="Typora">
+        <div class="tags-list-item">Typora</div>
+      </a>
+    
+      <a 
+        href="/tags/Python3/" 
+        title="Python3">
+        <div class="tags-list-item">Python3</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Vulhub/" 
+        title="Vulhub">
+        <div class="tags-list-item">Vulhub</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%884%E7%A7%8D%EF%BC%89"><span class="toc-text">js调用方法（4种）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E4%BA%8B%E4%BB%B6"><span class="toc-text">js事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DOM%E6%93%8D%E4%BD%9C"><span class="toc-text">DOM操作</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-03</div>
+        <a href="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/"><div class="recent-posts-item-content">Burpsuite绕过Token爆破</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-02</div>
+        <a href="/2021/07/02/centos7%E6%90%AD%E5%BB%BADVWA/"><div class="recent-posts-item-content">centos7搭建DVWA</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-06-28</div>
+        <a href="/2021/06/28/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><div class="recent-posts-item-content">Redis未授权访问漏洞复现</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-06-28</div>
+        <a href="/2021/06/28/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><div class="recent-posts-item-content">MS17-010漏洞复现</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Blog
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

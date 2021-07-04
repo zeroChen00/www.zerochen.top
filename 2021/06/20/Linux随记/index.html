@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>Linux随记</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Linux随记">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://zerochen00.github.io/2021/06/20/Linux%E9%9A%8F%E8%AE%B0/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-06-20">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-07-04">
+      <meta 
+        property="og:article:author" 
+        content="chen">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="随记">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">Blog</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Linux随记
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-06-20T02:37:22.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-06-20</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Linux/" 
+          class="post-meta-link">
+          Linux
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.1k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E9%9A%8F%E8%AE%B0/" 
+            class="post-meta-link">
+            随记
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="网卡配置"><a href="#网卡配置" class="headerlink" title="网卡配置"></a>网卡配置</h1><h2 id="配置静态IP："><a href="#配置静态IP：" class="headerlink" title="配置静态IP："></a>配置静态IP：</h2><pre class="highlight"><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eth0 或ifcfg-ens33</span><br><span class="line"></span><br><span class="line">ONBOOT=yes</span><br><span class="line"></span><br><span class="line">BOOTPROTO=&quot;static&quot;</span><br><span class="line"></span><br><span class="line">IPADDR=&quot;192.168.x.x&quot;</span><br><span class="line"></span><br><span class="line">NETMASK=&quot;255.255.255.0&quot;</span><br><span class="line"></span><br><span class="line">GATEWAY=&quot;192.168.x.1&quot;</span><br></pre>
+
+<pre class="highlight"><span class="line">ifdown eth0   禁用网卡</span><br><span class="line"></span><br><span class="line">ifup eth0      启用网卡</span><br></pre>
+
+<h2 id="配置DNS："><a href="#配置DNS：" class="headerlink" title="配置DNS："></a>配置DNS：</h2><pre class="highlight"><span class="line">vim /etc/resolv.conf</span><br><span class="line"></span><br><span class="line">nameserver 8.8.8.8</span><br></pre>
+
+<h2 id="其他："><a href="#其他：" class="headerlink" title="其他："></a>其他：</h2><p>arp -a 192.168.x.x  查看ip是否被使用，用来选择静态ip</p>
+<p>常用DNS：</p>
+<p>国内：114.114.114.114、223.5.5.5、119.29.29.29等</p>
+<p>国外：1.1.1.1、8.8.8.8等</p>
+<h1 id="重要目录及文件"><a href="#重要目录及文件" class="headerlink" title="重要目录及文件"></a>重要目录及文件</h1><table>
+<thead>
+<tr>
+<th>目录</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/etc</td>
+<td>存放所有管理系统所需要的配置文件和子目录</td>
+</tr>
+<tr>
+<td></td>
+<td>/etc/passwd                                  #存放操作系统用户信息<br>/etc/shadow                                 #存放操作系统账户密码<br>/etc/group                                    #存储当前系统中所有用户组信息<br>/etc/gshadow                               #存储用户组密码的一类信息<br>/etc/nginx/nginx.conf                 # Nginx配置文件<br>/etc/httpd/conf/httpd.conf        # Apache配置文件路径</td>
+</tr>
+<tr>
+<td>/usr</td>
+<td>Linux系统资源目录，类似Windows下的program files目录</td>
+</tr>
+<tr>
+<td></td>
+<td>/usr/local/nginx/html        # Nginx默认网站路径</td>
+</tr>
+<tr>
+<td>/var</td>
+<td>系统运行时需要改变的数据&lt;br /</td>
+</tr>
+<tr>
+<td></td>
+<td>/var/log                  #日志存放目录<br>/var/spool/cron    #计划任务目录，定时执行<br>/var/lib/mysql       # mysql数据路径<br>/var/www/html     # Apache默认网站路径</td>
+</tr>
+</tbody></table>
+<h1 id="常用解压压缩"><a href="#常用解压压缩" class="headerlink" title="常用解压压缩"></a>常用解压压缩</h1><pre class="highlight"><span class="line">tar -zxvf file  -C ./dir			  	#解压.tar.gz文件到指定文件夹</span><br><span class="line"></span><br><span class="line">tar -zcvf ./file  file1 file2			#打包压缩成.tar.gz文件，注意，压缩成的文件需要在-f参数后面</span><br><span class="line"></span><br><span class="line">unzip file								#解压zip文件</span><br><span class="line"></span><br><span class="line">zip file								#压缩zip文件</span><br><span class="line"></span><br></pre>
+
+<pre class="highlight"><span class="line">7za x file.7z -r -o./					#解压</span><br><span class="line">7za a -t7z file.7z /opt/fileName/*		#压缩</span><br></pre>
+
+<p>注：压缩中，-t指定压缩类型，可忽略（默认7z）</p>
+<p>下载使用</p>
+<pre class="highlight"><span class="line">yum install p7zip -y</span><br></pre>
+
+
+
+<h1 id="VI使用"><a href="#VI使用" class="headerlink" title="VI使用"></a>VI使用</h1><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i、I</td>
+<td>i光标处输入，I所在行第一个非空格符处输入</td>
+</tr>
+<tr>
+<td>a、A</td>
+<td>a光标下一个字符处输入，A行末处输入</td>
+</tr>
+<tr>
+<td>o、O</td>
+<td>o光标下一新行输入，O光标上一新行输入</td>
+</tr>
+<tr>
+<td>ESC</td>
+<td>命令模式</td>
+</tr>
+<tr>
+<td>ctrl+b</td>
+<td>上翻</td>
+</tr>
+<tr>
+<td>ctrl+f</td>
+<td>下翻</td>
+</tr>
+<tr>
+<td>0</td>
+<td>移动到行首</td>
+</tr>
+<tr>
+<td>$</td>
+<td>移动到行尾</td>
+</tr>
+<tr>
+<td>gg</td>
+<td>移动到文档首</td>
+</tr>
+<tr>
+<td>G</td>
+<td>移动到文档尾</td>
+</tr>
+<tr>
+<td>:%s/word1/word2/g</td>
+<td>全局替换word1为word2</td>
+</tr>
+<tr>
+<td>/word</td>
+<td>向光标之下寻找word字符串</td>
+</tr>
+<tr>
+<td>?word</td>
+<td>向光标之上寻找word字符串</td>
+</tr>
+<tr>
+<td>x、X</td>
+<td>剪切</td>
+</tr>
+<tr>
+<td>dd</td>
+<td>删除整行</td>
+</tr>
+<tr>
+<td>ndd</td>
+<td>删除n行</td>
+</tr>
+<tr>
+<td>yy</td>
+<td>复制整行</td>
+</tr>
+<tr>
+<td>nyy</td>
+<td>复制n行</td>
+</tr>
+<tr>
+<td>p、P</td>
+<td>p向下粘贴，P向上粘贴</td>
+</tr>
+<tr>
+<td>u</td>
+<td>撤销，直至还原</td>
+</tr>
+<tr>
+<td>ctrl+r</td>
+<td>撤销，仅限一步</td>
+</tr>
+<tr>
+<td>.</td>
+<td>重复上一个动作</td>
+</tr>
+<tr>
+<td>:q</td>
+<td>不保存退出</td>
+</tr>
+<tr>
+<td>:w</td>
+<td>保存退出</td>
+</tr>
+<tr>
+<td>:!</td>
+<td>强制执行</td>
+</tr>
+<tr>
+<td>:! command</td>
+<td>暂时离开vi执行command</td>
+</tr>
+<tr>
+<td>:set nu</td>
+<td>显示行号</td>
+</tr>
+<tr>
+<td>:set nonu</td>
+<td>取消显示行号</td>
+</tr>
+</tbody></table>
+<h1 id="查找命令"><a href="#查找命令" class="headerlink" title="查找命令"></a>查找命令</h1><pre class="highlight"><span class="line">find / -name &quot;file&quot;  在根目录下查看文件名为file的文件</span><br><span class="line">find / -perm &quot;root&quot;  在根目录下查找root权限文件</span><br><span class="line">find / -user &quot;root&quot;  在根目录下查找root用户文件</span><br></pre>
+
+
+
+<h1 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h1><h2 id="curl安装"><a href="#curl安装" class="headerlink" title="curl安装"></a>curl安装</h2><p>（需要有下载路径，本机对服务器的下载）</p>
+<p>curl _ip/_file -o filename  -o可替换为&gt;</p>
+<h2 id="scp上传"><a href="#scp上传" class="headerlink" title="scp上传"></a>scp上传</h2><p>（需要有源文件，本机对服务器的上传）</p>
+<p>scp：ssh+sftp，占用ssh端口及账号及部分功能，使用sftp协议，进行文件上传</p>
+<p>scp filename root@ip:/_path</p>
+<h2 id="yum安装"><a href="#yum安装" class="headerlink" title="yum安装"></a>yum安装</h2><p>（需要源网站里面有对应的软件）</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>yum search</td>
+<td>查找</td>
+</tr>
+<tr>
+<td>yum install</td>
+<td>安装</td>
+</tr>
+<tr>
+<td>yum remove</td>
+<td>移除</td>
+</tr>
+<tr>
+<td>yum update</td>
+<td>升级，可指定升级，也可全部升级</td>
+</tr>
+</tbody></table>
+<p>注：yum源文件：/etc/yum.repos.d</p>
+<h2 id="wget安装"><a href="#wget安装" class="headerlink" title="wget安装"></a>wget安装</h2><p>（同curl，但是更简单，速度更快）</p>
+<p>wget _path/_file</p>
+<h2 id="源码安装步骤"><a href="#源码安装步骤" class="headerlink" title="源码安装步骤"></a>源码安装步骤</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1、tar 解包</td>
+<td>解压缩源码包到指定目录</td>
+</tr>
+<tr>
+<td>2、./configure</td>
+<td>配置生成makefile文件，可手动配置参数（如安装路径）</td>
+</tr>
+<tr>
+<td>3、make编译</td>
+<td>生成可执行的二进制文件</td>
+</tr>
+<tr>
+<td>4、make install安装</td>
+<td>复制二进制文件到系统，配置应用环境（如应用安装路径配置文件）</td>
+</tr>
+</tbody></table>
+<p>注：configure配置文档（官方文档）</p>
+<p><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/configure/html">http://nginx.org/en/docs/configure/html</a>  </p>
+<h1 id="firewall防火墙配置"><a href="#firewall防火墙配置" class="headerlink" title="firewall防火墙配置"></a>firewall防火墙配置</h1><table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">firewall-cmd  –state</td>
+<td>查看防火墙状态</td>
+</tr>
+<tr>
+<td align="left">firewall-cmd  –get-active-zones</td>
+<td>查看正在使用的区域及网卡名称</td>
+</tr>
+<tr>
+<td align="left">firewall-cmd  –list-all-zones</td>
+<td>显示当前预期网卡配置参数、资源、端口及服务等信息</td>
+</tr>
+<tr>
+<td align="left">firewall-cmd  –zone=public –add-port=80/tcp –permanent</td>
+<td>允许80端口tcp流量通过，永久生效</td>
+</tr>
+<tr>
+<td align="left">firewall-cmd  –zone=public –add-service=http –permanent</td>
+<td>同上，不同的配置方式</td>
+</tr>
+<tr>
+<td align="left">firewall-cmd  –zone=public –remove-port=23/udp –permanent</td>
+<td>禁止23端口udp流量通过，永久生效</td>
+</tr>
+<tr>
+<td align="left">firewall-zone  –zone=public –remove-service=dns –permanent</td>
+<td>同上，不同配置方式</td>
+</tr>
+</tbody></table>
+<p>常用端口服务：</p>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>端口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>http</td>
+<td>80/tcp</td>
+</tr>
+<tr>
+<td>https</td>
+<td>443/tcp</td>
+</tr>
+<tr>
+<td>dns</td>
+<td>23/udp</td>
+</tr>
+<tr>
+<td>mysql</td>
+<td>3306/tcp</td>
+</tr>
+<tr>
+<td>ssh</td>
+<td>22/tcp</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2021/06/20/Web%E6%B8%97%E9%80%8F%E9%9A%8F%E8%AE%B0/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Web渗透随记 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2021/06/20/%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">搭建hexo博客 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="gitalk-container"></div>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+  
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+  
+<script src="/js/lib/md5.min.js"></script>
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: 'e231ce2fa07f8397e8a7',
+      clientSecret: '2fb4635367cf9a78330b811d153435c62a037615',
+      repo: 'zeroChen00.github.io',
+      owner: 'zeroChen00',
+      admin: ["zeroChen00"],
+      id: md5(location.pathname),
+      distractionFreeMode: true,
+      language: '',
+      labels: [],
+      perPage: 10
+    })
+
+    gitalk.render('gitalk-container')
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">网卡配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81IP%EF%BC%9A"><span class="toc-text">配置静态IP：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDNS%EF%BC%9A"><span class="toc-text">配置DNS：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9A"><span class="toc-text">其他：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%96%87%E4%BB%B6"><span class="toc-text">重要目录及文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%A7%A3%E5%8E%8B%E5%8E%8B%E7%BC%A9"><span class="toc-text">常用解压压缩</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VI%E4%BD%BF%E7%94%A8"><span class="toc-text">VI使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4"><span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#curl%E5%AE%89%E8%A3%85"><span class="toc-text">curl安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scp%E4%B8%8A%E4%BC%A0"><span class="toc-text">scp上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum%E5%AE%89%E8%A3%85"><span class="toc-text">yum安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget%E5%AE%89%E8%A3%85"><span class="toc-text">wget安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-text">源码安装步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#firewall%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-text">firewall防火墙配置</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">chen</p>
+<p class="author-description">做一个Python脚本小子</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>22</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>26</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">网卡配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81IP%EF%BC%9A"><span class="toc-text">配置静态IP：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDNS%EF%BC%9A"><span class="toc-text">配置DNS：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9A"><span class="toc-text">其他：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%96%87%E4%BB%B6"><span class="toc-text">重要目录及文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%A7%A3%E5%8E%8B%E5%8E%8B%E7%BC%A9"><span class="toc-text">常用解压压缩</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VI%E4%BD%BF%E7%94%A8"><span class="toc-text">VI使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4"><span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#curl%E5%AE%89%E8%A3%85"><span class="toc-text">curl安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scp%E4%B8%8A%E4%BC%A0"><span class="toc-text">scp上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum%E5%AE%89%E8%A3%85"><span class="toc-text">yum安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget%E5%AE%89%E8%A3%85"><span class="toc-text">wget安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-text">源码安装步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#firewall%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-text">firewall防火墙配置</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0/">
+        <div class="categories-list-item">
+          附加
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linxu/">
+        <div class="categories-list-item">
+          Linxu
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
+        title="hexo博客">
+        <div class="tags-list-item">hexo博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
+        title="直播推流平台">
+        <div class="tags-list-item">直播推流平台</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
+        title="Nginx环境搭建">
+        <div class="tags-list-item">Nginx环境搭建</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
+        title="Apache环境搭建">
+        <div class="tags-list-item">Apache环境搭建</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7/" 
+        title="添加用户">
+        <div class="tags-list-item">添加用户</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
+        title="Java环境配置">
+        <div class="tags-list-item">Java环境配置</div>
+      </a>
+    
+      <a 
+        href="/tags/IIS/" 
+        title="IIS">
+        <div class="tags-list-item">IIS</div>
+      </a>
+    
+      <a 
+        href="/tags/Vulhub/" 
+        title="Vulhub">
+        <div class="tags-list-item">Vulhub</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
+      </a>
+    
+      <a 
+        href="/tags/Python3/" 
+        title="Python3">
+        <div class="tags-list-item">Python3</div>
+      </a>
+    
+      <a 
+        href="/tags/Typora/" 
+        title="Typora">
+        <div class="tags-list-item">Typora</div>
+      </a>
+    
+      <a 
+        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
+        title="Shiro反序列">
+        <div class="tags-list-item">Shiro反序列</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">网卡配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81IP%EF%BC%9A"><span class="toc-text">配置静态IP：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDNS%EF%BC%9A"><span class="toc-text">配置DNS：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9A"><span class="toc-text">其他：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%96%87%E4%BB%B6"><span class="toc-text">重要目录及文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%A7%A3%E5%8E%8B%E5%8E%8B%E7%BC%A9"><span class="toc-text">常用解压压缩</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VI%E4%BD%BF%E7%94%A8"><span class="toc-text">VI使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4"><span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#curl%E5%AE%89%E8%A3%85"><span class="toc-text">curl安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scp%E4%B8%8A%E4%BC%A0"><span class="toc-text">scp上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum%E5%AE%89%E8%A3%85"><span class="toc-text">yum安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget%E5%AE%89%E8%A3%85"><span class="toc-text">wget安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-text">源码安装步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#firewall%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-text">firewall防火墙配置</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-03</div>
+        <a href="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/"><div class="recent-posts-item-content">Burpsuite绕过Token爆破</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-02</div>
+        <a href="/2021/07/02/centos7%E6%90%AD%E5%BB%BADVWA/"><div class="recent-posts-item-content">centos7搭建DVWA</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-06-28</div>
+        <a href="/2021/06/28/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><div class="recent-posts-item-content">Redis未授权访问漏洞复现</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-06-28</div>
+        <a href="/2021/06/28/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><div class="recent-posts-item-content">MS17-010漏洞复现</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          Blog
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>
