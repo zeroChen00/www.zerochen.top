@@ -45,7 +45,7 @@
         content="2021-07-03">
       <meta 
         property="og:article:modified_time" 
-        content="2021-07-03">
+        content="2021-07-04">
       <meta 
         property="og:article:author" 
         content="chen">
@@ -321,52 +321,52 @@
 <h1 id="二、流程"><a href="#二、流程" class="headerlink" title="二、流程"></a>二、流程</h1><p>1、使用DVWA的高级模式，进入爆破模块，进行抓包，并发送到攻击器。</p>
 <p>2、进行如下配置</p>
 <p>Position模块 </p>
-<p><img src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703091039611.png" alt="image-20210703091039611" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703091039611.png" class="lozad post-image"></p>
+<p><img src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703091039611.png" alt="image-20210703091039611" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703091039611.png" class="lozad post-image"></p>
 <pre class="highlight"><span class="line">1：攻击模式选择Pitchfork，意为多对多，一一匹配。</span><br><span class="line">2、选定密码和token字段设置变量</span><br></pre>
 
 
 
 <p>Paloads模块 – 1</p>
-<p><img src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703091434571.png" alt="image-20210703091434571" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703091434571.png" class="lozad post-image"></p>
+<p><img src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703091434571.png" alt="image-20210703091434571" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703091434571.png" class="lozad post-image"></p>
 <pre class="highlight"><span class="line">1：选定第一个变量（密码）</span><br><span class="line">2：攻击载荷选择简单列表</span><br><span class="line">3：选择从文件导入（这里做演示则随机添加了包含正确密码的若干密码）</span><br></pre>
 
 <p>注意：1处需要配置第二个变量的密码模式（token），后续会对token配置，回头再回此设置。</p>
 <p>Resource Pool模块</p>
 <p>（注：这里是最新版的多线程模块，老版本应在Request Engine处）</p>
-<p><img src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703092057193.png" alt="image-20210703092057193" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703092057193.png" class="lozad post-image"></p>
+<p><img src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703092057193.png" alt="image-20210703092057193" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703092057193.png" class="lozad post-image"></p>
 <pre class="highlight"><span class="line">多线程设置为1，因为token是服务器端生成的验证令牌，无法多线程爆破（一次只有一个token生效）</span><br></pre>
 
 
 
 <p>Option模块</p>
 <p>选择Grep Extract模块</p>
-<p><img src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703092543186.png" alt="image-20210703092543186" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703092543186.png" class="lozad post-image"></p>
+<p><img src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703092543186.png" alt="image-20210703092543186" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703092543186.png" class="lozad post-image"></p>
 <p>点击Add，依次填写</p>
-<p><img src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703092442542.png" alt="image-20210703092442542" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703092442542.png" class="lozad post-image"></p>
+<p><img src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703092442542.png" alt="image-20210703092442542" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703092442542.png" class="lozad post-image"></p>
 <pre class="highlight"><span class="line">1：获取返回包内容</span><br><span class="line">2：匹配关键字token</span><br><span class="line">3：选定token值，自动生成匹配规则</span><br><span class="line">4：OK</span><br></pre>
 
 
 
 <p>Redirections模块</p>
-<p><img src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703092804701.png" alt="image-20210703092804701" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703092804701.png" class="lozad post-image"></p>
+<p><img src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703092804701.png" alt="image-20210703092804701" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703092804701.png" class="lozad post-image"></p>
 <pre class="highlight"><span class="line">选定本次抓包的全部内容为重定向的范围（token在body的隐藏部分）</span><br></pre>
 
 
 
 <p>最后，回到Payloads模块</p>
-<p><img src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703093340999.png" alt="image-20210703093340999" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703093340999.png" class="lozad post-image"></p>
+<p><img src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703093340999.png" alt="image-20210703093340999" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703093340999.png" class="lozad post-image"></p>
 <pre class="highlight"><span class="line">1：选定第二个变量</span><br><span class="line">2：选定payload类型--递归匹配（这里选完后自动加载了刚刚配置token的匹配规则--payload option部分）</span><br><span class="line">3：粘贴抓包部分的token值--需要给定初次抓包的匹配值</span><br><span class="line">4：配置完成，开始攻击</span><br></pre>
 
 
 
 <p>3、结果</p>
-<p><img src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703093746103.png" alt="image-20210703093746103" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703093746103.png" class="lozad post-image"></p>
+<p><img src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703093746103.png" alt="image-20210703093746103" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703093746103.png" class="lozad post-image"></p>
 <pre class="highlight"><span class="line">可见token自动匹配，发包成功</span><br></pre>
 
 
 
 <p>按照长度排序（状态码相同，无法参考）</p>
-<p><img src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703093937504.png" alt="image-20210703093937504" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src=".%5CBurpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4.assets%5Cimage-20210703093937504.png" class="lozad post-image"></p>
+<p><img src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703093937504.png" alt="image-20210703093937504" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210703093937504.png" class="lozad post-image"></p>
 <p>在返回包的Render部分，可见DVWA爆破成功的界面。</p>
 <p>至此，token绕过爆破攻击结束。</p>
 
@@ -377,20 +377,6 @@
 </article>
 <div class="nav">
   
-  
-    <div class="nav-item-next">
-      <a 
-        href="/2021/07/02/centos7%E6%90%AD%E5%BB%BADVWA/" 
-        class="nav-link">
-        <div>
-          <div class="nav-label">下一篇</div>
-          
-            <div class="nav-title">centos7搭建DVWA </div>
-          
-        </div>
-        <i class="iconfont icon-right nav-next-icon"></i>
-      </a>
-    </div>
   
 </div>
 
@@ -454,19 +440,19 @@
   <a 
     class="author-posts-count" 
     href="/archives">
-    <span>22</span>
+    <span>1</span>
     <span>文章</span>
   </a>
   <a 
     class="author-categories-count" 
     href="/categories">
-    <span>9</span>
+    <span>1</span>
     <span>分类</span>
   </a>
   <a 
     class="author-tags-count" 
     href="/tags">
-    <span>26</span>
+    <span>1</span>
     <span>标签</span>
   </a>
 </div>
@@ -501,62 +487,6 @@
       <a href="/categories/Web%E6%B8%97%E9%80%8F/">
         <div class="categories-list-item">
           Web渗透
-          <span class="categories-list-item-badge">4</span>
-        </div>
-      </a>
-    
-      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
-        <div class="categories-list-item">
-          漏洞复现
-          <span class="categories-list-item-badge">4</span>
-        </div>
-      </a>
-    
-      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
-        <div class="categories-list-item">
-          编程基础
-          <span class="categories-list-item-badge">1</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Linux/">
-        <div class="categories-list-item">
-          Linux
-          <span class="categories-list-item-badge">4</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Python/">
-        <div class="categories-list-item">
-          Python
-          <span class="categories-list-item-badge">2</span>
-        </div>
-      </a>
-    
-      <a href="/categories/%E9%99%84%E5%8A%A0/">
-        <div class="categories-list-item">
-          附加
-          <span class="categories-list-item-badge">2</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Linxu/">
-        <div class="categories-list-item">
-          Linxu
-          <span class="categories-list-item-badge">1</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Windows/">
-        <div class="categories-list-item">
-          Windows
-          <span class="categories-list-item-badge">2</span>
-        </div>
-      </a>
-    
-      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
-        <div class="categories-list-item">
-          环境搭建
           <span class="categories-list-item-badge">1</span>
         </div>
       </a>
@@ -576,99 +506,9 @@
   <div class="tags-list">
     
       <a 
-        href="/tags/%E9%9A%8F%E8%AE%B0/" 
-        title="随记">
-        <div class="tags-list-item">随记</div>
-      </a>
-    
-      <a 
-        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
-        title="hexo博客">
-        <div class="tags-list-item">hexo博客</div>
-      </a>
-    
-      <a 
-        href="/tags/Apache%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
-        title="Apache环境搭建">
-        <div class="tags-list-item">Apache环境搭建</div>
-      </a>
-    
-      <a 
-        href="/tags/DVWA/" 
-        title="DVWA">
-        <div class="tags-list-item">DVWA</div>
-      </a>
-    
-      <a 
-        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
-        title="直播推流平台">
-        <div class="tags-list-item">直播推流平台</div>
-      </a>
-    
-      <a 
-        href="/tags/Nginx%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
-        title="Nginx环境搭建">
-        <div class="tags-list-item">Nginx环境搭建</div>
-      </a>
-    
-      <a 
-        href="/tags/%E6%8F%90%E6%9D%83/" 
-        title="提权">
-        <div class="tags-list-item">提权</div>
-      </a>
-    
-      <a 
-        href="/tags/%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7/" 
-        title="添加用户">
-        <div class="tags-list-item">添加用户</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
-        title="反弹shell">
-        <div class="tags-list-item">反弹shell</div>
-      </a>
-    
-      <a 
-        href="/tags/IIS/" 
-        title="IIS">
-        <div class="tags-list-item">IIS</div>
-      </a>
-    
-      <a 
-        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
-        title="Java环境配置">
-        <div class="tags-list-item">Java环境配置</div>
-      </a>
-    
-      <a 
-        href="/tags/Vulhub/" 
-        title="Vulhub">
-        <div class="tags-list-item">Vulhub</div>
-      </a>
-    
-      <a 
-        href="/tags/Docker/" 
-        title="Docker">
-        <div class="tags-list-item">Docker</div>
-      </a>
-    
-      <a 
-        href="/tags/Python3/" 
-        title="Python3">
-        <div class="tags-list-item">Python3</div>
-      </a>
-    
-      <a 
-        href="/tags/Typora/" 
-        title="Typora">
-        <div class="tags-list-item">Typora</div>
-      </a>
-    
-      <a 
-        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
-        title="Shiro反序列">
-        <div class="tags-list-item">Shiro反序列</div>
+        href="/tags/Token%E7%BB%95%E8%BF%87/" 
+        title="Token绕过">
+        <div class="tags-list-item">Token绕过</div>
       </a>
     
   </div>
@@ -706,21 +546,6 @@
       <div class="recent-posts-item">
         <div class="recent-posts-item-title">2021-07-03</div>
         <a href="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/"><div class="recent-posts-item-content">Burpsuite绕过Token爆破</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-02</div>
-        <a href="/2021/07/02/centos7%E6%90%AD%E5%BB%BADVWA/"><div class="recent-posts-item-content">centos7搭建DVWA</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-06-28</div>
-        <a href="/2021/06/28/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><div class="recent-posts-item-content">Redis未授权访问漏洞复现</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-06-28</div>
-        <a href="/2021/06/28/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><div class="recent-posts-item-content">MS17-010漏洞复现</div></a>
       </div>
     
   </div>
