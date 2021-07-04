@@ -18,17 +18,17 @@
   <link 
     rel="icon" 
     href="/img/favicon.png">
-  <title>归档</title>
+  <title>JavaScript基础</title>
   
     
       <meta 
         property="og:title" 
-        content="归档">
+        content="JavaScript基础">
     
     
       <meta 
         property="og:url" 
-        content="https://zerochen00.github.io/archives/2021/07/index.html">
+        content="https://zerochen00.github.io/2021/06/20/JavaScript%E5%9F%BA%E7%A1%80/index.html">
     
     
       <meta 
@@ -36,6 +36,26 @@
         content="/img/logo.png">
     
     
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-06-20">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-07-03">
+      <meta 
+        property="og:article:author" 
+        content="chen">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="JavaScript">
+        
+      
     
   
   <script>
@@ -143,6 +163,8 @@
   
   <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
   
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
   <body>
@@ -240,49 +262,309 @@
         <div class="container">
           <div class="columns">
             <main class="main-column">
-<div class="card card-content">
-  <h1 class="widget-title">归档</h1>
-</div>
-<div class="archive-timeline">
-  
-  
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      JavaScript基础
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-06-20T06:22:41.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-06-20</span>
+    </time>
     
-      <div class="archive-timeline-tag"><span>2021</span></div>
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" 
+          class="post-meta-link">
+          编程基础
+        </a>
       
     
-    <div class="archive-timeline-item">
-      <div class="archive-timeline-post">
-        <div class="card card-content">
-          <div class="archive-timeline-post-date">2021-07-03</div>
-          <div class="archive-timeline-post-content">
-            <a 
-              href="/2021/07/03/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/"
-              class="archive-timeline-post-item">
-              Burpsuite绕过Token爆破
-            </a>
-          </div>
-        </div>
+    
+      <span class="dot"></span>
+      <span>653 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/JavaScript/" 
+            class="post-meta-link">
+            JavaScript
+          </a>
+        
       </div>
     </div>
   
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="js调用方法（4种）"><a href="#js调用方法（4种）" class="headerlink" title="js调用方法（4种）"></a>js调用方法（4种）</h1><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><script>alert(1)</script></td>
+<td>script标签中执行</td>
+</tr>
+<tr>
+<td><script  src="x.js"></script></td>
+<td>调用执行</td>
+</tr>
+<tr>
+<td><a  href="javascript:alert(1)"></a></td>
+<td>链接触发</td>
+</tr>
+<tr>
+<td><p  onclick="alert(1)"></p></td>
+<td>事件触发</td>
+</tr>
+</tbody></table>
+<h1 id="js事件"><a href="#js事件" class="headerlink" title="js事件"></a>js事件</h1><table>
+<thead>
+<tr>
+<th>事件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows事件</td>
+<td>针对windows对象触发的事件，应用到body标签</td>
+</tr>
+<tr>
+<td>onafterprint</td>
+<td>打印之后触发的事件</td>
+</tr>
+<tr>
+<td>onbeforeprint</td>
+<td>打印之前触发的事件</td>
+</tr>
+<tr>
+<td>onerror</td>
+<td>发生错误（文件加载错误等）时触发的事件，常跟不存在的图片，用来执行js触发xss漏洞</td>
+</tr>
+<tr>
+<td>onload</td>
+<td>页面加载完成后立即发生</td>
+</tr>
+<tr>
+<td>onresize</td>
+<td>窗口大小被改变时触发的事件</td>
+</tr>
+<tr>
+<td>onunload</td>
+<td>页面下载或刷新网页时触发事件</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Form事件</td>
+<td>由HTML表单内的动作触发的事件，应用到几乎所有的HTML元素，最常用在Form元素</td>
+</tr>
+<tr>
+<td>onblur</td>
+<td>当元素失去焦点（鼠标移出等）时触发的事件</td>
+</tr>
+<tr>
+<td>onchange</td>
+<td>输入框的值发生变化或者下拉列表框选项触发的事件</td>
+</tr>
+<tr>
+<td>onfocus</td>
+<td>当元素获得焦点时触发的事件</td>
+</tr>
+<tr>
+<td>onformchange</td>
+<td>当表单被改变时触发的事件</td>
+</tr>
+<tr>
+<td>oninput</td>
+<td>当元素获得用户输入时触发的事件</td>
+</tr>
+<tr>
+<td>onselect</td>
+<td>元素中文本被选中后触发的事件</td>
+</tr>
+<tr>
+<td>onsubmit</td>
+<td>提交表单时触发的事件</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Keyboard事件</td>
+<td></td>
+</tr>
+<tr>
+<td>onkeydown</td>
+<td>用户按下按键时触发的事件</td>
+</tr>
+<tr>
+<td>onkeypress</td>
+<td>用户敲击按钮时触发的事件</td>
+</tr>
+<tr>
+<td>onkeyup</td>
+<td>用户释放按键时触发的事件</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Mouse事件</td>
+<td>由鼠标或类似用户动作触发的事件</td>
+</tr>
+<tr>
+<td>onclick</td>
+<td>元素上发生鼠标点击时触发的事件</td>
+</tr>
+<tr>
+<td>ondblclick</td>
+<td>元素上发生鼠标双击时触发的事件</td>
+</tr>
+<tr>
+<td>onmousedown</td>
+<td>当元素上按下鼠标按钮时触发的事件</td>
+</tr>
+<tr>
+<td>onmousemove</td>
+<td>当鼠标指针移动到元素上时触发的事件</td>
+</tr>
+<tr>
+<td>onmouseover</td>
+<td>当鼠标指针移动到元素上时触发的事件</td>
+</tr>
+<tr>
+<td>onmouseout</td>
+<td>当鼠标指针移出元素时触发的事件</td>
+</tr>
+<tr>
+<td>onmouseup</td>
+<td>当在元素上释放鼠标按钮时触发的事件</td>
+</tr>
+</tbody></table>
+<p>更多事件访问文档：<a target="_blank" rel="noopener" href="https://www.w3school.com.cn/tags/html_ref_eventattributes.asp">https://www.w3school.com.cn/tags/html_ref_eventattributes.asp</a></p>
+<h1 id="DOM操作"><a href="#DOM操作" class="headerlink" title="DOM操作"></a>DOM操作</h1><table>
+<thead>
+<tr>
+<th>使用</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>通过ID获取</td>
+<td>document.getElementById()</td>
+</tr>
+<tr>
+<td>通过标签名称获取（结果有多个，以数组形式存放）</td>
+<td>docunment.getElementsByTagName()</td>
+</tr>
+<tr>
+<td>通过对象名称获取（结果有多个，以数组形式存放）</td>
+<td>documemt.getElementsByClassName()</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>document事件操作</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>动态添加事件</td>
+<td>document.getElementById(“x”).addEventListener(“click”,function(){  })             <br />给img添加点击事件  <br />document.getElementById(“x”).addEventListener(“click”,function(){  alert(“这是图片”)  })</td>
+</tr>
+<tr>
+<td>创建标签</td>
+<td>document.createElement(“img”)                      #创建img标签  <br />创建img标签，并添加属性 <br /> img =  document.createElement(“img”)   img.src =  “x.jpg”  img.style.width  = “100px”  …     <br />可以创建script标签实现跨站脚本攻击<br />  <img src=".%5CJavaScript%E5%9F%BA%E7%A1%80.assets%5C1.png" alt="1" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src=".%5CJavaScript%E5%9F%BA%E7%A1%80.assets%5C1.png" class="lozad post-image"></td>
+</tr>
+<tr>
+<td>应用</td>
+<td>document.body.appendChild()  执行添加/创建（否则不显示）</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
     
-    <div class="archive-timeline-item">
-      <div class="archive-timeline-post">
-        <div class="card card-content">
-          <div class="archive-timeline-post-date">2021-07-02</div>
-          <div class="archive-timeline-post-content">
-            <a 
-              href="/2021/07/02/centos7%E6%90%AD%E5%BB%BADVWA/"
-              class="archive-timeline-post-item">
-              centos7搭建DVWA
-            </a>
-          </div>
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/2021/06/20/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%B9%B6%E6%8F%90%E6%9D%83/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">添加用户并提权 </div>
+          
         </div>
-      </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/2021/06/20/Windows%E9%9A%8F%E8%AE%B0/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Windows随记 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
     </div>
   
 </div>
-</main>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%884%E7%A7%8D%EF%BC%89"><span class="toc-text">js调用方法（4种）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E4%BA%8B%E4%BB%B6"><span class="toc-text">js事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DOM%E6%93%8D%E4%BD%9C"><span class="toc-text">DOM操作</span></a></li></ol>
+</div></main>
             <aside class="left-column">
               
               <div class="card card-author">
@@ -318,6 +600,18 @@
               </div>
                <div class="sticky-tablet">
   
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%884%E7%A7%8D%EF%BC%89"><span class="toc-text">js调用方法（4种）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E4%BA%8B%E4%BB%B6"><span class="toc-text">js事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DOM%E6%93%8D%E4%BD%9C"><span class="toc-text">DOM操作</span></a></li></ol>
+      </div>
+    </article>
   
   
   <article class="card card-content categories-widget">
@@ -408,87 +702,75 @@
   <div class="tags-list">
     
       <a 
+        href="/tags/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" 
+        title="JBoss反序列化">
+        <div class="tags-list-item">JBoss反序列化</div>
+      </a>
+    
+      <a 
+        href="/tags/Token%E7%BB%95%E8%BF%87/" 
+        title="Token绕过">
+        <div class="tags-list-item">Token绕过</div>
+      </a>
+    
+      <a 
         href="/tags/%E9%9A%8F%E8%AE%B0/" 
         title="随记">
         <div class="tags-list-item">随记</div>
       </a>
     
       <a 
-        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
-        title="hexo博客">
-        <div class="tags-list-item">hexo博客</div>
+        href="/tags/JavaScript/" 
+        title="JavaScript">
+        <div class="tags-list-item">JavaScript</div>
       </a>
     
       <a 
-        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
-        title="直播推流平台">
-        <div class="tags-list-item">直播推流平台</div>
+        href="/tags/MS17-010/" 
+        title="MS17-010">
+        <div class="tags-list-item">MS17-010</div>
       </a>
     
       <a 
-        href="/tags/Nginx%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
-        title="Nginx环境搭建">
-        <div class="tags-list-item">Nginx环境搭建</div>
+        href="/tags/BeautifulSoup%E6%A8%A1%E5%9D%97/" 
+        title="BeautifulSoup模块">
+        <div class="tags-list-item">BeautifulSoup模块</div>
       </a>
     
       <a 
-        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
-        title="反弹shell">
-        <div class="tags-list-item">反弹shell</div>
+        href="/tags/requests%E6%A8%A1%E5%9D%97/" 
+        title="requests模块">
+        <div class="tags-list-item">requests模块</div>
       </a>
     
       <a 
-        href="/tags/%E6%8F%90%E6%9D%83/" 
-        title="提权">
-        <div class="tags-list-item">提权</div>
+        href="/tags/socket%E6%A8%A1%E5%9D%97/" 
+        title="socket模块">
+        <div class="tags-list-item">socket模块</div>
       </a>
     
       <a 
-        href="/tags/%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7/" 
-        title="添加用户">
-        <div class="tags-list-item">添加用户</div>
+        href="/tags/threading%E6%A8%A1%E5%9D%97/" 
+        title="threading模块">
+        <div class="tags-list-item">threading模块</div>
       </a>
     
       <a 
-        href="/tags/Apache%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
-        title="Apache环境搭建">
-        <div class="tags-list-item">Apache环境搭建</div>
+        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
+        title="Redis未授权访问">
+        <div class="tags-list-item">Redis未授权访问</div>
       </a>
     
       <a 
-        href="/tags/DVWA/" 
-        title="DVWA">
-        <div class="tags-list-item">DVWA</div>
+        href="/tags/Python%E8%84%9A%E6%9C%AC/" 
+        title="Python脚本">
+        <div class="tags-list-item">Python脚本</div>
       </a>
     
       <a 
-        href="/tags/IIS/" 
-        title="IIS">
-        <div class="tags-list-item">IIS</div>
-      </a>
-    
-      <a 
-        href="/tags/Vulhub/" 
-        title="Vulhub">
-        <div class="tags-list-item">Vulhub</div>
-      </a>
-    
-      <a 
-        href="/tags/Docker/" 
-        title="Docker">
-        <div class="tags-list-item">Docker</div>
-      </a>
-    
-      <a 
-        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
-        title="Java环境配置">
-        <div class="tags-list-item">Java环境配置</div>
-      </a>
-    
-      <a 
-        href="/tags/Python3/" 
-        title="Python3">
-        <div class="tags-list-item">Python3</div>
+        href="/tags/Typora/" 
+        title="Typora">
+        <div class="tags-list-item">Typora</div>
       </a>
     
       <a 
@@ -498,9 +780,21 @@
       </a>
     
       <a 
-        href="/tags/Typora/" 
-        title="Typora">
-        <div class="tags-list-item">Typora</div>
+        href="/tags/Python3/" 
+        title="Python3">
+        <div class="tags-list-item">Python3</div>
+      </a>
+    
+      <a 
+        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
+        title="Java环境配置">
+        <div class="tags-list-item">Java环境配置</div>
+      </a>
+    
+      <a 
+        href="/tags/Docker/" 
+        title="Docker">
+        <div class="tags-list-item">Docker</div>
       </a>
     
   </div>
@@ -508,125 +802,21 @@
   </article>
   
   
-    <article class="card card-content widescreen-archive archive-widget">
-      <div class="archive-card">
-  <div class="archive-card-header">
-    <i 
-      class="iconfont icon-wodebaobiao" 
-      style="padding-right: 2px;">
-    </i>归档
-  </div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a 
-        href="/archives/2021" 
-        class="archive-card-list-item">
-        2021
-        <span class="archive-card-list-item-badge">22</span>
-      </a>
-    
-  </div>
-</div>
-    </article>
-  
 </div>
             </aside>
             <aside class="right-column">
               <div class="sticky-widescreen">
   
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%884%E7%A7%8D%EF%BC%89"><span class="toc-text">js调用方法（4种）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#js%E4%BA%8B%E4%BB%B6"><span class="toc-text">js事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DOM%E6%93%8D%E4%BD%9C"><span class="toc-text">DOM操作</span></a></li></ol>
+    </article>
   
   
   <article class="card card-content">
@@ -663,120 +853,6 @@
 </div>
   </article>
   
-  
-    <article class="card card-content">
-      <div class="archive-card">
-  <div class="archive-card-header">
-    <i 
-      class="iconfont icon-wodebaobiao" 
-      style="padding-right: 2px;">
-    </i>归档
-  </div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a 
-        href="/archives/2021" 
-        class="archive-card-list-item">
-        2021
-        <span class="archive-card-list-item-badge">22</span>
-      </a>
-    
-  </div>
-</div>
-    </article>
   
 </div>
             </aside>
@@ -848,6 +924,36 @@
 </a> 
      
      
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
      
      
     <script src="/js/main.js"></script> 
