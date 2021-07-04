@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
   <meta charset="UTF-8">
   <meta 
@@ -192,7 +192,7 @@
         href="/" 
         class="navbar-menu-item">
         
-          首页
+          Home
         
       </a>
     
@@ -200,7 +200,7 @@
         href="/archives" 
         class="navbar-menu-item">
         
-          归档
+          Archive
         
       </a>
     
@@ -208,7 +208,7 @@
         href="/tags" 
         class="navbar-menu-item">
         
-          标签
+          Tags
         
       </a>
     
@@ -216,7 +216,7 @@
         href="/categories" 
         class="navbar-menu-item">
         
-          分类
+          Categories
         
       </a>
     
@@ -224,7 +224,7 @@
         href="/about" 
         class="navbar-menu-item">
         
-          关于
+          About
         
       </a>
     
@@ -232,7 +232,7 @@
         href="/links" 
         class="navbar-menu-item">
         
-          友链
+          Friends
         
       </a>
     
@@ -292,7 +292,7 @@
     
     
       <span class="dot"></span>
-      <span>1.5k 字</span>
+      <span>1.5k words</span>
     
   </div>
   
@@ -447,7 +447,7 @@
         class="nav-link">
         <i class="iconfont icon-left nav-prev-icon"></i>
         <div>
-          <div class="nav-label">上一篇</div>
+          <div class="nav-label">Prev</div>
           
             <div class="nav-title">centos7搭建DVWA </div>
           
@@ -461,7 +461,7 @@
         href="/2021/06/28/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" 
         class="nav-link">
         <div>
-          <div class="nav-label">下一篇</div>
+          <div class="nav-label">Next</div>
           
             <div class="nav-title">MS17-010漏洞复现 </div>
           
@@ -513,7 +513,7 @@
   <i 
     class="iconfont icon-menu" 
     style="padding-right: 2px;">
-  </i>目录
+  </i>TOC
 </div>
 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E6%8F%8F%E8%BF%B0"><span class="toc-text">一、漏洞描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%BC%8F%E6%B4%9E%E7%89%B9%E5%BE%81"><span class="toc-text">二、漏洞特征</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-text">三、漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-text">漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95"><span class="toc-text">无密码登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99webshell"><span class="toc-text">写webshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">定时反弹shell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssh%E7%99%BB%E5%BD%95"><span class="toc-text">ssh登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">主从复制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-text">暴力破解</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BF%AE%E5%A4%8D"><span class="toc-text">四、修复</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%AE%9Aip%E7%99%BB%E5%BD%95"><span class="toc-text">指定ip登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E5%AF%86%E7%A0%81"><span class="toc-text">增加密码</span></a></li></ol></li></ol>
 </div></main>
@@ -533,19 +533,19 @@
     class="author-posts-count" 
     href="/archives">
     <span>22</span>
-    <span>文章</span>
+    <span>Posts</span>
   </a>
   <a 
     class="author-categories-count" 
     href="/categories">
     <span>9</span>
-    <span>分类</span>
+    <span>Categories</span>
   </a>
   <a 
     class="author-tags-count" 
     href="/tags">
     <span>26</span>
-    <span>标签</span>
+    <span>Tags</span>
   </a>
 </div>
 
@@ -559,7 +559,7 @@
   <i 
     class="iconfont icon-menu" 
     style="padding-right: 2px;">
-  </i>目录
+  </i>TOC
 </div>
 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E6%8F%8F%E8%BF%B0"><span class="toc-text">一、漏洞描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%BC%8F%E6%B4%9E%E7%89%B9%E5%BE%81"><span class="toc-text">二、漏洞特征</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-text">三、漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-text">漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95"><span class="toc-text">无密码登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99webshell"><span class="toc-text">写webshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">定时反弹shell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssh%E7%99%BB%E5%BD%95"><span class="toc-text">ssh登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">主从复制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-text">暴力破解</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BF%AE%E5%A4%8D"><span class="toc-text">四、修复</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%AE%9Aip%E7%99%BB%E5%BD%95"><span class="toc-text">指定ip登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E5%AF%86%E7%A0%81"><span class="toc-text">增加密码</span></a></li></ol></li></ol>
       </div>
@@ -572,7 +572,7 @@
     <i 
       class="iconfont icon-fenlei" 
       style="padding-right: 2px;">
-    </i>分类
+    </i>Categories
   </div>
   <div class="categories-list">
     
@@ -649,7 +649,7 @@
     <i 
       class="iconfont icon-biaoqian" 
       style="padding-right: 2px;">
-    </i>热门标签
+    </i>hot tags
   </div>
   <div class="tags-list">
     
@@ -765,7 +765,7 @@
   <i 
     class="iconfont icon-menu" 
     style="padding-right: 2px;">
-  </i>目录
+  </i>TOC
 </div>
 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E6%8F%8F%E8%BF%B0"><span class="toc-text">一、漏洞描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%BC%8F%E6%B4%9E%E7%89%B9%E5%BE%81"><span class="toc-text">二、漏洞特征</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-text">三、漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-text">漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95"><span class="toc-text">无密码登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99webshell"><span class="toc-text">写webshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">定时反弹shell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssh%E7%99%BB%E5%BD%95"><span class="toc-text">ssh登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">主从复制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-text">暴力破解</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BF%AE%E5%A4%8D"><span class="toc-text">四、修复</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%AE%9Aip%E7%99%BB%E5%BD%95"><span class="toc-text">指定ip登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E5%AF%86%E7%A0%81"><span class="toc-text">增加密码</span></a></li></ol></li></ol>
     </article>
@@ -777,7 +777,7 @@
     <i 
       class="iconfont icon-wenzhang_huaban" 
       style="padding-right: 2px;">
-    </i>最近文章
+    </i>Recent Posts
   </div>
   <div class="recent-posts-list">
     
