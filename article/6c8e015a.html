@@ -18,17 +18,17 @@
   <link 
     rel="icon" 
     href="/img/favicon.png">
-  <title>标签</title>
+  <title>Pocsuite3重写redis脚本</title>
   
     
       <meta 
         property="og:title" 
-        content="标签">
+        content="Pocsuite3重写redis脚本">
     
     
       <meta 
         property="og:url" 
-        content="https://www.zerochen.top/tags/Docker/index.html">
+        content="https://www.zerochen.top/article/6c8e015a.html">
     
     
       <meta 
@@ -36,6 +36,26 @@
         content="/img/logo.png">
     
     
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-07-19">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-07-19">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="redis">
+        
+      
     
   
   <script>
@@ -143,6 +163,8 @@
   
   <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
   
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
   
 <meta name="generator" content="Hexo 5.4.0"></head>
 
@@ -241,31 +263,139 @@
         <div class="container">
           <div class="columns">
             <main class="main-column">
-<div class="card card-content tag-page-card">
-  <div class="tags-page-title">标签&nbsp-&nbspDocker</div>
-</div>
-<div class="archive-timeline">
-  
-  
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Pocsuite3重写redis脚本
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-07-19T01:34:26.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-07-19</span>
+    </time>
     
-      <div class="archive-timeline-tag"><span>2021</span></div>
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Python/" 
+          class="post-meta-link">
+          Python
+        </a>
       
     
-    <div class="archive-timeline-item">
-      <div class="archive-timeline-post">
-        <div class="card card-content">
-          <div class="archive-timeline-post-date">2021-06-20</div>
-          <div class="archive-timeline-post-content">
-            <a 
-              href="/article/a438e427.html" 
-              class="archive-timeline-post-item">
-              Ubuntu搭建Docker + Vulhub
-            </a>
-          </div>
-        </div>
+    
+      <span class="dot"></span>
+      <span>326 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/redis/" 
+            class="post-meta-link">
+            redis
+          </a>
+        
       </div>
     </div>
   
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h1><p>本脚本只做学习使用，请勿用作非法用途！</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>结合pocsuite3所学，重写redis漏洞复现。内含PoC模块、attack模块和shell模块。密码爆破功能请继续使用旧版本：<code>redis.py</code></p>
+<p>其中，shell模式下会报错，但是不影响命令写入和反弹shell（pocsuite模块监听可以，执行有些问题，可以重写监听端口–shell模块默认监听6666端口，手动开启监听）</p>
+<pre class="highlight"><span class="line">[ERROR] thread MainThread: &#x27;NoneType&#x27; object has no attribute &#x27;params&#x27;</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\core\threads.py&quot;, line 47, in run_threads</span><br><span class="line">    thread_function(*args)</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\controller\controller.py&quot;, line 148, in task_run</span><br><span class="line">    result = poc_module.execute(target, headers=conf.http_headers, mode=conf.mode, verbose=False)</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\core\poc.py&quot;, line 229, in execute</span><br><span class="line">    output.params = self.params</span><br><span class="line">AttributeError: &#x27;NoneType&#x27; object has no attribute &#x27;params&#x27;</span><br></pre>
+
+<p>搜了一下，应该是某个值为空，然后空值被调用了，导致报错。但是我的shell里面没写空值，看报错，也都是系统函数报错的，盲猜可能是不会使用pocsuite3的shell模块导致的。有了解的大佬请留言指正，感谢！</p>
+<p>下载地址：</p>
+<p>旧版（爆破功能）</p>
+<p><a href="https://www.zerochen.top/download/Redis/redis.py">https://www.zerochen.top/download/Redis/redis.py</a></p>
+<p>新版（pocsuite3模块）</p>
+<p><a href="https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py">https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py</a></p>
+
+  </div>
+  <div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/2cb80240.html" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Pocsuite3使用 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="gitalk-container"></div>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+  
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+  
+<script src="/js/lib/md5.min.js"></script>
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: 'e231ce2fa07f8397e8a7',
+      clientSecret: '2fb4635367cf9a78330b811d153435c62a037615',
+      repo: 'zeroChen00.github.io',
+      owner: 'zeroChen00',
+      admin: ["zeroChen00"],
+      id: md5(location.href),
+      distractionFreeMode: true,
+      language: 'zh-CN',
+      labels: ["Gitalk"],
+      perPage: 10
+    })
+
+    gitalk.render('gitalk-container')
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E"><span class="toc-text">声明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li></ol>
 </div></main>
             <aside class="left-column">
               
@@ -282,19 +412,19 @@
   <a 
     class="author-posts-count" 
     href="/archives">
-    <span>23</span>
+    <span>26</span>
     <span>文章</span>
   </a>
   <a 
     class="author-categories-count" 
     href="/categories">
-    <span>9</span>
+    <span>8</span>
     <span>分类</span>
   </a>
   <a 
     class="author-tags-count" 
     href="/tags">
-    <span>27</span>
+    <span>26</span>
     <span>标签</span>
   </a>
 </div>
@@ -302,6 +432,18 @@
               </div>
                <div class="sticky-tablet">
   
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E"><span class="toc-text">声明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li></ol>
+      </div>
+    </article>
   
   
   <article class="card card-content categories-widget">
@@ -314,6 +456,13 @@
   </div>
   <div class="categories-list">
     
+      <a href="/categories/%E9%99%84%E5%8A%A0/">
+        <div class="categories-list-item">
+          附加
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
       <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
         <div class="categories-list-item">
           漏洞复现
@@ -324,14 +473,14 @@
       <a href="/categories/Web%E6%B8%97%E9%80%8F/">
         <div class="categories-list-item">
           Web渗透
-          <span class="categories-list-item-badge">4</span>
+          <span class="categories-list-item-badge">5</span>
         </div>
       </a>
     
       <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
         <div class="categories-list-item">
           环境搭建
-          <span class="categories-list-item-badge">2</span>
+          <span class="categories-list-item-badge">6</span>
         </div>
       </a>
     
@@ -345,34 +494,20 @@
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
-          <span class="categories-list-item-badge">4</span>
+          <span class="categories-list-item-badge">2</span>
         </div>
       </a>
     
       <a href="/categories/Python/">
         <div class="categories-list-item">
           Python
-          <span class="categories-list-item-badge">2</span>
-        </div>
-      </a>
-    
-      <a href="/categories/%E9%99%84%E5%8A%A0/">
-        <div class="categories-list-item">
-          附加
-          <span class="categories-list-item-badge">2</span>
+          <span class="categories-list-item-badge">4</span>
         </div>
       </a>
     
       <a href="/categories/Windows/">
         <div class="categories-list-item">
           Windows
-          <span class="categories-list-item-badge">2</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Linxu/">
-        <div class="categories-list-item">
-          Linxu
           <span class="categories-list-item-badge">1</span>
         </div>
       </a>
@@ -398,18 +533,6 @@
       </a>
     
       <a 
-        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
-        title="hexo博客">
-        <div class="tags-list-item">hexo博客</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
-        title="反弹shell">
-        <div class="tags-list-item">反弹shell</div>
-      </a>
-    
-      <a 
         href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
         title="直播推流平台">
         <div class="tags-list-item">直播推流平台</div>
@@ -422,33 +545,33 @@
       </a>
     
       <a 
-        href="/tags/Apache%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
-        title="Apache环境搭建">
-        <div class="tags-list-item">Apache环境搭建</div>
+        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
+        title="hexo博客">
+        <div class="tags-list-item">hexo博客</div>
       </a>
     
       <a 
-        href="/tags/Vulhub/" 
-        title="Vulhub">
-        <div class="tags-list-item">Vulhub</div>
+        href="/tags/LAMP/" 
+        title="LAMP">
+        <div class="tags-list-item">LAMP</div>
       </a>
     
       <a 
-        href="/tags/Docker/" 
-        title="Docker">
-        <div class="tags-list-item">Docker</div>
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
       </a>
     
       <a 
         href="/tags/%E6%8F%90%E6%9D%83/" 
         title="提权">
         <div class="tags-list-item">提权</div>
-      </a>
-    
-      <a 
-        href="/tags/%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7/" 
-        title="添加用户">
-        <div class="tags-list-item">添加用户</div>
       </a>
     
       <a 
@@ -464,9 +587,9 @@
       </a>
     
       <a 
-        href="/tags/DVWA/" 
-        title="DVWA">
-        <div class="tags-list-item">DVWA</div>
+        href="/tags/Vulhub/" 
+        title="Vulhub">
+        <div class="tags-list-item">Vulhub</div>
       </a>
     
       <a 
@@ -476,9 +599,15 @@
       </a>
     
       <a 
-        href="/tags/Typora/" 
-        title="Typora">
-        <div class="tags-list-item">Typora</div>
+        href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
+        title="SQL注入">
+        <div class="tags-list-item">SQL注入</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
+        title="Redis未授权访问">
+        <div class="tags-list-item">Redis未授权访问</div>
       </a>
     
       <a 
@@ -487,134 +616,32 @@
         <div class="tags-list-item">Shiro反序列</div>
       </a>
     
-  </div>
-</div>
-  </article>
-  
-  
-    <article class="card card-content widescreen-archive archive-widget">
-      <div class="archive-card">
-  <div class="archive-card-header">
-    <i 
-      class="iconfont icon-wodebaobiao" 
-      style="padding-right: 2px;">
-    </i>归档
-  </div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
       <a 
-        href="/archives/2021" 
-        class="archive-card-list-item">
-        2021
-        <span class="archive-card-list-item-badge">23</span>
+        href="/tags/portscan/" 
+        title="portscan">
+        <div class="tags-list-item">portscan</div>
       </a>
     
   </div>
 </div>
-    </article>
+  </article>
+  
   
 </div>
             </aside>
             <aside class="right-column">
               <div class="sticky-widescreen">
   
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E"><span class="toc-text">声明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li></ol>
+    </article>
   
   
   <article class="card card-content">
@@ -628,147 +655,29 @@
   <div class="recent-posts-list">
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-05</div>
-        <a href="/article/13b563a9.html"><div class="recent-posts-item-content">Java环境变量配置及切换</div></a>
+        <div class="recent-posts-item-title">2021-07-19</div>
+        <a href="/article/6c8e015a.html"><div class="recent-posts-item-content">Pocsuite3重写redis脚本</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-03</div>
-        <a href="/article/4fd639c3.html"><div class="recent-posts-item-content">Burpsuite绕过Token爆破</div></a>
+        <div class="recent-posts-item-title">2021-07-19</div>
+        <a href="/article/2cb80240.html"><div class="recent-posts-item-content">Pocsuite3使用</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-02</div>
-        <a href="/article/bfa55e85.html"><div class="recent-posts-item-content">centos7搭建DVWA</div></a>
+        <div class="recent-posts-item-title">2021-07-09</div>
+        <a href="/article/30e59cf7.html"><div class="recent-posts-item-content">SQL注入方法总结</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-06-28</div>
-        <a href="/article/3b28a510.html"><div class="recent-posts-item-content">Redis未授权访问漏洞复现</div></a>
+        <div class="recent-posts-item-title">2021-07-09</div>
+        <a href="/article/cfe7a8b3.html"><div class="recent-posts-item-content">Burpsuite挂梯子抓包</div></a>
       </div>
     
   </div>
 </div>
   </article>
   
-  
-    <article class="card card-content">
-      <div class="archive-card">
-  <div class="archive-card-header">
-    <i 
-      class="iconfont icon-wodebaobiao" 
-      style="padding-right: 2px;">
-    </i>归档
-  </div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a 
-        href="/archives/2021" 
-        class="archive-card-list-item">
-        2021
-        <span class="archive-card-list-item-badge">23</span>
-      </a>
-    
-  </div>
-</div>
-    </article>
   
 </div>
             </aside>
@@ -853,6 +762,36 @@
 </a> 
      
      
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
      
      
     <script src="/js/main.js"></script> 
