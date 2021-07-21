@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>Pocsuite3使用</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Pocsuite3使用">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/Pocsuite3%E4%BD%BF%E7%94%A8/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-07-19">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-07-21">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="pocsuite3模块">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Pocsuite3使用
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-07-19T01:13:24.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-07-19</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Python/" 
+          class="post-meta-link">
+          Python
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.8k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/pocsuite3%E6%A8%A1%E5%9D%97/" 
+            class="post-meta-link">
+            pocsuite3模块
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h1><pre class="highlight"><span class="line">漏洞应用名_版本号_漏洞类型名称 </span><br></pre>
+
+<p>（所有字母均为小写,所有的符号改成_）</p>
+<p>例：</p>
+<pre class="highlight"><span class="line">88979_cmseasy_5_5_sql_injection.py</span><br></pre>
+
+
+
+<h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><pre class="highlight"><span class="line">#导入所写PoC所需要类/文件，尽量不要使用第三方模块。</span><br><span class="line">#迫不得已使用第三方模块有其依赖规则，后面给出。</span><br><span class="line">from pocsuite3.api import Output,POCBase,register_poc,requests</span><br><span class="line"></span><br><span class="line">#PoC实现类，继承POCBase</span><br><span class="line">class DemoPoc(POCBase):</span><br><span class="line">	#PoC信息字段，需要完整填写全部下列信息</span><br><span class="line">	vulID = &#x27;1000&#x27;  					# ssvid ID 如果是提交漏洞的同时提交 PoC,则写成 0</span><br><span class="line">    version = &#x27;1&#x27; 						# 默认为1</span><br><span class="line">    author = &#x27;chen&#x27; 					# PoC作者的大名</span><br><span class="line">    vulDate = &#x27;2014-10-16&#x27; 				# 漏洞公开的时间,不知道就写今天</span><br><span class="line">    createDate = &#x27;2014-10-16&#x27;			# 编写PoC的日期</span><br><span class="line">    updateDate = &#x27;2014-10-16&#x27;			# PoC更新的时间,默认和编写时间一样</span><br><span class="line">    references = [&#x27;https://www.sektioneins.de/en/blog/14-10-15-drupal-sql-injection-vulnerability.html&#x27;]</span><br><span class="line">    									# 漏洞地址来源,0day不用写</span><br><span class="line">    name = &#x27;Drupal 7.x /includes/database/database.inc SQL注入漏洞 PoC&#x27;			# PoC名称</span><br><span class="line">    appPowerLink = &#x27;https://www.drupal.org/&#x27;			# 漏洞厂商主页地址</span><br><span class="line">    appName = &#x27;Drupal&#x27;									# 漏洞应用名称</span><br><span class="line">    appVersion = &#x27;7.x&#x27;									# 漏洞影响版本</span><br><span class="line">    vulType = &#x27;SQL Injection&#x27;							# 漏洞类型,类型参考见 漏洞类型规范表</span><br><span class="line">    desc = &#x27;&#x27;&#x27;</span><br><span class="line">    	漏洞简要描述</span><br><span class="line">    &#x27;&#x27;&#x27; </span><br><span class="line">    samples = []										# 测试样列,就是用 PoC 测试成功的网站</span><br><span class="line">    install_requires = [] 	# PoC 第三方模块依赖，请尽量不要使用第三方模块，必要时请参考《PoC第三方模块依赖说明》填写</span><br><span class="line">    #第三方插件需再此处注明</span><br><span class="line">   	# 整个字段的值为list，每个项为一个依赖模块</span><br><span class="line">   	# install_requires =[str_item_,str_item,…] </span><br><span class="line">   	# 如果遇到安装时模块名与调用时的不一致情况，用:分割开</span><br><span class="line">   	# 例如常见的加密算法库pycryptodome,但是调用是以from Crypto.Cipher import AES,此时就需要如下填写</span><br><span class="line">	# install_requires = [&#x27;pycryptodome:Crypto&#x27;]</span><br><span class="line">   	pocDesc = &#x27;&#x27;&#x27; </span><br><span class="line">   		poc的用法描述 </span><br><span class="line">   	&#x27;&#x27;&#x27;</span><br><span class="line">   	</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"> 	#编写验证模式</span><br><span class="line">	def _verify(self):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        result = &#123;&#125;</span><br><span class="line">        # 验证代码</span><br><span class="line">        if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">     </span><br><span class="line">    #编写攻击模式</span><br><span class="line">    #若没有攻击模式，直接写return self._verify()即可</span><br><span class="line">    def _attack(self):</span><br><span class="line">    	output = Output(self)</span><br><span class="line">    	result = &#123;&#125;</span><br><span class="line">    	# 攻击代码</span><br><span class="line">    	if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    #编写shell模式</span><br><span class="line">    def _shell(self):</span><br><span class="line">    	cmd = REVERSE_PAYLOAD.BASH.format(get_listener_ip(), get_listener_port())</span><br><span class="line">    	# 攻击代码 execute cmd</span><br><span class="line">    </span><br><span class="line">    #自定义输出函数，调用框架输出的实例Output</span><br><span class="line">	def parse_output(self,result):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        if result:</span><br><span class="line">            output.success(result)</span><br><span class="line">        else:</span><br><span class="line">            output.fail(&#x27;target is not vulnerable&#x27;)</span><br><span class="line">        return output</span><br><span class="line"></span><br><span class="line">register_poc(DemoPoc)</span><br></pre>
+
+
+
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><pre class="highlight"><span class="line"># 使用test.py这个PoC去检测http://test.com这个url</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify </span><br><span class="line"></span><br><span class="line"># shell 反弹模式</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify --shell </span><br><span class="line"></span><br><span class="line"># pocsuite3中自带的ecshop poc中实现了自定义命令`command`,可以从外部参数传递</span><br><span class="line">pocsuite -u http://test.com -r ecshop_rce.py --attack --command &quot;whoami&quot; </span><br><span class="line"></span><br><span class="line">#使用test.py这个PoC去检测url.txt文件里所有的url</span><br><span class="line">pocsuite -f url.txt -r test.py --verify </span><br></pre>
+
+
+
+<h1 id="Result结果参数说明"><a href="#Result结果参数说明" class="headerlink" title="Result结果参数说明"></a>Result结果参数说明</h1><pre class="highlight"><span class="line">result：[</span><br><span class="line">    &#123;  name: &#x27;DBInfo&#x27;，        value：&#x27;数据库内容&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value：&#x27;管理员密码&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Salt&#x27;，          value: &#x27;加密盐值&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;用户ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Groupid&#x27;，       value: &#x27;用户组ID&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;ShellInfo&#x27;，     value: &#x27;Webshell信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;Webshell地址&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;Webshell内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;FileInfo&#x27;，      value: &#x27;文件信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Filename&#x27;，      value: &#x27;文件名称&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;文件内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;XSSInfo&#x27;，       value: &#x27;跨站脚本信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Payload&#x27;，       value: &#x27;验证Payload&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;AdminInfo&#x27;，     value: &#x27;管理员信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;管理员ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;管理员密码&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;Database&#x27;，      value：&#x27;数据库信息&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Hostname&#x27;，      value: &#x27;数据库主机名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value：&#x27;数据库用户名&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;数据库密码&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;DBname&#x27;，        value: &#x27;数据库名&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;VerifyInfo&#x27;，    value: &#x27;验证信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Target&#x27;，        value: &#x27;验证host:port&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Postdata&#x27;，      value: &#x27;验证POST数据&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Path&#x27;，          value: &#x27;网站绝对路径&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;SiteAttr&#x27;，      value: &#x27;网站服务器信息&#x27;&#125;,</span><br><span class="line">    &#123;  name: &#x27;Process&#x27;，       value: &#x27;服务器进程&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    ]</span><br></pre>
+
+
+
+<h1 id="通用方法"><a href="#通用方法" class="headerlink" title="通用方法"></a>通用方法</h1><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>from pocsuite3.api import logger</td>
+<td>日志记录，比如logger.log(info)</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import requests</td>
+<td>请求类，用法同 requests</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import Seebug</td>
+<td>Seebug api 调用</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import ZoomEye</td>
+<td>ZoomEye api 调用</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import CEye</td>
+<td>Ceye api 调用</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import crawl</td>
+<td>简单爬虫功能</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import PHTTPServer</td>
+<td>Http服务功能</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import REVERSE_PAYLOAD</td>
+<td>反向连接shell payload</td>
+</tr>
+<tr>
+<td>from pocsuite3.api import get_results</td>
+<td>获取结果</td>
+</tr>
+</tbody></table>
+<h1 id="漏洞类型规范"><a href="#漏洞类型规范" class="headerlink" title="漏洞类型规范"></a>漏洞类型规范</h1><table>
+<thead>
+<tr>
+<th>英文名称</th>
+<th>中文名称</th>
+<th>缩写</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cross Site Scripting</td>
+<td>跨站脚本</td>
+<td>xss</td>
+</tr>
+<tr>
+<td>Cross Site Request Forgery</td>
+<td>跨站请求伪造</td>
+<td>csrf</td>
+</tr>
+<tr>
+<td>SQL Injection</td>
+<td>Sql注入</td>
+<td>sql-inj</td>
+</tr>
+<tr>
+<td>LDAP Injection</td>
+<td>ldap注入</td>
+<td>ldap-inj</td>
+</tr>
+<tr>
+<td>Mail Command Injection</td>
+<td>邮件命令注入</td>
+<td>smtp-inj</td>
+</tr>
+<tr>
+<td>Null Byte Injection</td>
+<td>空字节注入</td>
+<td>null-byte-inj</td>
+</tr>
+<tr>
+<td>CRLF Injection</td>
+<td>CRLF注入</td>
+<td>crlf-inj</td>
+</tr>
+<tr>
+<td>SSI Injection</td>
+<td>Ssi注入</td>
+<td>ssi-inj</td>
+</tr>
+<tr>
+<td>XPath Injection</td>
+<td>Xpath注入</td>
+<td>xpath-inj</td>
+</tr>
+<tr>
+<td>XML Injection</td>
+<td>Xml注入</td>
+<td>xml-inj</td>
+</tr>
+<tr>
+<td>XQuery Injection</td>
+<td>Xquery 注入</td>
+<td>xquery-inj</td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td>命令执行</td>
+<td>cmd-exec</td>
+</tr>
+<tr>
+<td>Code Execution</td>
+<td>代码执行</td>
+<td>code-exec</td>
+</tr>
+<tr>
+<td>Remote File Inclusion</td>
+<td>远程文件包含</td>
+<td>rfi</td>
+</tr>
+<tr>
+<td>Local File Inclusion</td>
+<td>本地文件包含</td>
+<td>lfi</td>
+</tr>
+<tr>
+<td>Abuse of Functionality</td>
+<td>功能函数滥用</td>
+<td>func-abuse</td>
+</tr>
+<tr>
+<td>Brute Force</td>
+<td>暴力破解</td>
+<td>brute-force</td>
+</tr>
+<tr>
+<td>Buffer Overflow</td>
+<td>缓冲区溢出</td>
+<td>buffer-overflow</td>
+</tr>
+<tr>
+<td>Content Spoofing</td>
+<td>内容欺骗</td>
+<td>spoofing</td>
+</tr>
+<tr>
+<td>Credential Prediction</td>
+<td>证书预测</td>
+<td>credential-prediction</td>
+</tr>
+<tr>
+<td>Session Prediction</td>
+<td>会话预测</td>
+<td>session-prediction</td>
+</tr>
+<tr>
+<td>Denial of Service</td>
+<td>拒绝服务</td>
+<td>dos</td>
+</tr>
+<tr>
+<td>Fingerprinting</td>
+<td>指纹识别</td>
+<td>finger</td>
+</tr>
+<tr>
+<td>Format String</td>
+<td>格式化字符串</td>
+<td>format-string</td>
+</tr>
+<tr>
+<td>HTTP Response Smuggling</td>
+<td>http响应伪造</td>
+<td>http-response-smuggling</td>
+</tr>
+<tr>
+<td>HTTP Response Splitting</td>
+<td>http响应拆分</td>
+<td>http-response-splitting</td>
+</tr>
+<tr>
+<td>HTTP Request Splitting</td>
+<td>http请求拆分</td>
+<td>http-request-splitting</td>
+</tr>
+<tr>
+<td>HTTP Request Smuggling</td>
+<td>http请求伪造</td>
+<td>http-request-smuggling</td>
+</tr>
+<tr>
+<td>HTTP Parameter Pollution</td>
+<td>http参数污染</td>
+<td>hpp</td>
+</tr>
+<tr>
+<td>Integer Overflows</td>
+<td>整数溢出</td>
+<td>int-overflow</td>
+</tr>
+<tr>
+<td>Predictable Resource Location</td>
+<td>可预测资源定位</td>
+<td>res-location</td>
+</tr>
+<tr>
+<td>Session Fixation</td>
+<td>会话固定</td>
+<td>session-fixation</td>
+</tr>
+<tr>
+<td>URL Redirector Abuse</td>
+<td>url重定向</td>
+<td>redirect</td>
+</tr>
+<tr>
+<td>Privilege Escalation</td>
+<td>权限提升</td>
+<td>privilege-escalation</td>
+</tr>
+<tr>
+<td>Resolve Error</td>
+<td>解析错误</td>
+<td>resolve-error</td>
+</tr>
+<tr>
+<td>Arbitrary File Creation</td>
+<td>任意文件创建</td>
+<td>file-creation</td>
+</tr>
+<tr>
+<td>Arbitrary File Download</td>
+<td>任意文件下载</td>
+<td>file-download</td>
+</tr>
+<tr>
+<td>Arbitrary File Deletion</td>
+<td>任意文件删除</td>
+<td>file-deletion</td>
+</tr>
+<tr>
+<td>Backup File Found</td>
+<td>备份文件发现</td>
+<td>bak-file-found</td>
+</tr>
+<tr>
+<td>Database Found</td>
+<td>数据库发现</td>
+<td>db-found</td>
+</tr>
+<tr>
+<td>Directory Listing</td>
+<td>目录遍历</td>
+<td>dir-listing</td>
+</tr>
+<tr>
+<td>Directory Traversal</td>
+<td>目录穿越</td>
+<td>dir-traversal</td>
+</tr>
+<tr>
+<td>File Upload</td>
+<td>文件上传</td>
+<td>file-upload</td>
+</tr>
+<tr>
+<td>Login Bypass</td>
+<td>登录绕过</td>
+<td>login-bypass</td>
+</tr>
+<tr>
+<td>Weak Password</td>
+<td>弱密码</td>
+<td>weak-pass</td>
+</tr>
+<tr>
+<td>Remote Password Change</td>
+<td>远程密码修改</td>
+<td>remote-pass-change</td>
+</tr>
+<tr>
+<td>Code Disclosure</td>
+<td>代码泄漏</td>
+<td>code-disclosure</td>
+</tr>
+<tr>
+<td>Path Disclosure</td>
+<td>路径泄漏</td>
+<td>path-disclosure</td>
+</tr>
+<tr>
+<td>Information Disclosure</td>
+<td>信息泄漏</td>
+<td>info-disclosure</td>
+</tr>
+<tr>
+<td>Security Mode Bypass</td>
+<td>安全模式绕过</td>
+<td>sec-bypass</td>
+</tr>
+<tr>
+<td>Malware</td>
+<td>挂马</td>
+<td>mal</td>
+</tr>
+<tr>
+<td>Black Link</td>
+<td>暗链</td>
+<td>black-link</td>
+</tr>
+<tr>
+<td>Backdoor</td>
+<td>后门</td>
+<td>backdoor</td>
+</tr>
+<tr>
+<td>Unauthorized access</td>
+<td>未授权访问</td>
+<td>Unauthorized access</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Pocsuite3重写redis脚本 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/SQL%E6%B3%A8%E5%85%A5%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">SQL注入方法总结 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%91%BD%E5%90%8D%E8%A7%84%E5%88%99"><span class="toc-text">命名规则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF"><span class="toc-text">模板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Result%E7%BB%93%E6%9E%9C%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-text">Result结果参数说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text">通用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E7%B1%BB%E5%9E%8B%E8%A7%84%E8%8C%83"><span class="toc-text">漏洞类型规范</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">努力成为一个Python脚本小子</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>26</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>8</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>26</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%91%BD%E5%90%8D%E8%A7%84%E5%88%99"><span class="toc-text">命名规则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF"><span class="toc-text">模板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Result%E7%BB%93%E6%9E%9C%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-text">Result结果参数说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text">通用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E7%B1%BB%E5%9E%8B%E8%A7%84%E8%8C%83"><span class="toc-text">漏洞类型规范</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0/">
+        <div class="categories-list-item">
+          附加
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/Token%E7%BB%95%E8%BF%87/" 
+        title="Token绕过">
+        <div class="tags-list-item">Token绕过</div>
+      </a>
+    
+      <a 
+        href="/tags/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" 
+        title="JBoss反序列化">
+        <div class="tags-list-item">JBoss反序列化</div>
+      </a>
+    
+      <a 
+        href="/tags/Java/" 
+        title="Java">
+        <div class="tags-list-item">Java</div>
+      </a>
+    
+      <a 
+        href="/tags/Burpsuite/" 
+        title="Burpsuite">
+        <div class="tags-list-item">Burpsuite</div>
+      </a>
+    
+      <a 
+        href="/tags/JavaScript/" 
+        title="JavaScript">
+        <div class="tags-list-item">JavaScript</div>
+      </a>
+    
+      <a 
+        href="/tags/MS17-010/" 
+        title="MS17-010">
+        <div class="tags-list-item">MS17-010</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/pocsuite3%E6%A8%A1%E5%9D%97/" 
+        title="pocsuite3模块">
+        <div class="tags-list-item">pocsuite3模块</div>
+      </a>
+    
+      <a 
+        href="/tags/redis/" 
+        title="redis">
+        <div class="tags-list-item">redis</div>
+      </a>
+    
+      <a 
+        href="/tags/portscan/" 
+        title="portscan">
+        <div class="tags-list-item">portscan</div>
+      </a>
+    
+      <a 
+        href="/tags/BeautifulSoup%E6%A8%A1%E5%9D%97/" 
+        title="BeautifulSoup模块">
+        <div class="tags-list-item">BeautifulSoup模块</div>
+      </a>
+    
+      <a 
+        href="/tags/requests%E6%A8%A1%E5%9D%97/" 
+        title="requests模块">
+        <div class="tags-list-item">requests模块</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
+        title="Redis未授权访问">
+        <div class="tags-list-item">Redis未授权访问</div>
+      </a>
+    
+      <a 
+        href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
+        title="SQL注入">
+        <div class="tags-list-item">SQL注入</div>
+      </a>
+    
+      <a 
+        href="/tags/Python3/" 
+        title="Python3">
+        <div class="tags-list-item">Python3</div>
+      </a>
+    
+      <a 
+        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
+        title="Shiro反序列">
+        <div class="tags-list-item">Shiro反序列</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%91%BD%E5%90%8D%E8%A7%84%E5%88%99"><span class="toc-text">命名规则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF"><span class="toc-text">模板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Result%E7%BB%93%E6%9E%9C%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-text">Result结果参数说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text">通用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E7%B1%BB%E5%9E%8B%E8%A7%84%E8%8C%83"><span class="toc-text">漏洞类型规范</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-19</div>
+        <a href="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/"><div class="recent-posts-item-content">Pocsuite3重写redis脚本</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-19</div>
+        <a href="/article/Pocsuite3%E4%BD%BF%E7%94%A8/"><div class="recent-posts-item-content">Pocsuite3使用</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-09</div>
+        <a href="/article/SQL%E6%B3%A8%E5%85%A5%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"><div class="recent-posts-item-content">SQL注入方法总结</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-07-09</div>
+        <a href="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/"><div class="recent-posts-item-content">Burpsuite挂梯子抓包</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>
