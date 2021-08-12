@@ -14,7 +14,7 @@ import threading
 q = queue.Queue()
 
 
-def portScan():
+def portScan(q):
     while not q.empty():
         port = q.get()
         # 设置套接字连接
@@ -46,16 +46,16 @@ if __name__ == "__main__":
     host = sys.argv[1]
     thread_num = int(sys.argv[2])
     # 在进程开始前，定义进程锁，不可在进程中定义锁，否则线程自己使用自己的锁，则失去进程锁的意义
-    lock = threading.RLock()
+    lock = threading.Lock()
 
     for port in range(1, 65536):
         q.put(port)
     for i in range(thread_num):
         # 开启守护进程
-        t = threading.Thread(target=portScan, daemon=True)
+        t = threading.Thread(target=portScan, args=[q], daemon=True)
         t.start()
 
     # 设置主进程死循环，方便接收中断信号
     # 因为设置了守护进程，所以主进程结束，子进程也会立刻结束
-    while 1:
+    while True:
         pass
