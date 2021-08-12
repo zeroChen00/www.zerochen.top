@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>SQL注入思路整理</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="SQL注入思路整理">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF%E6%95%B4%E7%90%86/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-07-21">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-09">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="SQL注入">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      SQL注入思路整理
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-07-21T09:10:24.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-07-21</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.8k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
+            class="post-meta-link">
+            SQL注入
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>本篇只介绍思路，不做详细注入语句讲解。</p>
+<h1 id="二、SQL注入产生原因"><a href="#二、SQL注入产生原因" class="headerlink" title="二、SQL注入产生原因"></a>二、SQL注入产生原因</h1><p>用户输入处理不当，用户数据被当做SQL语句执行。</p>
+<h1 id="三、注入类型"><a href="#三、注入类型" class="headerlink" title="三、注入类型"></a>三、注入类型</h1><table>
+<thead>
+<tr>
+<th align="left">分类标准</th>
+<th align="left">分类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">根据请求方式分类</td>
+<td align="left">GET方式注入 POST方式注入</td>
+</tr>
+<tr>
+<td align="left">根据注入点参数分类</td>
+<td align="left">整数型注入 字符型注入 搜索型注入</td>
+</tr>
+<tr>
+<td align="left">根据反馈类型分类</td>
+<td align="left">union联合查询注入 报错注入 布尔盲注 时间盲注 其他类型 （如请求头注入、内联注入、二次编码注入、宽字节注入、堆叠注入、二阶注入等）</td>
+</tr>
+<tr>
+<td align="left">根据数据库类型分类</td>
+<td align="left">Mysql、MSSql、Oracle、Access、MongoDB等</td>
+</tr>
+</tbody></table>
+<h1 id="四、SQL注入思路"><a href="#四、SQL注入思路" class="headerlink" title="四、SQL注入思路"></a>四、SQL注入思路</h1><h2 id="1、发现注入点"><a href="#1、发现注入点" class="headerlink" title="1、发现注入点"></a>1、发现注入点</h2><p><strong>注入点</strong></p>
+<p>所有存在<strong>可变参数</strong>且<strong>代入数据</strong>库中执行的数据</p>
+<p>如：url中的?id=、页面中的搜索框、POST数据包中的可变参数、数据头中的UA、X-Forward-For等</p>
+<p><strong>判断：</strong></p>
+<p>在参数后加单引号、双引号、斜杠<code>&#39;、&quot;、\</code>，全部加。</p>
+<p>若页面异常，则可能存在注入；</p>
+<p>若页面无变化，则使用延时函数，判断是否存在时间延时盲注（各大数据库通用）；其中，在mysql数据库中，需要额外判断宽字节注入、二次编码注入。若页面存在延时刷新、报错，可能存在sql注入。</p>
+<h2 id="2、判断闭合符"><a href="#2、判断闭合符" class="headerlink" title="2、判断闭合符"></a>2、判断闭合符</h2><p>使用不报错的闭合符（<code>&#39;或&quot;</code>）,加上注释符（不同数据库不同，但<code>-- a</code>几乎可以通用：mysql中为–空格,mssql和oracle为–，access无注释符号）</p>
+<p>注意：</p>
+<p>mysql为<code>?id=1&#39; -- a</code>形式</p>
+<p>mssql、oracle、access均为<code>?id=1&#39; and 1=1/1=2 --</code>形式（1=1正常、1=2异常）</p>
+<p>若页面返回正常，则单或双引号即为闭合符；若页面依然异常，则在单或双引号后添加<code>)</code>，直至页面恢复正常。添加部分与单或双引号组成闭合符。</p>
+<p>注意：需要结合语境，判断可能使用的sql语句，更加容易判断闭合符。如搜索型语句处（多存在搜索框处），可能会使用like关键词，需要使用%闭合，构造形如<code>%&#39;and &#39;%&#39;=&#39;</code>的闭合语句进行闭合判断。</p>
+<h2 id="3、判断数据库类型"><a href="#3、判断数据库类型" class="headerlink" title="3、判断数据库类型"></a>3、判断数据库类型</h2><p>在进行注入前，需要判断数据库类型，从而选择合适的注入语句。使用每个数据库独有的一个或多个语法、函数进行判断。</p>
+<p>简单列举，够用即可。</p>
+<table>
+<thead>
+<tr>
+<th align="left">数据库类型</th>
+<th align="left">注释</th>
+<th align="left">函数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">mysql</td>
+<td align="left">– a</td>
+<td align="left">version()、@@version、length()</td>
+</tr>
+<tr>
+<td align="left">mssql</td>
+<td align="left">–</td>
+<td align="left">@@version、len()、?id=1’ and exists (select * from sysobjects)&gt;0 – 返回正常</td>
+</tr>
+<tr>
+<td align="left">oracle</td>
+<td align="left">–</td>
+<td align="left">banner from sys.v_$version、length()</td>
+</tr>
+<tr>
+<td align="left">access</td>
+<td align="left">无</td>
+<td align="left">and exists (select * from msysobjects)&gt;0 返回正常</td>
+</tr>
+</tbody></table>
+<p>注：注释处为两个英文输入法的短横杠，非单横杠（显示问题）</p>
+<h2 id="4、选择注入方式"><a href="#4、选择注入方式" class="headerlink" title="4、选择注入方式"></a>4、选择注入方式</h2><p>根据页面回显情况，选择通用注入方式：</p>
+<p>1&gt;首选union联合查询。要求：有回显位。</p>
+<p>2&gt;次选报错注入。要求：页面异常为报错信息。</p>
+<p>3&gt;最后是盲注。若页面只有正常和单一异常两种回显，选择布尔盲注；若页面无回显，选择时间盲注。</p>
+<h2 id="5、结合WAF确定注入语句"><a href="#5、结合WAF确定注入语句" class="headerlink" title="5、结合WAF确定注入语句"></a>5、结合WAF确定注入语句</h2><p>结合4，同一处注入点可以有多重注入手法，若是没有waf，按照优先级进行选择即可。若是有waf，需要结合绕waf选择注入方式。同时，在判断时，也可以尝试绕waf。</p>
+<p>1&gt;首先，判断and、or、空格是否存在waf拦截。</p>
+<p>2&gt;然后，按照注入手法优先级，将用到的关键词（如：order by、union select等）单独放入注入语句进行判断。</p>
+<p><strong>优先绕过waf，其次换可替代的关键词、最后换注入方式</strong>。</p>
+<p>3&gt;最后，根据waf拦截方式，确定注入语句，依次注出当前数据库名、表名、字段名、数据即可。文末附上常见绕waf方式。</p>
+<p>注意：</p>
+<p>若为mysql数据库，可进行以下判断</p>
+<pre class="highlight"><span class="line">--os-shell可对网站进行getshell，但是存在以下前提条件</span><br><span class="line">1、存在sql注入</span><br><span class="line">2、知道网站绝对路径</span><br><span class="line">3、拥有数据库权限（dba权限），也可以使用sqlmap的--is-dba判断</span><br><span class="line">4、数据库配置文件secure_file_priv未设置或设置为可读写的已知路径</span><br></pre>
+
+<p>4&gt;其他：</p>
+<p>时间延时盲注可用DNS外带节省注入时间，放在其他文章中再做讲述。</p>
+<h1 id="五、SQL注入防御"><a href="#五、SQL注入防御" class="headerlink" title="五、SQL注入防御"></a>五、SQL注入防御</h1><table>
+<thead>
+<tr>
+<th align="left">方式</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">去掉单引号</td>
+<td align="left">现实场景常用单引号，去掉不合实际</td>
+</tr>
+<tr>
+<td align="left">转义单引号</td>
+<td align="left">对数字型无效（数字型不需要引号） 斜杠转义 addslashes()函数转义 php.ini配置文件转义（5.6以下版本开启magic_quotes_gpc = On）</td>
+</tr>
+<tr>
+<td align="left">强制类型转换</td>
+<td align="left">针对数字型 intval()</td>
+</tr>
+<tr>
+<td align="left">更改数据库连接方式</td>
+<td align="left">POD连接数据库将变量转换成字符串，再写入数据库，无法拼接</td>
+</tr>
+</tbody></table>
+<h1 id="六、WAF绕过"><a href="#六、WAF绕过" class="headerlink" title="六、WAF绕过"></a>六、WAF绕过</h1><p>sql语法特性 + http特性 + waf缺陷 = waf绕过</p>
+<p>1、大小写绕过（现今几乎无效）</p>
+<p>2、替换关键字<br>1&gt; 关键字双写（代码级别waf有效）<br>2&gt; 同价词替换，针对特殊关键词拦截的情况</p>
+<pre class="highlight"><span class="line">and --&gt; &amp;&amp;</span><br><span class="line">or --&gt; ||</span><br><span class="line">= --&gt; &lt;、&gt;</span><br><span class="line">空格 --&gt; %20、%09、%0a、%0b、%0c、%0d、%a0、//</span><br></pre>
+
+<p> 3&gt; 特殊字符拼接（mssql支持拼接、mysql不支持拼接）<br>​ ‘test1’+’test2’<br>​<br>3、编码绕过<br>常见的sql编码有unicode、hex、url、ascii、base64等<br>​ 1&gt;url编码（或者二次编码）<br>​ 2&gt;unicode编码（改/为%）<br>​ 常见unicode编码<br>​ 单引号：<code>%u0027</code><br>​ 空格：<code>%u0020</code><br>​ 左括号：<code>%u0028</code><br>​ 右括号：<code>%u0029</code><br>​<br>4、注释绕过<br>利用语言函数特性来绕过waf规则<br>常见注释符：<br><code>//、--、//、#、--+、---、;、--a</code><br>​ 1&gt;普通注释<br>​ <code>/**/</code>在构造查询中插入注释，规避对空格的依赖或关键字识别<br>​ 2&gt;内联注释<br>​ <code>/*!*/</code>表示注释里面的语句会被执行（只有MYSQL能识别）<br>​ <code>/*!50001 select * from test*/</code>表示数据库5.00.01以上版本才会执行该语句<br>​<br>5、参数污染<br>当同一参数出现多次，不同中间件会解析为不同结果。如果WAF只检测了同名参数中的第一个或最后一个，并且中间件特征正好取与WAF相反的参数，则可成功绕过</p>
+<table>
+<thead>
+<tr>
+<th align="left">服务器中间件</th>
+<th align="left">解析结果</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ASP.NET/IIS</td>
+<td align="left">所有出现的参数值用逗号连接</td>
+<td>par1=var1,val2</td>
+</tr>
+<tr>
+<td align="left">ASP/IIS</td>
+<td align="left">所有出现的参数值用逗号连接</td>
+<td>par1=var1,var2</td>
+</tr>
+<tr>
+<td align="left">PHP/Apache</td>
+<td align="left">仅最后一次出现的参数值</td>
+<td>par1=var2</td>
+</tr>
+<tr>
+<td align="left">JSP/Tomcat</td>
+<td align="left">仅最后一次出现的参数值</td>
+<td>par1=val1</td>
+</tr>
+<tr>
+<td align="left">Perl CGI/Apache</td>
+<td align="left">仅第一次出现参数值</td>
+<td>par1=var1</td>
+</tr>
+</tbody></table>
+<p>如：</p>
+<pre class="highlight"><span class="line">/index.aspx?id=select 1,2,3 from table</span><br><span class="line">--&gt;</span><br><span class="line">/index.aspx?id=select 1&amp;id=,2,3 from table</span><br></pre>
+
+<p>6、缓冲区溢出<br>许多WAF是C语言写的，而C语言本身没有缓冲区保护机制，如果WAF在处理测试向量时超出了其缓冲区长度，会引发bug从而实现绕过<br>如：</p>
+<pre class="highlight"><span class="line">?id=1 and (select 1)=(select 0xAAAAAA*1000 more A)+union select 1,2version()-- a</span><br></pre>
+
+<p>7、整合绕过<br>绕过技术结合使用</p>
+<p>8、分块传输绕过<br>burpsuite中更实用post传输数据，设置<code>Transfer-encoding: chunked</code><br>使用换行分割数据</p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF%E6%95%B4%E7%90%86/">
+            https://www.zerochen.top/article/SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF%E6%95%B4%E7%90%86/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">文件包含漏洞 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Pocsuite3重写redis脚本 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SQL%E6%B3%A8%E5%85%A5%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-text">二、SQL注入产生原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B"><span class="toc-text">三、注入类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF"><span class="toc-text">四、SQL注入思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%8F%91%E7%8E%B0%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="toc-text">1、发现注入点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E7%AC%A6"><span class="toc-text">2、判断闭合符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB%E5%9E%8B"><span class="toc-text">3、判断数据库类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E9%80%89%E6%8B%A9%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="toc-text">4、选择注入方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E7%BB%93%E5%90%88WAF%E7%A1%AE%E5%AE%9A%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5"><span class="toc-text">5、结合WAF确定注入语句</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81SQL%E6%B3%A8%E5%85%A5%E9%98%B2%E5%BE%A1"><span class="toc-text">五、SQL注入防御</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81WAF%E7%BB%95%E8%BF%87"><span class="toc-text">六、WAF绕过</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SQL%E6%B3%A8%E5%85%A5%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-text">二、SQL注入产生原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B"><span class="toc-text">三、注入类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF"><span class="toc-text">四、SQL注入思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%8F%91%E7%8E%B0%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="toc-text">1、发现注入点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E7%AC%A6"><span class="toc-text">2、判断闭合符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB%E5%9E%8B"><span class="toc-text">3、判断数据库类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E9%80%89%E6%8B%A9%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="toc-text">4、选择注入方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E7%BB%93%E5%90%88WAF%E7%A1%AE%E5%AE%9A%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5"><span class="toc-text">5、结合WAF确定注入语句</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81SQL%E6%B3%A8%E5%85%A5%E9%98%B2%E5%BE%A1"><span class="toc-text">五、SQL注入防御</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81WAF%E7%BB%95%E8%BF%87"><span class="toc-text">六、WAF绕过</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SQL%E6%B3%A8%E5%85%A5%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-text">二、SQL注入产生原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B"><span class="toc-text">三、注入类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF"><span class="toc-text">四、SQL注入思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%8F%91%E7%8E%B0%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="toc-text">1、发现注入点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E7%AC%A6"><span class="toc-text">2、判断闭合符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB%E5%9E%8B"><span class="toc-text">3、判断数据库类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E9%80%89%E6%8B%A9%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="toc-text">4、选择注入方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E7%BB%93%E5%90%88WAF%E7%A1%AE%E5%AE%9A%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5"><span class="toc-text">5、结合WAF确定注入语句</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81SQL%E6%B3%A8%E5%85%A5%E9%98%B2%E5%BE%A1"><span class="toc-text">五、SQL注入防御</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81WAF%E7%BB%95%E8%BF%87"><span class="toc-text">六、WAF绕过</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

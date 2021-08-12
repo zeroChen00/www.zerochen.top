@@ -45,7 +45,7 @@
         content="2021-06-27">
       <meta 
         property="og:article:modified_time" 
-        content="2021-07-21">
+        content="2021-08-09">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -53,7 +53,7 @@
         
           <meta 
             property="og:article:tag" 
-            content="portscan">
+            content="端口扫描">
         
       
     
@@ -270,7 +270,7 @@
     </h1>
   </header>
   <div class="post-meta post-show-meta">
-    <time datetime="2021-06-27T08:34:50.000Z">
+    <time datetime="2021-06-27T07:40:38.000Z">
       <i 
         class="iconfont icon-calendar" 
         style="margin-right: 2px;">
@@ -304,9 +304,9 @@
         
           
           <a 
-            href="/tags/portscan/" 
+            href="/tags/%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/" 
             class="post-meta-link">
-            portscan
+            端口扫描
           </a>
         
       </div>
@@ -321,8 +321,6 @@
 <p>使用</p>
 <pre class="highlight"><span class="line">import socket						# 导包</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 		# 创建socket对象</span><br><span class="line">s.bind = ((host,port))				# 绑定端口</span><br><span class="line">s.close								# 断开连接</span><br><span class="line">s.send(msg.decode(&#x27;utf-8&#x27;))			# 发送数据</span><br><span class="line">s.recv(1024)						# 接受数据</span><br><span class="line">s.settimeout()						# 设置超时时间，单位秒</span><br><span class="line">s.sendall							# 发送完整TCP数据</span><br><span class="line">s.sendto							# 发送udp数据</span><br><span class="line"></span><br><span class="line"># 服务端</span><br><span class="line">s.listen							# 设置最大连接数</span><br><span class="line">csocket,addr = s.accept()			# 建立客户端连接</span><br><span class="line"></span><br><span class="line"># 客户端</span><br><span class="line">s.connect((host,port))				# 连接服务器</span><br></pre>
 
-
-
 <h2 id="threading模块"><a href="#threading模块" class="headerlink" title="threading模块"></a>threading模块</h2><p>介绍：多线程模块</p>
 <p>使用</p>
 <pre class="highlight"><span class="line">import threading							# 导包</span><br><span class="line">t = threading.Thread(target=要执行的函数)		# 设置要开启线程的函数</span><br><span class="line">t.start()									# 开启线程</span><br><span class="line"># linux可直接Ctrl+c结束脚本，Windows下失效</span><br></pre>
@@ -335,12 +333,32 @@
 
 <h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用端口扫描项目，梳理套接字、多线程（守护进程、线程锁）的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import queue</span><br><span class="line">import threading</span><br><span class="line"></span><br><span class="line"># 全局变量，队列，用来依次存储端口号</span><br><span class="line">q = queue.Queue()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def portScan():</span><br><span class="line">    while not q.empty():</span><br><span class="line">        port = q.get()</span><br><span class="line">        # 设置套接字连接</span><br><span class="line">        c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        # 设置超时重连时间，单位秒，不设置会导致发包速度极慢，默认15秒</span><br><span class="line">        c.settimeout(0.5)</span><br><span class="line">        # connect.ex()会一直尝试连接，连接成功返回0，失败返回错误信息（key值）</span><br><span class="line">        if c.connect_ex((host, port)) == 0:</span><br><span class="line">            print(&quot;%s:%d is open&quot; % (host, port))</span><br><span class="line">            s = host + &quot;:&quot; + str(port)</span><br><span class="line">            # 开启进程锁，多线程写入数据</span><br><span class="line">            lock.acquire()</span><br><span class="line">            with open(&#x27;./ports.txt&#x27;, &#x27;a&#x27;) as fp:</span><br><span class="line">                fp.write(s + &quot;\n&quot;)</span><br><span class="line">                # 释放锁</span><br><span class="line">            lock.release()</span><br><span class="line">        else:</span><br><span class="line">            print(&quot;%s:%d not open&quot; % (host, port))</span><br><span class="line">        # 关闭套接字连接</span><br><span class="line">        c.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 独立执行时的程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    #argv用来接收用户输入，按输入次序分别为argv[0-n],argv[0]表示脚本名</span><br><span class="line">    if len(sys.argv) &lt; 3:</span><br><span class="line">        print(&quot;请以以下格式输入：&quot;)</span><br><span class="line">        print(&quot;python portScan.py ip 线程数&quot;)</span><br><span class="line">    host = sys.argv[1]</span><br><span class="line">    thread_num = int(sys.argv[2])</span><br><span class="line">    # 在进程开始前，定义进程锁，不可在进程中定义锁，否则线程自己使用自己的锁，则失去进程锁的意义</span><br><span class="line">    lock = threading.RLock()</span><br><span class="line"></span><br><span class="line">    for port in range(1, 65536):</span><br><span class="line">        q.put(port)</span><br><span class="line">    for i in range(thread_num):</span><br><span class="line">        # 开启守护进程</span><br><span class="line">        t = threading.Thread(target=portScan, daemon=True)</span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">    # 设置主进程死循环，方便接收中断信号</span><br><span class="line">    # 因为设置了守护进程，所以主进程结束，子进程也会立刻结束</span><br><span class="line">    while 1:</span><br><span class="line">        pass</span><br></pre>
 
-
-
-<h1 id="四、下载"><a href="#四、下载" class="headerlink" title="四、下载"></a>四、下载</h1><p><a href="https://www.zerochen.top/download/Port/portScan.py">https://www.zerochen.top/download/Port/portScan.py</a></p>
+<h1 id="四、下载"><a href="#四、下载" class="headerlink" title="四、下载"></a>四、下载</h1><p><a href="https://www.zerochen.top/download/Port/PortScan.py">https://www.zerochen.top/download/Port/PortScan.py</a></p>
 
   </div>
   <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/Python%E4%B9%8B%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/">
+            https://www.zerochen.top/article/Python%E4%B9%8B%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
     
   </div>
 </article>
@@ -348,13 +366,13 @@
   
     <div class="nav-item-prev">
       <a 
-        href="/article/Python%E4%B9%8B%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" 
+        href="/article/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" 
         class="nav-link">
         <i class="iconfont icon-left nav-prev-icon"></i>
         <div>
           <div class="nav-label">上一篇</div>
           
-            <div class="nav-title">Python之网络爬虫 </div>
+            <div class="nav-title">JBoss反序列化漏洞复现 </div>
           
         </div>
       </a>
@@ -363,12 +381,12 @@
   
     <div class="nav-item-next">
       <a 
-        href="/article/Ubuntu%E5%AE%89%E8%A3%85Python3/" 
+        href="/article/PHP%E5%9F%BA%E7%A1%80/" 
         class="nav-link">
         <div>
           <div class="nav-label">下一篇</div>
           
-            <div class="nav-title">Ubuntu安装Python3 </div>
+            <div class="nav-title">PHP基础 </div>
           
         </div>
         <i class="iconfont icon-right nav-next-icon"></i>
@@ -434,24 +452,24 @@
     alt="author avatar">
 
 <p class="author-name">沉墨</p>
-<p class="author-description">努力成为一个Python脚本小子</p>
+<p class="author-description">谨言多思，野蛮生长</p>
 <div class="author-message">
   <a 
     class="author-posts-count" 
     href="/archives">
-    <span>26</span>
+    <span>43</span>
     <span>文章</span>
   </a>
   <a 
     class="author-categories-count" 
     href="/categories">
-    <span>8</span>
+    <span>9</span>
     <span>分类</span>
   </a>
   <a 
     class="author-tags-count" 
     href="/tags">
-    <span>26</span>
+    <span>43</span>
     <span>标签</span>
   </a>
 </div>
@@ -483,24 +501,31 @@
   </div>
   <div class="categories-list">
     
-      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
         <div class="categories-list-item">
-          漏洞复现
-          <span class="categories-list-item-badge">4</span>
-        </div>
-      </a>
-    
-      <a href="/categories/%E9%99%84%E5%8A%A0/">
-        <div class="categories-list-item">
-          附加
-          <span class="categories-list-item-badge">2</span>
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
         </div>
       </a>
     
       <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
         <div class="categories-list-item">
           编程基础
-          <span class="categories-list-item-badge">1</span>
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
         </div>
       </a>
     
@@ -511,17 +536,10 @@
         </div>
       </a>
     
-      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
-        <div class="categories-list-item">
-          Web渗透
-          <span class="categories-list-item-badge">5</span>
-        </div>
-      </a>
-    
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
-          <span class="categories-list-item-badge">2</span>
+          <span class="categories-list-item-badge">1</span>
         </div>
       </a>
     
@@ -535,6 +553,13 @@
       <a href="/categories/Windows/">
         <div class="categories-list-item">
           Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
           <span class="categories-list-item-badge">1</span>
         </div>
       </a>
@@ -560,27 +585,63 @@
       </a>
     
       <a 
-        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
-        title="hexo博客">
-        <div class="tags-list-item">hexo博客</div>
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
       </a>
     
       <a 
-        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
-        title="直播推流平台">
-        <div class="tags-list-item">直播推流平台</div>
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
       </a>
     
       <a 
-        href="/tags/Nginx%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
-        title="Nginx环境搭建">
-        <div class="tags-list-item">Nginx环境搭建</div>
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
       </a>
     
       <a 
-        href="/tags/LAMP/" 
-        title="LAMP">
-        <div class="tags-list-item">LAMP</div>
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
       </a>
     
       <a 
@@ -596,57 +657,21 @@
       </a>
     
       <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
         href="/tags/DVWA/" 
         title="DVWA">
         <div class="tags-list-item">DVWA</div>
       </a>
     
       <a 
-        href="/tags/IIS/" 
-        title="IIS">
-        <div class="tags-list-item">IIS</div>
-      </a>
-    
-      <a 
-        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
-        title="Java环境配置">
-        <div class="tags-list-item">Java环境配置</div>
-      </a>
-    
-      <a 
-        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
-        title="Shiro反序列">
-        <div class="tags-list-item">Shiro反序列</div>
-      </a>
-    
-      <a 
-        href="/tags/Vulhub/" 
-        title="Vulhub">
-        <div class="tags-list-item">Vulhub</div>
-      </a>
-    
-      <a 
-        href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
-        title="SQL注入">
-        <div class="tags-list-item">SQL注入</div>
-      </a>
-    
-      <a 
-        href="/tags/Python3/" 
-        title="Python3">
-        <div class="tags-list-item">Python3</div>
-      </a>
-    
-      <a 
-        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
-        title="Redis未授权访问">
-        <div class="tags-list-item">Redis未授权访问</div>
-      </a>
-    
-      <a 
-        href="/tags/requests%E6%A8%A1%E5%9D%97/" 
-        title="requests模块">
-        <div class="tags-list-item">requests模块</div>
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
       </a>
     
   </div>
@@ -682,23 +707,23 @@
   <div class="recent-posts-list">
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-19</div>
-        <a href="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/"><div class="recent-posts-item-content">Pocsuite3重写redis脚本</div></a>
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-19</div>
-        <a href="/article/Pocsuite3%E4%BD%BF%E7%94%A8/"><div class="recent-posts-item-content">Pocsuite3使用</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-09</div>
-        <a href="/article/SQL%E6%B3%A8%E5%85%A5%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"><div class="recent-posts-item-content">SQL注入方法总结</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-09</div>
-        <a href="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/"><div class="recent-posts-item-content">Burpsuite挂梯子抓包</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
       </div>
     
   </div>
@@ -735,6 +760,18 @@
 
     
     
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
     
     
       <div class="footer-dsc">

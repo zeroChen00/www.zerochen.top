@@ -42,10 +42,10 @@
         content="article">
       <meta 
         property="og:article:published_time" 
-        content="2021-06-20">
+        content="2021-06-14">
       <meta 
         property="og:article:modified_time" 
-        content="2021-07-21">
+        content="2021-08-09">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -270,12 +270,12 @@
     </h1>
   </header>
   <div class="post-meta post-show-meta">
-    <time datetime="2021-06-20T06:22:41.000Z">
+    <time datetime="2021-06-14T06:46:41.000Z">
       <i 
         class="iconfont icon-calendar" 
         style="margin-right: 2px;">
       </i>
-      <span>2021-06-20</span>
+      <span>2021-06-14</span>
     </time>
     
       <span class="dot"></span>
@@ -289,7 +289,7 @@
     
     
       <span class="dot"></span>
-      <span>653 字</span>
+      <span>725 字</span>
     
   </div>
   
@@ -319,199 +319,221 @@
     <h1 id="js调用方法（4种）"><a href="#js调用方法（4种）" class="headerlink" title="js调用方法（4种）"></a>js调用方法（4种）</h1><table>
 <thead>
 <tr>
-<th>命令</th>
-<th>说明</th>
+<th>语句</th>
+<th>执行</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><script>alert(1)</script></td>
-<td>script标签中执行</td>
+<td><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></td>
+<td>script标签中执行 –标签外（如body中） 推荐<br>（不用点击，直接触发）</td>
 </tr>
 <tr>
-<td><script src="x.js"></script></td>
-<td>调用执行</td>
+<td><code>&lt;script  src=&quot;x.js&quot;&gt;&lt;/script&gt; </code></td>
+<td>调用执行   –标签外</td>
 </tr>
 <tr>
-<td><a href="javascript:alert(1)"></a></td>
-<td>链接触发</td>
+<td><code>&lt;a  href=&quot;javascript:alert(1)&quot;&gt;&lt;/a&gt;  </code></td>
+<td>伪协议触发（javascript不可少）–标签内   推荐</td>
 </tr>
 <tr>
-<td><p onclick="alert(1)"></p></td>
-<td>事件触发</td>
+<td><code>&lt;p  onclick=&quot;alert(1)&quot;&gt;&lt;/p&gt;  </code></td>
+<td>事件触发   –标签内</td>
 </tr>
 </tbody></table>
 <h1 id="js事件"><a href="#js事件" class="headerlink" title="js事件"></a>js事件</h1><table>
 <thead>
 <tr>
-<th>事件</th>
-<th>说明</th>
+<th align="left">事件</th>
+<th align="left">说明</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>Windows事件</td>
-<td>针对windows对象触发的事件，应用到body标签</td>
+<td align="left">Windows事件</td>
+<td align="left">针对windows对象触发的事件，应用到body标签</td>
 </tr>
 <tr>
-<td>onafterprint</td>
-<td>打印之后触发的事件</td>
+<td align="left">onafterprint</td>
+<td align="left">打印之后触发的事件</td>
 </tr>
 <tr>
-<td>onbeforeprint</td>
-<td>打印之前触发的事件</td>
+<td align="left">onbeforeprint</td>
+<td align="left">打印之前触发的事件</td>
 </tr>
 <tr>
-<td>onerror</td>
-<td>发生错误（文件加载错误等）时触发的事件，常跟不存在的图片，用来执行js触发xss漏洞</td>
+<td align="left">onerror</td>
+<td align="left">发生错误（文件加载错误等）时触发的事件，常跟不存在的图片，用来执行js触发xss漏洞</td>
 </tr>
 <tr>
-<td>onload</td>
-<td>页面加载完成后立即发生</td>
+<td align="left">onload</td>
+<td align="left">页面加载完成后立即发生</td>
 </tr>
 <tr>
-<td>onresize</td>
-<td>窗口大小被改变时触发的事件</td>
+<td align="left">onresize</td>
+<td align="left">窗口大小被改变时触发的事件</td>
 </tr>
 <tr>
-<td>onunload</td>
-<td>页面下载或刷新网页时触发事件</td>
+<td align="left">onunload</td>
+<td align="left">页面下载或刷新网页时触发事件</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td align="left"></td>
+<td align="left"></td>
 </tr>
 <tr>
-<td>Form事件</td>
-<td>由HTML表单内的动作触发的事件，应用到几乎所有的HTML元素，最常用在Form元素</td>
+<td align="left">Form事件</td>
+<td align="left">由HTML表单内的动作触发的事件，应用到几乎所有的HTML元素，最常用在Form元素</td>
 </tr>
 <tr>
-<td>onblur</td>
-<td>当元素失去焦点（鼠标移出等）时触发的事件</td>
+<td align="left">onblur</td>
+<td align="left">当元素失去焦点（鼠标移出等）时触发的事件</td>
 </tr>
 <tr>
-<td>onchange</td>
-<td>输入框的值发生变化或者下拉列表框选项触发的事件</td>
+<td align="left">onchange</td>
+<td align="left">输入框的值发生变化或者下拉列表框选项触发的事件</td>
 </tr>
 <tr>
-<td>onfocus</td>
-<td>当元素获得焦点时触发的事件</td>
+<td align="left">onfocus</td>
+<td align="left">当元素获得焦点时触发的事件</td>
 </tr>
 <tr>
-<td>onformchange</td>
-<td>当表单被改变时触发的事件</td>
+<td align="left">onformchange</td>
+<td align="left">当表单被改变时触发的事件</td>
 </tr>
 <tr>
-<td>oninput</td>
-<td>当元素获得用户输入时触发的事件</td>
+<td align="left">oninput</td>
+<td align="left">当元素获得用户输入时触发的事件</td>
 </tr>
 <tr>
-<td>onselect</td>
-<td>元素中文本被选中后触发的事件</td>
+<td align="left">onselect</td>
+<td align="left">元素中文本被选中后触发的事件</td>
 </tr>
 <tr>
-<td>onsubmit</td>
-<td>提交表单时触发的事件</td>
+<td align="left">onsubmit</td>
+<td align="left">提交表单时触发的事件</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td align="left"></td>
+<td align="left"></td>
 </tr>
 <tr>
-<td>Keyboard事件</td>
-<td></td>
+<td align="left">Keyboard事件</td>
+<td align="left"></td>
 </tr>
 <tr>
-<td>onkeydown</td>
-<td>用户按下按键时触发的事件</td>
+<td align="left">onkeydown</td>
+<td align="left">用户按下按键时触发的事件</td>
 </tr>
 <tr>
-<td>onkeypress</td>
-<td>用户敲击按钮时触发的事件</td>
+<td align="left">onkeypress</td>
+<td align="left">用户敲击按钮时触发的事件</td>
 </tr>
 <tr>
-<td>onkeyup</td>
-<td>用户释放按键时触发的事件</td>
+<td align="left">onkeyup</td>
+<td align="left">用户释放按键时触发的事件</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td align="left"></td>
+<td align="left"></td>
 </tr>
 <tr>
-<td>Mouse事件</td>
-<td>由鼠标或类似用户动作触发的事件</td>
+<td align="left">Mouse事件</td>
+<td align="left">由鼠标或类似用户动作触发的事件</td>
 </tr>
 <tr>
-<td>onclick</td>
-<td>元素上发生鼠标点击时触发的事件</td>
+<td align="left">onclick</td>
+<td align="left">元素上发生鼠标点击时触发的事件</td>
 </tr>
 <tr>
-<td>ondblclick</td>
-<td>元素上发生鼠标双击时触发的事件</td>
+<td align="left">ondblclick</td>
+<td align="left">元素上发生鼠标双击时触发的事件</td>
 </tr>
 <tr>
-<td>onmousedown</td>
-<td>当元素上按下鼠标按钮时触发的事件</td>
+<td align="left">onmousedown</td>
+<td align="left">当元素上按下鼠标按钮时触发的事件</td>
 </tr>
 <tr>
-<td>onmousemove</td>
-<td>当鼠标指针移动到元素上时触发的事件</td>
+<td align="left">onmousemove</td>
+<td align="left">当鼠标指针移动到元素上时触发的事件</td>
 </tr>
 <tr>
-<td>onmouseover</td>
-<td>当鼠标指针移动到元素上时触发的事件</td>
+<td align="left">onmouseover</td>
+<td align="left">当鼠标指针移动到元素上时触发的事件</td>
 </tr>
 <tr>
-<td>onmouseout</td>
-<td>当鼠标指针移出元素时触发的事件</td>
+<td align="left">onmouseout</td>
+<td align="left">当鼠标指针移出元素时触发的事件</td>
 </tr>
 <tr>
-<td>onmouseup</td>
-<td>当在元素上释放鼠标按钮时触发的事件</td>
+<td align="left">onmouseup</td>
+<td align="left">当在元素上释放鼠标按钮时触发的事件</td>
 </tr>
 </tbody></table>
 <p>更多事件访问文档：<a target="_blank" rel="noopener" href="https://www.w3school.com.cn/tags/html_ref_eventattributes.asp">https://www.w3school.com.cn/tags/html_ref_eventattributes.asp</a></p>
 <h1 id="DOM操作"><a href="#DOM操作" class="headerlink" title="DOM操作"></a>DOM操作</h1><table>
 <thead>
 <tr>
-<th>使用</th>
-<th>命令</th>
+<th align="left">使用</th>
+<th align="left">命令</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>通过ID获取</td>
-<td>document.getElementById()</td>
+<td align="left">通过ID获取</td>
+<td align="left">document.getElementById()</td>
 </tr>
 <tr>
-<td>通过标签名称获取（结果有多个，以数组形式存放）</td>
-<td>docunment.getElementsByTagName()</td>
+<td align="left">通过标签名称获取（结果有多个，以数组形式存放）</td>
+<td align="left">docunment.getElementsByTagName()</td>
 </tr>
 <tr>
-<td>通过对象名称获取（结果有多个，以数组形式存放）</td>
-<td>documemt.getElementsByClassName()</td>
+<td align="left">通过对象名称获取（结果有多个，以数组形式存放）</td>
+<td align="left">documemt.getElementsByClassName()</td>
 </tr>
 </tbody></table>
 <table>
 <thead>
 <tr>
-<th>document事件操作</th>
-<th></th>
+<th align="left">document事件操作</th>
+<th align="left"></th>
 </tr>
 </thead>
 <tbody><tr>
-<td>动态添加事件</td>
-<td>document.getElementById(“x”).addEventListener(“click”,function(){  })             <br>给img添加点击事件  <br>document.getElementById(“x”).addEventListener(“click”,function(){  alert(“这是图片”)  })</td>
+<td align="left">动态添加事件</td>
+<td align="left">document.getElementById(“x”).addEventListener(“click”,function(){ }) 给img添加点击事件 document.getElementById(“x”).addEventListener(“click”,function(){ alert(“这是图片”) })</td>
 </tr>
 <tr>
-<td>创建标签</td>
-<td>document.createElement(“img”)                      #创建img标签  <br>创建img标签，并添加属性 <br> img =  document.createElement(“img”)   img.src =  “x.jpg”  img.style.width  = “100px”  …     <br>可以创建script标签实现跨站脚本攻击<br>  <img src="/article/JavaScript%E5%9F%BA%E7%A1%80/.%5CJavaScript%E5%9F%BA%E7%A1%80.assets%5C1.png" alt="1" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/JavaScript%E5%9F%BA%E7%A1%80/.%5CJavaScript%E5%9F%BA%E7%A1%80.assets%5C1.png" class="lozad post-image"></td>
+<td align="left">创建标签</td>
+<td align="left">document.createElement(“img”) #创建img标签 <br>创建img标签，并添加属性 <br>img = document.createElement(“img”) <br>img.src = “x.jpg” <br>img.style.width = “100px” <br>… <br><br>可以创建script标签实现跨站脚本攻击 <br> <img src="/article/JavaScript%E5%9F%BA%E7%A1%80/image-20210809144718521.png" alt="image-20210809144718521" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/JavaScript%E5%9F%BA%E7%A1%80/image-20210809144718521.png" class="lozad post-image"></td>
 </tr>
 <tr>
-<td>应用</td>
-<td>document.body.appendChild()  执行添加/创建（否则不显示）</td>
+<td align="left">应用</td>
+<td align="left">document.body.appendChild() 执行添加/创建（否则不显示）</td>
 </tr>
 </tbody></table>
 
   </div>
   <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/JavaScript%E5%9F%BA%E7%A1%80/">
+            https://www.zerochen.top/article/JavaScript%E5%9F%BA%E7%A1%80/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
     
   </div>
 </article>
@@ -519,13 +541,13 @@
   
     <div class="nav-item-prev">
       <a 
-        href="/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%B9%B6%E6%8F%90%E6%9D%83/" 
+        href="/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/" 
         class="nav-link">
         <i class="iconfont icon-left nav-prev-icon"></i>
         <div>
           <div class="nav-label">上一篇</div>
           
-            <div class="nav-title">添加用户并提权 </div>
+            <div class="nav-title">创建用户+提权 </div>
           
         </div>
       </a>
@@ -534,12 +556,12 @@
   
     <div class="nav-item-next">
       <a 
-        href="/article/Windows%E9%9A%8F%E8%AE%B0/" 
+        href="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/" 
         class="nav-link">
         <div>
           <div class="nav-label">下一篇</div>
           
-            <div class="nav-title">Windows随记 </div>
+            <div class="nav-title">Windows搭建IIS+MSSql </div>
           
         </div>
         <i class="iconfont icon-right nav-next-icon"></i>
@@ -605,24 +627,24 @@
     alt="author avatar">
 
 <p class="author-name">沉墨</p>
-<p class="author-description">努力成为一个Python脚本小子</p>
+<p class="author-description">谨言多思，野蛮生长</p>
 <div class="author-message">
   <a 
     class="author-posts-count" 
     href="/archives">
-    <span>26</span>
+    <span>43</span>
     <span>文章</span>
   </a>
   <a 
     class="author-categories-count" 
     href="/categories">
-    <span>8</span>
+    <span>9</span>
     <span>分类</span>
   </a>
   <a 
     class="author-tags-count" 
     href="/tags">
-    <span>26</span>
+    <span>43</span>
     <span>标签</span>
   </a>
 </div>
@@ -654,24 +676,31 @@
   </div>
   <div class="categories-list">
     
-      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
         <div class="categories-list-item">
-          漏洞复现
-          <span class="categories-list-item-badge">4</span>
-        </div>
-      </a>
-    
-      <a href="/categories/%E9%99%84%E5%8A%A0/">
-        <div class="categories-list-item">
-          附加
-          <span class="categories-list-item-badge">2</span>
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
         </div>
       </a>
     
       <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
         <div class="categories-list-item">
           编程基础
-          <span class="categories-list-item-badge">1</span>
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
         </div>
       </a>
     
@@ -682,17 +711,10 @@
         </div>
       </a>
     
-      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
-        <div class="categories-list-item">
-          Web渗透
-          <span class="categories-list-item-badge">5</span>
-        </div>
-      </a>
-    
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
-          <span class="categories-list-item-badge">2</span>
+          <span class="categories-list-item-badge">1</span>
         </div>
       </a>
     
@@ -706,6 +728,13 @@
       <a href="/categories/Windows/">
         <div class="categories-list-item">
           Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
           <span class="categories-list-item-badge">1</span>
         </div>
       </a>
@@ -731,27 +760,63 @@
       </a>
     
       <a 
-        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
-        title="hexo博客">
-        <div class="tags-list-item">hexo博客</div>
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
       </a>
     
       <a 
-        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
-        title="直播推流平台">
-        <div class="tags-list-item">直播推流平台</div>
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
       </a>
     
       <a 
-        href="/tags/Nginx%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
-        title="Nginx环境搭建">
-        <div class="tags-list-item">Nginx环境搭建</div>
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
       </a>
     
       <a 
-        href="/tags/LAMP/" 
-        title="LAMP">
-        <div class="tags-list-item">LAMP</div>
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
       </a>
     
       <a 
@@ -767,57 +832,21 @@
       </a>
     
       <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
         href="/tags/DVWA/" 
         title="DVWA">
         <div class="tags-list-item">DVWA</div>
       </a>
     
       <a 
-        href="/tags/IIS/" 
-        title="IIS">
-        <div class="tags-list-item">IIS</div>
-      </a>
-    
-      <a 
-        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
-        title="Java环境配置">
-        <div class="tags-list-item">Java环境配置</div>
-      </a>
-    
-      <a 
-        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
-        title="Shiro反序列">
-        <div class="tags-list-item">Shiro反序列</div>
-      </a>
-    
-      <a 
-        href="/tags/Vulhub/" 
-        title="Vulhub">
-        <div class="tags-list-item">Vulhub</div>
-      </a>
-    
-      <a 
-        href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
-        title="SQL注入">
-        <div class="tags-list-item">SQL注入</div>
-      </a>
-    
-      <a 
-        href="/tags/Python3/" 
-        title="Python3">
-        <div class="tags-list-item">Python3</div>
-      </a>
-    
-      <a 
-        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
-        title="Redis未授权访问">
-        <div class="tags-list-item">Redis未授权访问</div>
-      </a>
-    
-      <a 
-        href="/tags/requests%E6%A8%A1%E5%9D%97/" 
-        title="requests模块">
-        <div class="tags-list-item">requests模块</div>
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
       </a>
     
   </div>
@@ -853,23 +882,23 @@
   <div class="recent-posts-list">
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-19</div>
-        <a href="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/"><div class="recent-posts-item-content">Pocsuite3重写redis脚本</div></a>
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-19</div>
-        <a href="/article/Pocsuite3%E4%BD%BF%E7%94%A8/"><div class="recent-posts-item-content">Pocsuite3使用</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-09</div>
-        <a href="/article/SQL%E6%B3%A8%E5%85%A5%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"><div class="recent-posts-item-content">SQL注入方法总结</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-09</div>
-        <a href="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/"><div class="recent-posts-item-content">Burpsuite挂梯子抓包</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
       </div>
     
   </div>
@@ -906,6 +935,18 @@
 
     
     
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
     
     
       <div class="footer-dsc">

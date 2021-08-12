@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>PHP基础</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="PHP基础">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/PHP%E5%9F%BA%E7%A1%80/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-06-24">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-10">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="PHP">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      PHP基础
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-06-24T04:47:37.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-06-24</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" 
+          class="post-meta-link">
+          编程基础
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>3k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/PHP/" 
+            class="post-meta-link">
+            PHP
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>PHP是嵌入式编程语言，嵌入到HTML中，可以是任何位置。</p>
+<table>
+<thead>
+<tr>
+<th align="left">介绍</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">语法</td>
+<td align="left">短标签（需要开启short_open_tag=on）</td>
+</tr>
+<tr>
+<td align="left">注释</td>
+<td align="left"># 单行注释 // 单行注释 /**/ 多行注释</td>
+</tr>
+<tr>
+<td align="left">变量定义</td>
+<td align="left">$a 不能以数字开头</td>
+</tr>
+<tr>
+<td align="left">换行</td>
+<td align="left">echo “<strong>“;</strong></td>
+</tr>
+<tr>
+<td align="left">输入</td>
+<td align="left">$a = fgets(STDIN);</td>
+</tr>
+<tr>
+<td align="left">输出</td>
+<td align="left">echo $a; printf($a); die($a); 执行完退出 exit($a); 执行完退出</td>
+</tr>
+<tr>
+<td align="left">php数据类型</td>
+<td align="left">整型 浮点型 字符串 bool型 null型 数组 对象 $a = new PDO(‘mysql://127.0.0.1’);</td>
+</tr>
+<tr>
+<td align="left">字符串连接</td>
+<td align="left">. 字符串、整型、浮点型等 .= 用于字符串追加</td>
+</tr>
+<tr>
+<td align="left">单双引号</td>
+<td align="left">“” 解析特殊字符（如变量） ‘’ 不解析特殊字符 或者斜杠转义</td>
+</tr>
+<tr>
+<td align="left">比较</td>
+<td align="left">== 值比较 === 类型比较</td>
+</tr>
+<tr>
+<td align="left">逻辑运算符</td>
+<td align="left">and &amp;&amp; 与运算，双true为true <br>or || 或运算，单true则true <br>xor 异或，有且仅有一个true为true <br>! 非，不为true则true</td>
+</tr>
+<tr>
+<td align="left">三元运算符</td>
+<td align="left">condition?value of true:value of false</td>
+</tr>
+<tr>
+<td align="left">条件判断</td>
+<td align="left">if(){ }elseif(){ }else{ }</td>
+</tr>
+</tbody></table>
+<p>循环</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">while</td>
+<td align="left">while循环</td>
+</tr>
+<tr>
+<td align="left">for</td>
+<td align="left">for循环</td>
+</tr>
+<tr>
+<td align="left">foreach($a as $i)</td>
+<td align="left">用i在a中遍历</td>
+</tr>
+</tbody></table>
+<p>数组</p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left">函数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">索引数组</td>
+<td align="left">$a=array(1,’二’,3,4); $a[1];</td>
+</tr>
+<tr>
+<td align="left">关联数组</td>
+<td align="left">$a=[ ‘uname’=&gt;’zs’, ‘age’=&gt;18 ]; echo $a[‘age’];</td>
+</tr>
+<tr>
+<td align="left">混合数组</td>
+<td align="left">$a=[ ‘hello’, ‘age’=&gt;18, 123, ‘pass’=&gt;’123456’, 456 ]; a[1]=123 a[‘age’]=18 <br>注意，指向不占下标顺序</td>
+</tr>
+</tbody></table>
+<p>数组增删</p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left">函数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">追加</td>
+<td align="left">$a[‘w’]=’q’ 赋值追加 array_push($a,’a’)</td>
+</tr>
+<tr>
+<td align="left">删除</td>
+<td align="left">array_pop($a); 删除数组最后一个元素</td>
+</tr>
+</tbody></table>
+<p>数组排序</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">sort()</td>
+<td align="left">升序排序</td>
+</tr>
+<tr>
+<td align="left">rsort()</td>
+<td align="left">降序排序</td>
+</tr>
+<tr>
+<td align="left">ksort()</td>
+<td align="left">根据键升序排序</td>
+</tr>
+<tr>
+<td align="left">krsort()</td>
+<td align="left">根据键降序排序</td>
+</tr>
+<tr>
+<td align="left">asort()</td>
+<td align="left">根据值，升序排序</td>
+</tr>
+<tr>
+<td align="left">arsort()</td>
+<td align="left">根据值，降序排序</td>
+</tr>
+</tbody></table>
+<p>注：排序操作会改变原来数组</p>
+<p>遍历输出</p>
+<p>for($i=0;$i&lt;sizeof($a);$i++){</p>
+<p>echo $a[$i];</p>
+<p>}</p>
+<p>foreach ($a as $key=&gt;$value)</p>
+<p>函数</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">var_dump()</td>
+<td align="left">输出详细信息</td>
+</tr>
+<tr>
+<td align="left">strlen()</td>
+<td align="left">判断字符串长度</td>
+</tr>
+<tr>
+<td align="left">trim()</td>
+<td align="left">去除两侧空字符串，清理数据</td>
+</tr>
+<tr>
+<td align="left">intval()</td>
+<td align="left">把字符串转为整型</td>
+</tr>
+<tr>
+<td align="left">count()、sizeof()</td>
+<td align="left">返回数组长度</td>
+</tr>
+<tr>
+<td align="left">empty()</td>
+<td align="left">检查变量是否为空</td>
+</tr>
+<tr>
+<td align="left">gettype()</td>
+<td align="left">获取变量类型</td>
+</tr>
+<tr>
+<td align="left">is_array()</td>
+<td align="left">检查变量是否为数组类型</td>
+</tr>
+<tr>
+<td align="left">isset()</td>
+<td align="left">检查变量是否被设置或赋值</td>
+</tr>
+<tr>
+<td align="left">unset()</td>
+<td align="left">释放变量</td>
+</tr>
+<tr>
+<td align="left">substr()</td>
+<td align="left">截取字符串,起点-长度</td>
+</tr>
+<tr>
+<td align="left">strstr()</td>
+<td align="left">截取字符串，起点-结尾</td>
+</tr>
+<tr>
+<td align="left">md5()</td>
+<td align="left">计算字符串MD5值</td>
+</tr>
+<tr>
+<td align="left">time()</td>
+<td align="left">获取当前时间（元年计数法，秒）</td>
+</tr>
+<tr>
+<td align="left">date(“Y-m-d H:i:s”,time())</td>
+<td align="left">将时间戳转化为日期格式</td>
+</tr>
+<tr>
+<td align="left">feof()</td>
+<td align="left">检查文件是否读取至文件末，常用于判断文件是否读取完毕</td>
+</tr>
+<tr>
+<td align="left">explode()</td>
+<td align="left">分割字符串 explode(‘::’,$line)</td>
+</tr>
+<tr>
+<td align="left">str_ireplace()</td>
+<td align="left">替换字符串，不区分大小写 <br>str_ireplace($search, $replace, $str); <br>在str中将replace替换为search</td>
+</tr>
+</tbody></table>
+<p>文件操作</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">fread()</td>
+<td align="left">读取整个文件或指定长度的字符串，可用于二进制文件读取</td>
+</tr>
+<tr>
+<td align="left">fgets()</td>
+<td align="left">读取文件中的一行</td>
+</tr>
+<tr>
+<td align="left">fgetss()</td>
+<td align="left">读取文件中的一行，并去掉所有HTML、PHP标记</td>
+</tr>
+<tr>
+<td align="left">fgetc()</td>
+<td align="left">读取文件中的一个字节</td>
+</tr>
+<tr>
+<td align="left">file()</td>
+<td align="left">将文件读取到数组</td>
+</tr>
+<tr>
+<td align="left">file_get_contents()</td>
+<td align="left">无需打开文件及关闭文件，读取文件全部内容到字符串，文件不存在则自动创建</td>
+</tr>
+<tr>
+<td align="left">file_put_contents()</td>
+<td align="left">将字符串内容写入文件，文件不存在则自动创建</td>
+</tr>
+<tr>
+<td align="left">copy()</td>
+<td align="left">复制文件</td>
+</tr>
+<tr>
+<td align="left">unlink()</td>
+<td align="left">删除文件</td>
+</tr>
+<tr>
+<td align="left">rename()</td>
+<td align="left">重命名文件或目录，或移动文件</td>
+</tr>
+<tr>
+<td align="left">ftruncate()</td>
+<td align="left">将文件截断到指定长度</td>
+</tr>
+<tr>
+<td align="left">file_exits()</td>
+<td align="left">判断文件或文件夹是否存在</td>
+</tr>
+<tr>
+<td align="left">filesize()</td>
+<td align="left">只读，返回文件大小</td>
+</tr>
+<tr>
+<td align="left">filetype()</td>
+<td align="left">只读，返回文件类型，如文件或文件夹</td>
+</tr>
+<tr>
+<td align="left">filectime()</td>
+<td align="left">返回文件创建时间的时间戳</td>
+</tr>
+<tr>
+<td align="left">filemtime()</td>
+<td align="left">只读，返回文件的修改时间</td>
+</tr>
+<tr>
+<td align="left">realpath()</td>
+<td align="left">返回文件的物理路径</td>
+</tr>
+<tr>
+<td align="left">pathinfo()</td>
+<td align="left">以数组形式返回文件的路径和文件名信息</td>
+</tr>
+</tbody></table>
+<p><strong>类和对象</strong></p>
+<p>类：同样特征和行为的对象的集合</p>
+<p>类中变量=&gt;属性</p>
+<p>类中函数=&gt;方法</p>
+<p>对象=&gt;类的实例化</p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left">函数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">类的声明</td>
+<td align="left">class Person{ <br>var 属性1; <br>var 属性2; <br>function name1(){ //方法1 } <br>function name2(){ //方法2 } }</td>
+</tr>
+<tr>
+<td align="left">类的使用</td>
+<td align="left">$a=new Person; <br>实例化对象 <br><br>$a-&gt;name=’小马’; <br>对象属性赋值 <br><br>$a-&gt;say(); <br>对象方法调用</td>
+</tr>
+</tbody></table>
+<p>文件处理</p>
+<p>$a = fopen(‘1.txt’,’a’) 以a方式打开文件</p>
+<p>fclose($a) 关闭文件</p>
+<p>打开文件方式</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">r</td>
+<td align="left">只读打开，文件不存在则出错</td>
+</tr>
+<tr>
+<td align="left">w</td>
+<td align="left">写入方式打开，游标指向文件头，文件不存在则创建</td>
+</tr>
+<tr>
+<td align="left">a</td>
+<td align="left">以追加方式打开，游标指向文件末，文件不存在则创建</td>
+</tr>
+<tr>
+<td align="left">b</td>
+<td align="left">以二进制方式打开文件，可与r、w、a合用</td>
+</tr>
+<tr>
+<td align="left">r+</td>
+<td align="left">读写方式打开，游标指向文件头</td>
+</tr>
+<tr>
+<td align="left">w+</td>
+<td align="left">读写方式打开，游标指向文件头，并删除文件内容</td>
+</tr>
+<tr>
+<td align="left">a+</td>
+<td align="left">以追加方式打开，游标指向文件末</td>
+</tr>
+<tr>
+<td align="left">x</td>
+<td align="left">以只写方式创建并打开，游标指向文件头。文件存在则打开失败</td>
+</tr>
+<tr>
+<td align="left">x+</td>
+<td align="left">以读写方式创建并打开，游标指向文件头。文件存在则打开失败</td>
+</tr>
+</tbody></table>
+<p>文件读取、写入</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">fgets()</td>
+<td align="left">读取一行</td>
+</tr>
+<tr>
+<td align="left">file_get_contents()</td>
+<td align="left">读取全部</td>
+</tr>
+<tr>
+<td align="left">fwrite()</td>
+<td align="left">将一个字符串写入文件 ‘)?&gt;</td>
+</tr>
+</tbody></table>
+<p>表单处理</p>
+<p>超全局变量，只有在web模式下才可以使用</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">$_REQUEST</td>
+<td align="left">GET、POST集合，但是速度慢</td>
+</tr>
+<tr>
+<td align="left">$_GET</td>
+<td align="left">接收GET方式提交的数据，数据量小，url可见 <br>?传参，多个参数使用&amp;连接 a标签（链接）也可以使用GET方式传参</td>
+</tr>
+<tr>
+<td align="left">$_POST</td>
+<td align="left">接收POST方式提交的数据，数据量不限 需要表单提交</td>
+</tr>
+<tr>
+<td align="left">$_FILES</td>
+<td align="left">接收文件提交（暂存至临时目录） <br>移动临时文件文件至指定目录 <br>$file=$FILES[‘file’]; <br>if($file[‘error’]==0){ <br>move_uploaded_file($file[‘tmp_name’],’uploadfile/‘.$file[‘name’]); } <br>可用echo $FILES查看FILES属性，包括临时目录位置</td>
+</tr>
+<tr>
+<td align="left">$_COOKIE</td>
+<td align="left">接收cookie值 setcookie()创建cookie</td>
+</tr>
+<tr>
+<td align="left">$_SESSION</td>
+<td align="left">接收SESSION值 session_star()开启session session_id()获取session</td>
+</tr>
+<tr>
+<td align="left">$_SERVER</td>
+<td align="left">获取服务器和执行环境信息</td>
+</tr>
+<tr>
+<td align="left">$_ENV</td>
+<td align="left">接收服务器端环境变量（数组）</td>
+</tr>
+</tbody></table>
+<p>在变量前增加@符号，可忽略简单错误</p>
+<p>如：</p>
+<p>echo @$_POST[‘name’];</p>
+<p>其他：</p>
+<p>PHP获取表单数据时，根据表单下textarea、input标签的属性来接收数据</p>
+<p>会话控制</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">cookie</td>
+<td align="left">保存在客户端，包含用户有关信息，有过期时间 cookie有内置数据，可直接使用 setcookie(name,value) 创建cookie <br>setcookie(name,’’,0) 销毁cookie（）设置时间为0</td>
+</tr>
+<tr>
+<td align="left">session</td>
+<td align="left">保存在服务器，cookie升级版，无过期时间，但是长时间无请求，则清除session session为空数组，需赋值使用 session_start() <br>创建session $_SESSION[‘a’]=$b; session赋值 <br>session_destroy() 销毁session（退出登录）</td>
+</tr>
+</tbody></table>
+<p>定界符，EOF中间所有内容将按原编码存入变量</p>
+<p>echo &lt;&lt;&lt;EOF</p>
+<p>xxx</p>
+<p>EOF;</p>
+<p>文件包含</p>
+<p>包含指定文件，实现代码复用</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">include()</td>
+<td align="left">文件包含失败时，会产生警告，脚本会继续运行</td>
+</tr>
+<tr>
+<td align="left">require()</td>
+<td align="left">文件包含失败时，会产生错误，直接结束脚本执行</td>
+</tr>
+<tr>
+<td align="left">include_once()</td>
+<td align="left">与inlude()功能相同，文件只会被包含一次（出现多次时只生效一次）</td>
+</tr>
+<tr>
+<td align="left">require_once()</td>
+<td align="left">与require()功能相同，文件只会被包含一次</td>
+</tr>
+</tbody></table>
+<p>用法：</p>
+<p>include_once ‘header.php’;</p>
+<p>include_once($GET[‘action’]);</p>
+<p>若是包含变量，则可能存在文件包含漏洞</p>
+<p>MYSQL数据类型（遵循sql编程规则）</p>
+<table>
+<thead>
+<tr>
+<th align="left">数据类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">数值型</td>
+<td align="left">int：整型 可以是十进制或十六进制 float：浮点型</td>
+</tr>
+<tr>
+<td align="left">字符串</td>
+<td align="left">CHAR：长字符串 VARCHAR：可变长字符串（常用） <br>BLOB：存储二进制数据 text：长文本信息</td>
+</tr>
+<tr>
+<td align="left">日期和时间</td>
+<td align="left">time：时间 <br>date：日期 <br>datetime：日期和时间</td>
+</tr>
+</tbody></table>
+<p>MYSQL数据库操作</p>
+<p>配置文件</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作系统</th>
+<th align="left">位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Linux</td>
+<td align="left">/etc/my.conf</td>
+</tr>
+<tr>
+<td align="left">Windows</td>
+<td align="left">安装目录/my.ini</td>
+</tr>
+</tbody></table>
+<p>常用命令</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">show databases;</td>
+<td align="left">显示所有数据库</td>
+</tr>
+<tr>
+<td align="left">use dbname;</td>
+<td align="left">选定数默认数据库</td>
+</tr>
+<tr>
+<td align="left">show tables;</td>
+<td align="left">显示默认数据库中所有表</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">create database db_test;</td>
+<td align="left">创建数据库</td>
+</tr>
+<tr>
+<td align="left">use db_test;</td>
+<td align="left">选定数据库</td>
+</tr>
+<tr>
+<td align="left">create table tb_test();</td>
+<td align="left">创建表 <br>CREATE TABLE tb_news( <br>id INT(10) UNSIGNED UNIQUE AUTO_INCREMENT, <br>title VARCHAR(100) NOT NULL, author VARCHAR(20) NOT NULL, <br>content TEXT NOT NULL, <br>addtime TIMESTAMP, <br>PRIMARY KEY (id) );  <br><br>CREATE TABLE tb_users( <br>id INT(10) UNSIGNED AUTO_INCREMENT, <br>uname VARCHAR(20) NOT NULL, <br>upass VARCHAR(50) NOT NULL, <br>activeSrc VARCHAR(100) DEFAULT ‘image/default.jpg’, <br>email VARCHAR(50) NOT NULL, <br>addtime TIMESTAMP, <br>PRIMARY KEY (id) ); <br>注： UNIQUE 值唯一 id属性固定（设置自增长） KEY属性固定（设定ID为主键）</td>
+</tr>
+<tr>
+<td align="left">desc tb_test;</td>
+<td align="left">查看表内容</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">insert INTO tb_test (字段) VALUE (‘内容’);</td>
+<td align="left">新增字段，键值一一对应 <br>insert INTO tb_test (author,title,content) VALUES (‘zs’,’title1’,’dasdasadadadad’);</td>
+</tr>
+<tr>
+<td align="left">select * from tb_test where xx;</td>
+<td align="left">查询数据 <br>* 可替换为指定键 where限定查询范围，查询表达式运算从前往后 xx可以为：&gt;、&lt;、=、like 分别对应数值匹配和字符串匹配，like搭配%使用（%n查询以n结尾的数据） <br>select * from tb_news where content like ‘%n%’ <br>搜索content中包含n的内容 搜索范围使用and连接，标识并列，or连接表示<br><br>或者 <br>select * from tb_news where addtime &gt; ‘2021-06-23 16:48:46’ and (content like ‘%8%’ or id &lt; 16);</td>
+</tr>
+<tr>
+<td align="left">delete</td>
+<td align="left">删除 <br>delete from tb_news; <br>删除表格全部数据 <br><br>delete from tb_news where id =18; <br>最小删除单位为行 查询限制条件同select</td>
+</tr>
+<tr>
+<td align="left">update</td>
+<td align="left">修改数据 <br>update tb_news set author = ‘zs’, title = ‘hello’; <br>修改全部数据 <br><br>update tb_news set author = ‘zs’, title = ‘hello’ where id=2; <br>修改id=2的指定数据</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">alter table 表名 action</td>
+<td align="left">修改表结构 action可以为： <br>add 列名 建表语句 [first|afer 列名] 为表添加一列，默认列尾添加 <br>add primary key(列名) 为表添加主键，已存在主键则报错 <br>modify 列名 &lt;建表语句&gt; [first|after 列名] 更改列类型和列名称 <br>drop 列名 删除一列 rename as 新表名 更改表名</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\c</td>
+<td align="left">放弃正在输入的命令</td>
+</tr>
+<tr>
+<td align="left">\h</td>
+<td align="left">显示命令清单</td>
+</tr>
+<tr>
+<td align="left">\q</td>
+<td align="left">退出mysql程序</td>
+</tr>
+<tr>
+<td align="left">\s</td>
+<td align="left">查看mysql服务器状态</td>
+</tr>
+</tbody></table>
+<p>补充：</p>
+<p>匹配用户名密码</p>
+<pre class="highlight"><span class="line">select * from tb_users where uname = &#x27;admin&#x27; and upass = &#x27;123&#x27;;</span><br></pre>
+
+<p>注册账户</p>
+<pre class="highlight"><span class="line">insert INTO tb_users (uname,upass ,email) VALUE (&#x27;admin&#x27;,&#x27;123&#x27;,&#x27;123@qq.com&#x27;);</span><br></pre>
+
+<p>修改密码</p>
+<pre class="highlight"><span class="line">update tb_users set upass = md5(&#x27;123123&#x27;) where uname=&#x27;admin&#x27;;</span><br></pre>
+
+<p>修改表结构</p>
+<pre class="highlight"><span class="line">alter table tb_users MODIFY column upass varchar(50);</span><br></pre>
+
+<p>PHP操作MYSQL数据库</p>
+<p>常用语句</p>
+<table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">$db = mysqli_connect(‘127.0.0.1’,’root’,’root’);</td>
+<td align="left">连接数据库软件 <br>相当于：mysql -h ‘127.0.0.1’ -uroot -proot 在被包含的配置文件中，可使用全局变量$GLOBALS[‘db’]代替$db，使得$db参数可在全局使用</td>
+</tr>
+<tr>
+<td align="left">mysqli_select_db($GLOBALS[‘db’],’db_bbs’);</td>
+<td align="left">选择数据库</td>
+</tr>
+<tr>
+<td align="left">mysqli_set_charset($GLOBALS[‘db’],’utf8’);</td>
+<td align="left">设置数据库编码格式为utf8</td>
+</tr>
+<tr>
+<td align="left">以上三句可写入config.php文件中，使用文件包含，避免冗余代码</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”SQL语句”);</td>
+<td align="left">需要用变量接收，$res为资源类型数据(赋值后为对象类型)，使用$res-&gt;num_rows取数据（判断是否为空–数据库无此数据） <br><br>可在后面衔接or die(mysqli_error($GLOBALS[‘db’]));<br>显示连接错误信息</td>
+</tr>
+<tr>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”INSERT INTO tb_users (uname,upass,email) VALUE (‘’$uname’,’$upass’,’$email’);”);</td>
+<td align="left">新增用户信息至users表 若是包含变量，则最外层需要用双引号，否则变量不生效，内层用单引号，避免截断失效</td>
+</tr>
+<tr>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”DELETE FROM tb_users WHERE uname=’admin’; “);</td>
+<td align="left">删除admin所在行，删除限定符必须唯一</td>
+</tr>
+<tr>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#49;&#64;&#113;&#x71;&#46;&#99;&#111;&#109;">&#49;&#64;&#113;&#x71;&#46;&#99;&#111;&#109;</a>](mailto:<a href="mailto:&#49;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#109;">&#49;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#109;</a>)’ WHERE uname=’admin’; “);</td>
+<td align="left">修改admin密码邮箱</td>
+</tr>
+<tr>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”SELECT * FROM tb_users;”);</td>
+<td align="left">查询全部数据，加where增加限制条件</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">常用函数</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">mysqli_fetch_all($res);</td>
+<td align="left">取出数据库查询到的全部数据，以索引（下标）数组存储数据</td>
+</tr>
+<tr>
+<td align="left">mysqli_fetch_array($res);</td>
+<td align="left">一次取一个结果，索引、关联类型分别存储，有两份数据</td>
+</tr>
+<tr>
+<td align="left">mysqli_fetch_row($res);</td>
+<td align="left">一次取一个结果，索引类型存储</td>
+</tr>
+<tr>
+<td align="left">mysqli_fetch_assoc($res);</td>
+<td align="left">一次取一个结果，关联类型存储，推荐使用</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">循环读取</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">while($r = mysqli_fetch_assoc($res)){ mysqli_query($GLOBALS,”SQL语句’); }</td>
+<td align="left">while循环执行命令，推荐使用</td>
+</tr>
+<tr>
+<td align="left">for($i=0; $i&lt;$res-&gt;num_rows; $i++){ mysqli_query($GLOBALS,”SQL语句”); }</td>
+<td align="left">for循环执行命令，$res-&gt;num_rows为数据查询的返回条数，为0则无查询结果 <br>注意：哪怕无查询结果，返回数据也不为false，而是一个空的对象。</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/PHP%E5%9F%BA%E7%A1%80/">
+            https://www.zerochen.top/article/PHP%E5%9F%BA%E7%A1%80/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/Python%E4%B9%8B%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Python之端口扫描 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/Ubuntu%E6%90%AD%E5%BB%BADocker-Vulhub/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Ubuntu搭建Docker + Vulhub </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

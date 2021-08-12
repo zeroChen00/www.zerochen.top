@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>CSRF</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="CSRF">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/CSRF/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-05">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-12">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="CSRF">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      CSRF
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-05T04:54:12.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-05</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.2k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/CSRF/" 
+            class="post-meta-link">
+            CSRF
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>CSRF，（Cross-siterequestforgery），跨站请求伪造。</p>
+<p>强制终端用户在当前对其进行身份验证后的Web应用程序上执行非本意的操作。CSRF攻击的着重点在伪造更改状态的请求，而不是盗取数据，因为攻击者无法查看对伪造请求的响应</p>
+<h1 id="一、CSRF与XSS的区别"><a href="#一、CSRF与XSS的区别" class="headerlink" title="一、CSRF与XSS的区别"></a>一、CSRF与XSS的区别</h1><p>原理角度：</p>
+<p>XSS是将恶意的代码插入到html页面中，当用户浏览页面时，插入的html代码会被执行，从而达到最终目的。</p>
+<p>CSRF是一种欺骗受害者提交恶意请求的攻击。代表受害者执行非本意、恶意的操作</p>
+<p>其他角度：</p>
+<p>1、CSRF比XSS漏洞危害更高，相对XSS而言较难防御。</p>
+<p>2、CSRF可以做到的事情，XSS都可以做到。</p>
+<p>3、XSS有局限性，而CSRF没有局限性。</p>
+<p>4、XSS针对客户端，而CSRF针对服务端。</p>
+<p>5、XSS是利用合法用户获取其信息，而CSRF是伪造成合法用户发起请求。</p>
+<h1 id="二、CSRF攻击的条件"><a href="#二、CSRF攻击的条件" class="headerlink" title="二、CSRF攻击的条件"></a>二、CSRF攻击的条件</h1><p>1、目标用户登录受信任的网站A，并在本地生成cookie</p>
+<p>2、目标用户身份认证未过期（直接关闭网站，未退出）的情况下，访问网站B</p>
+<p>方式</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">GET</td>
+<td align="left">1、构造修改信息的连接，短网址伪装<br> 2、构造修改信息的html，使用src标签引用网址连接</td>
+</tr>
+<tr>
+<td align="left">POST</td>
+<td align="left">burpsuite-Engagement tool-Generate CSRF PoC工具，自动生成html <br>注意：删除原有submit标签，使用script标签自动提交表单（添加id） <code>&lt;script&gt;document.getElementById(&#39;xx&#39;).submit()&lt;/script&gt;</code></td>
+</tr>
+</tbody></table>
+<p>网站克隆</p>
+<p><a target="_blank" rel="noopener" href="https://bazhan.me/">https://bazhan.me</a></p>
+<p><strong>同源策略</strong></p>
+<p>如果两个页面的协议，端口（如果有指定）和域名都相同，则两个页面具有相同的源。</p>
+<p>受约束对象：</p>
+<p>DOM、Cookie、第三方插件以及XMLHttpRequest（Ajax）都受到同源策略的约束</p>
+<p>不受约束对象：</p>
+<p>页面中的链接，重定向以及表单提交是不会受到同源策略限制的。</p>
+<p>跨域资源的引入是可以的。但是js不能读写加载的内容。如嵌入到页面中的<code>&lt;script&gt;，&lt;img&gt;，&lt;link&gt;，&lt;iframe&gt;</code>等带src属性的标签。</p>
+<p><strong>非同源受到的限制：</strong></p>
+<p>Cookie、LocalStorage和IndexDB无法读取。</p>
+<p>DOM无法获得。</p>
+<p>AJAX请求能发送但是不能接收。</p>
+<h1 id="三、AJAX"><a href="#三、AJAX" class="headerlink" title="三、AJAX"></a>三、AJAX</h1><p>Ajax 的全称是asynchronous javascript and xml，</p>
+<p>用来实现客户端与服务器端的异步通信效果，实现页面的局部刷新。</p>
+<p>需要jquery支持，可以通过document穿件对象方式，引入js库</p>
+<pre class="highlight"><span class="line">s=document.createElement(&#x27;script&#x27;)</span><br><span class="line"></span><br><span class="line">s.src=&quot;http://code.jquery.com/jquery-latest.js&quot;</span><br><span class="line"></span><br><span class="line">document.body.appendChild(s)</span><br></pre>
+
+<p>发送get包</p>
+<pre class="highlight"><span class="line">$.get(&#x27;http://192.168.21.112:9000/xxxx&#x27;)</span><br></pre>
+
+<p>发送post包</p>
+<pre class="highlight"><span class="line">$.ajax(&#123;</span><br><span class="line"></span><br><span class="line">  url: &quot;http://192.168.21.33/csrf/bank/self.php&quot;,</span><br><span class="line"></span><br><span class="line">  type: &quot;POST&quot;,</span><br><span class="line"></span><br><span class="line">  crossDomain: true, //设置跨域为true</span><br><span class="line"></span><br><span class="line">  xhrFields: &#123;</span><br><span class="line"></span><br><span class="line">		withCredentials: true //默认情况下，标准的跨域请求是不会发送cookie的</span><br><span class="line"></span><br><span class="line">	          &#125;,</span><br><span class="line"></span><br><span class="line">  data: &#123;</span><br><span class="line"></span><br><span class="line">   username:&quot;jiabao&quot;,</span><br><span class="line"></span><br><span class="line">   money:&quot;-90000000&quot;,</span><br><span class="line"></span><br><span class="line">   submit:&quot;%E4%BA%A4%E6%98%93&quot;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#125;);</span><br></pre>
+
+<h1 id="四、跨域方法"><a href="#四、跨域方法" class="headerlink" title="四、跨域方法"></a>四、跨域方法</h1><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>document.domain跨域  <br>若两个页面一级域名相同，只是二级域名不同，  那么浏览器可以通过设置document.domain来共享Cookie</td>
+<td>特点：  <br>1、只能在父域名与子域名之间使用  <br>2、存在安全性问题，当一个站点被攻击后，另一个站点会引起安全漏洞  <br>3、只适用于Cookie和iframe窗口     <br>举例：  <br>网页A：<a target="_blank" rel="noopener" href="http://a.ichunqiu.com/index.html">http://a.ichunqiu.com/index.html</a>  <br>网页B：<a target="_blank" rel="noopener" href="http://b.ichunqiu.com/index.html">http://b.ichunqiu.com/index.html</a>  <br>设置document.domain=’ichunqiu.com’，就实现以上任意两个页面之间的通信</td>
+</tr>
+<tr>
+<td>JSONP跨域  <br>利用<code>&lt;script&gt;</code>的src不受同源策略约束实现跨域获取数据</td>
+<td>存在问题：  <br>1、存在安全性问题，需要网站双方商议基础token的身份验证  <br>2、只能是GET，不能POST  <br>3、可能被注入恶意代码，篡改页面内容，可以采用字符串过滤来规避此问题。     <br>举例：  <br>a.com/jsonp.html想得到b.com/main.js中的数据，  在a.com的jsonp.html里创建一个回调函数xxx，动态添加<code>&lt;script&gt;</code>元素，向服务器发送请求，  请求地址后面加上查询字符串，通过callback参数指定回调函数的名字。  <br>请求地址为<a target="_blank" rel="noopener" href="http://b.com/main.js?callback=xxx">http://b.com/main.js?callback=xxx</a>  在main.js中调用这个回调函数xxx，并且以JSON数据形式作为参数传递</td>
+</tr>
+<tr>
+<td>CORS跨域  <br>CORS是一个W3C标准，允许浏览器向跨源服务器发出XMLHttpRequest请求  利用JavaScript无法控制HTTP头的特点，通过目标返回的HTTP头授权是否允许跨域访问。</td>
+<td>举例：  <br>a.com想得到b.com中的内容，在b.com里面添加响应头声明允许a.com的访问添加：  <br><code>Access-Control-Allow-Origin:http://a.com</code>  <br>然后a.com就可以用ajax获取b.com里的数据了  <br>注意：此方法IE8以下完全不支持，IE8-10部分支持</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/CSRF/">
+            https://www.zerochen.top/article/CSRF/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/XXE%E5%92%8CSSRF/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">XXE和SSRF </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/XSS/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">XSS </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81CSRF%E4%B8%8EXSS%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">一、CSRF与XSS的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81CSRF%E6%94%BB%E5%87%BB%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="toc-text">二、CSRF攻击的条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81AJAX"><span class="toc-text">三、AJAX</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%B7%A8%E5%9F%9F%E6%96%B9%E6%B3%95"><span class="toc-text">四、跨域方法</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81CSRF%E4%B8%8EXSS%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">一、CSRF与XSS的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81CSRF%E6%94%BB%E5%87%BB%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="toc-text">二、CSRF攻击的条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81AJAX"><span class="toc-text">三、AJAX</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%B7%A8%E5%9F%9F%E6%96%B9%E6%B3%95"><span class="toc-text">四、跨域方法</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81CSRF%E4%B8%8EXSS%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">一、CSRF与XSS的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81CSRF%E6%94%BB%E5%87%BB%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="toc-text">二、CSRF攻击的条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81AJAX"><span class="toc-text">三、AJAX</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%B7%A8%E5%9F%9F%E6%96%B9%E6%B3%95"><span class="toc-text">四、跨域方法</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

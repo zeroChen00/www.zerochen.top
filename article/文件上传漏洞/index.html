@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>文件上传漏洞</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="文件上传漏洞">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-07-26">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-10">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="文件上传">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      文件上传漏洞
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-07-26T01:41:09.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-07-26</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>2k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+            class="post-meta-link">
+            文件上传
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="一、漏洞原理"><a href="#一、漏洞原理" class="headerlink" title="一、漏洞原理"></a>一、漏洞原理</h1><p>1、未过滤或web前端过滤被绕过</p>
+<p>2、文件检测被绕过</p>
+<p>3、中间件解析</p>
+<p>4、不完善的黑名单拓展名</p>
+<p>5、文件路径截断</p>
+<p>6、HTTP不安全方法（PUT协议）</p>
+<h1 id="二、漏洞触发点"><a href="#二、漏洞触发点" class="headerlink" title="二、漏洞触发点"></a>二、漏洞触发点</h1><table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">存在漏洞的网站类型</td>
+<td align="left">存在文件上传功能的网站皆有可能出现文件上传漏洞</td>
+</tr>
+<tr>
+<td align="left">常见存在漏洞的位置</td>
+<td align="left">头像、相册上传 ；视频、照片分享 ；论坛发帖、留言、邮箱附件上传 ；添加文章图片 ；编辑器文件上传 ；后台添加模板等</td>
+</tr>
+</tbody></table>
+<h1 id="三、利用条件"><a href="#三、利用条件" class="headerlink" title="三、利用条件"></a>三、利用条件</h1><p>1、服务器开启文件上传功能</p>
+<p>2、用户对目录拥有读写权限、执行权限</p>
+<p>3、web容器可以以指定格式解析上传的文件（如php站点以php方式解析任意含马文件）</p>
+<p>4、服务器配置不当（开启PUT方法）</p>
+<p><strong>使用前提</strong></p>
+<p>1、文件名后缀必须符合当前网站的开发语言类型</p>
+<p>2、确保内容正确，有且只有一个语法标签，如</p>
+<p>3、知道文件路径</p>
+<p><strong>文件上传漏洞分类</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">任意文件上传</td>
+<td align="left">无限制</td>
+</tr>
+<tr>
+<td align="left">前端限制</td>
+<td align="left">js、标签等</td>
+</tr>
+<tr>
+<td align="left">后端限制</td>
+<td align="left">文件名后缀 MIME-type类型 文件内容</td>
+</tr>
+<tr>
+<td align="left">解析漏洞</td>
+<td align="left">iis、nginx、apache、tomcat</td>
+</tr>
+<tr>
+<td align="left">其他类型</td>
+<td align="left">00截断、put截断、修改模板等</td>
+</tr>
+</tbody></table>
+<p><strong>判断操作系统类型</strong></p>
+<p>选择图片路径，改大小写，访问成功为windows、失败为linux</p>
+<h1 id="四、绕过方式"><a href="#四、绕过方式" class="headerlink" title="四、绕过方式"></a>四、<strong>绕过方式</strong></h1><table>
+<thead>
+<tr>
+<th align="left">waf类型</th>
+<th align="left">说明</th>
+<th align="left">方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">前端验 证</td>
+<td align="left">上传.xxx文件，抓包，若未抓包边被拦截，即为前段验证。</td>
+<td align="left">1、禁用js（不推荐） <br>2、bp抓包改文件名后缀</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">后端验证</td>
+<td align="left">分别修改文件名后缀、文件类型和文件内容，观察哪一次修改被拦截，即为哪种验证</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">文件类型检测</td>
+<td align="left">MIME，描述消息内容类型的因特网标准 <br>Content-Type： <br>.js -&gt; application/x-javascript <br>.html -&gt; text/html <br>.jpg -&gt; image/jpeg * <br>.png -&gt; image/png <br>.pdf -&gt; application/pdf</td>
+<td align="left">常用类型：image/jpeg</td>
+</tr>
+<tr>
+<td align="left">后缀名检测</td>
+<td align="left">黑白名单 上传.xxx文件，通过即为黑名单，不通过为白名单 常见黑名单后缀 php：”.php”,”.php5”,”.php4”,”.php3”,”.php2”,”php1”,”.html”,”.htm”,”.phtml”, jsp：”.jsp”,”.jspa”,”.jspx”,”.jsw”,”.jsv”,”.jspf”,”.jtml”,”.jSp”, asp：”.asp”,”.aspx”,”.asa”,”.asax”,”.ascx”,”.ashx”,”.asmx”,,”.cEr”,”.sWf”,”.swf”</td>
+<td align="left">黑名单绕过 <br>1、大小写绕过 linux中，centos6搭载默认apache2.2时可绕过 windows可以绕过 <br> 2、黑名单不全绕过 php：.php3、.phtml asp：.cer、.asmx  <br><br>3、windows系统特性绕过 a.php. a.php (空格) a.php:1 a.php::$DATA</td>
+</tr>
+<tr>
+<td align="left">内容检测</td>
+<td align="left">会检测图片流数据前n位，判断文件类型、大小等。</td>
+<td align="left">制作图片马。<br>最好选择不含PHP、ASP、ASP等标签的图片 如果有，需要手动剔除 <br><br>copy 1.jpg /b + 2.txt /a 3.jpg <br>将2中内容追加到1中，生成3 2中可同时写入多种一句话</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">解析漏洞</td>
+<td align="left">1、Apache解析漏洞 <br>&gt;多后缀 apache解析顺序从右到左，若是无法解析，则返回源码。 <br>前提：<br>apache1.x、2.x Apache能够识别的文件在mime.types文件可以查看 <br>形式： <br>a.php.xxx.yyy绕过（黑名单绕过） <br>a.php.7z（可绕过白名单–不在apache解析目录，但是在白名单目录） <br><br>&gt;配置错误 apache配置文件可指定解析后缀类型 <br>&gt;.htaccess apache环境下，当上传文件未拦截.htaccess且未重命名文件时，可上传.htaccess修改apache默认配置  <br><br>2、IIS6.0解析漏洞 <br>&gt;目录解析 <br>形式：<br>/xx.asp/xx.jpg <br>原理：<br>在网站下创建文件夹名字为.asp、.asa的文件夹，其目录内的任何扩展名的文件都被当作asp文件来解析并执行。 <br><br>&gt;文件解析 <br>形式：<br>/xx.asp;.jpg（利用特殊符号”;”）<br>原理：<br>在iis6.0下，服务器默认不解析；号后面的内容，所以xx.asp;.jpg被解析为asp脚本解析漏洞 <br><br>&gt;解析文件类型（属于黑名单绕过方式） <br>形式：<br>/test.asa、/test.cer、/test.cdx <br>原理：<br>iis6.0默认的可执行文件除了asp还包含这三种asa、cer、cdx，会将这三种扩展名文件解析为asp文件  <br><br>3、PHP CGI解析漏洞 <br>IIS7.0/IIS7.5/Nginx&lt;0.8.3畸形解析漏洞 <br>前提： <br>1、Fast-CGI运行模式 <br>2、php.ini里cgi.fix_pathinfo=1(默认为1) <br>3、取消勾选php-cgi.exe程序的”Invoke handler only if request is mapped to” <br>形式：将/xx.jpg/xx.php解析为php文件 <br>4、Nginx解析漏洞 <br>影响版本：<br>0.5，0.6，0.7&lt;=0.7.65，0.8&lt;=0.8.37 <br>原理：<br>在使用PHP-FastCGI执行php的时候，URL里面在遇到%00空字节时与FastCGI处理不一致，导致可以在图片中嵌入PHP代码然后通过访问xxx.jpg%00.php来执行其中的代码 <br>形式：<br>xxx.jpg%00.php</td>
+<td align="left">&gt;配置错误 <br>AddHandler php5-script .php、<br>AddType application/x-httpd-php .jpg <br><br>&gt;.htaccess <br>AddType application/x-httpd-php xxx 使用php解析.xxx文件 <br><br>或 <br>&lt;FilesMatch .ccc$&gt; SetHandler application/x-httpd-php <br>正则匹配.ccc后缀文件 <br><br>或 <br>&lt;FilesMatch “shell.jpg”&gt; SetHandler application/x-httpd-php <br>指定解析某个文件</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">其他类型</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">00截断</td>
+<td align="left">前提： <br>1、php版本小于5.3.4 <br>2、php的magic_quotes_gpc为OFF状态</td>
+<td align="left">抓包 POST包： <br>1.php+.jpg，将+的数值改为十六进制的00 <br>GET包： <br>1.php%00，存在上传路径时，也可在上传路径后用此方法截断</td>
+</tr>
+<tr>
+<td align="left">HTTP PUT方法</td>
+<td align="left">前提：<br>开启PUT服务 <br>探测： <br>telnet 192.168.139.136 80 <br>OPTIONS / HTTP/1.1 <br>HOST:172.16.132.161 <br>利用： <br>telnet 192.168.139.136 80 <br>PUT /infoa.php HTTP/1.1 <br>HOST: 192.168.139.136 <br>Content-Length: 18</td>
+<td align="left">开启PUT服务： <br>1、开启Dav（conf配置文件）–取消注释<br> LoadModule dav_module modules/mod_dav.so LoadModule dav_fs_module modules/mod_dav_fs.so <br><br>2、启用Dav DocumentRoot-Directory下新增DAV On <br><br>3、开启文件锁 配置文件首部新增 DavLockDB <br>c:\phpstudy\www\DavLock 新增DavLock文件夹（上面写的路径） 重启apache服务</td>
+</tr>
+</tbody></table>
+<h1 id="五、编辑器漏洞"><a href="#五、编辑器漏洞" class="headerlink" title="五、编辑器漏洞"></a>五、编辑器漏洞</h1><p>常见文本编辑器</p>
+<p>FCKeditor、Ewebeditor、Ueditor、KindEditor、XHeditor</p>
+<h2 id="1、FCKeditor漏洞"><a href="#1、FCKeditor漏洞" class="headerlink" title="1、FCKeditor漏洞"></a>1、FCKeditor漏洞</h2><p><strong>漏洞版本</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">版本</th>
+<th align="left">漏洞说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Version2.2版本</td>
+<td align="left">Apache+linux环境下在上传文件后面加个.突破</td>
+</tr>
+<tr>
+<td align="left">Version&lt;=2.4.2</td>
+<td align="left">forphp上传的地方并未对Media类型进行上传文件类型的控制，导致用户上传任意文件</td>
+</tr>
+<tr>
+<td align="left">Version&lt;=v2.4.3</td>
+<td align="left">FCKeditor被动限制策略所导致的过滤不严问题较高版本FCKeditor文件上传“.”变“_”下划线</td>
+</tr>
+</tbody></table>
+<p><strong>方法</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查看编辑器</td>
+<td align="left">/fckeditor/editor/dialog/fck_about.html /fckeditor/_whatsnew.html</td>
+</tr>
+<tr>
+<td align="left">FCKeditor中test文件的上传地址</td>
+<td align="left">fckeditor/editor/filemanager/connectors/test.html fckeditor/editor/filemanager/connectors/uploadtest.html fckeditor/editor/filemanager/browser/default/connectors/test.html fckeditor/editor/filemanager/upload/test.html</td>
+</tr>
+<tr>
+<td align="left">&gt;2.4.3版本绕过</td>
+<td align="left">在fckeditor/editor/filemanager/connectors/test.html下 同时创建两个x.asp文件夹，一级目录可绕过.转义成_，从而在一级目录a.asp下上传图片马，进行解析</td>
+</tr>
+</tbody></table>
+<h2 id="2、Ewebeditor编辑器漏洞"><a href="#2、Ewebeditor编辑器漏洞" class="headerlink" title="2、Ewebeditor编辑器漏洞"></a>2、Ewebeditor编辑器漏洞</h2><p>Ewebeidtor编辑器的默认信息</p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left">路径</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">默认数据库路径：</td>
+<td align="left">/db/ewebeditor.mdb /db/db.mdb <br>/db/%23ewebeditor.mdb</td>
+</tr>
+<tr>
+<td align="left">默认密码：</td>
+<td align="left">admin/admin/888或admin/admin进入后台，也可尝试admin/123456/admin888</td>
+</tr>
+<tr>
+<td align="left">系统默认：</td>
+<td align="left">ewebeditor.asp?id=content1&amp;style=standards</td>
+</tr>
+<tr>
+<td align="left">默认管理地址：</td>
+<td align="left">2.80以前：<br>ewebeditor/admin_login.asp；<br>以后版本：<br>admin/login.aspEwebeditor</td>
+</tr>
+</tbody></table>
+<p><strong>漏洞类型</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1.关键文字的名称和路径</td>
+<td align="left">登录页面<br>Admin_Login.asp <br>Admin_Default.asp <br><br>管理首页<br>Admin_UploadFile.asp <br>Upload.asp</td>
+</tr>
+<tr>
+<td align="left">2.默认用户名密码</td>
+<td align="left">账号密码基本是默认的admin/admin（admin888）</td>
+</tr>
+<tr>
+<td align="left">3.下载数据库</td>
+<td align="left">默认数据库/db/ewebeditor.mdb或者/db/ewebeditor.asp</td>
+</tr>
+<tr>
+<td align="left">4.文件上传</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">5.遍历路径</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">6.Cookie漏洞</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p><strong>利用</strong></p>
+<p>1、登录后台，进入样式管理，增加上传类型即可。</p>
+<p>2、访问<code>/admin/ewebEditor/asp/upload.asp?action=save&amp;type=image&amp;style=popup&amp;cusdir=hack.asp</code></p>
+<p>创建hack.asp文件件，此文件夹下文件全部可执行</p>
+<p>检查元素，编辑html</p>
+<pre class="highlight"><span class="line">&lt;form action=&quot;http://192.168.1.1/admin/ewebEditor/asp/upload.asp?		action=save&amp;type=image&amp;style=popup&amp;cusdir=hack.asp&quot; method=post name=myform enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">&lt;input type=file name=uploadfile size=100&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">&lt;input type=submit value=upload&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre>
+
+<p>新增上传窗口，上传图片马，查看源码即可获得文件路径。</p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/">
+            https://www.zerochen.top/article/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/HTTP%E5%9F%BA%E7%A1%80/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">HTTP基础 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">文件包含漏洞 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-text">一、漏洞原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%BC%8F%E6%B4%9E%E8%A7%A6%E5%8F%91%E7%82%B9"><span class="toc-text">二、漏洞触发点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-text">三、利用条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F"><span class="toc-text">四、绕过方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%BC%96%E8%BE%91%E5%99%A8%E6%BC%8F%E6%B4%9E"><span class="toc-text">五、编辑器漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81FCKeditor%E6%BC%8F%E6%B4%9E"><span class="toc-text">1、FCKeditor漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81Ewebeditor%E7%BC%96%E8%BE%91%E5%99%A8%E6%BC%8F%E6%B4%9E"><span class="toc-text">2、Ewebeditor编辑器漏洞</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-text">一、漏洞原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%BC%8F%E6%B4%9E%E8%A7%A6%E5%8F%91%E7%82%B9"><span class="toc-text">二、漏洞触发点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-text">三、利用条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F"><span class="toc-text">四、绕过方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%BC%96%E8%BE%91%E5%99%A8%E6%BC%8F%E6%B4%9E"><span class="toc-text">五、编辑器漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81FCKeditor%E6%BC%8F%E6%B4%9E"><span class="toc-text">1、FCKeditor漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81Ewebeditor%E7%BC%96%E8%BE%91%E5%99%A8%E6%BC%8F%E6%B4%9E"><span class="toc-text">2、Ewebeditor编辑器漏洞</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-text">一、漏洞原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%BC%8F%E6%B4%9E%E8%A7%A6%E5%8F%91%E7%82%B9"><span class="toc-text">二、漏洞触发点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-text">三、利用条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F"><span class="toc-text">四、绕过方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%BC%96%E8%BE%91%E5%99%A8%E6%BC%8F%E6%B4%9E"><span class="toc-text">五、编辑器漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81FCKeditor%E6%BC%8F%E6%B4%9E"><span class="toc-text">1、FCKeditor漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81Ewebeditor%E7%BC%96%E8%BE%91%E5%99%A8%E6%BC%8F%E6%B4%9E"><span class="toc-text">2、Ewebeditor编辑器漏洞</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

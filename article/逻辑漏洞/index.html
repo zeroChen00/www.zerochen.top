@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>逻辑漏洞</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="逻辑漏洞">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-05">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-12">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="逻辑漏洞">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      逻辑漏洞
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-05T06:03:41.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-05</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>5.4k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+            class="post-meta-link">
+            逻辑漏洞
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="一、漏洞的产生"><a href="#一、漏洞的产生" class="headerlink" title="一、漏洞的产生"></a>一、漏洞的产生</h1><p>常见漏洞：</p>
+<p>身份认证安全漏洞、支付逻辑漏洞（数据纂改）</p>
+<p>任意密码找回漏洞、验证码突破漏洞</p>
+<p>接口调用安全、未授权访问漏洞</p>
+<h1 id="二、权限绕过漏洞"><a href="#二、权限绕过漏洞" class="headerlink" title="二、权限绕过漏洞"></a>二、权限绕过漏洞</h1><table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left">方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">身份认证安全： <br>有些网站对身份认证模块没有做好安全防护，导致漏洞产生</td>
+<td align="left">绕过身份认证有以下几种方法 <br>1、暴力破解、撞库 <br>2、Cookie&amp;session类（重要）加密 <br>3、暴力破解 ：<br>测试方法：<br>在没有验证码限制或者一次验证码可以多次使用的地方，可以分为以下几种情况： <br>爆破用户名。<br>&#9;当输入的用户名不存在时，会显示请输入正确用户名，或者用户名不存在 <br>已知用户名。 <br>&#9;比如： 已知用户名为admin，密码可以进行字典爆破 <br>使用一个常用密码。<br>&#9;比如123456对大量用户进行爆破  <br><br>修复方法： <br>1、增加验证码。<br>登录失败的时候，变换验证码。(验证码不能被工具识别) <br>2、限制登录频率。<br>例如，5分钟内登录失败次数超过10次则锁定账号1小时。 <br>3、二次验证。<br>可以添加手机验证码或邮箱验证码。</td>
+</tr>
+<tr>
+<td align="left">Cookie伪造： <br>通过修改Cookie中的某个参数来实现登录其他用户</td>
+<td align="left">测试方法： <br>1.使用一个账号登录，找一个可以证明身份的页面，例如首页的欢迎xxx或者是个人中心显示昵称的地方 <br>2.刷新该页面拦截请求，观察Cookie中的字段和值，例如userid=xxx，修改Cookie中的值，把xxx改成admin <br>3.forword放行，页面显示admin的信息，则存在此问题。  <br><br>修复方法： <br>对于客户端标识的用户信息，使用Session会话认证方式，避免通过Cookie去仿冒其他人的身份。</td>
+</tr>
+<tr>
+<td align="left">Session会话固定攻击： <br>一种诱骗受害者使用攻击者指定的会话标识（Sessionid）的攻击手段，利用了服务器的session不变的机制</td>
+<td align="left">攻击步骤： <br>1、攻击者通过某种手段重置目标用户的Sessionid，然后监听用户会话状态 <br>2、目标用户携带攻击者设定的Sessionid登录站点 <br>3、攻击者通过Sessionid获得合法会话  <br><br>攻击者重置Sessionid的方法： <br>通过xss，嗅探等方法取得用户的session，修改数据包。<br><br> 修复方法： <br>每次登陆成功之后重新生成session，sessionID闲置过久时，进行重置sessionID</td>
+</tr>
+<tr>
+<td align="left">加密测试</td>
+<td align="left">概念： <br>有些网站在前端加密，然后传到后台直接和数据库里的值做对比，这时抓包就知道加密方式，然后做暴力破解。  <br><br>测试方法： <br>1、用账号密码登录，拦截请求，查看传输信息是不是通过一些加密方式对账号和密码进行了加密，如果有则存在此问题 <br>2、对于前端加密后的密码进行暴力破解测试时，可以在BurpSuite的Intruder模块 PayloadProcessing中选择加密方式  <br><br>修复方法： <br>把加密对比的方法放到后台去执行</td>
+</tr>
+</tbody></table>
+<h1 id="三、数据篡改"><a href="#三、数据篡改" class="headerlink" title="三、数据篡改"></a>三、数据篡改</h1><p>数据纂改分为两方面：</p>
+<p>1、业务一致性安全：手机号篡改、邮箱和用户名篡改、订单ID更改、商品编号更改、用户ID篡改</p>
+<p>2、业务数据安全：金额数据篡改、商品数量篡改、最大数量限制突破、本地JS参数修改</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">手机号篡改</td>
+<td align="left">步骤： <br>抓包修改手机号码，之后进行越权判断，进入其他人的页面进行操作  <br>修复： <br>通过session机制判断身份，还需校验手机号与登录者身份是否一致</td>
+</tr>
+<tr>
+<td align="left">邮箱和用户名纂改</td>
+<td align="left">步骤： <br>抓包修改用户名和邮箱为其他用户或邮箱  <br>修复： <br>通过session机制判断身份，如需传输邮件，要判断发件人与session一致</td>
+</tr>
+<tr>
+<td align="left">订单ID纂改</td>
+<td align="left">步骤： <br>注册一普通账号，修改遍历订单ID，获取其他用户订单详情（平行越权）  <br>修复： <br>查看订单是通过session判断用户身份，做好平行权限控制</td>
+</tr>
+<tr>
+<td align="left">商品编号纂改</td>
+<td align="left">步骤： <br>提交订单时，抓包修改商品标号，导致商品与价格不符却交易成功 <br><br>举例： <br>例如100个积分只能换商品编号为001,1000个积分只能换商品编号005，在100积分换商品的时候抓包把换商品的编号修改为005，用低积分换取高积分商品。  <br><br>修复： <br>金额不在客户端传入，防止被篡改，如必要，则务必检查交易金额与商品价格或对支付金额做签名校验</td>
+</tr>
+<tr>
+<td align="left">用户ID纂改</td>
+<td align="left">步骤：<br>抓包查看用户的ID，修改ID（加减1），查看是否能查看其它用户id信息。 <br><br>修复：<br>通过session机制判断身份，如果必须用userID参数，要判断与session是否一致</td>
+</tr>
+<tr>
+<td align="left">金额数据纂改</td>
+<td align="left">步骤： <br>在提交订单时进行抓包，修改支付的金额或折扣等相关数据。  <br><br>修复： <br>商品信息如金额、折扣等原始数据校验应来自于服务器端，不应接受客户端传来的值</td>
+</tr>
+<tr>
+<td align="left">商品数量纂改</td>
+<td align="left">步骤： <br>抓包修改商品数量等字段，将请求中的商品数量修改为负数或0，查看能否以修改后的数量完成业务流程。  <br><br>修复： <br>产生异常的交易行为时直接限制、阻断</td>
+</tr>
+<tr>
+<td align="left">本地JS参数纂改</td>
+<td align="left">步骤： <br>部分应用程序通过Javascript处理用户提交的请求，通过修改Javascript脚本，测试修改后的数据是否影响到用户。  <br><br>修复： <br>服务器校验；跨平台支付调用接口，要做好数据的完整性校验，确保一致性</td>
+</tr>
+<tr>
+<td align="left">最大数限制突破</td>
+<td align="left">步骤： <br>很多商品限制用户购买数量时，服务器仅在页面通过js脚本限制，没有在服务器端校验用户提交的数量，通过抓包修改商品最大数限制，将请求中的商品数量改为大于最大数限制的值，查看能否以修改后的数量完成业务流程。  <br><br>修复： <br>每次提交都对其对应的各项信息做强校验</td>
+</tr>
+</tbody></table>
+<h1 id="四、业务授权安全"><a href="#四、业务授权安全" class="headerlink" title="四、业务授权安全"></a>四、业务授权安全</h1><p>越权漏洞的分类：</p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">水平越权 <br>指相同权限的不同用户可以互相访问</td>
+<td align="left">漏洞危害： <br>如果出现此漏洞，那么将可能会造成大批量数据泄露，严重的甚至会造成用户信息被恶意篡改。</td>
+</tr>
+<tr>
+<td align="left">垂直越权 <br>指使用权限低的用户可以访问权限较高的用户</td>
+<td align="left">举例： <br>同一个公司不同权限的管理员A和B，通过修改请求，管理员A可以修改不在他管辖范围内的员工、考勤、工资等</td>
+</tr>
+</tbody></table>
+<p><strong>漏洞危害：</strong></p>
+<p>向上越权：普通用户可以执行管理员权限，比如发布文章、删除文章等操作。</p>
+<p>向下越权：一个高级用户可以访问低级用户信息（暴露用户隐私）</p>
+<p><strong>检测手段：</strong></p>
+<p>查看所有敏感涉及到账户的操作是否有除了UID之外的验证方式，没有的话构造uid访问，可检查是否有漏洞，这里的uid代指username、email、userid等声称的账户信息</p>
+<p>如果有验证参数，尝试是否是可以预知的或者可以猜测出来的。不是，没有漏洞，是，有漏洞，构造请求验证漏洞</p>
+<p><strong>发生越权行为的修复方法：</strong></p>
+<p>1、涉及用户信息的操作需要验证用户身份，比如查看各种用户信息的情况下，不能只根据用户uid去搜索，应该再次进行身份验证</p>
+<p>2、特别敏感的操作应该进行二次操作</p>
+<h1 id="五、任意密码找回的方法"><a href="#五、任意密码找回的方法" class="headerlink" title="五、任意密码找回的方法"></a>五、任意密码找回的方法</h1><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">用户凭证暴力破解</td>
+<td align="left">概念： <br>常见的是找回密码的验证码为4位，并且服务端没有加以限制，我们可以通过爆破出验证码的方式来找回密码 <br>步骤： <br>验证码的位数：4or6，验证码有效时间：1min-15min 验证码爆破防护绕过  <br><br>修复： <br>增加验证码复杂性和长度 限制请求修改次数</td>
+</tr>
+<tr>
+<td align="left">返回凭证</td>
+<td align="left">返回凭证的三种形式 <br>1、url返回凭证 <br>2、抓包返回凭证 <br>3、凭证在页面中  <br><br>方法： <br>1、URL返回凭证 使用firefox的firebug查看请求链接，看链接中是否有验证码等密码找回凭证 <br>2、抓包直接返回 根据手机号找回密码后抓包，可以发现验证码直接显示verifycode=xxxx，如果信息被加密，解密即可（其他信息同理） <br>3、密码找回凭证在页面中 通过密保问题找回密码，查看源码，密保问题和答案就在源码中显示</td>
+</tr>
+<tr>
+<td align="left">邮箱弱token</td>
+<td align="left">获取邮箱弱token的方法： <br>1、Unix时间戳+md5 <br>例如：<br>通过邮箱找回密码，正常流程去邮箱查看重置密码链接，发现链接处有一串md5加密字符串。字符串解密，类似1491293277（10位），可以判断为Unix时间戳。 重置他人密码只需利用他人邮箱发送重置密码邮件，在短时间内对Unix时间戳进行暴力破解，即可获得重置密码的链接 <br><br>2、用户名 <br>例如：重置密码链接直接使用用户名进行区别，改变用户名即可更改他人密码 <br><br>3、服务器时间 <br>例如： 利用两个帐号同时点击找回密码，去邮箱查看找回密码的链接，发现两者的随机token只差1-2，而且可以猜测出为服务器时间。所以可以用一个未知帐号和一个已知帐号同时点击找回密码，稍微遍历随机token，就可以构造出未知帐号的密码找回链接</td>
+</tr>
+<tr>
+<td align="left">用户凭证有效性</td>
+<td align="left">通过用户凭证有效性修改密码： <br>1、短信验证码 通过他人手机号找回密码，抓包，将他人手机号替换成自己的手机号，获取验证码，提交后修改密码。 通过自己手机号找回密码，获取验证码后抓包，将数据包中的username改为他人用户名，提交后成功修改他人密码 <br>2、邮箱token 通过邮箱找回密码，访问链接重置密码，输入新密码提交时抓包，虽然有token，但依然可以直接修改用户ID进而修改密码  <br>案例：<br>短信验证码 P2P之通融易贷存在设计缺陷可重置任意用户密码<a target="_blank" rel="noopener" href="https://www.uedbox.com/post/19507/">https://www.uedbox.com/post/19507/</a> <br>说明：<br>点击修改密码时抓包，将邮箱号修改为自己的邮箱号，验证码就被发送到自己的邮箱中</td>
+</tr>
+<tr>
+<td align="left">重新绑定手机和邮箱</td>
+<td align="left">1、手机绑定： <br>给已知账户绑定手机，发现绑定手机的URL链接中有uid参数，修改uid参数为他人的，即可实现将他人的账户绑定上自己的手机，之后通过手机修改密码 修改个人资料处抓包，修改userId为他人，修改手机号为自己的手机，即可实现将他人的账户绑定上自己的手机，之后通过手机来修改密码  <br><br>2、邮箱绑定： <br>通过邮箱找回密码，URL链接中修改用户ID为他人，邮箱不变，之后通过链接可以将他人账户绑定为自己的邮箱，之后通过邮箱找回密码</td>
+</tr>
+<tr>
+<td align="left">服务器验证</td>
+<td align="left">1、最终提交步骤 使用邮箱找回密码，通过链接至修改密码页面，修改密码后提交、抓包，获得Uid参数，修改为他人，即可修改其他用户密码 <br><br>2、服务器验证的验证逻辑为空（绕过认证） 通过密码保护问题找回密码，抓包，将密码保护问题删除，直接修改密码，提交 <br>注：此处密保问题和新密码在同一页面  <br>案例：<br>最终提交步骤 携程旅行网任意用户密码修改说明：通过修改密码邮件，进行密码修改，提交时进行抓包。将Uid改为别人的，即可修改其他人的密码</td>
+</tr>
+<tr>
+<td align="left">修改凭证</td>
+<td align="left">修改凭证找回密码的方法 <br>1、修改手机号码 <br>2、修改邮箱地址</td>
+</tr>
+<tr>
+<td align="left">跳过验证</td>
+<td align="left">跳过验证步骤、找回方式、直接到设置新密码页面 <br>1、正常流程下，密码找回，查看最后设置新密码页面的URL，记录下来。继续返回密码找回处，输入其他用户名，提交找回申请，直接访问上面记录下的修改密码页面，成功修改密码 <br>2、正常流程下，修改密码页面抓包，修改其中的USERNAME_COOKIE为其他用户（有可能会经过编码，比如base64），提交即可修改其他用户密码，如果抓包其中有step参数，可以修改这个参数为最后一步（比如：5），提交便可略过之前的步骤</td>
+</tr>
+<tr>
+<td align="left">本地验证</td>
+<td align="left">1、在本地验证服务器的返回信息，确定是否执行密码重置，但是其返回信息是可控的内容，或者是可以获得的内容 例如：通过手机找回密码，随便输入验证码，抓包，发送，拦截response包（Burpsuite中可以选取do intercept–&gt;response to this request），修改response包中的返回码，继续发送，说不定就可以绕过验证，直接跳到修改密码的页面。 <br>2、发生短信等验证信息的动作在本地执行，可以通过修改request包进行控制 例如：通过用户名找回密码，提交后会自动发送验证码到手机中，抓包，修改手机为自己的手机（如果其中有type之类的参数，也可以尝试修改，有email之类的参数，可以尝试删除内容），发送修改后的包，手机成功接收验证码。输入验证码，继续发送，抓包，如果有type之类的参数，可以继续尝试修改，发送就可以成功修改密码</td>
+</tr>
+<tr>
+<td align="left">Token生成可控</td>
+<td align="left">token生成可控 <br>举例： <br>1、通过邮箱找回密码，正常流程下，抓包查看提交验证码后返回的数据，有加密字符串，这个加密字符串和后面重新设置新密码URL链接中的加密字符串一样，所以可以利用这个加密字符串 <br>2、根据上面提交验证码的抓包，修改User为其他用户（User有可能会使用md5加密），发送，就可以返回其他用户的加密字符串 <br>3、重新返回到找回密码首页，利用其他用户找回，点下一步，到输入验证码处，直接修改URL链接，加入加密字符串，可以直接绕过验证码，重置密码</td>
+</tr>
+<tr>
+<td align="left">注册覆盖</td>
+<td align="left">注册覆盖 <br>举例： <br>注册重复的用户名，例如admin，相当于修改了密码</td>
+</tr>
+<tr>
+<td align="left">Session覆盖</td>
+<td align="left">Session覆盖 <br>举例： <br>同一浏览器，首先输入自己的账户进行邮箱密码找回，进入邮箱查看链接，接着输入他人账户，进行密码找回，返回刚刚自己的邮箱点击链接，由于session覆盖导致了，这个链接成为了修改他人密码的链接，成功修改他人密码</td>
+</tr>
+</tbody></table>
+<h1 id="六、验证码突破"><a href="#六、验证码突破" class="headerlink" title="六、验证码突破"></a>六、验证码突破</h1><p>验证码突破方法</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">暴力破解</td>
+<td align="left">方法 <br>1、有的验证码输入正确一次，在一定时间内不用再输入。 <br>2、有的验证码输入正确一次，会在你session中设定一个值，告诉服务器你已经通过验证码验证了。 <br>3、有的验证码因为逻辑问题只是一个摆设，正常的逻辑为先对比验证码是否正确，再检测账号密码是否正确，反过来了 <br>4、删除cookie，将验证码参数va=1234变成va[]=1234  <br><br>修复建议： <br>1、提高验证码的长度、复杂度 <br>2、可限制错误登录次数、有效时间突破验证码的方法</td>
+</tr>
+<tr>
+<td align="left">时间、次数突破</td>
+<td align="left">概念： <br>重复提交携带验证码的数据包，查看返回包，判断次数 <br><br>测试方法：<br>填写正确登录信息和验证码–&gt;抓取提交数据包–&gt;重复提交该数据包–&gt;查看是否登录成功–&gt;登录成功则存在验证码重复使用问题  <br><br>案例： <br>Step1、输入正确信息点击登录时抓包 <br>Step2、抓包，通过修改imageField参数的大小来实现暴力提交，自设一个两位数数字字典作为payload<br>Step3、查看任意响应包是否登录成功，从结果来看，暴力重复提交的数据包均登录成功。</td>
+</tr>
+<tr>
+<td align="left">回显测试</td>
+<td align="left">概念： <br>验证码直接由客户端生成，在回显中显示，可通过浏览器工具直接查看 <br><br>测试方法： <br>1、在源码中显示。源代码审计，搜索源码中有无验证码 <br>2、在COOKIE中显示。抓包时分析COOKIE中是否含有验证码 <br>案例： <br>Step1、输入相关信息 <br>Step2、抓包，得到验证码 <br>Step3、输入验证码。验证通过</td>
+</tr>
+<tr>
+<td align="left">绕过测试</td>
+<td align="left">漏洞成因：<br>由于逻辑设计缺陷，可绕过验证，比如直接删除COOKIE或验证码参数可绕过、当验证不通过清空session时，验证码参数值为空时绕过等。 <br><br>测试方法： <br>1、抓包，删除验证码字段，查看是否可以成功发送 <br>2、抓包，正常流程下，记录验证码后的数据包，替换目标包中内容，直接发送，查看是否可以直接绕过验证码 <br><br>案例： <br>Step1、输入正确账户信息和错误验证码，登录时抓包 <br>Step2、删除COOKIEStep3.客户端登陆成功</td>
+</tr>
+</tbody></table>
+<h1 id="七、接口调用安全"><a href="#七、接口调用安全" class="headerlink" title="七、接口调用安全"></a>七、接口调用安全</h1><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">重放攻击</td>
+<td align="left">在短信、邮件调用业务或生成业务数据环节中（类：短信验证码，邮件验证码，订单生成，评论提交等），对其业务环节进行调用（重放）测试 <br><br>常见类型： <br>短信轰炸（末尾空格、\n绕过） <br>恶意注册  <br><br>修复： <br>1、对评论提交等操作采用验证码机制，防止生成数据业务被恶意调用； <br>2、短信/邮件接口，需要对接调用频率进行控制或者上限限制； <br>3、每一个订单（接口访问）使用唯一的token，提交一次后，token失效</td>
+</tr>
+<tr>
+<td align="left">内容编辑</td>
+<td align="left">例如： <br>点击获取短信验证码，抓包，可以修改短信内容，实施下一步攻击  <br><br>修复： <br>从客户端处获取手机号、邮箱等账号信息，要与Session中的凭证进行核验，验证通过后才允许进行业务操作。</td>
+</tr>
+<tr>
+<td align="left">接口调用遍历漏洞</td>
+<td align="left">Web接口一般将常见的一些功能需求进行封装，通过传入不同的参数来获取对应的数据或者执行相应的功能，其中最常见的场景就是通过接口传入id参数，返回对应id的信息。此类接口如请求合法性校验不严，很容易出现非授权访问或者越权访问的问题。  <br><br>修复： <br>1、在session中存储当前用户的凭证或者id，只有传入凭证或者id参数值与session中的一致才返回结果。 <br>2、一般涉及身份校验的接口，不要直接将敏感信息的明文信息在客户端与服务端间传递，可以将敏感信息在服务端关联到用户标识ID，在客户端保存用户标识ID并提交到服务端，服务端根据ID取出对应信息后进行校验；</td>
+</tr>
+<tr>
+<td align="left">接口未授权访问、调用漏洞</td>
+<td align="left">在正常的业务中，敏感功能的接口需要对访问者的身份进行验证，验证通过后才允许调用接口进行操作。接口未做身份验证或身份校验不严，可能导致非授权访问或越权调用，越权又分为垂直越权和水平越权。  <br><br>修复： <br>1、采用Token校验的方式，在url中添加一个Token参数，只有Token验证通过才返回接口数据且Token使用一次后失效； <br>2、在接口被调用时，服务器端对会话状态进行验证，如果已经登录，便返回接口数据；如未登录，则返回自定义的错误信息； <br>3、未授权访问接口做Session认证，并对用户访问的每一个URL做身份鉴别，正确的校验用户id及token等； <br>4、服务器端需校验身份唯一性，访问接口来源验证，不同身份只能查看修改删除添加自己的信息。</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/">
+            https://www.zerochen.top/article/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/TOP10%E6%BC%8F%E6%B4%9E%E6%8E%A2%E6%B5%8B%E7%82%B9/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">TOP10漏洞探测点 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/XXE%E5%92%8CSSRF/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">XXE和SSRF </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E7%9A%84%E4%BA%A7%E7%94%9F"><span class="toc-text">一、漏洞的产生</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E"><span class="toc-text">二、权限绕过漏洞</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E6%8D%AE%E7%AF%A1%E6%94%B9"><span class="toc-text">三、数据篡改</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%B8%9A%E5%8A%A1%E6%8E%88%E6%9D%83%E5%AE%89%E5%85%A8"><span class="toc-text">四、业务授权安全</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%BB%BB%E6%84%8F%E5%AF%86%E7%A0%81%E6%89%BE%E5%9B%9E%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">五、任意密码找回的方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E7%AA%81%E7%A0%B4"><span class="toc-text">六、验证码突破</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E5%AE%89%E5%85%A8"><span class="toc-text">七、接口调用安全</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E7%9A%84%E4%BA%A7%E7%94%9F"><span class="toc-text">一、漏洞的产生</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E"><span class="toc-text">二、权限绕过漏洞</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E6%8D%AE%E7%AF%A1%E6%94%B9"><span class="toc-text">三、数据篡改</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%B8%9A%E5%8A%A1%E6%8E%88%E6%9D%83%E5%AE%89%E5%85%A8"><span class="toc-text">四、业务授权安全</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%BB%BB%E6%84%8F%E5%AF%86%E7%A0%81%E6%89%BE%E5%9B%9E%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">五、任意密码找回的方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E7%AA%81%E7%A0%B4"><span class="toc-text">六、验证码突破</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E5%AE%89%E5%85%A8"><span class="toc-text">七、接口调用安全</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BC%8F%E6%B4%9E%E7%9A%84%E4%BA%A7%E7%94%9F"><span class="toc-text">一、漏洞的产生</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E"><span class="toc-text">二、权限绕过漏洞</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E6%8D%AE%E7%AF%A1%E6%94%B9"><span class="toc-text">三、数据篡改</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%B8%9A%E5%8A%A1%E6%8E%88%E6%9D%83%E5%AE%89%E5%85%A8"><span class="toc-text">四、业务授权安全</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%BB%BB%E6%84%8F%E5%AF%86%E7%A0%81%E6%89%BE%E5%9B%9E%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">五、任意密码找回的方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E7%AA%81%E7%A0%B4"><span class="toc-text">六、验证码突破</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E5%AE%89%E5%85%A8"><span class="toc-text">七、接口调用安全</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

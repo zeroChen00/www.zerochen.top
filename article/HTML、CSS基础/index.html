@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>HTML、CSS基础</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="HTML、CSS基础">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-06-13">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-10">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="HTML">
+        
+          <meta 
+            property="og:article:tag" 
+            content="CSS">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      HTML、CSS基础
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-06-13T02:16:35.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-06-13</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" 
+          class="post-meta-link">
+          编程基础
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.9k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/HTML/" 
+            class="post-meta-link">
+            HTML
+          </a>
+        
+          
+            <span class="dot"></span>
+          
+          <a 
+            href="/tags/CSS/" 
+            class="post-meta-link">
+            CSS
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="HTML："><a href="#HTML：" class="headerlink" title="HTML："></a>HTML：</h1><p>HTML不是编程语言，而是标记语言，用来描述网页</p>
+<p>HTML基础语法及标签</p>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;!DOCTYPE&gt;  </code></td>
+<td><code>&lt;!DOCTYPE&gt;  </code>不是HTML标记语言，而是声明，它是指示 web 浏览器关于页面使用哪个  <br>HTML 版本进行编写的指令 <code>&lt;!DOCTYPE  html&gt; </code></td>
+</tr>
+<tr>
+<td><code>&lt;meta  charset=&quot;utf-8&quot;&gt;  </code></td>
+<td>对于中文网页需要声明编码方式，否则会乱码  <br><code>&lt;meta  charset=&quot;gbk&quot;&gt;</code>  设置gbk编码</td>
+</tr>
+<tr>
+<td><code> &lt;!---  ---&gt; </code></td>
+<td>注释  <br><code>&lt;!---这是一个注释---&gt;  </code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>完整的HTML页面</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;!DOCTYPE  html&gt;</code></td>
+<td>声明</td>
+</tr>
+<tr>
+<td><code>&lt;html&gt;&lt;/html&gt; </code></td>
+<td>最外层框架，告知是html框架</td>
+</tr>
+<tr>
+<td><code>&lt;head&gt;&lt;/head&gt;</code></td>
+<td>头部元素，包含编码语言和页面标题</td>
+</tr>
+<tr>
+<td><code>&lt;meta  charset=&quot;utf-8&quot;&gt;</code></td>
+<td>声明编码</td>
+</tr>
+<tr>
+<td><code>&lt;title&gt;&lt;/title&gt;</code></td>
+<td>网页标题  <br><code>&lt;title&gt;Hello&lt;/title&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;body&gt;&lt;/body&gt;</code></td>
+<td>网页主题，是网页的内容部分  <br><code>&lt;body&gt;  &lt;p&gt;这是正文&lt;/p&gt;  &lt;/body&gt;</code></td>
+</tr>
+<tr>
+<td>上述标签关系如图，是网页的最小构成单元</td>
+<td><img src="/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/02A7DD95-22B4-4FB9-B994-DDB5393F7F03.jpg" alt="02A7DD95-22B4-4FB9-B994-DDB5393F7F03" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/02A7DD95-22B4-4FB9-B994-DDB5393F7F03.jpg" class="lozad post-image"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>常用标签</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;h1&gt;&lt;/h1&gt;</code></td>
+<td>标题  h1-h6，标题级别（字体大小）由大到小 <br><code> &lt;h1&gt;这是最大级别标题&lt;/h1&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;p&gt;&lt;/p&gt;</code></td>
+<td>段落  <br><code>&lt;p&gt;这是一个段落&lt;/p&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;hr&gt;  </code></td>
+<td>线</td>
+</tr>
+<tr>
+<td><code>&lt;pre&gt;&lt;/pre&gt;</code></td>
+<td>预格式化文本容器,会保留空格和换行符</td>
+</tr>
+<tr>
+<td><code>&lt;br/&gt;</code></td>
+<td>换行，直接插入段落，没有闭合标签</td>
+</tr>
+<tr>
+<td><code>&lt;a&gt;&lt;/a&gt;</code></td>
+<td>链接  <br><code>&lt;a  href=&quot;https://www.baidu.com&quot;&gt;这是百度链接&lt;/a&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;img&gt; </code></td>
+<td>图片，注意，图片标签不是成对出现  <br><code>&lt;img  src=&quot;1.jpg&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;ul&gt;&lt;/ul&gt;：无序列表</code>  <br><code>&lt;ol&gt;&lt;/ol&gt;：有序列表</code>  <br><code>&lt;li&gt;&lt;/li&gt;：列表项</code></td>
+<td>列表  <br><code>&lt;ol&gt;</code>  <br><code>&lt;li&gt;有序列表1&lt;/li&gt;</code><br><code>&lt;li&gt;有序列表2&lt;/li&gt;</code>  <br><code>&lt;/ol&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;table&gt;&lt;/table&gt;：表格</code><br><code>&lt;tr&gt;&lt;/tr&gt;：行</code>  <br><code>&lt;td&gt;&lt;/td&gt;：格</code>  <br><code>&lt;th&gt;&lt;/th&gt;：表格头(加粗加黑) </code></td>
+<td>创建表格  <br><code>&lt;table&gt;</code>   <br><code>&lt;tr&gt;</code>    <br><code>&lt;th&gt;Month&lt;/th&gt;</code>    <code>&lt;th&gt;Savings&lt;/th&gt;</code>   <br><code>&lt;/tr&gt;</code>   <br><br><code>&lt;tr&gt;</code>    <br><code>&lt;td&gt;January&lt;/td&gt;</code>    <code>&lt;td&gt;$100&lt;/td&gt;</code>   <br><code>&lt;/tr&gt;</code>  <br><code>&lt;/table&gt;</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>HTML表单</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;form&gt;&lt;/form&gt;</code></td>
+<td>定义表单  <br><code>&lt;form  action=&quot;www.baidu.com&quot; method=&quot;get&quot;  enctype=&quot;application/x-www-form-urlencoded&quot;&gt;</code><br><code>这是表单</code><br><code>&lt;/form&gt;</code>  <br><br>action：表明表单将要提交到哪里  <br>method：表示提交用的方法分别为get和post可选  <br>enctype：规定在发送表单数据前对数据进行编码格式</td>
+</tr>
+<tr>
+<td><code>&lt;INPUT&gt;</code></td>
+<td>表单域标记  <br><code>&lt;INPUT  type= &quot;text&quot; name= &quot;文本框名称&quot; value= &quot;文本框值&quot; size=  &quot;文本框的宽度&quot; maxlength=  &quot;文本框中能输入的最大长度&quot; &gt;</code>  <br>value：输入框默认文本</td>
+</tr>
+<tr>
+<td>type</td>
+<td>表单类型  <br>text：单行文本框  <br>password：密码框，输入值以点代替  <br>checkbox：复选框  <br>radio：单选按钮  <br>submit：提交按钮  <br>button：自定义按钮</td>
+</tr>
+<tr>
+<td>value</td>
+<td>默认文本</td>
+</tr>
+<tr>
+<td>placeholder</td>
+<td>提示文字</td>
+</tr>
+<tr>
+<td><code>&lt;div&gt;&lt;/div&gt;</code></td>
+<td>块元素，可以存放文本、图片等，用来对整体设置属性</td>
+</tr>
+<tr>
+<td><code>&lt;textarea&gt;&lt;/textarea&gt;</code></td>
+<td>格式及属性  <br><code>&lt;TEXTAREA  name= &quot;名称&quot; rows=  &quot;最大可视行数&quot; cols=  &quot;最大可视列数&quot; &gt;默认多行文本</code><br><code> &lt;/TEXTAREA&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;select&gt;&lt;/select&gt;  </code><br><code>&lt;option&gt;&lt;/option&gt;</code></td>
+<td>多选表单  <br><code>&lt;SELECT name= &quot;&quot; size= &quot;&quot; &gt; </code><br><code>&lt;OPTION  value= &quot; &quot; &gt; 选项1 &lt;/OPTION&gt;</code><br><code>&lt;OPTION  value= &quot; &quot; &gt; 选项2 &lt;/OPTION&gt; </code><br><code>&lt;/SELECT&gt;</code></td>
+</tr>
+</tbody></table>
+<p>补充：</p>
+<p>HTTP请求方式</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>发起一个请求来获得服务器上的某一资源，通过一组HTTP头和呈现数据返回客户端，GET请求中永远不会包含呈现数据</td>
+</tr>
+<tr>
+<td>HEAD</td>
+<td>与GET类似，但是HEAD只含有HTTP头信息，不含有呈现数据。侧重判断某个资源是否存在。</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>向服务器提交数据，使用最为广泛</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>与POST类似，但是PUT指定了资源存放的位置，POST数据存放位置则由服务器决定。少见</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>删除资源。少见。</td>
+</tr>
+<tr>
+<td>OPTIONS</td>
+<td>获取当前URL所支持的方法，若请求成功，会在HTTP头中更包含一个名为Allow的头，值是所支持的方法</td>
+</tr>
+</tbody></table>
+<h1 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h1><p>CSS是一种用来装饰HTML的标记集合，是对HTML标记的一种扩展，可以进一步美化HTML页面</p>
+<p>语法</p>
+<pre class="highlight"><span class="line">选择符+声明（声明=属性+属性值）</span><br><span class="line"></span><br><span class="line">           属性 值              属性 值</span><br><span class="line"></span><br><span class="line">   h1&#123;   color:red;     front-size:14px&#125;</span><br><span class="line"></span><br><span class="line">  选择器    声明          声明</span><br></pre>
+
+<p>引用方式</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内联样式</td>
+<td>在HTML元素中使用style属性，只对当前标记里的内容有效   <br><code>&lt;p  style=&quot;display:none&quot;&gt;&lt;/p&gt;</code></td>
+</tr>
+<tr>
+<td>内部样式表</td>
+<td>在HTML文档头部head区域使用<code>&lt;style&gt;</code>元素，包含CS，全局声明，调用  <br><code>&lt;style  type=&quot;text/css&quot;&gt; </code><br><code>选择符 &#123; 样式属性:属性值; 样式属性:属性值;……&#125;</code><br><code>选择符 &#123; 样式属性:属性值; 样式属性:属性值;……&#125;</code><br><code>&lt;/style&gt;</code></td>
+</tr>
+<tr>
+<td>外部引用</td>
+<td>外部CSS，通过<code>&lt;link&gt;</code>标签引入外部的CSS文件 <br><code>&lt;link  rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;样式表文件的地址&quot;&gt;</code></td>
+</tr>
+</tbody></table>
+<p>内部样式表总结</p>
+<table>
+<thead>
+<tr>
+<th>样式</th>
+<th>语法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类选择符</td>
+<td><code>&lt;style  type=&quot;text/css&quot;&gt;  </code><br><code>.sfont&#123;  font-size:12px; </code><br><code>color:red;  &#125;</code><br><code>&lt;/style&gt; </code><br><code>&lt;p  class=&quot;sfont&quot;&gt;…&lt;/p&gt; </code></td>
+</tr>
+<tr>
+<td>ID选择符</td>
+<td><code>&lt;style  type=&quot;text/css&quot;&gt;</code><br><code>#sfont&#123; </code><br><code>font-size:12px;</code><br><code>color:red;  &#125; </code><br><code>&lt;/style&gt; </code>   <br><code>&lt;p id=&quot;sfont&quot;&gt;…&lt;/p&gt;  </code></td>
+</tr>
+<tr>
+<td>类型选择符</td>
+<td><code>&lt;style  type=&quot;text/css&quot;&gt; </code><br><code>p&#123;</code><br><code>font-size:12px;</code><br><code>color:red;  &#125;</code><br><code>&lt;/style&gt;  </code><br><code> &lt;p&gt;…&lt;/p&gt; </code></td>
+</tr>
+</tbody></table>
+<p>样式表冲突</p>
+<p>当多种样式作用于同一标记的同一属性时，会发生样式表冲突</p>
+<p>优先原则</p>
+<p>同一选择符：按就近原则</p>
+<p>不同选择符：内联 &gt; ID &gt; 类 &gt; 类型 &gt; 外部</p>
+<p>定位符</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>position</td>
+<td></td>
+</tr>
+<tr>
+<td>fixed<br>绝对定位</td>
+<td><code>&lt;view  style=&#39;position:fixed;bottom:100rpx;right:100rpx&#39;&gt;  </code><br><code>&lt;image style=&#39; width:102rpx;  height:110rpx&#39;  src=&quot;/images/music/music-start.png&quot;&gt;&lt;/image&gt;  &lt;/view&gt;</code></td>
+</tr>
+<tr>
+<td>absolute<br>绝对定位</td>
+<td><code>&lt;view  style=&#39;position:absolute;&#39;&gt; </code><br><code>&lt;image style=&#39; width:102px;  height:110px&#39; src=&quot;/images/music/music-start.png&quot;&gt;&lt;/image&gt;  &lt;/view&gt; </code> <br>在没有使用 “left”, “top”, “right” 以及 “bottom” 属性之前，基于文档流的位置停留在在文档流之外，  随着滚动并不一直停留在屏幕中。     <br><br><code>&lt;view  style=&#39;position:absolute;bottom:100rpx;right:100rpx&#39;&gt;  </code><br><code>&lt;image style=&#39; width:102rpx;  height:110rpx&#39;  src=&quot;/images/music/music-start.png&quot;&gt;&lt;/image&gt;  &lt;/view&gt;</code>  <br>在使用 “left”, “top”, “right” 以及 “bottom” 属性之后，位置就不是基于文档流时候的位置，  而是根据这些设置的属性基于整个屏幕的位置确定的。随着滚动并不一直停留在屏幕中。</td>
+</tr>
+<tr>
+<td>relative<br>相对定位</td>
+<td><code>&lt;html&gt;  &lt;head&gt; </code><br><code>&lt;style  type=&quot;text/css&quot;&gt;</code><br><code>h2.pos_left  &#123;  position:relative;  left:-20px  &#125; </code><br><code>h2.pos_right  &#123;  position:relative;  left:20px  &#125; </code><br><code>.container&#123;   margin-left:100px;   border:5px solid #405f80;  &#125;</code><br><code>&lt;/style&gt;  &lt;/head&gt;  &lt;body&gt; </code><br><code> &lt;div class=&quot;container&quot;&gt; </code><br><code>   &lt;h2&gt;这是位于正常位置的标题&lt;/h2&gt;  </code><br><code>&lt;h2 class=&quot;pos_left&quot;&gt;这个标题相对于其正常位置向左移动&lt;/h2&gt;  </code><br><code>&lt;h2 class=&quot;pos_right&quot;&gt;这个标题相对于其正常位置向右移动&lt;/h2&gt; </code><br><code>&lt;/div&gt;  &lt;/body&gt;     &lt;/html&gt;  </code></td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/">
+            https://www.zerochen.top/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">搭建LAMP环境 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">搭建Nginx+直播推流平台 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTML%EF%BC%9A"><span class="toc-text">HTML：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CSS"><span class="toc-text">CSS</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTML%EF%BC%9A"><span class="toc-text">HTML：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CSS"><span class="toc-text">CSS</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTML%EF%BC%9A"><span class="toc-text">HTML：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CSS"><span class="toc-text">CSS</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

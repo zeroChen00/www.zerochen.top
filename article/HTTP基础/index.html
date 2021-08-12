@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>HTTP基础</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="HTTP基础">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/HTTP%E5%9F%BA%E7%A1%80/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-07-26">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-10">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="HTTP">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      HTTP基础
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-07-26T06:03:40.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-07-26</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" 
+          class="post-meta-link">
+          网络基础
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>5.2k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/HTTP/" 
+            class="post-meta-link">
+            HTTP
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h1><p>简介：</p>
+<p>超文本传输协议，80端口</p>
+<p>特点：</p>
+<p>1、支持客户端/服务器模式</p>
+<p>2、简单快速</p>
+<p>3、灵活</p>
+<p>4、无状态</p>
+<p>请求报文：</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">开始行</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">首部</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">一个空行</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">主体</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>响应报文：</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">状态行</td>
+<td align="left">HTTP/版本 状态码 状态短语</td>
+</tr>
+<tr>
+<td align="left">首部</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">一个空行</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">主体</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>请求字段</p>
+<table>
+<thead>
+<tr>
+<th align="left">协议头字段名</th>
+<th align="left">说明</th>
+<th align="left">示例</th>
+<th align="left">状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Accept</td>
+<td align="left">能够接受的回应内容类型（Content-Types）</td>
+<td align="left">Accept: text/plain</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Accept-Charset</td>
+<td align="left">能够接受的字符集</td>
+<td align="left">Accept-Charset: utf-8</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Accept-Encoding</td>
+<td align="left">能够接受的编码方式列表</td>
+<td align="left">Accept-Encoding: gzip, deflate</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Accept-Language</td>
+<td align="left">能够接受的回应内容的自然语言列表。</td>
+<td align="left">Accept-Language: en-US</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Authorization</td>
+<td align="left">用于超文本传输协议的认证的认证信息</td>
+<td align="left">Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Cache-Control</td>
+<td align="left">用来指定在这次的请求/响应链中的所有缓存机制都必须遵守的指令</td>
+<td align="left">Cache-Control: no-cache</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Connection</td>
+<td align="left">该浏览器想要优先使用的连接类型</td>
+<td align="left">Connection: keep-alive Connection: Upgrade</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Content-Length</td>
+<td align="left">以八位字节数组 （8位的字节）表示的请求体的长度</td>
+<td align="left">Content-Length: 348</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Content-Type</td>
+<td align="left">请求体的格式 （用于POST和PUT请求中）</td>
+<td align="left">Content-Type: application/x-www-form-urlencoded</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Date</td>
+<td align="left">发送该消息的日期和时间(按照 RFC 7231 中定义的”超文本传输协议日期”格式来发送)</td>
+<td align="left">Date: Tue, 15 Nov 1994 08:12:31 GMT</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Expect</td>
+<td align="left">表明客户端要求服务器做出特定的行为</td>
+<td align="left">Expect: 100-continue</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">From</td>
+<td align="left">发起此请求的用户的邮件地址</td>
+<td align="left">From: <a href="mailto:user@example.com">user@example.com</a></td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Host</td>
+<td align="left">服务器的域名(用于虚拟主机 )，以及服务器所监听的传输控制协议端口号。如果所请求的端口是对应的服务的标准端口，则端口号可被省略。 自超文件传输协议版本1.1（HTTP/1.1）开始便是必需字段。</td>
+<td align="left">Host: en.wikipedia.org:80 Host: en.wikipedia.org</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">If-Match</td>
+<td align="left">仅当客户端提供的实体与服务器上对应的实体相匹配时，才进行对应的操作。主要作用时，用作像 PUT 这样的方法中，仅当从用户上次更新某个资源以来，该资源未被修改的情况下，才更新该资源。</td>
+<td align="left">If-Match: “737060cd8c284d8af7ad3082f209582d”</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">If-Modified-Since</td>
+<td align="left">允许在对应的内容未被修改的情况下返回304未修改（ 304 Not Modified ）</td>
+<td align="left">If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">If-None-Match</td>
+<td align="left">允许在对应的内容未被修改的情况下返回304未修改（ 304 Not Modified ）</td>
+<td align="left">If-None-Match: “737060cd8c284d8af7ad3082f209582d”</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">If-Range</td>
+<td align="left">如果该实体未被修改过，则向我发送我所缺少的那一个或多个部分；否则，发送整个新的实体</td>
+<td align="left">If-Range: “737060cd8c284d8af7ad3082f209582d”</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">If-Unmodified-Since</td>
+<td align="left">仅当该实体自某个特定时间已来未被修改的情况下，才发送回应。</td>
+<td align="left">If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Max-Forwards</td>
+<td align="left">限制该消息可被代理及网关转发的次数。</td>
+<td align="left">Max-Forwards: 10</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Proxy-Authorization</td>
+<td align="left">用来向代理进行认证的认证信息。</td>
+<td align="left">Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Range</td>
+<td align="left">仅请求某个实体的一部分。字节偏移以0开始。</td>
+<td align="left">Range: bytes=500-999</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Referer</td>
+<td align="left">表示浏览器所访问的前一个页面，正是那个页面上的某个链接将浏览器带到了当前所请求的这个页面。</td>
+<td align="left">Referer: <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Main_Page">http://en.wikipedia.org/wiki/Main_Page</a></td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">TE</td>
+<td align="left">浏览器预期接受的传输编码方式：可使用回应协议头 Transfer-Encoding 字段中的值；另外还可用”trailers”（与”分块 “传输方式相关）这个值来表明浏览器希望在最后一个尺寸为0的块之后还接收到一些额外的字段。</td>
+<td align="left">TE: trailers, <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/DEFLATE">deflate</a></td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">User-Agent</td>
+<td align="left">浏览器的身份标识字符串</td>
+<td align="left">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Upgrade</td>
+<td align="left">要求服务器升级到另一个协议。</td>
+<td align="left">Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Via</td>
+<td align="left">向服务器告知，这个请求是由哪些代理发出的。</td>
+<td align="left">Via: 1.0 fred, 1.1 example.com (Apache/1.1)</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Warning</td>
+<td align="left">一个一般性的警告，告知，在实体内容体中可能存在错误。</td>
+<td align="left">Warning: 199 Miscellaneous warning</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Cookie</td>
+<td align="left">之前由服务器通过 Set-Cookie发送的一个超文本传输协议Cookie</td>
+<td align="left">Cookie: $Version=1; Skin=new;</td>
+<td align="left">常设: 标准</td>
+</tr>
+<tr>
+<td align="left">Origin</td>
+<td align="left">跳转来源域名（要求服务器在回应中加入一个‘访问控制-允许来源’（’Access-Control-Allow-Origin’）字段）。</td>
+<td align="left">Origin: <a target="_blank" rel="noopener" href="http://www.example-social-network.com/">http://www.example-social-network.com</a></td>
+<td align="left">常设: 标准</td>
+</tr>
+<tr>
+<td align="left">Pragma</td>
+<td align="left">与具体的实现相关，这些字段可能在请求/回应链中的任何时候产生多种效果。</td>
+<td align="left">Pragma: no-cache</td>
+<td align="left">常设但不常用</td>
+</tr>
+<tr>
+<td align="left">Content-MD5</td>
+<td align="left">请求体的内容的二进制 MD5 散列值，以 Base64 编码的结果</td>
+<td align="left">Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==</td>
+<td align="left">过时的</td>
+</tr>
+<tr>
+<td align="left">Accept-Datetime</td>
+<td align="left">能够接受的按照时间来表示的版本</td>
+<td align="left">Accept-Datetime: Thu, 31 May 2007 20:35:00 GMT</td>
+<td align="left">临时</td>
+</tr>
+</tbody></table>
+<p>常见的非标准请求字段</p>
+<table>
+<thead>
+<tr>
+<th align="left">字段名</th>
+<th align="left">说明</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">X-Requested-With</td>
+<td align="left">主要用于标识 Ajax 及可扩展标记语言 请求。大部分的JavaScript框架会发送这个字段，且将其值设置为 XMLHttpRequest</td>
+<td align="left">X-Requested-With: XMLHttpRequest</td>
+</tr>
+<tr>
+<td align="left">DNT</td>
+<td align="left">请求某个网页应用程序停止跟踪某个用户。在火狐浏览器中，相当于X-Do-Not-Track协议头字段（自 Firefox/4.0 Beta 11 版开始支持）。Safari 和 Internet Explorer 9 也支持这个字段。2011年3月7日，草案提交IETF。万维网协会 的跟踪保护工作组正在就此制作一项规范。</td>
+<td align="left">DNT: 1 (DNT启用) DNT: 0 (DNT被禁用)</td>
+</tr>
+<tr>
+<td align="left">X-Forwarded-For</td>
+<td align="left">一个事实标准 ，用于标识某个通过超文本传输协议代理或负载均衡连接到某个网页服务器的客户端的原始互联网地址</td>
+<td align="left">X-Forwarded-For: client1, proxy1, proxy2 X-Forwarded-For: 129.78.138.66, 129.78.64.103</td>
+</tr>
+<tr>
+<td align="left">X-Forwarded-Host</td>
+<td align="left">一个事实标准 ，用于识别客户端原本发出的 Host 请求头部。</td>
+<td align="left">X-Forwarded-Host: en.wikipedia.org:80 X-Forwarded-Host: en.wikipedia.org</td>
+</tr>
+<tr>
+<td align="left">X-Forwarded-Proto</td>
+<td align="left">一个事实标准，用于标识某个超文本传输协议请求最初所使用的协议。</td>
+<td align="left">X-Forwarded-Proto: https</td>
+</tr>
+<tr>
+<td align="left">Front-End-Https</td>
+<td align="left">被微软的服务器和负载均衡器所使用的非标准头部字段。</td>
+<td align="left">Front-End-Https: on</td>
+</tr>
+<tr>
+<td align="left">X-Http-Method-Override</td>
+<td align="left">请求某个网页应用程序使用该协议头字段中指定的方法（一般是PUT或DELETE）来覆盖掉在请求中所指定的方法（一般是POST）。当某个浏览器或防火墙阻止直接发送PUT 或DELETE 方法时（注意，这可能是因为软件中的某个漏洞，因而需要修复，也可能是因为某个配置选项就是如此要求的，因而不应当设法绕过），可使用这种方式。</td>
+<td align="left">X-HTTP-Method-Override: DELETE</td>
+</tr>
+<tr>
+<td align="left">X-ATT-DeviceId</td>
+<td align="left">使服务器更容易解读AT&amp;T设备User-Agent字段中常见的设备型号、固件信息。</td>
+<td align="left">X-Att-Deviceid: GT-P7320/P7320XXLPG</td>
+</tr>
+<tr>
+<td align="left">X-Wap-Profile</td>
+<td align="left">链接到互联网上的一个XML文件，其完整、仔细地描述了正在连接的设备。右侧以为AT&amp;T Samsung Galaxy S2提供的XML文件为例。</td>
+<td align="left">x-wap-profile: <a target="_blank" rel="noopener" href="http://wap.samsungmobile.com/uaprof/SGH-I777.xml">http://wap.samsungmobile.com/uaprof/SGH-I777.xml</a></td>
+</tr>
+<tr>
+<td align="left">Proxy-Connection</td>
+<td align="left">该字段源于早期超文本传输协议版本实现中的错误。与标准的连接（Connection）字段的功能完全相同。</td>
+<td align="left">Proxy-Connection: keep-alive</td>
+</tr>
+<tr>
+<td align="left">X-Csrf-Token</td>
+<td align="left">用于防止 跨站请求伪造。 辅助用的头部有 X-CSRFToken或 X-XSRF-TOKEN</td>
+<td align="left">X-Csrf-Token: i8XNjC4b8KVok4uw5RftR38Wgp2BFwql</td>
+</tr>
+</tbody></table>
+<p>响应字段</p>
+<table>
+<thead>
+<tr>
+<th align="left">字段名</th>
+<th align="left">说明</th>
+<th align="left">例子</th>
+<th align="left">状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Accept-Patch</td>
+<td align="left">指定服务器支持的文件格式类型。</td>
+<td align="left">Accept-Patch: text/example;charset=utf-8</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Accept-Ranges</td>
+<td align="left">这个服务器支持哪些种类的部分内容范围</td>
+<td align="left">Accept-Ranges: bytes</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Age</td>
+<td align="left">这个对象在代理缓存中存在的时间，以秒为单位</td>
+<td align="left">Age: 12</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Allow</td>
+<td align="left">对于特定资源有效的动作。针对HTTP/405这一错误代码而使用</td>
+<td align="left">Allow: GET, HEAD</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Cache-Control</td>
+<td align="left">向从服务器直到客户端在内的所有缓存机制告知，它们是否可以缓存这个对象。其单位为秒</td>
+<td align="left">Cache-Control: max-age=3600</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Connection</td>
+<td align="left">针对该连接所预期的选项</td>
+<td align="left">Connection: close</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Content-Disposition</td>
+<td align="left">一个可以让客户端下载文件并建议文件名的头部。文件名需要用双引号包裹。</td>
+<td align="left">Content-Disposition: attachment; filename=”fname.ext”</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Content-Encoding</td>
+<td align="left">在数据上使用的编码类型。参考 超文本传输协议压缩 。</td>
+<td align="left">Content-Encoding: gzip</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Content-Language</td>
+<td align="left">内容所使用的语言</td>
+<td align="left">Content-Language: da</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Content-Length</td>
+<td align="left">回应消息体的长度，以字节（8位为一字节）为单位</td>
+<td align="left">Content-Length: 348</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Content-Location</td>
+<td align="left">所返回的数据的一个候选位置</td>
+<td align="left">Content-Location: /index.htm</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Content-Range</td>
+<td align="left">这条部分消息是属于某条完整消息的哪个部分</td>
+<td align="left">Content-Range: bytes 21010-47021/47022</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Content-Type</td>
+<td align="left">当前内容的MIME类型</td>
+<td align="left">Content-Type: text/html; charset=utf-8</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Date</td>
+<td align="left">此条消息被发送时的日期和时间(按照 RFC 7231 中定义的“超文本传输协议日期”格式来表示)</td>
+<td align="left">Date: Tue, 15 Nov 1994 08:12:31 GMT</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">ETag</td>
+<td align="left">对于某个资源的某个特定版本的一个标识符，通常是一个 消息散列</td>
+<td align="left">ETag: “737060cd8c284d8af7ad3082f209582d”</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Last-Modified</td>
+<td align="left">所请求的对象的最后修改日期(按照 RFC 7231 中定义的“超文本传输协议日期”格式来表示)</td>
+<td align="left">Last-Modified: Tue, 15 Nov 1994 12:45:26 GMT</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Link</td>
+<td align="left">用来表达与另一个资源之间的类型关系，此处所说的类型关系是在 RFC 5988 中定义的</td>
+<td align="left">Link: ; rel=”alternate”</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Location</td>
+<td align="left">用来进行重定向，或者在创建了某个新资源时使用。</td>
+<td align="left">Location: <a target="_blank" rel="noopener" href="http://www.w3.org/pub/WWW/People.html">http://www.w3.org/pub/WWW/People.html</a></td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">P3P</td>
+<td align="left">用于支持设置P3P策略，标准格式为“P3P:CP=”your_compact_policy””。然而P3P规范并不成功，大部分现代浏览器没有完整实现该功能，而大量网站也将该值设为假值，从而足以用来欺骗浏览器的P3P插件功能并授权给第三方Cookies。</td>
+<td align="left">P3P: CP=”This is not a P3P policy! See <a target="_blank" rel="noopener" href="http://www.google.com/support/accounts/bin/answer.py?hl=en&amp;answer=151657">http://www.google.com/support/accounts/bin/answer.py?hl=en&amp;answer=151657</a> for more info.”</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Pragma</td>
+<td align="left">与具体的实现相关，这些字段可能在请求/回应链中的任何时候产生多种效果。</td>
+<td align="left">Pragma: no-cache</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Proxy-Authenticate</td>
+<td align="left">要求在访问代理时提供身份认证信息。</td>
+<td align="left">Proxy-Authenticate: Basic</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Public-Key-Pins</td>
+<td align="left">用于缓解中间人攻击，声明网站认证使用的传输层安全协议证书的散列值</td>
+<td align="left">Public-Key-Pins: max-age=2592000; pin-sha256=”E9CZ9INDbd+2eRQozYqqbQ2yXLVKB9+xcprMF+44U1g=”;</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Retry-After</td>
+<td align="left">如果某个实体临时不可用，则，此协议头用来告知客户端日后重试。其值可以是一个特定的时间段(以秒为单位)或一个超文本传输协议日期。</td>
+<td align="left">Example 1: Retry-After: 120 Example 2: Retry-After: Fri, 07 Nov 2014 23:59:59 GMT</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Server</td>
+<td align="left">服务器的名字</td>
+<td align="left">Server: Apache/2.4.1 (Unix)</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Trailer</td>
+<td align="left">这个头部数值指示了在这一系列头部信息由由分块传输编码编码。</td>
+<td align="left">Trailer: Max-Forwards</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Transfer-Encoding</td>
+<td align="left">用来将实体安全地传输给用户的编码形式。当前定义的方法包括：分块（chunked）、compress、deflate、gzip和identity。</td>
+<td align="left">Transfer-Encoding: chunked</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Upgrade</td>
+<td align="left">要求客户端升级到另一个协议。</td>
+<td align="left">Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Vary</td>
+<td align="left">告知下游的代理服务器，应当如何对未来的请求协议头进行匹配，以决定是否可使用已缓存的回应内容而不是重新从原始服务器请求新的内容。</td>
+<td align="left">Vary: *</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Via</td>
+<td align="left">告知代理服务器的客户端，当前回应是通过什么途径发送的。</td>
+<td align="left">Via: 1.0 fred, 1.1 example.com (Apache/1.1)</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Warning</td>
+<td align="left">一般性的警告，告知在实体内容体中可能存在错误。</td>
+<td align="left">Warning: 199 Miscellaneous warning</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">WWW-Authenticate</td>
+<td align="left">表明在请求获取这个实体时应当使用的认证模式。</td>
+<td align="left">WWW-Authenticate: Basic</td>
+<td align="left">常设</td>
+</tr>
+<tr>
+<td align="left">Expires</td>
+<td align="left">指定一个日期/时间，超过该时间则认为此回应已经过期</td>
+<td align="left">Expires: Thu, 01 Dec 1994 16:00:00 GMT</td>
+<td align="left">常设: 标准</td>
+</tr>
+<tr>
+<td align="left">Set-Cookie</td>
+<td align="left">HTTP cookie</td>
+<td align="left">Set-Cookie: UserID=JohnDoe; Max-Age=3600; Version=1</td>
+<td align="left">常设: 标准</td>
+</tr>
+<tr>
+<td align="left">Strict-Transport-Security</td>
+<td align="left">HTTP 严格传输安全这一头部告知客户端缓存这一强制 HTTPS 策略的时间，以及这一策略是否适用于其子域名。</td>
+<td align="left">Strict-Transport-Security: max-age=16070400; includeSubDomains</td>
+<td align="left">常设: 标准</td>
+</tr>
+<tr>
+<td align="left">Content-MD5</td>
+<td align="left">回应内容的二进制 MD5 散列，以 Base64 方式编码</td>
+<td align="left">Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==</td>
+<td align="left">过时的</td>
+</tr>
+<tr>
+<td align="left">X-Frame-Options</td>
+<td align="left">点击劫持保护： deny：该页面不允许在 frame 中展示，即使是同域名内。 sameorigin：该页面允许同域名内在 frame 中展示。 allow-from uri：该页面允许在指定uri的 frame 中展示。 allowall：允许任意位置的frame显示，非标准值。</td>
+<td align="left">X-Frame-Options: deny</td>
+<td align="left">过时的</td>
+</tr>
+<tr>
+<td align="left">Access-Control-Allow-Origin</td>
+<td align="left">指定哪些网站可参与到跨来源资源共享过程中</td>
+<td align="left">Access-Control-Allow-Origin: *</td>
+<td align="left">临时</td>
+</tr>
+<tr>
+<td align="left">Refresh</td>
+<td align="left">用于设定可定时的重定向跳转。右边例子设定了5秒后跳转至“<a target="_blank" rel="noopener" href="http://www.w3.org/pub/WWW/People.html%E2%80%9D%E3%80%82">http://www.w3.org/pub/WWW/People.html”。</a></td>
+<td align="left">Refresh: 5; url=<a target="_blank" rel="noopener" href="http://www.w3.org/pub/WWW/People.html">http://www.w3.org/pub/WWW/People.html</a></td>
+<td align="left">专利并非标准 Netscape实现的扩展，但大部分网页浏览器也支持。</td>
+</tr>
+<tr>
+<td align="left">Status</td>
+<td align="left">通用网关接口 协议头字段，用来说明当前这个超文本传输协议回应的 状态 。普通的超文本传输协议回应，会使用单独的“状态行”（”Status-Line”）作为替代，这一点是在 RFC 7230 中定义的。</td>
+<td align="left">Status: 200 OK</td>
+<td align="left">Not listed as a registered field name</td>
+</tr>
+</tbody></table>
+<p>常见的非标准回应字段</p>
+<table>
+<thead>
+<tr>
+<th align="left">字段名</th>
+<th align="left">说明</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">X-XSS-Protection</td>
+<td align="left">跨站脚本攻击 （XSS）过滤器</td>
+<td align="left">X-XSS-Protection: 1; mode=block</td>
+</tr>
+<tr>
+<td align="left">Content-Security-Policy, X-Content-Security-Policy, X-WebKit-CSP</td>
+<td align="left">内容安全策略定义。</td>
+<td align="left">X-WebKit-CSP: default-src ‘self’</td>
+</tr>
+<tr>
+<td align="left">X-Content-Type-Options</td>
+<td align="left">唯一允许的数值为”nosniff”，防止 Internet Explorer 对文件进行MIME类型嗅探。这也对 Google Chrome 下载扩展时适用。</td>
+<td align="left">X-Content-Type-Options: nosniff</td>
+</tr>
+<tr>
+<td align="left">X-Powered-By</td>
+<td align="left">表明用于支持当前网页应用程序的技术（例如：PHP）（版本号细节通常放置在 X-Runtime 或 X-Version 中）</td>
+<td align="left">X-Powered-By: PHP/5.4.0</td>
+</tr>
+<tr>
+<td align="left">X-UA-Compatible</td>
+<td align="left">推荐指定的渲染引擎（通常是向后兼容模式）来显示内容。也用于激活 Internet Explorer 中的 Chrome Frame。</td>
+<td align="left">X-UA-Compatible: IE=EmulateIE7 X-UA-Compatible: IE=edge X-UA-Compatible: Chrome=1</td>
+</tr>
+<tr>
+<td align="left">X-Content-Duration</td>
+<td align="left">指出音视频的长度，单位为秒。只受Gecko内核浏览器支持。</td>
+<td align="left">X-Content-Duration: 42.666</td>
+</tr>
+<tr>
+<td align="left">Feature-Policy</td>
+<td align="left">管控特定应用程序接口</td>
+<td align="left">Feature-Policy: vibrate ‘none’; geolocation ‘none’</td>
+</tr>
+<tr>
+<td align="left">Permissions-Policy</td>
+<td align="left">管控特定应用程序接口为W3C标准 替代Feature-Policy</td>
+<td align="left">Permissions-Policy: microphone=(),geolocation=(),camera=()</td>
+</tr>
+<tr>
+<td align="left">X-Permitted-Cross-Domain-Policies</td>
+<td align="left">Flash的跨网站攻击防御</td>
+<td align="left">X-Permitted-Cross-Domain-Policies: none</td>
+</tr>
+<tr>
+<td align="left">Referrer-Policy</td>
+<td align="left">保护信息泄漏</td>
+<td align="left">Referrer-Policy: origin-when-cross-origin</td>
+</tr>
+<tr>
+<td align="left">Expect-CT</td>
+<td align="left">防止欺骗 SSL，单位为秒</td>
+<td align="left">Expect-CT: max-age=31536000, enforce</td>
+</tr>
+</tbody></table>
+<p><strong>X-Forwarder-For</strong></p>
+<p>60.12.15.50(出口ip) -&gt;45.67.45.32(代理ip) -&gt; 1114.114.114.114(目的ip)</p>
+<p>X-Forwarder-For： 60.12.15.50,45.67.45.32(可伪造，进行SQL注入)</p>
+<p>CLIENT_IP: 60.12.15.50</p>
+<p>REMOTE_IP: 45.67.45.32</p>
+<p>HTTP响应码</p>
+<table>
+<thead>
+<tr>
+<th align="left">状态码</th>
+<th align="left">状态码英文名称</th>
+<th align="left">中文描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1**</td>
+<td align="left"></td>
+<td align="left">信息，服务器收到请求，需要请求者继续执行操作</td>
+</tr>
+<tr>
+<td align="left">100</td>
+<td align="left">Continue</td>
+<td align="left">继续。客户端应继续其请求</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="left">Switching Protocols</td>
+<td align="left">切换协议。服务器根据客户端的请求切换协议。只能切换到更高级的协议，例如，切换到HTTP的新版本协议</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">2**</td>
+<td align="left"></td>
+<td align="left">成功，操作被成功接收并处理</td>
+</tr>
+<tr>
+<td align="left">200</td>
+<td align="left">OK</td>
+<td align="left">请求成功。一般用于GET与POST请求</td>
+</tr>
+<tr>
+<td align="left">201</td>
+<td align="left">Created</td>
+<td align="left">已创建。成功请求并创建了新的资源</td>
+</tr>
+<tr>
+<td align="left">202</td>
+<td align="left">Accepted</td>
+<td align="left">已接受。已经接受请求，但未处理完成</td>
+</tr>
+<tr>
+<td align="left">203</td>
+<td align="left">Non-Authoritative Information</td>
+<td align="left">非授权信息。请求成功。但返回的meta信息不在原始的服务器，而是一个副本</td>
+</tr>
+<tr>
+<td align="left">204</td>
+<td align="left">No Content</td>
+<td align="left">无内容。服务器成功处理，但未返回内容。在未更新网页的情况下，可确保浏览器继续显示当前文档</td>
+</tr>
+<tr>
+<td align="left">205</td>
+<td align="left">Reset Content</td>
+<td align="left">重置内容。服务器处理成功，用户终端（例如：浏览器）应重置文档视图。可通过此返回码清除浏览器的表单域</td>
+</tr>
+<tr>
+<td align="left">206</td>
+<td align="left">Partial Content</td>
+<td align="left">部分内容。服务器成功处理了部分GET请求</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">3**</td>
+<td align="left"></td>
+<td align="left">重定向，需要进一步的操作以完成请求</td>
+</tr>
+<tr>
+<td align="left">300</td>
+<td align="left">Multiple Choices</td>
+<td align="left">多种选择。请求的资源可包括多个位置，相应可返回一个资源特征与地址的列表用于用户终端（例如：浏览器）选择</td>
+</tr>
+<tr>
+<td align="left">301</td>
+<td align="left">Moved Permanently</td>
+<td align="left">永久移动。请求的资源已被永久的移动到新URI，返回信息会包括新的URI，浏览器会自动定向到新URI。今后任何新的请求都应使用新的URI代替</td>
+</tr>
+<tr>
+<td align="left">302</td>
+<td align="left">Found</td>
+<td align="left">临时移动。与301类似。但资源只是临时被移动。客户端应继续使用原有URI</td>
+</tr>
+<tr>
+<td align="left">303</td>
+<td align="left">See Other</td>
+<td align="left">查看其它地址。与301类似。使用GET和POST请求查看</td>
+</tr>
+<tr>
+<td align="left">304</td>
+<td align="left">Not Modified</td>
+<td align="left">未修改。所请求的资源未修改，服务器返回此状态码时，不会返回任何资源。客户端通常会缓存访问过的资源，通过提供一个头信息指出客户端希望只返回在指定日期之后修改的资源</td>
+</tr>
+<tr>
+<td align="left">305</td>
+<td align="left">Use Proxy</td>
+<td align="left">使用代理。所请求的资源必须通过代理访问</td>
+</tr>
+<tr>
+<td align="left">306</td>
+<td align="left">Unused</td>
+<td align="left">已经被废弃的HTTP状态码</td>
+</tr>
+<tr>
+<td align="left">307</td>
+<td align="left">Temporary Redirect</td>
+<td align="left">临时重定向。与302类似。使用GET请求重定向</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">4**</td>
+<td align="left"></td>
+<td align="left">客户端错误，请求包含语法错误或无法完成请求</td>
+</tr>
+<tr>
+<td align="left">400</td>
+<td align="left">Bad Request</td>
+<td align="left">客户端请求的语法错误，服务器无法理解</td>
+</tr>
+<tr>
+<td align="left">401</td>
+<td align="left">Unauthorized</td>
+<td align="left">请求要求用户的身份认证</td>
+</tr>
+<tr>
+<td align="left">402</td>
+<td align="left">Payment Required</td>
+<td align="left">保留，将来使用</td>
+</tr>
+<tr>
+<td align="left">403</td>
+<td align="left">Forbidden</td>
+<td align="left">服务器理解请求客户端的请求，但是拒绝执行此请求（文件夹是存在的）</td>
+</tr>
+<tr>
+<td align="left">404</td>
+<td align="left">Not Found</td>
+<td align="left">服务器无法根据客户端的请求找到资源（网页）。通过此代码，网站设计人员可设置”您所请求的资源无法找到”的个性页面（客户端请求文件或文件夹不存在）</td>
+</tr>
+<tr>
+<td align="left">405</td>
+<td align="left">Method Not Allowed</td>
+<td align="left">客户端请求中的方法被禁止</td>
+</tr>
+<tr>
+<td align="left">406</td>
+<td align="left">Not Acceptable</td>
+<td align="left">服务器无法根据客户端请求的内容特性完成请求</td>
+</tr>
+<tr>
+<td align="left">407</td>
+<td align="left">Proxy Authentication Required</td>
+<td align="left">请求要求代理的身份认证，与401类似，但请求者应当使用代理进行授权</td>
+</tr>
+<tr>
+<td align="left">408</td>
+<td align="left">Request Time-out</td>
+<td align="left">服务器等待客户端发送的请求时间过长，超时</td>
+</tr>
+<tr>
+<td align="left">409</td>
+<td align="left">Conflict</td>
+<td align="left">服务器完成客户端的 PUT 请求时可能返回此代码，服务器处理请求时发生了冲突</td>
+</tr>
+<tr>
+<td align="left">410</td>
+<td align="left">Gone</td>
+<td align="left">客户端请求的资源已经不存在。410不同于404，如果资源以前有现在被永久删除了可使用410代码，网站设计人员可通过301代码指定资源的新位置</td>
+</tr>
+<tr>
+<td align="left">411</td>
+<td align="left">Length Required</td>
+<td align="left">服务器无法处理客户端发送的不带Content-Length的请求信息</td>
+</tr>
+<tr>
+<td align="left">412</td>
+<td align="left">Precondition Failed</td>
+<td align="left">客户端请求信息的先决条件错误</td>
+</tr>
+<tr>
+<td align="left">413</td>
+<td align="left">Request Entity Too Large</td>
+<td align="left">由于请求的实体过大，服务器无法处理，因此拒绝请求。为防止客户端的连续请求，服务器可能会关闭连接。如果只是服务器暂时无法处理，则会包含一个Retry-After的响应信息</td>
+</tr>
+<tr>
+<td align="left">414</td>
+<td align="left">Request-URI Too Large</td>
+<td align="left">请求的URI过长（URI通常为网址），服务器无法处理</td>
+</tr>
+<tr>
+<td align="left">415</td>
+<td align="left">Unsupported Media Type</td>
+<td align="left">服务器无法处理请求附带的媒体格式</td>
+</tr>
+<tr>
+<td align="left">416</td>
+<td align="left">Requested range not satisfiable</td>
+<td align="left">客户端请求的范围无效</td>
+</tr>
+<tr>
+<td align="left">417</td>
+<td align="left">Expectation Failed</td>
+<td align="left">服务器无法满足Expect的请求头信息</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">5**</td>
+<td align="left"></td>
+<td align="left">服务器错误，服务器在处理请求的过程中发生了错误</td>
+</tr>
+<tr>
+<td align="left">500</td>
+<td align="left">Internal Server Error</td>
+<td align="left">服务器内部错误，无法完成请求</td>
+</tr>
+<tr>
+<td align="left">501</td>
+<td align="left">Not Implemented</td>
+<td align="left">服务器不支持请求的功能，无法完成请求</td>
+</tr>
+<tr>
+<td align="left">502</td>
+<td align="left">Bad Gateway</td>
+<td align="left">作为网关或者代理工作的服务器尝试执行请求时，从远程服务器接收到了一个无效的响应</td>
+</tr>
+<tr>
+<td align="left">503</td>
+<td align="left">Service Unavailable</td>
+<td align="left">由于超载或系统维护，服务器暂时的无法处理客户端的请求。延时的长度可包含在服务器的Retry-After头信息中</td>
+</tr>
+<tr>
+<td align="left">504</td>
+<td align="left">Gateway Time-out</td>
+<td align="left">充当网关或代理的服务器，未及时从远端服务器获取请求</td>
+</tr>
+<tr>
+<td align="left">505</td>
+<td align="left">HTTP Version not supported</td>
+<td align="left">服务器不支持请求的HTTP协议的版本，无法完成处理</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/HTTP%E5%9F%BA%E7%A1%80/">
+            https://www.zerochen.top/article/HTTP%E5%9F%BA%E7%A1%80/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E5%9F%BA%E7%A1%80/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">网络协议基础 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">文件上传漏洞 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP%E5%8D%8F%E8%AE%AE"><span class="toc-text">HTTP协议</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP%E5%8D%8F%E8%AE%AE"><span class="toc-text">HTTP协议</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP%E5%8D%8F%E8%AE%AE"><span class="toc-text">HTTP协议</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>

