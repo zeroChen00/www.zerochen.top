@@ -45,7 +45,7 @@
         content="2021-07-26">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-10">
+        content="2021-08-15">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -289,7 +289,7 @@
     
     
       <span class="dot"></span>
-      <span>2k 字</span>
+      <span>2.1k 字</span>
     
   </div>
   
@@ -408,7 +408,7 @@
 <tr>
 <td align="left">后缀名检测</td>
 <td align="left">黑白名单 上传.xxx文件，通过即为黑名单，不通过为白名单 常见黑名单后缀 php：”.php”,”.php5”,”.php4”,”.php3”,”.php2”,”php1”,”.html”,”.htm”,”.phtml”, jsp：”.jsp”,”.jspa”,”.jspx”,”.jsw”,”.jsv”,”.jspf”,”.jtml”,”.jSp”, asp：”.asp”,”.aspx”,”.asa”,”.asax”,”.ascx”,”.ashx”,”.asmx”,,”.cEr”,”.sWf”,”.swf”</td>
-<td align="left">黑名单绕过 <br>1、大小写绕过 linux中，centos6搭载默认apache2.2时可绕过 windows可以绕过 <br> 2、黑名单不全绕过 php：.php3、.phtml asp：.cer、.asmx  <br><br>3、windows系统特性绕过 a.php. a.php (空格) a.php:1 a.php::$DATA</td>
+<td align="left">黑名单绕过 <br>1、大小写绕过 linux中，centos6搭载默认apache2.2时可绕过 windows可以绕过 <br> 2、黑名单不全绕过 php：.php3、.phtml asp：.cer、.asmx  <br><br>3、windows系统特性绕过 a.php. <br>a.php (空格) <br>a.php:1 <br>a.php::$DATA</td>
 </tr>
 <tr>
 <td align="left">内容检测</td>
@@ -422,7 +422,7 @@
 </tr>
 <tr>
 <td align="left">解析漏洞</td>
-<td align="left">1、Apache解析漏洞 <br>&gt;多后缀 apache解析顺序从右到左，若是无法解析，则返回源码。 <br>前提：<br>apache1.x、2.x Apache能够识别的文件在mime.types文件可以查看 <br>形式： <br>a.php.xxx.yyy绕过（黑名单绕过） <br>a.php.7z（可绕过白名单–不在apache解析目录，但是在白名单目录） <br><br>&gt;配置错误 apache配置文件可指定解析后缀类型 <br>&gt;.htaccess apache环境下，当上传文件未拦截.htaccess且未重命名文件时，可上传.htaccess修改apache默认配置  <br><br>2、IIS6.0解析漏洞 <br>&gt;目录解析 <br>形式：<br>/xx.asp/xx.jpg <br>原理：<br>在网站下创建文件夹名字为.asp、.asa的文件夹，其目录内的任何扩展名的文件都被当作asp文件来解析并执行。 <br><br>&gt;文件解析 <br>形式：<br>/xx.asp;.jpg（利用特殊符号”;”）<br>原理：<br>在iis6.0下，服务器默认不解析；号后面的内容，所以xx.asp;.jpg被解析为asp脚本解析漏洞 <br><br>&gt;解析文件类型（属于黑名单绕过方式） <br>形式：<br>/test.asa、/test.cer、/test.cdx <br>原理：<br>iis6.0默认的可执行文件除了asp还包含这三种asa、cer、cdx，会将这三种扩展名文件解析为asp文件  <br><br>3、PHP CGI解析漏洞 <br>IIS7.0/IIS7.5/Nginx&lt;0.8.3畸形解析漏洞 <br>前提： <br>1、Fast-CGI运行模式 <br>2、php.ini里cgi.fix_pathinfo=1(默认为1) <br>3、取消勾选php-cgi.exe程序的”Invoke handler only if request is mapped to” <br>形式：将/xx.jpg/xx.php解析为php文件 <br>4、Nginx解析漏洞 <br>影响版本：<br>0.5，0.6，0.7&lt;=0.7.65，0.8&lt;=0.8.37 <br>原理：<br>在使用PHP-FastCGI执行php的时候，URL里面在遇到%00空字节时与FastCGI处理不一致，导致可以在图片中嵌入PHP代码然后通过访问xxx.jpg%00.php来执行其中的代码 <br>形式：<br>xxx.jpg%00.php</td>
+<td align="left">1、Apache解析漏洞 <br>&gt;多后缀 apache解析顺序从右到左，若是无法解析，则返回源码。 <br>前提：<br>apache1.x、2.x<br>Apache能够识别的文件在mime.types文件可以查看 <br>形式： <br>a.php.xxx.yyy绕过（黑名单绕过） <br>a.php.7z（可绕过白名单–不在apache解析目录，但是在白名单目录） <br><br>&gt;配置错误 apache配置文件可指定解析后缀类型 <br>&gt;.htaccess apache环境下，当上传文件未拦截.htaccess且未重命名文件时，可上传.htaccess修改apache默认配置  <br><br>2、IIS6.0解析漏洞 <br>&gt;目录解析 <br>形式：<br>/xx.asp/xx.jpg <br>原理：<br>在网站下创建文件夹名字为.asp、.asa的文件夹，其目录内的任何扩展名的文件都被当作asp文件来解析并执行。 <br><br>&gt;文件解析 <br>形式：<br>/xx.asp;.jpg（利用特殊符号”;”）<br>原理：<br>在iis6.0下，服务器默认不解析；号后面的内容，所以xx.asp;.jpg被解析为asp脚本解析漏洞 <br><br>&gt;解析文件类型（属于黑名单绕过方式） <br>形式：<br>/test.asa、/test.cer、/test.cdx <br>原理：<br>iis6.0默认的可执行文件除了asp还包含这三种asa、cer、cdx，会将这三种扩展名文件解析为asp文件  <br><br>3、PHP CGI解析漏洞 <br>IIS7.0/IIS7.5/Nginx&lt;0.8.3畸形解析漏洞 <br>前提： <br>1、Fast-CGI运行模式 <br>2、php.ini里cgi.fix_pathinfo=1(默认为1) <br>3、取消勾选php-cgi.exe程序的”Invoke handler only if request is mapped to” <br>形式：将/xx.jpg/xx.php解析为php文件 <br>4、Nginx解析漏洞 <br>影响版本：<br>0.5，0.6，0.7&lt;=0.7.65，0.8&lt;=0.8.37 <br>原理：<br>在使用PHP-FastCGI执行php的时候，URL里面在遇到%00空字节时与FastCGI处理不一致，导致可以在图片中嵌入PHP代码然后通过访问xxx.jpg%00.php来执行其中的代码 <br>形式：<br>xxx.jpg%00.php</td>
 <td align="left">&gt;配置错误 <br>AddHandler php5-script .php、<br>AddType application/x-httpd-php .jpg <br><br>&gt;.htaccess <br>AddType application/x-httpd-php xxx 使用php解析.xxx文件 <br><br>或 <br>&lt;FilesMatch .ccc$&gt; SetHandler application/x-httpd-php <br>正则匹配.ccc后缀文件 <br><br>或 <br>&lt;FilesMatch “shell.jpg”&gt; SetHandler application/x-httpd-php <br>指定解析某个文件</td>
 </tr>
 <tr>
@@ -434,6 +434,11 @@
 <td align="left">其他类型</td>
 <td align="left"></td>
 <td align="left"></td>
+</tr>
+<tr>
+<td align="left">.user.ini</td>
+<td align="left">自动文件包含，可将jpg解析为php文件，包含于php文件首部，只适用于PHP，7.3版本可用，类似于Apache配置文件.htaccess<br>注意：文件夹下必须有php文件才可生效</td>
+<td align="left">auto_prepend_file=x.jpg <br>注意，文件名必须相同，访问任意php文件即可生效</td>
 </tr>
 <tr>
 <td align="left">00截断</td>
@@ -551,7 +556,7 @@
 <p><strong>利用</strong></p>
 <p>1、登录后台，进入样式管理，增加上传类型即可。</p>
 <p>2、访问<code>/admin/ewebEditor/asp/upload.asp?action=save&amp;type=image&amp;style=popup&amp;cusdir=hack.asp</code></p>
-<p>创建hack.asp文件件，此文件夹下文件全部可执行</p>
+<p>创建hack.asp文件夹，此文件夹下文件全部可执行</p>
 <p>检查元素，编辑html</p>
 <pre class="highlight"><span class="line">&lt;form action=&quot;http://192.168.1.1/admin/ewebEditor/asp/upload.asp?		action=save&amp;type=image&amp;style=popup&amp;cusdir=hack.asp&quot; method=post name=myform enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">&lt;input type=file name=uploadfile size=100&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">&lt;input type=submit value=upload&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre>
 
@@ -751,17 +756,17 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
-        <div class="categories-list-item">
-          环境搭建
-          <span class="categories-list-item-badge">7</span>
-        </div>
-      </a>
-    
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
           <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">7</span>
         </div>
       </a>
     
@@ -801,99 +806,99 @@
   <div class="tags-list">
     
       <a 
-        href="/tags/Access/" 
-        title="Access">
-        <div class="tags-list-item">Access</div>
-      </a>
-    
-      <a 
-        href="/tags/BurpSuite%E4%BB%A3%E7%90%86/" 
-        title="BurpSuite代理">
-        <div class="tags-list-item">BurpSuite代理</div>
-      </a>
-    
-      <a 
-        href="/tags/%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/" 
-        title="绕过Token爆破">
-        <div class="tags-list-item">绕过Token爆破</div>
-      </a>
-    
-      <a 
-        href="/tags/CSRF/" 
-        title="CSRF">
-        <div class="tags-list-item">CSRF</div>
-      </a>
-    
-      <a 
-        href="/tags/HTML/" 
-        title="HTML">
-        <div class="tags-list-item">HTML</div>
-      </a>
-    
-      <a 
-        href="/tags/CSS/" 
-        title="CSS">
-        <div class="tags-list-item">CSS</div>
-      </a>
-    
-      <a 
-        href="/tags/HTTP/" 
-        title="HTTP">
-        <div class="tags-list-item">HTTP</div>
-      </a>
-    
-      <a 
-        href="/tags/JavaScript/" 
-        title="JavaScript">
-        <div class="tags-list-item">JavaScript</div>
-      </a>
-    
-      <a 
-        href="/tags/JBoss/" 
-        title="JBoss">
-        <div class="tags-list-item">JBoss</div>
-      </a>
-    
-      <a 
-        href="/tags/Java/" 
-        title="Java">
-        <div class="tags-list-item">Java</div>
-      </a>
-    
-      <a 
-        href="/tags/MS17-010/" 
-        title="MS17-010">
-        <div class="tags-list-item">MS17-010</div>
-      </a>
-    
-      <a 
         href="/tags/%E9%9A%8F%E8%AE%B0/" 
         title="随记">
         <div class="tags-list-item">随记</div>
       </a>
     
       <a 
-        href="/tags/MSSQL/" 
-        title="MSSQL">
-        <div class="tags-list-item">MSSQL</div>
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
       </a>
     
       <a 
-        href="/tags/Nosql/" 
-        title="Nosql">
-        <div class="tags-list-item">Nosql</div>
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
       </a>
     
       <a 
-        href="/tags/mysql/" 
-        title="mysql">
-        <div class="tags-list-item">mysql</div>
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
       </a>
     
       <a 
-        href="/tags/Oracle/" 
-        title="Oracle">
-        <div class="tags-list-item">Oracle</div>
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
+        title="综合靶场">
+        <div class="tags-list-item">综合靶场</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
+        title="反弹shell">
+        <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+        title="信息收集">
+        <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
       </a>
     
   </div>

