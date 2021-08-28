@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.zerochen.top/article/MSF%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</loc>
-    <lastmod>2021-08-26</lastmod>
+    <loc>https://www.zerochen.top/article/Linux%E6%8F%90%E6%9D%83/</loc>
+    <lastmod>2021-08-28</lastmod>
   </url>
   <url>
     <loc>https://www.zerochen.top/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</loc>
-    <lastmod>2021-08-26</lastmod>
+    <lastmod>2021-08-28</lastmod>
+  </url>
+  <url>
+    <loc>https://www.zerochen.top/article/Windows%E6%8F%90%E6%9D%83/</loc>
+    <lastmod>2021-08-28</lastmod>
   </url>
   <url>
     <loc>https://www.zerochen.top/article/Mysql%E6%B3%A8%E5%85%A5/</loc>
