@@ -18,17 +18,17 @@
   <link 
     rel="icon" 
     href="/img/favicon.png">
-  <title>标签</title>
+  <title>权限维持</title>
   
     
       <meta 
         property="og:title" 
-        content="标签">
+        content="权限维持">
     
     
       <meta 
         property="og:url" 
-        content="https://www.zerochen.top/tags/%E6%8F%90%E6%9D%83/index.html">
+        content="https://www.zerochen.top/article/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/index.html">
     
     
       <meta 
@@ -36,6 +36,26 @@
         content="/img/logo.png">
     
     
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-08-28">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-08-28">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="权限维持">
+        
+      
     
   
   <script>
@@ -143,6 +163,8 @@
   
   <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
   
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
   
 <meta name="generator" content="Hexo 5.4.0"></head>
 
@@ -241,63 +263,212 @@
         <div class="container">
           <div class="columns">
             <main class="main-column">
-<div class="card card-content tag-page-card">
-  <div class="tags-page-title">标签&nbsp-&nbsp提权</div>
-</div>
-<div class="archive-timeline">
-  
-  
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      权限维持
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-08-28T12:32:44.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-08-28</span>
+    </time>
     
-      <div class="archive-timeline-tag"><span>2021</span></div>
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          内网渗透
+        </a>
       
     
-    <div class="archive-timeline-item">
-      <div class="archive-timeline-post">
-        <div class="card card-content">
-          <div class="archive-timeline-post-date">2021-08-28</div>
-          <div class="archive-timeline-post-content">
-            <a 
-              href="/article/Linux%E6%8F%90%E6%9D%83/" 
-              class="archive-timeline-post-item">
-              Linux提权
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  
     
-    <div class="archive-timeline-item">
-      <div class="archive-timeline-post">
-        <div class="card card-content">
-          <div class="archive-timeline-post-date">2021-08-28</div>
-          <div class="archive-timeline-post-content">
-            <a 
-              href="/article/Windows%E6%8F%90%E6%9D%83/" 
-              class="archive-timeline-post-item">
-              Windows提权
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  
+      <span class="dot"></span>
+      <span>969 字</span>
     
-    <div class="archive-timeline-item">
-      <div class="archive-timeline-post">
-        <div class="card card-content">
-          <div class="archive-timeline-post-date">2021-06-15</div>
-          <div class="archive-timeline-post-content">
-            <a 
-              href="/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/" 
-              class="archive-timeline-post-item">
-              创建用户+提权
-            </a>
-          </div>
-        </div>
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" 
+            class="post-meta-link">
+            权限维持
+          </a>
+        
       </div>
     </div>
   
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <p>Windows权限维持</p>
+<p>后门：绕过安全措施获取对程序或系统放弃那个文权限的方法，是一个留在目标主机上的软件，可以使攻击者随时与目标主机进行连接。</p>
+<p>常见后门：</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>shift后门</td>
+<td>连按5次shift键，会以system权限启动粘滞键  <br>粘滞键的位置：  C:\windows\system32\sethc.exe     <br><br>利用  <br>用  cmd.exe或远控木马替换 windows\system32 目录下的粘滞键sethc.exe  如果出现拒绝访问，则需要修改权限：<br>  <code>takeown /f c:\windows\system32\sethc.exe /a /r /d y   cacls  c:\windows\system32\*.* /T</code>      <br><br>防御：  <br>1、 禁用该  sethc.exe 功能 或者在 “控制面板”中关闭“连续按5次shift键时启用粘滞键选项”  <br>2、使用权限约束  sethc.exe，使任何人都不能访问它</td>
+</tr>
+<tr>
+<td>映像劫持</td>
+<td>在高版本的windows版本中替换的文件受到了系统的保护，所以需要进行  “映像劫持”     <br><br>利用：  <br>注册表位置：  <br>1、在注册表的 <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows  NT\CurrentVersion\Image File Execution Option</code> 下添加一个项 sethc.exe  <br>2、在新建的项中添加debugger键，键值设置为恶意程序的路径  或cmd直接添加、双击导出文件运行。    <br><br>其他可以劫持的程序：  <br>设置中心：C:\Windows\System32\utilman.exe，<br>快捷键：Windows+U  <br>屏幕键盘：C:\Windows\System32\osk.exe  <br>放大镜：C:\Windows\System32\Magnify.exe  ，<br>快捷键：Windows+加减号</td>
+</tr>
+<tr>
+<td>计划任务</td>
+<td>windows7-：<br>at，打开一个后台进程  每天定时执行：  <br><code>at 24:00:00 /every:M,T,W,TH,F,S,SU  &quot;c:\\windwos\\system32\\atd.exe&quot;</code>  <br><br>windows8+：<br>schtasks，将定时的任务在前台执行  系统启动时运行  <br><code>schtasks /create /tn &quot;chrom&quot; /tr cmd.exe  /sc minute /mo 1</code>   每分钟执行一次cmd  <br><br>命令行乱码：  <br>chcp 936 GBK编码  <br>chcp 65001 utf编码</td>
+</tr>
+<tr>
+<td>开机启动</td>
+<td>注册表启动项  <br>1、 regedit打开注册表：<code>HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/Run</code>  <br>2、 添加一个键值类型为REG_SZ  <br>3、 在数据中填写需要运行程序的路径  <br>4、cmd.exe  实现了开机后自启动     其他开机启动项（需要用户登录生效，退出则失效）  <br><code>C:\ProgramData\Microsoft\Windows\Start  Menu\Programs\StartUp</code>  <br><code>C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup  </code></td>
+</tr>
+<tr>
+<td>注册服务</td>
+<td><code>sc create jihua binPath= &quot;c:\\msf.exe&quot; start= auto</code>(注意=后均有空格，不可删除)  <br>EasyServerce、nssm等工具，自动注册服务，且有守护进程</td>
+</tr>
+<tr>
+<td>影子账户</td>
+<td>影子用户顾名思义就是一个隐藏用户，只能通过注册表查看这个用户，其它方式找不到这个用户的信息。影子账户可以获得管理员的权限，且不容易被发现     <br><br>利用  <br>1、创建一个隐藏用户  添加的test$用户在net user命令下是看不到的，但是在管理界面下可以看到  <br>2、在注册表中打开  HKEY_LOCAL_MACHINE/SAM/SAM/Domains/Account/Users/ 选项，点击Names菜单，  可以看到计算机中所有的账户名称  <br>注意：如果进入SAM后无法再看到里面的子选项，需要给予administrators完权控制权限，并重新进入注册表  <br>3、将administrator用户对应的项中的F值复制到 test$ 对应项中的F值，然后保存  <br>4、将Names中的 test$ 和 对应的 Users 中的目录进行右键导出  <br>5、将创建的隐藏账号 test$ 删除  <br>6、双击刚才导出的两个注册表，影子账户就创建完成了  <br>7、查看影子账户是否创建成功，只有在注册表中才能查看该账户</td>
+</tr>
+</tbody></table>
+<p>Linux权限维持</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计划任务</td>
+<td>crontab -e 写入定时任务  *  * */1 * * /bin/msf</td>
+</tr>
+<tr>
+<td>开机启动项</td>
+<td>centos中  /etc/rc.local为开机启动项  将程序放置此文件夹即可     <br>/etc/profile为用户启动文件夹</td>
+</tr>
+<tr>
+<td>ssh公钥</td>
+<td>将公钥写入/root/.ssh/authorized_keys</td>
+</tr>
+<tr>
+<td>第三方守护进程</td>
+<td>yum  install supervisor</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">
+            https://www.zerochen.top/article/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/Linux%E6%8F%90%E6%9D%83/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">Linux提权 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
 </div></main>
             <aside class="left-column">
               
@@ -334,6 +505,18 @@
               </div>
                <div class="sticky-tablet">
   
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
+      </div>
+    </article>
   
   
   <article class="card card-content categories-widget">
@@ -538,233 +721,21 @@
   </article>
   
   
-    <article class="card card-content widescreen-archive archive-widget">
-      <div class="archive-card">
-  <div class="archive-card-header">
-    <i 
-      class="iconfont icon-wodebaobiao" 
-      style="padding-right: 2px;">
-    </i>归档
-  </div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a 
-        href="/archives/2021" 
-        class="archive-card-list-item">
-        2021
-        <span class="archive-card-list-item-badge">49</span>
-      </a>
-    
-  </div>
-</div>
-    </article>
-  
 </div>
             </aside>
             <aside class="right-column">
               <div class="sticky-widescreen">
   
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+
+    </article>
   
   
   <article class="card card-content">
@@ -801,228 +772,6 @@
 </div>
   </article>
   
-  
-    <article class="card card-content">
-      <div class="archive-card">
-  <div class="archive-card-header">
-    <i 
-      class="iconfont icon-wodebaobiao" 
-      style="padding-right: 2px;">
-    </i>归档
-  </div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a 
-        href="/archives/2021" 
-        class="archive-card-list-item">
-        2021
-        <span class="archive-card-list-item-badge">49</span>
-      </a>
-    
-  </div>
-</div>
-    </article>
   
 </div>
             </aside>
@@ -1119,6 +868,36 @@
 </a> 
      
      
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
      
      
     <script src="/js/main.js"></script> 
