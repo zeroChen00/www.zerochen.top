@@ -45,7 +45,7 @@
         content="2021-06-10">
       <meta 
         property="og:article:modified_time" 
-        content="2021-09-04">
+        content="2021-09-05">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -289,7 +289,7 @@
     
     
       <span class="dot"></span>
-      <span>248 字</span>
+      <span>362 字</span>
     
   </div>
   
@@ -386,6 +386,18 @@
 
 
 <h1 id="powershell位置"><a href="#powershell位置" class="headerlink" title="powershell位置"></a>powershell位置</h1><pre class="highlight"><span class="line">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</span><br></pre>
+
+
+
+<h1 id="远程下载命令"><a href="#远程下载命令" class="headerlink" title="远程下载命令"></a>远程下载命令</h1><pre class="highlight"><span class="line">certutil -urlcache -split -f http://x.x.x.x/x.exe C:\windows\x.exe		# win7+使用，不加指定目录默认为当前目录</span><br><span class="line"># 命令本身是用来添加证书、校验文件的，也可加解密</span><br><span class="line"></span><br><span class="line">certutil -encode a.txt b.txt		# 将a base64编码为b.txt</span><br><span class="line">certutil -decode b.txt c.txt		# 将b base64解码（还原）为c.txt</span><br></pre>
+
+
+
+<h1 id="cmd开关防火墙"><a href="#cmd开关防火墙" class="headerlink" title="cmd开关防火墙"></a>cmd开关防火墙</h1><p>开启防火墙：</p>
+<pre class="highlight"><span class="line">netsh firewall set opmode mode=enable</span><br></pre>
+
+<p>关闭防火墙：</p>
+<pre class="highlight"><span class="line">netsh firewall set opmode mode=disable</span><br></pre>
 
 
   </div>
@@ -493,7 +505,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#choco%E5%AE%89%E8%A3%85"><span class="toc-text">choco安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bcpu%E5%8F%8A%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="toc-text">查看cpu及内存使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#powershell%E4%BD%8D%E7%BD%AE"><span class="toc-text">powershell位置</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#choco%E5%AE%89%E8%A3%85"><span class="toc-text">choco安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bcpu%E5%8F%8A%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="toc-text">查看cpu及内存使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#powershell%E4%BD%8D%E7%BD%AE"><span class="toc-text">powershell位置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%91%BD%E4%BB%A4"><span class="toc-text">远程下载命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cmd%E5%BC%80%E5%85%B3%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-text">cmd开关防火墙</span></a></li></ol>
 </div></main>
             <aside class="left-column">
               
@@ -539,7 +551,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#choco%E5%AE%89%E8%A3%85"><span class="toc-text">choco安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bcpu%E5%8F%8A%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="toc-text">查看cpu及内存使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#powershell%E4%BD%8D%E7%BD%AE"><span class="toc-text">powershell位置</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#choco%E5%AE%89%E8%A3%85"><span class="toc-text">choco安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bcpu%E5%8F%8A%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="toc-text">查看cpu及内存使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#powershell%E4%BD%8D%E7%BD%AE"><span class="toc-text">powershell位置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%91%BD%E4%BB%A4"><span class="toc-text">远程下载命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cmd%E5%BC%80%E5%85%B3%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-text">cmd开关防火墙</span></a></li></ol>
       </div>
     </article>
   
@@ -561,10 +573,10 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
         <div class="categories-list-item">
-          网络基础
-          <span class="categories-list-item-badge">2</span>
+          编程基础
+          <span class="categories-list-item-badge">3</span>
         </div>
       </a>
     
@@ -575,10 +587,10 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
         <div class="categories-list-item">
-          编程基础
-          <span class="categories-list-item-badge">3</span>
+          网络基础
+          <span class="categories-list-item-badge">2</span>
         </div>
       </a>
     
@@ -664,9 +676,9 @@
       </a>
     
       <a 
-        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
-        title="逻辑漏洞">
-        <div class="tags-list-item">逻辑漏洞</div>
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
       </a>
     
       <a 
@@ -682,21 +694,9 @@
       </a>
     
       <a 
-        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
-        title="网络协议">
-        <div class="tags-list-item">网络协议</div>
-      </a>
-    
-      <a 
-        href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" 
-        title="权限维持">
-        <div class="tags-list-item">权限维持</div>
-      </a>
-    
-      <a 
-        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
-        title="文件包含">
-        <div class="tags-list-item">文件包含</div>
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
       </a>
     
       <a 
@@ -706,15 +706,39 @@
       </a>
     
       <a 
+        href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" 
+        title="权限维持">
+        <div class="tags-list-item">权限维持</div>
+      </a>
+    
+      <a 
         href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
         title="综合靶场">
         <div class="tags-list-item">综合靶场</div>
       </a>
     
       <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
         href="/tags/%E5%8D%9A%E5%AE%A2/" 
         title="博客">
         <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%85%A5%E4%BE%B5%E6%8E%92%E6%9F%A5/" 
+        title="入侵排查">
+        <div class="tags-list-item">入侵排查</div>
       </a>
     
       <a 
@@ -727,18 +751,6 @@
         href="/tags/Nginx/" 
         title="Nginx">
         <div class="tags-list-item">Nginx</div>
-      </a>
-    
-      <a 
-        href="/tags/Apache/" 
-        title="Apache">
-        <div class="tags-list-item">Apache</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
-        title="命令执行">
-        <div class="tags-list-item">命令执行</div>
       </a>
     
   </div>
@@ -759,7 +771,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#choco%E5%AE%89%E8%A3%85"><span class="toc-text">choco安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bcpu%E5%8F%8A%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="toc-text">查看cpu及内存使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#powershell%E4%BD%8D%E7%BD%AE"><span class="toc-text">powershell位置</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#choco%E5%AE%89%E8%A3%85"><span class="toc-text">choco安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bcpu%E5%8F%8A%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="toc-text">查看cpu及内存使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#powershell%E4%BD%8D%E7%BD%AE"><span class="toc-text">powershell位置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%91%BD%E4%BB%A4"><span class="toc-text">远程下载命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cmd%E5%BC%80%E5%85%B3%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-text">cmd开关防火墙</span></a></li></ol>
     </article>
   
   

