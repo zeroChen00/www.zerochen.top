@@ -45,7 +45,7 @@
         content="2021-06-11">
       <meta 
         property="og:article:modified_time" 
-        content="2021-08-19">
+        content="2021-12-29">
       <meta 
         property="og:article:author" 
         content="沉墨">
@@ -615,6 +615,10 @@
 <h1 id="查看linux版本"><a href="#查看linux版本" class="headerlink" title="查看linux版本"></a>查看linux版本</h1><pre class="highlight"><span class="line">uname -a</span><br><span class="line">cat /proc/version</span><br></pre>
 
 
+
+<h1 id="安装vmtools"><a href="#安装vmtools" class="headerlink" title="安装vmtools"></a>安装vmtools</h1><pre class="highlight"><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install open-vm-tools</span><br><span class="line"></span><br><span class="line">yum install open-vm-tools</span><br></pre>
+
+
   </div>
   <div>
     
@@ -720,7 +724,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">网卡配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81IP%EF%BC%9A"><span class="toc-text">配置静态IP：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDNS%EF%BC%9A"><span class="toc-text">配置DNS：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9A"><span class="toc-text">其他：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%96%87%E4%BB%B6"><span class="toc-text">重要目录及文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%A7%A3%E5%8E%8B%E5%8E%8B%E7%BC%A9"><span class="toc-text">常用解压压缩</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VI%E4%BD%BF%E7%94%A8"><span class="toc-text">VI使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4"><span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#curl%E5%AE%89%E8%A3%85"><span class="toc-text">curl安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scp%E4%B8%8A%E4%BC%A0"><span class="toc-text">scp上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum%E5%AE%89%E8%A3%85"><span class="toc-text">yum安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget%E5%AE%89%E8%A3%85"><span class="toc-text">wget安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-text">源码安装步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#firewall%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-text">firewall防火墙配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Python3"><span class="toc-text">安装Python3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Blinux%E7%89%88%E6%9C%AC"><span class="toc-text">查看linux版本</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">网卡配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81IP%EF%BC%9A"><span class="toc-text">配置静态IP：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDNS%EF%BC%9A"><span class="toc-text">配置DNS：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9A"><span class="toc-text">其他：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%96%87%E4%BB%B6"><span class="toc-text">重要目录及文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%A7%A3%E5%8E%8B%E5%8E%8B%E7%BC%A9"><span class="toc-text">常用解压压缩</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VI%E4%BD%BF%E7%94%A8"><span class="toc-text">VI使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4"><span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#curl%E5%AE%89%E8%A3%85"><span class="toc-text">curl安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scp%E4%B8%8A%E4%BC%A0"><span class="toc-text">scp上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum%E5%AE%89%E8%A3%85"><span class="toc-text">yum安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget%E5%AE%89%E8%A3%85"><span class="toc-text">wget安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-text">源码安装步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#firewall%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-text">firewall防火墙配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Python3"><span class="toc-text">安装Python3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Blinux%E7%89%88%E6%9C%AC"><span class="toc-text">查看linux版本</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85vmtools"><span class="toc-text">安装vmtools</span></a></li></ol>
 </div></main>
             <aside class="left-column">
               
@@ -766,7 +770,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">网卡配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81IP%EF%BC%9A"><span class="toc-text">配置静态IP：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDNS%EF%BC%9A"><span class="toc-text">配置DNS：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9A"><span class="toc-text">其他：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%96%87%E4%BB%B6"><span class="toc-text">重要目录及文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%A7%A3%E5%8E%8B%E5%8E%8B%E7%BC%A9"><span class="toc-text">常用解压压缩</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VI%E4%BD%BF%E7%94%A8"><span class="toc-text">VI使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4"><span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#curl%E5%AE%89%E8%A3%85"><span class="toc-text">curl安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scp%E4%B8%8A%E4%BC%A0"><span class="toc-text">scp上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum%E5%AE%89%E8%A3%85"><span class="toc-text">yum安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget%E5%AE%89%E8%A3%85"><span class="toc-text">wget安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-text">源码安装步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#firewall%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-text">firewall防火墙配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Python3"><span class="toc-text">安装Python3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Blinux%E7%89%88%E6%9C%AC"><span class="toc-text">查看linux版本</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">网卡配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81IP%EF%BC%9A"><span class="toc-text">配置静态IP：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDNS%EF%BC%9A"><span class="toc-text">配置DNS：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9A"><span class="toc-text">其他：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%96%87%E4%BB%B6"><span class="toc-text">重要目录及文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%A7%A3%E5%8E%8B%E5%8E%8B%E7%BC%A9"><span class="toc-text">常用解压压缩</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VI%E4%BD%BF%E7%94%A8"><span class="toc-text">VI使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4"><span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#curl%E5%AE%89%E8%A3%85"><span class="toc-text">curl安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scp%E4%B8%8A%E4%BC%A0"><span class="toc-text">scp上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum%E5%AE%89%E8%A3%85"><span class="toc-text">yum安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget%E5%AE%89%E8%A3%85"><span class="toc-text">wget安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-text">源码安装步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#firewall%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-text">firewall防火墙配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Python3"><span class="toc-text">安装Python3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Blinux%E7%89%88%E6%9C%AC"><span class="toc-text">查看linux版本</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85vmtools"><span class="toc-text">安装vmtools</span></a></li></ol>
       </div>
     </article>
   
@@ -788,10 +792,10 @@
         </div>
       </a>
     
-      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
         <div class="categories-list-item">
-          漏洞复现
-          <span class="categories-list-item-badge">5</span>
+          编程基础
+          <span class="categories-list-item-badge">3</span>
         </div>
       </a>
     
@@ -802,17 +806,17 @@
         </div>
       </a>
     
-      <a href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
-        <div class="categories-list-item">
-          编程基础
-          <span class="categories-list-item-badge">3</span>
-        </div>
-      </a>
-    
       <a href="/categories/Python/">
         <div class="categories-list-item">
           Python
           <span class="categories-list-item-badge">6</span>
+        </div>
+      </a>
+    
+      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        <div class="categories-list-item">
+          漏洞复现
+          <span class="categories-list-item-badge">5</span>
         </div>
       </a>
     
@@ -897,15 +901,21 @@
       </a>
     
       <a 
-        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
-        title="文件包含">
-        <div class="tags-list-item">文件包含</div>
-      </a>
-    
-      <a 
         href="/tags/%E7%A5%A8%E6%8D%AE%E4%BD%BF%E7%94%A8/" 
         title="票据使用">
         <div class="tags-list-item">票据使用</div>
+      </a>
+    
+      <a 
+        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
+        title="逻辑漏洞">
+        <div class="tags-list-item">逻辑漏洞</div>
+      </a>
+    
+      <a 
+        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
+        title="网络协议">
+        <div class="tags-list-item">网络协议</div>
       </a>
     
       <a 
@@ -921,15 +931,9 @@
       </a>
     
       <a 
-        href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" 
-        title="网络协议">
-        <div class="tags-list-item">网络协议</div>
-      </a>
-    
-      <a 
-        href="/tags/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E/" 
-        title="逻辑漏洞">
-        <div class="tags-list-item">逻辑漏洞</div>
+        href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" 
+        title="文件包含">
+        <div class="tags-list-item">文件包含</div>
       </a>
     
       <a 
@@ -939,9 +943,9 @@
       </a>
     
       <a 
-        href="/tags/%E5%9F%9F%E6%8E%A7/" 
-        title="域控">
-        <div class="tags-list-item">域控</div>
+        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
+        title="文件上传">
+        <div class="tags-list-item">文件上传</div>
       </a>
     
       <a 
@@ -951,21 +955,21 @@
       </a>
     
       <a 
-        href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" 
-        title="文件上传">
-        <div class="tags-list-item">文件上传</div>
+        href="/tags/%E5%9F%9F%E6%8E%A7/" 
+        title="域控">
+        <div class="tags-list-item">域控</div>
       </a>
     
       <a 
-        href="/tags/%E7%9B%B4%E6%92%AD%E6%8E%A8%E6%B5%81/" 
-        title="直播推流">
-        <div class="tags-list-item">直播推流</div>
+        href="/tags/%E5%8D%9A%E5%AE%A2/" 
+        title="博客">
+        <div class="tags-list-item">博客</div>
       </a>
     
       <a 
-        href="/tags/Nginx/" 
-        title="Nginx">
-        <div class="tags-list-item">Nginx</div>
+        href="/tags/%E5%86%85%E7%BD%91%E5%B0%8F%E7%BB%93/" 
+        title="内网小结">
+        <div class="tags-list-item">内网小结</div>
       </a>
     
   </div>
@@ -986,7 +990,7 @@
     style="padding-right: 2px;">
   </i>目录
 </div>
-<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">网卡配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81IP%EF%BC%9A"><span class="toc-text">配置静态IP：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDNS%EF%BC%9A"><span class="toc-text">配置DNS：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9A"><span class="toc-text">其他：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%96%87%E4%BB%B6"><span class="toc-text">重要目录及文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%A7%A3%E5%8E%8B%E5%8E%8B%E7%BC%A9"><span class="toc-text">常用解压压缩</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VI%E4%BD%BF%E7%94%A8"><span class="toc-text">VI使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4"><span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#curl%E5%AE%89%E8%A3%85"><span class="toc-text">curl安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scp%E4%B8%8A%E4%BC%A0"><span class="toc-text">scp上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum%E5%AE%89%E8%A3%85"><span class="toc-text">yum安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget%E5%AE%89%E8%A3%85"><span class="toc-text">wget安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-text">源码安装步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#firewall%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-text">firewall防火墙配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Python3"><span class="toc-text">安装Python3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Blinux%E7%89%88%E6%9C%AC"><span class="toc-text">查看linux版本</span></a></li></ol>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">网卡配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81IP%EF%BC%9A"><span class="toc-text">配置静态IP：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDNS%EF%BC%9A"><span class="toc-text">配置DNS：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9A"><span class="toc-text">其他：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%96%87%E4%BB%B6"><span class="toc-text">重要目录及文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E8%A7%A3%E5%8E%8B%E5%8E%8B%E7%BC%A9"><span class="toc-text">常用解压压缩</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VI%E4%BD%BF%E7%94%A8"><span class="toc-text">VI使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4"><span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#curl%E5%AE%89%E8%A3%85"><span class="toc-text">curl安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scp%E4%B8%8A%E4%BC%A0"><span class="toc-text">scp上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum%E5%AE%89%E8%A3%85"><span class="toc-text">yum安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget%E5%AE%89%E8%A3%85"><span class="toc-text">wget安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-text">源码安装步骤</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#firewall%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-text">firewall防火墙配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Python3"><span class="toc-text">安装Python3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Blinux%E7%89%88%E6%9C%AC"><span class="toc-text">查看linux版本</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85vmtools"><span class="toc-text">安装vmtools</span></a></li></ol>
     </article>
   
   
