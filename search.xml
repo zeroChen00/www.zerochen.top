@@ -9907,4 +9907,27 @@
         <tag>票据使用</tag>
       </tags>
   </entry>
+  <entry>
+    <title>批量域名标题并翻译脚本</title>
+    <url>/article/%E6%89%B9%E9%87%8F%E5%9F%9F%E5%90%8D%E6%A0%87%E9%A2%98%E5%B9%B6%E7%BF%BB%E8%AF%91%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<p><strong>业务场景</strong>：</p>
+<p>拿到几十万域名，了解其大致业务，并筛选所需。</p>
+<p><strong>做法：</strong><br>1、批量跑域名标题，这里借用第三方工具<br><a href="https://github.com/dean2021/titlesearch">https://github.com/dean2021/titlesearch</a><br>请求http及https+域名。结果是域名+标题的txt脚本</p>
+<p>2、翻译</p>
+<p>因为是非中文语言，翻译是必要步骤。改过有道脚本，但是某种语言走有道接口无法翻译，故舍弃。改过谷歌脚本，但是按行读取翻译的方式会被封禁（约3000次请求，即使添加随机ua）；最后按块翻译，谷歌支持单次最大5000字节数据，极大程度上减少请求次数，避免被封。<br>脚本采用googletrans三方模块，需要安装指定版本：</p>
+<pre class="highlight"><span class="line">pip install googletrans==4.0.0-rc1</span><br></pre>
+
+<p>其次，配合随机ua，修改模块发包代码，需要手动替换（不替换也可，看数据量及需求）：<br>替换 Python39\Lib\site-packages\googletrans\client.py文件（增加随机ua）</p>
+<p><strong>脚本地址:</strong></p>
+<p><a href="https://www.zerochen.top/download/Trans/client.py">https://www.zerochen.top/download/Trans/client.py</a></p>
+<p><a href="https://www.zerochen.top/download/Trans/tranGG.py">https://www.zerochen.top/download/Trans/tranGG.py</a></p>
+<p>注：因为脚本需要，传至个人博客，文章顺带贴了过去。个人首发，非转载。</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>谷歌翻译</tag>
+      </tags>
+  </entry>
 </search>
